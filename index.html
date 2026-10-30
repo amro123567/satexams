@@ -766,7 +766,7 @@ If one of the students who prefer online classes is selected at random, what is 
 const EMAILJS_CONFIG = {
   publicKey: "r7tBHktw3unegDdMM",
   serviceId: "service_6gulv0u",
-  templateId: "template_zumox1t"
+  templateId: "template_nxcnl2g"
 };
 const RECIPIENT_EMAIL = "amroacademylb@gmail.com";
 
@@ -1394,26 +1394,24 @@ function buildReport() {
       statusLabel(r.status) + " | " + fmt(r.time) + " | Hints: " + r.hints + "\n";
   });
 
-  const th = 'style="border:1px solid #cfd8de;padding:6px 8px;background:#e8f6fc;text-align:left"';
-  const td = 'style="border:1px solid #cfd8de;padding:6px 8px"';
+  // Compact HTML (EmailJS caps all variables at 50 KB, so no per-cell inline styles)
   const color = { correct: "#1e8e3e", wrong: "#c5221f", unanswered: "#b06000" };
-  const tbl = (heads, rows) => `<table style="border-collapse:collapse;font-family:Arial,sans-serif;font-size:13px;margin:8px 0 18px">
-    <tr>${heads.map(h => `<th ${th}>${h}</th>`).join("")}</tr>${rows.join("")}</table>`;
-  let h = `<div style="font-family:Arial,sans-serif;color:#1b1b1b">
-    <h2 style="color:#1d6a96;margin:0 0 6px">Amro Academy – SAT Math Practice Report</h2>
-    <p style="margin:0 0 12px"><b>Student:</b> ${esc(state.studentName)}<br><b>Date:</b> ${esc(date)}<br>
-    <b>Total score:</b> ${s.total}/${s.count} (${pct(s.total, s.count)}%)<br>
-    ${s.perModule.map(pm => `<b>Module ${pm.m}:</b> ${pm.correct}/${pm.total} (module time used ${fmt(pm.time)})`).join("<br>")}<br>
-    <b>Total time on questions:</b> ${fmt(s.totalTime)}<br><b>Hints used:</b> ${s.hintsUsed} &nbsp;|&nbsp; <b>Correct without hints:</b> ${s.correctNoHint}</p>`;
-  h += `<h3 style="color:#1d6a96">Score by domain</h3>` + tbl(["Domain", "Correct", "%", "Avg time/question", "Hints"],
-    s.perDomain.map(d => `<tr><td ${td}>${d.d}</td><td ${td}>${d.correct}/${d.total}</td><td ${td}>${d.pct}%</td><td ${td}>${fmt(d.avg)}</td><td ${td}>${d.hints}</td></tr>`));
-  h += `<h3 style="color:#1d6a96">Mistakes &amp; unanswered (${mistakes.length})</h3>` + (mistakes.length ? tbl(["Module", "Q", "Domain", "Skill", "Student answer", "Correct", "Time", "Hints"],
-    mistakes.map(r => `<tr><td ${td}>${r.q.module}</td><td ${td}>${r.q.number}</td><td ${td}>${r.q.domain}</td><td ${td}>${esc(r.q.skill)}</td>
-      <td style="border:1px solid #cfd8de;padding:6px 8px;color:${color[r.status]};font-weight:bold">${r.status === "unanswered" ? "(no answer)" : esc(r.answer)}</td>
-      <td ${td}>${esc(correctDisplay(r.q))}</td><td ${td}>${fmt(r.time)}</td><td ${td}>${r.hints}</td></tr>`)) : "<p>None — perfect score!</p>");
-  h += `<h3 style="color:#1d6a96">Per-question table</h3>` + tbl(["Q", "Domain", "Type", "Result", "Time", "Hints"],
-    s.rows.map(r => `<tr><td ${td}>M${r.q.module} Q${r.q.number}</td><td ${td}>${r.q.domain}</td><td ${td}>${r.q.type.toUpperCase()}</td>
-      <td style="border:1px solid #cfd8de;padding:6px 8px;color:${color[r.status]};font-weight:bold">${statusLabel(r.status)}</td><td ${td}>${fmt(r.time)}</td><td ${td}>${r.hints}</td></tr>`));
+  const res = (st) => `<font color="${color[st]}"><b>${statusLabel(st)}</b></font>`;
+  const tbl = (heads, rows) => `<table border="1" cellpadding="5" cellspacing="0" style="border-collapse:collapse;font:13px Arial;margin:6px 0 16px"><tr bgcolor="#e8f6fc"><th>${heads.join("</th><th>")}</th></tr>${rows.join("")}</table>`;
+  const tr = (cells) => `<tr><td>${cells.join("</td><td>")}</td></tr>`;
+  let h = `<div style="font:14px Arial">`;
+  h += `<h2 style="color:#1d6a96">Amro Academy – SAT Math Practice Report</h2>`;
+  h += `<p><b>Student:</b> ${esc(state.studentName)}<br><b>Date:</b> ${esc(date)}<br><b>Total score:</b> ${s.total}/${s.count} (${pct(s.total, s.count)}%)<br>`;
+  h += s.perModule.map(pm => `<b>Module ${pm.m}:</b> ${pm.correct}/${pm.total} (time used ${fmt(pm.time)})`).join("<br>");
+  h += `<br><b>Time on questions:</b> ${fmt(s.totalTime)}<br><b>Hints used:</b> ${s.hintsUsed} | <b>Correct without hints:</b> ${s.correctNoHint}</p>`;
+  h += `<h3>Score by domain</h3>` + tbl(["Domain", "Correct", "%", "Avg time", "Hints"],
+    s.perDomain.map(d => tr([d.d, d.correct + "/" + d.total, d.pct + "%", fmt(d.avg), d.hints])));
+  h += `<h3>Mistakes &amp; unanswered (${mistakes.length})</h3>` + (mistakes.length ? tbl(["Q", "Domain", "Skill", "Student", "Correct", "Time", "Hints"],
+    mistakes.map(r => tr(["M" + r.q.module + " Q" + r.q.number, r.q.domain, esc(r.q.skill),
+      r.status === "unanswered" ? res("unanswered") : `<font color="#c5221f"><b>${esc(r.answer)}</b></font>`,
+      esc(correctDisplay(r.q)), fmt(r.time), r.hints]))) : "<p>None — perfect score!</p>");
+  h += `<h3>Per-question table</h3>` + tbl(["Q", "Domain", "Type", "Result", "Time", "Hints"],
+    s.rows.map(r => tr(["M" + r.q.module + " Q" + r.q.number, r.q.domain, r.q.type.toUpperCase(), res(r.status), fmt(r.time), r.hints])));
   h += `</div>`;
   return { text: t, html: h, stats: s, date };
 }
@@ -1448,6 +1446,7 @@ async function sendReport() {
   saveState(); render();
 
   const rep = buildReport();
+  const sizeOf = (o) => new Blob([JSON.stringify(o)]).size;
   const params = {
     to_email: RECIPIENT_EMAIL,
     student_name: state.studentName,
@@ -1457,6 +1456,9 @@ async function sendReport() {
     report: rep.text,
     report_html: rep.html
   };
+  // EmailJS limit is 50 KB: trim the plain-text copy first if needed
+  if (sizeOf(params) > 48000) params.report = rep.text.split("\nPER-QUESTION TABLE")[0] + "\n(Per-question table: see HTML version.)";
+  if (sizeOf(params) > 48000) params.report = "See the HTML report.";
   try {
     if (!window.emailjs) throw new Error("EmailJS could not be loaded. Check your internet connection.");
     await emailjs.send(EMAILJS_CONFIG.serviceId, EMAILJS_CONFIG.templateId, params);
