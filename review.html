@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hrag's Exam Review</title>
+<script>
+window.MathJax = { tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] }, svg: { fontCache: 'global' },
+  startup: { pageReady: () => MathJax.startup.defaultPageReady().then(() => { window.__mjReady = true; }) } };
+</script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f4f9fc; --card:#ffffff; --ink:#132029; --muted:#5a6a76; --line:#d8e5ec;
+  --accent:#2b8fc4; --accent-ink:#1d6a96; --accent-soft:#e3f3fb; --sky:#87CEEB;
+  --right:#1e8e3e; --right-soft:#e6f4ea; --wrong:#c5221f; --wrong-soft:#fce8e6; --warn:#a85d00; --warn-soft:#fff4e0;
+  --fig-a:#cdeaf8; --fig-b:#ffe4c2; --fig-line:#1d4a63; --fig-hi:#d9480f;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0e161c; --card:#152129; --ink:#e5eef3; --muted:#91a3af; --line:#25343f;
+  --accent:#6cc3ec; --accent-ink:#8fd3f3; --accent-soft:#15303e;
+  --right:#5cc982; --right-soft:#16301f; --wrong:#ff8a80; --wrong-soft:#3a1c1b; --warn:#f0b35b; --warn-soft:#3a2b14;
+  --fig-a:#1d4258; --fig-b:#4a3416; --fig-line:#bfe3f5; --fig-hi:#ff9f6b;}}
+:root[data-theme="dark"]{
+  --bg:#0e161c; --card:#152129; --ink:#e5eef3; --muted:#91a3af; --line:#25343f;
+  --accent:#6cc3ec; --accent-ink:#8fd3f3; --accent-soft:#15303e;
+  --right:#5cc982; --right-soft:#16301f; --wrong:#ff8a80; --wrong-soft:#3a1c1b; --warn:#f0b35b; --warn-soft:#3a2b14;
+  --fig-a:#1d4258; --fig-b:#4a3416; --fig-line:#bfe3f5; --fig-hi:#ff9f6b;}
+*{box-sizing:border-box}
+a{color:var(--accent-ink)}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 Inter,system-ui,-apple-system,sans-serif}
+.wrap{max-width:880px;margin:0 auto;padding:0 16px 80px}
+header.hero{padding:34px 0 10px}
+.eyebrow{color:var(--accent-ink);font-weight:700;font-size:12.5px;letter-spacing:.08em;text-transform:uppercase}
+h1{font-size:32px;line-height:1.15;margin:6px 0 8px;letter-spacing:-.01em}
+.lede{color:var(--muted);margin:0;max-width:62ch}
+nav.tabs{position:sticky;top:0;z-index:10;background:var(--bg);display:flex;gap:6px;overflow-x:auto;padding:12px 0;border-bottom:1px solid var(--line);margin-bottom:22px}
+nav.tabs a{flex:none;text-decoration:none;color:var(--ink);font-weight:600;font-size:14px;padding:8px 14px;border-radius:999px;border:1px solid var(--line);background:var(--card)}
+nav.tabs a.on{background:var(--accent);border-color:var(--accent);color:#fff}
+section.view{display:none}
+section.view.on{display:block}
+h2{font-size:24px;margin:8px 0 6px;letter-spacing:-.01em}
+h3{font-size:19px;margin:28px 0 8px}
+.sub{color:var(--muted);margin:0 0 18px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px 20px;margin-bottom:14px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:14px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px}
+.stat .k{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;font-weight:600}
+.stat .v{font-size:26px;font-weight:800;line-height:1.2;margin-top:2px}
+.stat .n{font-size:12.5px;color:var(--muted)}
+.bars{display:grid;gap:12px}
+.bar-row{display:grid;grid-template-columns:minmax(120px,210px) 1fr 70px;gap:12px;align-items:center;font-size:14.5px}
+.bar{height:12px;border-radius:6px;background:var(--accent-soft);overflow:hidden}
+.bar i{display:block;height:100%;border-radius:6px;background:var(--accent)}
+.bar i.low{background:var(--warn)}
+.bar-row b{text-align:right}
+.finding{display:grid;grid-template-columns:34px 1fr;gap:12px;padding:14px 0;border-top:1px solid var(--line)}
+.finding:first-child{border-top:none;padding-top:0}
+.finding .num{width:30px;height:30px;border-radius:50%;background:var(--accent-soft);color:var(--accent-ink);font-weight:800;display:flex;align-items:center;justify-content:center}
+.finding h4{margin:2px 0 4px;font-size:16px}
+.finding p{margin:0;color:var(--ink)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.chip{font-size:12.5px;font-weight:600;padding:2px 9px;border-radius:999px;border:1px solid var(--line);background:var(--bg);color:var(--ink);text-decoration:none}
+a.chip:hover{border-color:var(--accent)}
+.rules{counter-reset:r;list-style:none;padding:0;margin:0;display:grid;gap:10px}
+.rules li{counter-increment:r;display:grid;grid-template-columns:30px 1fr;gap:10px}
+.rules li::before{content:counter(r);width:26px;height:26px;border-radius:8px;background:var(--accent);color:#fff;font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center;margin-top:1px}
+
+/* question cards */
+.q{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px 20px;margin-bottom:16px;scroll-margin-top:70px}
+.q-head{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:12px;font-size:13px}
+.qn{font-weight:800;background:var(--ink);color:var(--bg);padding:2px 9px;border-radius:6px}
+.pill{font-weight:600;padding:2px 9px;border-radius:999px;border:1px solid var(--line);color:var(--muted)}
+.res{margin-left:auto;font-weight:700;padding:2px 10px;border-radius:999px}
+.res.wrong{background:var(--wrong-soft);color:var(--wrong)}
+.res.blank{background:var(--warn-soft);color:var(--warn)}
+.stem{margin-bottom:12px;overflow-x:auto}
+.stem table.data-table{border-collapse:collapse;margin:10px 0;font-size:14px}
+.stem .data-table th,.stem .data-table td{border:1px solid var(--line);padding:5px 12px;text-align:center}
+.choices{list-style:none;padding:0;margin:0 0 12px;display:grid;gap:7px}
+.choice{display:flex;align-items:center;gap:12px;padding:8px 12px;border:1.5px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);font:inherit;text-align:left;width:100%}
+button.choice{cursor:pointer}
+button.choice:hover:not(:disabled){border-color:var(--accent);background:var(--accent-soft)}
+.choice .L{width:24px;height:24px;flex:none;border-radius:50%;border:1.5px solid var(--muted);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px}
+.choice.sel{border-color:var(--accent);background:var(--accent-soft)}
+.choice.sel .L{background:var(--accent);border-color:var(--accent);color:#fff}
+.choice.ok{border-color:var(--right);background:var(--right-soft)}
+.choice.ok .L{background:var(--right);border-color:var(--right);color:#fff}
+.choice.bad{border-color:var(--wrong);background:var(--wrong-soft)}
+.choice.bad .L{background:var(--wrong);border-color:var(--wrong);color:#fff}
+.choice .tag{margin-left:auto;font-size:12px;font-weight:700;white-space:nowrap}
+.choice.ok .tag{color:var(--right)} .choice.bad .tag{color:var(--wrong)}
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.compare div{border-radius:10px;padding:10px 12px}
+.compare .yours{background:var(--wrong-soft)} .compare .yours.blank{background:var(--warn-soft)}
+.compare .right{background:var(--right-soft)}
+.compare small{display:block;font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.compare .yours small{color:var(--wrong)} .compare .yours.blank small{color:var(--warn)} .compare .right small{color:var(--right)}
+.compare b{font-size:18px}
+.call{border-radius:12px;padding:12px 14px;margin:10px 0}
+.call h5{margin:0 0 4px;font-size:13px;text-transform:uppercase;letter-spacing:.06em}
+.call.why{background:var(--wrong-soft)} .call.why h5{color:var(--wrong)}
+.call.why.blank{background:var(--warn-soft)} .call.why.blank h5{color:var(--warn)}
+.call.fast{background:var(--accent-soft)} .call.fast h5{color:var(--accent-ink)}
+.steps-h{margin:14px 0 6px;font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+ol.steps{margin:0;padding-left:22px} ol.steps li{margin-bottom:6px}
+
+/* practice */
+.progress{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.progress .bar{flex:1;height:10px}
+.ans-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:4px}
+.ans-row input{font:600 17px Inter,sans-serif;width:150px;padding:8px 10px;border:1.5px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink)}
+.ans-row input:focus{outline:none;border-color:var(--accent)}
+.btn{font:600 14px Inter,sans-serif;padding:8px 16px;border-radius:999px;border:1.5px solid var(--accent);background:var(--accent);color:#fff;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--accent-ink)}
+.btn:disabled{opacity:.5;cursor:default}
+.fb{font-weight:700;font-size:14px}
+.fb.ok{color:var(--right)} .fb.bad{color:var(--wrong)}
+.sol{display:none;margin-top:12px;border-left:4px solid var(--accent);background:var(--accent-soft);border-radius:0 10px 10px 0;padding:10px 14px}
+.sol.on{display:block}
+.like{font-size:12.5px;color:var(--muted)}
+
+/* figures */
+figure{margin:14px 0;text-align:center}
+figure svg{max-width:100%;height:auto}
+figcaption{font-size:13.5px;color:var(--muted);margin-top:6px}
+.fig-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.fig-row figure{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:10px;margin:0}
+svg text{font-family:Inter,sans-serif;fill:var(--ink)}
+.rule-box{border:1.5px solid var(--accent);border-radius:14px;padding:14px 16px;background:var(--accent-soft);margin:14px 0}
+.rule-box b{color:var(--accent-ink)}
+table.ladder{border-collapse:collapse;width:100%;font-size:15px;margin:8px 0}
+.ladder th,.ladder td{border:1px solid var(--line);padding:8px 10px;text-align:center}
+.ladder th{background:var(--accent-soft)}
+.trap{background:var(--warn-soft);border-radius:12px;padding:12px 14px;margin:12px 0}
+.trap h5{margin:0 0 4px;color:var(--warn);font-size:13px;text-transform:uppercase;letter-spacing:.06em}
+.trap ul{margin:0;padding-left:20px}
+.subnav{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 16px}
+@media (max-width:620px){
+  h1{font-size:26px}
+  .compare,.fig-row{grid-template-columns:1fr}
+  .bar-row{grid-template-columns:1fr 60px}
+  .bar-row .bar{grid-column:1/-1;grid-row:2}
+  .q,.card{padding:16px 14px}
+}
+@media print{nav.tabs{display:none} section.view{display:block} .sol{display:block}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="hero">
+  <div class="eyebrow">Amro Academy · SAT Math</div>
+  <h1>Hrag's Exam Review</h1>
+  <p class="lede">Results from the practice exam submitted on 31 October: what went well, a step-by-step review of every missed question, new questions to practice alone, and a triangle lab.</p>
+</header>
+
+<nav class="tabs" aria-label="Sections">
+  <a href="#results" data-view="results">1 · Results</a>
+  <a href="#review" data-view="review">2 · Mistake review (13)</a>
+  <a href="#practice" data-view="practice">3 · Practice alone (13)</a>
+  <a href="#triangles" data-view="triangles">4 · Triangle lab</a>
+</nav>
+
+<!-- ============================ RESULTS ============================ -->
+<section class="view" id="v-results">
+  <h2>Your results</h2>
+  <p class="sub">This exam was written to be harder than the official Bluebook practice tests, so 70% is a solid base. The mistakes follow clear patterns, which makes them fixable.</p>
+  <div class="stats">
+    <div class="stat"><div class="k">Total</div><div class="v">31 / 44</div><div class="n">70%</div></div>
+    <div class="stat"><div class="k">Module 1</div><div class="v">15 / 22</div><div class="n">4 wrong · 3 blank</div></div>
+    <div class="stat"><div class="k">Module 2</div><div class="v">16 / 22</div><div class="n">2 wrong · 4 blank</div></div>
+    <div class="stat"><div class="k">Hints used</div><div class="v">12</div><div class="n">26 correct without hints</div></div>
+  </div>
+  <div class="card">
+    <h3 style="margin-top:0">By domain</h3>
+    <div class="bars">
+      <div class="bar-row"><span>Problem-Solving &amp; Data</span><div class="bar"><i style="width:100%"></i></div><b>6/6</b></div>
+      <div class="bar-row"><span>Algebra</span><div class="bar"><i style="width:87%"></i></div><b>13/15</b></div>
+      <div class="bar-row"><span>Geometry &amp; Trig</span><div class="bar"><i class="low" style="width:57%"></i></div><b>4/7</b></div>
+      <div class="bar-row"><span>Advanced Math</span><div class="bar"><i class="low" style="width:50%"></i></div><b>8/16</b></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-top:0">What the mistakes show</h3>
+    <div class="finding"><span class="num">1</span><div><h4>You know the method, but the last step slips</h4>
+      <p>4 of your 6 wrong answers were the exact trap choice: answering with \(k\) instead of \(x\), taking the 6-hour rate as hourly, a sign flip on \(k\), and ignoring the 2 in \(2t\). The setup was right every time.</p>
+      <div class="chips"><a class="chip" href="#review" data-go="m1q5">M1 Q5</a><a class="chip" href="#review" data-go="m1q19">M1 Q19</a><a class="chip" href="#review" data-go="m2q16">M2 Q16</a><a class="chip" href="#review" data-go="m2q21">M2 Q21</a></div></div></div>
+    <div class="finding"><span class="num">2</span><div><h4>Exponential rates are the top priority</h4>
+      <p>Both questions that asked for a percent rate from an equivalent form were wrong. They share one idea: rewrite the exponent so it is just \(t\), then read the new base.</p>
+      <div class="chips"><a class="chip" href="#review" data-go="m1q19">M1 Q19</a><a class="chip" href="#review" data-go="m2q21">M2 Q21</a></div></div></div>
+    <div class="finding"><span class="num">3</span><div><h4>Signs with negative numbers</h4>
+      <p>Two polynomial questions were lost to one sign each: 10 instead of 9, and \(x-4\) instead of \(x+4\).</p>
+      <div class="chips"><a class="chip" href="#review" data-go="m1q16">M1 Q16</a><a class="chip" href="#review" data-go="m2q16">M2 Q16</a></div></div></div>
+    <div class="finding"><span class="num">4</span><div><h4>Seven questions were left blank</h4>
+      <p>The SAT has no penalty for wrong answers, so a blank is always a lost point. Guessing on the 5 blank multiple-choice questions is worth about 1 point on average, and an educated guess is worth more.</p>
+      <div class="chips"><a class="chip" href="#review" data-go="m1q20">M1 Q20</a><a class="chip" href="#review" data-go="m1q21">M1 Q21</a><a class="chip" href="#review" data-go="m1q22">M1 Q22</a><a class="chip" href="#review" data-go="m2q10">M2 Q10</a><a class="chip" href="#review" data-go="m2q17">M2 Q17</a><a class="chip" href="#review" data-go="m2q20">M2 Q20</a><a class="chip" href="#review" data-go="m2q22">M2 Q22</a></div></div></div>
+    <div class="finding"><span class="num">5</span><div><h4>Geometry: three topics skipped, none answered wrong</h4>
+      <p>Sector area with radians, similar solids, and the unit circle were all left blank. These are formula topics, so a short review (in the mistake cards) turns them into quick points.</p></div></div>
+    <div class="finding"><span class="num">6</span><div><h4>Strong points</h4>
+      <p>Perfect on data analysis, and every algebra question you attempted was correct. You also solved the two triangle questions (M1 Q7 and M2 Q6); the triangle lab goes deeper on both.</p></div></div>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-top:0">Four habits for the next test</h3>
+    <ol class="rules">
+      <li><span><b>Re-read the last line before choosing.</b> Ask: "Is my number what they asked for?" (\(x\) or \(k\)? per hour or per 6 hours? \(AB\) or \(DB\)?)</span></li>
+      <li><span><b>Write substituted values in brackets.</b> \((-1)^3\), \(x-(-4)\). One extra line prevents most sign errors.</span></li>
+      <li><span><b>If the exponent is not just \(t\), rewrite it.</b> \(b^{t/6}=(b^{1/6})^t\) and \(b^{2t}=(b^2)^t\).</span></li>
+      <li><span><b>Never leave a blank.</b> With 2 minutes left, fill every empty answer.</span></li>
+    </ol>
+  </div>
+  <p class="sub">A note for next time: the per-question stopwatch was not used on most questions, so this report can't show speed. Starting it on each question will show where time goes.</p>
+</section>
+
+<!-- ============================ REVIEW ============================ -->
+<section class="view" id="v-review">
+  <h2>Mistake review</h2>
+  <p class="sub">Every question you missed or left blank: your answer next to the correct one, why it went wrong, a full step-by-step solution, and the fastest way to solve it on test day.</p>
+  <div id="reviewList"></div>
+</section>
+
+<!-- ============================ PRACTICE ============================ -->
+<section class="view" id="v-practice">
+  <h2>Practice alone</h2>
+  <p class="sub">13 new questions, one for each question you missed, testing the same idea with different numbers. Solve each one before you check it. The solution unlocks after you check, or with "Show solution".</p>
+  <div class="progress"><b id="pScore">0 / 13 correct</b><div class="bar"><i id="pBar" style="width:0%"></i></div></div>
+  <div id="practiceList"></div>
+</section>
+
+<!-- ============================ TRIANGLES ============================ -->
+<section class="view" id="v-triangles">
+  <h2>Triangle lab</h2>
+  <p class="sub">The two ideas behind M1 Q7 and M2 Q6, explained with pictures, then exercises to build them into habits.</p>
+  <div class="subnav"><a class="chip" href="#triangles" data-jump="lab-sim">Part A · Similar triangles (M1 Q7)</a><a class="chip" href="#triangles" data-jump="lab-trig">Part B · Right-triangle trig (M2 Q6)</a></div>
+
+  <div class="card" id="lab-sim">
+    <div class="eyebrow">Part A · M1 Q7</div>
+    <h3 style="margin-top:4px">Similar triangles: a parallel line makes a small copy</h3>
+    <p>In M1 Q7, \(\overline{DE}\parallel\overline{BC}\), \(AD=6\), \(DB=9\), and the area of triangle \(ADE\) is 24. The question asks for the area of quadrilateral \(DBCE\).</p>
+    <figure id="figQ7"></figure>
+
+    <h4>Step 1 · Why the triangles are similar</h4>
+    <p>A line parallel to one side creates equal corresponding angles: \(\angle ADE=\angle ABC\) and \(\angle AED=\angle ACB\), and both triangles share \(\angle A\). Equal angles mean <b>similar triangles</b> (AA similarity): \(\triangle ADE\) is a scaled-down copy of \(\triangle ABC\).</p>
+
+    <h4>Step 2 · Find the scale factor from matching sides</h4>
+    <p>Match each side of the small triangle with the same side of the big one. \(AD\) matches \(AB\), the <b>whole</b> side, not \(DB\).</p>
+    <p class="rule-box">\(k=\dfrac{AD}{AB}=\dfrac{6}{6+9}=\dfrac{6}{15}=\dfrac25\)</p>
+
+    <h4>Step 3 · Areas scale by the square</h4>
+    <p>When every length is multiplied by \(k\), the area is multiplied by \(k^2\). The pictures show why: doubling the sides makes 4 copies of the small triangle, and tripling makes 9.</p>
+    <div class="fig-row"><figure id="figGrid2"></figure><figure id="figGrid3"></figure></div>
+    <table class="ladder"><tr><th>Measurement</th><th>Lengths, perimeters</th><th>Areas</th><th>Volumes</th></tr>
+      <tr><td>Scale by</td><td>\(k\)</td><td>\(k^2\)</td><td>\(k^3\)</td></tr>
+      <tr><td>M1 Q7 (\(k=\frac25\))</td><td>\(\times\frac25\)</td><td>\(\times\frac4{25}\)</td><td>—</td></tr></table>
+
+    <h4>Step 4 · Finish</h4>
+    <p>\(\dfrac{\text{Area }ADE}{\text{Area }ABC}=\dfrac{4}{25}\Rightarrow \text{Area }ABC=24\cdot\dfrac{25}{4}=150\). The quadrilateral is the big triangle minus the small one: \(150-24=\mathbf{126}\).</p>
+
+    <div class="trap"><h5>Traps the choices were built on</h5><ul>
+      <li>\(k=\frac69\) (using \(DB\) instead of \(AB\)): wrong scale factor.</li>
+      <li>54: using \(k=\frac25\) on the area without squaring it.</li>
+      <li>150: the whole triangle; you forgot to subtract the small one.</li></ul></div>
+
+    <div class="rule-box"><b>Recipe for every "parallel line in a triangle" question:</b> (1) find matching sides through the shared vertex, (2) \(k=\frac{\text{small}}{\text{whole}}\), (3) lengths \(\times k\), areas \(\times k^2\), (4) subtract if the question asks for the leftover piece.</div>
+
+    <h3>Exercises · Similar triangles</h3>
+    <div id="labSim"></div>
+  </div>
+
+  <div class="card" id="lab-trig">
+    <div class="eyebrow">Part B · M2 Q6</div>
+    <h3 style="margin-top:4px">Right-triangle trig: every ratio depends on where you stand</h3>
+    <p>In M2 Q6, angle \(C\) is the right angle and \(\sin A=\frac{5}{13}\). The question asks for \(\tan A+\tan B\).</p>
+
+    <h4>Step 1 · SOH-CAH-TOA</h4>
+    <p class="rule-box">\(\sin=\dfrac{\text{opposite}}{\text{hypotenuse}}\qquad \cos=\dfrac{\text{adjacent}}{\text{hypotenuse}}\qquad \tan=\dfrac{\text{opposite}}{\text{adjacent}}\)</p>
+
+    <h4>Step 2 · Turn the ratio into a triangle</h4>
+    <p>\(\sin A=\frac{5}{13}\) means: the side opposite \(A\) is 5 and the hypotenuse is 13. The Pythagorean theorem gives the third side: \(\sqrt{13^2-5^2}=\sqrt{144}=12\).</p>
+
+    <h4>Step 3 · Read each angle from its own corner</h4>
+    <p>The hypotenuse never changes, but <b>opposite and adjacent swap</b> when you move from \(A\) to \(B\).</p>
+    <div class="fig-row"><figure id="figFromA"></figure><figure id="figFromB"></figure></div>
+    <p>From \(A\): \(\tan A=\frac{5}{12}\). From \(B\): \(\tan B=\frac{12}{5}\).</p>
+
+    <h4>Step 4 · Finish</h4>
+    <p>\(\tan A+\tan B=\dfrac{5}{12}+\dfrac{12}{5}=\dfrac{25+144}{60}=\mathbf{\dfrac{169}{60}}\)</p>
+
+    <div class="rule-box"><b>Facts that save time</b> (when \(C=90^\circ\), so \(A+B=90^\circ\)):<br>
+      • \(\sin A=\cos B\) and \(\cos A=\sin B\)<br>
+      • \(\tan B=\dfrac{1}{\tan A}\), so \(\tan A\cdot\tan B=1\)<br>
+      • Shortcut: \(\tan A+\tan B=\dfrac{c^2}{ab}=\dfrac{13^2}{5\cdot12}=\dfrac{169}{60}\)<br>
+      • Know the triples: 3-4-5, 5-12-13, 8-15-17, 7-24-25 and their multiples</div>
+
+    <div class="trap"><h5>Traps the choices were built on</h5><ul>
+      <li>\(\frac{60}{169}\): the right answer flipped.</li>
+      <li>1: that is \(\tan A\times\tan B\), not the sum.</li>
+      <li>Reading \(\tan B\) from angle \(A\)'s point of view, which gives \(\frac{5}{12}\) twice.</li></ul></div>
+
+    <h3>Exercises · Right-triangle trig</h3>
+    <div id="labTrig"></div>
+  </div>
+</section>
+</div>
+
+<script>
+const REVIEW = [{"id":"m1q4","module":1,"number":4,"domain":"Advanced Math","skill":"Equivalent expressions (rational)","type":"mcq","question":"\\[\\frac{x^2-9}{x^2+x-6}\\cdot\\frac{x^2-4}{x^2-5x+6}\\] Which of the following is equivalent to the expression above for \\(x>3\\)?","choices":["\\(\\dfrac{x-2}{x+2}\\)","\\(\\dfrac{x+3}{x-3}\\)","\\(\\dfrac{x+2}{x-2}\\)","\\(1\\)"],"correctAnswer":"C","hints":["Factor all four polynomials completely before cancelling anything.","\\(x^2-9=(x-3)(x+3)\\), \\(x^2+x-6=(x+3)(x-2)\\), \\(x^2-4=(x-2)(x+2)\\), \\(x^2-5x+6=(x-2)(x-3)\\). Now cancel common factors."],"solution":"\\(\\frac{(x-3)(x+3)}{(x+3)(x-2)}\\cdot\\frac{(x-2)(x+2)}{(x-2)(x-3)}\\). Cancel \\((x-3)\\), \\((x+3)\\) and one \\((x-2)\\): the result is \\(\\frac{x+2}{x-2}\\).","note":{"student":"B","time":"03:26","hints":2,"why":"Choice B, \\(\\frac{x+3}{x-3}\\), comes from cancelling the wrong pair. After factoring, \\((x-3)\\) and \\((x+3)\\) cancel <b>completely<\/b>; the factors that survive are \\((x+2)\\) on top and one \\((x-2)\\) on the bottom. You also spent 3½ minutes and both hints here, which means the factoring itself is fine and the slip happens while cancelling.","steps":["Factor all four pieces: \\(x^2-9=(x-3)(x+3)\\), \\(x^2+x-6=(x+3)(x-2)\\), \\(x^2-4=(x-2)(x+2)\\), \\(x^2-5x+6=(x-2)(x-3)\\).","Write everything as one fraction: \\[\\frac{(x-3)(x+3)\\,(x-2)(x+2)}{(x+3)(x-2)\\,(x-2)(x-3)}\\]","Cancel one pair at a time and physically cross each one out: \\((x-3)\\) with \\((x-3)\\), \\((x+3)\\) with \\((x+3)\\), then <b>one<\/b> \\((x-2)\\) with <b>one<\/b> \\((x-2)\\).","Top keeps \\((x+2)\\). Bottom keeps the second \\((x-2)\\). Result: \\(\\dfrac{x+2}{x-2}\\) → <b>C<\/b>."],"fast":"<b>Plug in a number (≈40 s).<\/b> Choose \\(x=4\\) (allowed because \\(x>3\\)). Original: \\(\\frac{16-9}{16+4-6}\\cdot\\frac{16-4}{16-20+6}=\\frac{7}{14}\\cdot\\frac{12}{2}=3\\). Choices: A \\(=\\frac13\\), B \\(=7\\), C \\(=\\frac{6}{2}=3\\) ✓, D \\(=1\\). Only C matches, and you never risk a cancelling error."}},{"id":"m1q5","module":1,"number":5,"domain":"Advanced Math","skill":"Quadratics — discriminant","type":"mcq","question":"\\[2x^2-kx+18=0\\] In the equation above, \\(k\\) is a positive constant. If the equation has exactly one real solution, what is that solution?","choices":["\\(12\\)","\\(3\\)","\\(6\\)","\\(-3\\)"],"correctAnswer":"B","hints":["\"Exactly one real solution\" means the discriminant \\(b^2-4ac\\) equals 0. Use it to find \\(k\\) first.","\\(k^2-4(2)(18)=0\\) gives \\(k=12\\). The question asks for the solution \\(x\\), not \\(k\\): with a zero discriminant, \\(x=\\frac{-b}{2a}\\)."],"solution":"\\(k^2-144=0\\Rightarrow k=12\\) (positive). The single solution is \\(x=\\frac{k}{2\\cdot2}=\\frac{12}{4}=3\\). Check: \\(2(9)-36+18=0\\). Choice A (12) is the value of \\(k\\) — a trap.","note":{"student":"A","time":"01:17","hints":0,"why":"12 is the value of \\(k\\), not the solution. The math was right, but the question asks for \\(x\\). This is the most common SAT trap: <b>answering for the wrong variable<\/b>.","steps":["\"Exactly one real solution\" means the discriminant is zero: \\(b^2-4ac=0\\).","Here \\(a=2,\\ b=-k,\\ c=18\\): \\(k^2-4(2)(18)=0\\Rightarrow k^2=144\\Rightarrow k=12\\) (positive).","<b>Stop and re-read the question:<\/b> it asks for the solution \\(x\\).","With a zero discriminant, the only solution is \\(x=\\dfrac{-b}{2a}=\\dfrac{k}{4}=\\dfrac{12}{4}=3\\) → <b>B<\/b>.","Check: \\(2(3)^2-12(3)+18=18-36+18=0\\) ✓."],"fast":"<b>Perfect-square shortcut (≈15 s).<\/b> One solution means the quadratic is a perfect square: \\(2x^2-kx+18=2\\left(x^2-\\tfrac{k}{2}x+9\\right)\\), and \\(9=3^2\\), so it must be \\(2(x-3)^2\\). The answer is \\(x=3\\) without ever finding \\(k\\)."}},{"id":"m1q16","module":1,"number":16,"domain":"Advanced Math","skill":"Polynomial factors and remainders","type":"spr","question":"\\[p(x)=x^3+ax^2-5x+6\\] In the polynomial above, \\(a\\) is a constant. If \\(x-2\\) is a factor of \\(p(x)\\), what is the value of \\(p(-1)\\)?","correctAnswer":"9","acceptedAnswers":["9"],"hints":["If \\(x-2\\) is a factor, then \\(p(2)=0\\). Use this to find \\(a\\).","\\(8+4a-10+6=0\\). After finding \\(a\\), substitute \\(x=-1\\) carefully (watch the signs of the odd powers)."],"solution":"\\(p(2)=4a+4=0\\Rightarrow a=-1\\). Then \\(p(-1)=(-1)^3-(-1)^2-5(-1)+6=-1-1+5+6=9\\).","note":{"student":"10","time":"00:00","hints":1,"why":"Your method (factor theorem) was right; one sign went wrong while evaluating. With \\(a=-1\\), the term \\(ax^2\\) at \\(x=-1\\) is \\((-1)(1)=-1\\), and \\(-5x\\) becomes \\(+5\\). Getting 10 instead of 9 means one of those terms was off by 1.","steps":["Factor theorem: if \\(x-2\\) is a factor, then \\(p(2)=0\\).","\\(p(2)=8+4a-10+6=4a+4=0\\Rightarrow a=-1\\).","So \\(p(x)=x^3-x^2-5x+6\\).","Evaluate <b>term by term<\/b> at \\(x=-1\\): \\((-1)^3=-1\\), \\(\\ -(-1)^2=-1\\), \\(\\ -5(-1)=+5\\), \\(\\ +6\\).","Add: \\(-1-1+5+6=9\\)."],"fast":"<b>Bracket every term before adding:<\/b> \\((-1)+(-1)+(+5)+(+6)\\). Odd powers of \\(-1\\) give \\(-1\\), even powers give \\(+1\\). On test day you can also type \\(x^3-x^2-5x+6\\) into Desmos and click the point at \\(x=-1\\)."}},{"id":"m1q19","module":1,"number":19,"domain":"Advanced Math","skill":"Exponential decay rate","type":"mcq","question":"The mass, in grams, of a radioactive substance \\(t\\) hours after a measurement is modeled by \\(m(t)=240(0.5)^{t/6}\\). Approximately what percent of the substance decays each hour?","choices":["8.3%","11%","89%","50%"],"correctAnswer":"B","hints":["Rewrite the model as \\(240\\,(b)^t\\), where \\(b\\) is the hourly multiplier.","\\(b=(0.5)^{1/6}\\approx0.891\\). The percent that decays per hour is \\(1-b\\)."],"solution":"\\((0.5)^{t/6}=\\left((0.5)^{1/6}\\right)^t\\approx(0.891)^t\\). Each hour 89.1% remains, so about \\(10.9\\%\\approx11\\%\\) decays. (8.3% comes from wrongly dividing 50% by 6.)","note":{"student":"D","time":"00:00","hints":0,"why":"50% is how much decays every <b>6 hours<\/b> (the exponent is \\(t/6\\)), not every hour.","steps":["Rewrite so the exponent is just \\(t\\): \\((0.5)^{t/6}=\\left((0.5)^{1/6}\\right)^t\\).","The hourly factor is \\(b=(0.5)^{1/6}\\approx0.891\\).","So each hour 89.1% <b>remains<\/b>.","Decay per hour \\(=1-0.891=0.109\\approx11\\%\\) → <b>B<\/b>."],"fast":"<b>Calculator in one step:<\/b> 0.5^(1/6) = 0.891, so 11%. Elimination also works fast: D empties the substance far quicker than a 6-hour half-life; C (89%) is what <i>remains<\/i>, not what decays; A (50 ÷ 6) treats exponential decay as linear."}},{"id":"m1q20","module":1,"number":20,"domain":"Geometry and Trigonometry","skill":"Arc length, sector area, radians","type":"mcq","question":"A circle has a radius of 9 centimeters. A sector of the circle has an arc length of \\(6\\pi\\) centimeters. What is the area, in square centimeters, of this sector?","choices":["\\(54\\pi\\)","\\(18\\pi\\)","\\(27\\pi\\)","\\(81\\pi\\)"],"correctAnswer":"C","hints":["Find the central angle in radians from \\(s=r\\theta\\).","\\(\\theta=\\frac{6\\pi}{9}=\\frac{2\\pi}{3}\\). The sector is that fraction of the full circle: \\(\\frac{\\theta}{2\\pi}\\times\\pi r^2\\)."],"solution":"\\(\\theta=\\frac{2\\pi}{3}\\), which is \\(\\frac13\\) of the circle. Sector area \\(=\\frac13\\cdot81\\pi=27\\pi\\). (Shortcut: area \\(=\\frac12 rs=\\frac12\\cdot9\\cdot6\\pi\\).)","note":{"student":"","time":"00:00","hints":0,"why":"Left blank. This uses radians and sectors, one of the three geometry topics you skipped.","steps":["Arc length with radians: \\(s=r\\theta\\). So \\(6\\pi=9\\theta\\Rightarrow\\theta=\\frac{2\\pi}{3}\\).","Fraction of the full circle: \\(\\dfrac{2\\pi/3}{2\\pi}=\\dfrac13\\).","Full circle area: \\(\\pi(9)^2=81\\pi\\).","Sector area \\(=\\frac13\\cdot81\\pi=27\\pi\\) → <b>C<\/b>."],"fast":"<b>Memorize \\(A_{\\text{sector}}=\\tfrac12\\,r\\,s\\).<\/b> Then it's one line: \\(\\tfrac12\\cdot9\\cdot6\\pi=27\\pi\\)."}},{"id":"m1q21","module":1,"number":21,"domain":"Algebra","skill":"Linear functions","type":"mcq","question":"For the linear function \\(f\\), \\(f(3)=7\\) and \\(f(-1)=-5\\). The function \\(g\\) is defined by \\(g(x)=f(2x)+1\\). For what value of \\(k\\) is \\(g(k)=k\\)?","choices":["\\(1\\)","\\(-\\dfrac{1}{5}\\)","\\(\\dfrac{1}{7}\\)","\\(\\dfrac{1}{5}\\)"],"correctAnswer":"D","hints":["Find the equation of \\(f\\) first: slope from the two points, then the intercept.","\\(f(x)=3x-2\\), so \\(g(x)=3(2x)-2+1\\). Set \\(g(k)=k\\)."],"solution":"Slope \\(=\\frac{7-(-5)}{3-(-1)}=3\\); \\(f(x)=3x-2\\). \\(g(x)=6x-1\\). \\(6k-1=k\\Rightarrow k=\\frac15\\). (\\(k=1\\) solves \\(f(k)=k\\) — a trap.)","note":{"student":"","time":"00:00","hints":0,"why":"Left blank. Note the trap: choice A (\\(k=1\\)) solves \\(f(k)=k\\), not \\(g(k)=k\\).","steps":["Slope of \\(f\\): \\(\\dfrac{7-(-5)}{3-(-1)}=\\dfrac{12}{4}=3\\).","\\(f(x)=3x+b\\) and \\(f(3)=7\\Rightarrow 9+b=7\\Rightarrow b=-2\\). So \\(f(x)=3x-2\\).","\\(g(x)=f(2x)+1=3(2x)-2+1=6x-1\\).","\\(g(k)=k\\Rightarrow 6k-1=k\\Rightarrow k=\\frac15\\) → <b>D<\/b>."],"fast":"<b>Desmos:<\/b> graph \\(y=6x-1\\) and \\(y=x\\) and click the intersection, \\((0.2,\\,0.2)\\)."}},{"id":"m1q22","module":1,"number":22,"domain":"Advanced Math","skill":"Linear–quadratic systems","type":"spr","question":"\\[y=2x^2-6x+c\\]\\[y=2x-3\\] In the system above, \\(c\\) is a constant. If the graphs of the equations intersect at exactly one point, what is the value of \\(c\\)?","correctAnswer":"5","acceptedAnswers":["5"],"hints":["Set the two expressions for \\(y\\) equal and move everything to one side.","\\(2x^2-8x+(c+3)=0\\). One intersection point means the discriminant is 0."],"solution":"\\(2x^2-8x+c+3=0\\). Discriminant: \\(64-4(2)(c+3)=0\\Rightarrow c+3=8\\Rightarrow c=5\\).","note":{"student":"","time":"00:00","hints":0,"why":"Left blank. \"Intersect at exactly one point\" is a discriminant question in disguise.","steps":["Set the two \\(y\\)-expressions equal: \\(2x^2-6x+c=2x-3\\).","Move everything to one side: \\(2x^2-8x+(c+3)=0\\).","One intersection ⇒ discriminant \\(=0\\): \\((-8)^2-4(2)(c+3)=0\\).","\\(64=8(c+3)\\Rightarrow c+3=8\\Rightarrow c=5\\)."],"fast":"<b>Desmos slider:<\/b> type both equations, let \\(c\\) be a slider, and drag until the line just touches the parabola (\\(c=5\\))."}},{"id":"m2q10","module":2,"number":10,"domain":"Advanced Math","skill":"Function transformations","type":"mcq","question":"The function \\(f\\) is defined by \\(f(x)=(x-4)(x+2)\\). The function \\(g\\) is defined by \\(g(x)=f(2x)\\). The minimum value of \\(g\\) is \\(b\\), and it occurs at \\(x=a\\). Which of the following is \\((a,\\,b)\\)?","choices":["\\(\\left(\\tfrac12,\\,-9\\right)\\)","\\((1,\\,-9)\\)","\\(\\left(\\tfrac12,\\,-18\\right)\\)","\\((2,\\,-9)\\)"],"correctAnswer":"A","hints":["Find the vertex of \\(f\\) first: it lies halfway between its zeros, 4 and \\(-2\\).","\\(f\\) has its minimum \\(-9\\) at \\(x=1\\). Replacing \\(x\\) with \\(2x\\) compresses horizontally: \\(g\\) reaches that same value when \\(2x=1\\)."],"solution":"Vertex of \\(f\\): \\(x=1\\), \\(f(1)=(-3)(3)=-9\\). \\(g(x)=f(2x)\\) has the same minimum value \\(-9\\), reached when \\(2x=1\\), i.e. \\(x=\\frac12\\). Horizontal compression does not change the minimum value.","note":{"student":"","time":"00:00","hints":0,"why":"Left blank. This tests one rule about horizontal transformations.","steps":["Zeros of \\(f\\): \\(x=4\\) and \\(x=-2\\). The vertex is halfway: \\(x=1\\).","Minimum value: \\(f(1)=(1-4)(1+2)=-9\\).","\\(g(x)=f(2x)\\) squeezes the graph horizontally by a factor of 2: every \\(x\\)-coordinate is <b>halved<\/b>, every \\(y\\)-value stays the same.","Vertex \\((1,-9)\\) moves to \\(\\left(\\tfrac12,-9\\right)\\) → <b>A<\/b>."],"fast":"<b>Rule to memorize:<\/b> \\(f(kx)\\) divides \\(x\\)-coordinates by \\(k\\) and never changes the minimum or maximum value."}},{"id":"m2q16","module":2,"number":16,"domain":"Advanced Math","skill":"Polynomial functions","type":"mcq","question":"\\[p(x)=(x-1)^2(x+3)(x-k)\\] In the polynomial function above, \\(k\\) is a constant. If \\(p(0)=12\\), what is the value of \\(p(-2)\\)?","choices":["\\(-54\\)","\\(-18\\)","\\(54\\)","\\(18\\)"],"correctAnswer":"D","hints":["Use \\(p(0)=12\\) to find \\(k\\): substitute \\(x=0\\) into each factor.","\\((1)(3)(-k)=12\\Rightarrow k=-4\\). So the last factor is \\((x+4)\\). Now evaluate at \\(x=-2\\)."],"solution":"\\(-3k=12\\Rightarrow k=-4\\). \\(p(-2)=(-3)^2(1)(-2+4)=9\\cdot1\\cdot2=18\\). Using \\(k=4\\) by mistake gives \\(-54\\).","note":{"student":"A","time":"00:00","hints":1,"why":"−54 is exactly what you get with \\(k=4\\). From \\(-3k=12\\), \\(k=-4\\), so the last factor is \\(x-(-4)=x+4\\), not \\(x-4\\). This is a sign slip, the same kind as M1 Q16.","steps":["\\(p(0)=(0-1)^2(0+3)(0-k)=(1)(3)(-k)=-3k\\).","\\(-3k=12\\Rightarrow k=-4\\).","<b>Rewrite the factor with the number:<\/b> \\(x-k=x-(-4)=x+4\\).","\\(p(-2)=(-2-1)^2(-2+3)(-2+4)=9\\cdot1\\cdot2=18\\) → <b>D<\/b>."],"fast":"<b>Always write the substituted factor on its own line<\/b> before evaluating. Most sign errors happen when you skip writing \\(x-(-4)=x+4\\)."}},{"id":"m2q17","module":2,"number":17,"domain":"Geometry and Trigonometry","skill":"Similar solids — volume","type":"mcq","question":"Two right circular cones are similar. The ratio of their surface areas is \\(9:16\\). If the volume of the larger cone is \\(128\\pi\\) cubic inches, what is the volume, in cubic inches, of the smaller cone?","choices":["\\(72\\pi\\)","\\(54\\pi\\)","\\(96\\pi\\)","\\(24\\pi\\)"],"correctAnswer":"B","hints":["Area ratio is the square of the length ratio. Find the length (scale) ratio first.","Length ratio \\(=3:4\\). Volume ratio is the cube of the length ratio."],"solution":"Length ratio \\(\\frac34\\); volume ratio \\(\\frac{27}{64}\\). Smaller volume \\(=128\\pi\\cdot\\frac{27}{64}=54\\pi\\). (Using \\(\\frac{9}{16}\\) directly gives the trap \\(72\\pi\\).)","note":{"student":"","time":"00:00","hints":0,"why":"Left blank. Trap to avoid: using \\(\\frac{9}{16}\\) directly gives \\(72\\pi\\).","steps":["Area ratio \\(9:16\\) ⇒ length ratio \\(\\sqrt9:\\sqrt{16}=3:4\\).","Volume ratio \\(=3^3:4^3=27:64\\).","Smaller volume \\(=128\\pi\\cdot\\dfrac{27}{64}=54\\pi\\) → <b>B<\/b>."],"fast":"<b>The ladder:<\/b> lengths \\(k\\), areas \\(k^2\\), volumes \\(k^3\\). From an area ratio, square-root it, then cube it."}},{"id":"m2q20","module":2,"number":20,"domain":"Geometry and Trigonometry","skill":"Unit circle and radians","type":"mcq","question":"The angle \\(\\theta\\), measured in radians, satisfies \\(\\frac{\\pi}{2}<\\theta<\\pi\\) and \\(\\sin\\theta=\\frac35\\). What is the value of \\(\\cos(\\theta+\\pi)\\)?","choices":["\\(\\dfrac45\\)","\\(-\\dfrac45\\)","\\(\\dfrac35\\)","\\(-\\dfrac35\\)"],"correctAnswer":"A","hints":["Find \\(\\cos\\theta\\) first using \\(\\sin^2\\theta+\\cos^2\\theta=1\\). Which quadrant is \\(\\theta\\) in?","\\(\\theta\\) is in Quadrant II, so \\(\\cos\\theta=-\\frac45\\). Adding \\(\\pi\\) moves the point to the opposite side of the unit circle."],"solution":"\\(\\cos\\theta=-\\frac45\\) (Quadrant II). Rotating by \\(\\pi\\) reflects the point through the origin, so \\(\\cos(\\theta+\\pi)=-\\cos\\theta=\\frac45\\).","note":{"student":"","time":"00:00","hints":0,"why":"Left blank. Unit circle with radians, a skipped geometry topic.","steps":["\\(\\frac{\\pi}{2}<\\theta<\\pi\\) is Quadrant II: sine positive, cosine negative.","\\(\\cos\\theta=-\\sqrt{1-\\left(\\tfrac35\\right)^2}=-\\tfrac45\\).","Adding \\(\\pi\\) rotates the point to the opposite side of the circle: \\((\\cos\\theta,\\sin\\theta)\\to(-\\cos\\theta,-\\sin\\theta)\\).","\\(\\cos(\\theta+\\pi)=-\\cos\\theta=\\tfrac45\\) → <b>A<\/b>."],"fast":"<b>Sketch it (≈20 s):<\/b> a 3-4-5 triangle in Quadrant II, then its mirror image through the origin in Quadrant IV, where cosine is positive. So \\(\\tfrac45\\)."}},{"id":"m2q21","module":2,"number":21,"domain":"Advanced Math","skill":"Exponential growth — equivalent forms","type":"mcq","question":"The value, in dollars, of an investment \\(t\\) years after it was made is given by \\(A(t)=2000(1.03)^{2t}\\). To the nearest hundredth of a percent, by what percent does the value of the investment increase each year?","choices":["3.00%","6.00%","6.09%","9.27%"],"correctAnswer":"C","hints":["Rewrite the model in the form \\(2000\\,(b)^t\\), where \\(b\\) is the yearly growth factor.","\\((1.03)^{2t}=\\left((1.03)^2\\right)^t\\). Compute \\((1.03)^2\\)."],"solution":"\\((1.03)^2=1.0609\\), so \\(A(t)=2000(1.0609)^t\\): a 6.09% yearly increase. (6% ignores compounding.)","note":{"student":"A","time":"00:00","hints":0,"why":"3% is the growth per <b>half-year<\/b>. The exponent is \\(2t\\), so the 1.03 factor applies twice each year. This is the same mistake type as M1 Q19.","steps":["\\((1.03)^{2t}=\\left((1.03)^2\\right)^t\\).","\\((1.03)^2=1.0609\\).","\\(A(t)=2000(1.0609)^t\\): growth of 6.09% per year → <b>C<\/b>."],"fast":"<b>Rule:<\/b> whenever the exponent isn't just \\(t\\), rewrite as \\((\\text{base}^{\\text{number}})^t\\) and compute the new base on the calculator."}},{"id":"m2q22","module":2,"number":22,"domain":"Algebra","skill":"Linear equations — intercepts and area","type":"spr","question":"The graph of \\(4x+ky=24\\), where \\(k\\) is a positive constant, forms a triangle with the \\(x\\)-axis and the \\(y\\)-axis. If the area of this triangle is 18, what is the value of \\(k\\)?","correctAnswer":"4","acceptedAnswers":["4"],"hints":["Find both intercepts in terms of \\(k\\): set \\(y=0\\), then set \\(x=0\\).","The \\(x\\)-intercept is 6 and the \\(y\\)-intercept is \\(\\frac{24}{k}\\). The triangle is a right triangle with these legs."],"solution":"Area \\(=\\frac12\\cdot6\\cdot\\frac{24}{k}=\\frac{72}{k}=18\\Rightarrow k=4\\).","note":{"student":"","time":"00:00","hints":0,"why":"Left blank. Intercepts plus triangle area, which is quick once set up.","steps":["\\(x\\)-intercept (\\(y=0\\)): \\(4x=24\\Rightarrow x=6\\).","\\(y\\)-intercept (\\(x=0\\)): \\(ky=24\\Rightarrow y=\\frac{24}{k}\\).","The line and the axes form a right triangle with those legs: area \\(=\\frac12\\cdot6\\cdot\\frac{24}{k}=\\frac{72}{k}\\).","\\(\\frac{72}{k}=18\\Rightarrow k=4\\)."],"fast":"<b>Area with the axes = ½ × x-intercept × y-intercept.<\/b> Find both intercepts, then one equation."}}];
+const PRACTICE = [{"id":"p1","like":"M1 Q4","type":"mcq","q":"\\[\\frac{x^2-25}{x^2+2x-15}\\cdot\\frac{x^2-9}{x^2-8x+15}\\] Which of the following is equivalent to the expression above for \\(x>5\\)?","choices":["\\(\\dfrac{x-3}{x+3}\\)","\\(\\dfrac{x+3}{x-3}\\)","\\(\\dfrac{x+5}{x-5}\\)","\\(1\\)"],"ans":"B","sol":"Factor: \\(\\frac{(x-5)(x+5)}{(x+5)(x-3)}\\cdot\\frac{(x-3)(x+3)}{(x-3)(x-5)}\\). Cancel \\((x-5)\\), \\((x+5)\\) and one \\((x-3)\\): \\(\\frac{x+3}{x-3}\\). Plug-in check with \\(x=7\\): original \\(=\\frac{24}{48}\\cdot\\frac{40}{8}=2.5\\), and \\(\\frac{10}{4}=2.5\\) ✓.","src":"m1q4"},{"id":"p2","like":"M1 Q5","type":"mcq","q":"\\[4x^2-kx+9=0\\] In the equation above, \\(k\\) is a positive constant. If the equation has exactly one real solution, what is that solution?","choices":["\\(12\\)","\\(3\\)","\\(\\dfrac32\\)","\\(-\\dfrac32\\)"],"ans":"C","sol":"Perfect square: \\(4x^2-kx+9=(2x-3)^2\\) (since \\(4x^2=(2x)^2\\), \\(9=3^2\\), and \\(k>0\\)). So \\(2x-3=0\\Rightarrow x=\\frac32\\). With the discriminant: \\(k^2=144\\Rightarrow k=12\\) (choice A is \\(k\\), the trap), then \\(x=\\frac{k}{2\\cdot4}=\\frac{12}{8}=\\frac32\\).","src":"m1q5"},{"id":"p3","like":"M1 Q16","type":"spr","q":"\\[p(x)=x^3+ax^2-4x+12\\] In the polynomial above, \\(a\\) is a constant. If \\(x-3\\) is a factor of \\(p(x)\\), what is the value of \\(p(-1)\\)?","accept":[12],"sol":"\\(p(3)=27+9a-12+12=27+9a=0\\Rightarrow a=-3\\). So \\(p(x)=x^3-3x^2-4x+12\\). Term by term at \\(-1\\): \\((-1)+(-3)+(+4)+(+12)=12\\).","src":"m1q16"},{"id":"p4","like":"M1 Q19","type":"mcq","q":"The amount, in milligrams, of a medicine in a patient's body \\(t\\) hours after a dose is modeled by \\(m(t)=500(0.5)^{t/4}\\). Approximately what percent of the medicine leaves the body each hour?","choices":["12.5%","16%","84%","50%"],"ans":"B","sol":"Hourly factor: \\((0.5)^{1/4}\\approx0.841\\). So 84.1% remains each hour (choice C, the trap) and about \\(1-0.841\\approx16\\%\\) leaves. 12.5% is \\(50\\div4\\), the linear trap; 50% is per 4 hours.","src":"m1q19"},{"id":"p5","like":"M1 Q20","type":"mcq","q":"A circle has a radius of 12 inches. A sector of the circle has an arc length of \\(8\\pi\\) inches. What is the area, in square inches, of the sector?","choices":["\\(96\\pi\\)","\\(48\\pi\\)","\\(24\\pi\\)","\\(144\\pi\\)"],"ans":"B","sol":"\\(A=\\tfrac12 rs=\\tfrac12\\cdot12\\cdot8\\pi=48\\pi\\). Long way: \\(\\theta=\\frac{8\\pi}{12}=\\frac{2\\pi}{3}\\), which is \\(\\frac13\\) of the circle, and \\(\\frac13\\cdot144\\pi=48\\pi\\).","src":"m1q20"},{"id":"p6","like":"M1 Q21","type":"mcq","q":"For the linear function \\(f\\), \\(f(2)=5\\) and \\(f(-2)=-7\\). The function \\(g\\) is defined by \\(g(x)=f(3x)+2\\). For what value of \\(k\\) is \\(g(k)=k\\)?","choices":["\\(\\dfrac12\\)","\\(-\\dfrac18\\)","\\(\\dfrac18\\)","\\(-\\dfrac12\\)"],"ans":"B","sol":"Slope \\(=\\frac{5-(-7)}{2-(-2)}=3\\), so \\(f(x)=3x-1\\). \\(g(x)=3(3x)-1+2=9x+1\\). \\(9k+1=k\\Rightarrow 8k=-1\\Rightarrow k=-\\frac18\\). Choice A solves \\(f(k)=k\\) (trap).","src":"m1q21"},{"id":"p7","like":"M1 Q22","type":"spr","q":"\\[y=3x^2-4x+c\\]\\[y=2x+1\\] In the system above, \\(c\\) is a constant. If the graphs intersect at exactly one point, what is the value of \\(c\\)?","accept":[4],"sol":"\\(3x^2-4x+c=2x+1\\Rightarrow3x^2-6x+(c-1)=0\\). Discriminant: \\(36-12(c-1)=0\\Rightarrow c-1=3\\Rightarrow c=4\\).","src":"m1q22"},{"id":"p8","like":"M2 Q10","type":"mcq","q":"The function \\(f\\) is defined by \\(f(x)=(x-7)(x+1)\\). The function \\(g\\) is defined by \\(g(x)=f(3x)\\). The minimum value of \\(g\\) is \\(b\\), and it occurs at \\(x=a\\). Which of the following is \\((a,\\,b)\\)?","choices":["\\((1,\\,-16)\\)","\\((3,\\,-16)\\)","\\((1,\\,-48)\\)","\\((9,\\,-16)\\)"],"ans":"A","sol":"Vertex of \\(f\\): halfway between 7 and \\(-1\\), so \\(x=3\\), and \\(f(3)=(-4)(4)=-16\\). \\(g(x)=f(3x)\\) divides \\(x\\)-coordinates by 3: \\((3,-16)\\to(1,-16)\\). The minimum value does not change, so \\(-48\\) is a trap.","src":"m2q10"},{"id":"p9","like":"M2 Q16","type":"mcq","q":"\\[p(x)=(x+1)^2(x-2)(x-k)\\] In the polynomial above, \\(k\\) is a constant. If \\(p(0)=-8\\), what is the value of \\(p(1)\\)?","choices":["\\(12\\)","\\(-20\\)","\\(20\\)","\\(-12\\)"],"ans":"B","sol":"\\(p(0)=(1)^2(-2)(-k)=2k=-8\\Rightarrow k=-4\\). Write the factor: \\(x-(-4)=x+4\\). \\(p(1)=(2)^2(1-2)(1+4)=4\\cdot(-1)\\cdot5=-20\\). Using \\(k=4\\) by mistake gives 12 (trap).","src":"m2q16"},{"id":"p10","like":"M2 Q17","type":"mcq","q":"Two right circular cylinders are similar. The ratio of their surface areas is \\(4:9\\). If the volume of the larger cylinder is \\(270\\pi\\) cubic centimeters, what is the volume, in cubic centimeters, of the smaller cylinder?","choices":["\\(120\\pi\\)","\\(180\\pi\\)","\\(80\\pi\\)","\\(40\\pi\\)"],"ans":"C","sol":"Lengths: \\(\\sqrt4:\\sqrt9=2:3\\). Volumes: \\(8:27\\). Smaller \\(=270\\pi\\cdot\\frac{8}{27}=80\\pi\\). Using \\(\\frac49\\) gives \\(120\\pi\\) (trap).","src":"m2q17"},{"id":"p11","like":"M2 Q20","type":"mcq","q":"The angle \\(\\theta\\), in radians, satisfies \\(\\pi<\\theta<\\frac{3\\pi}{2}\\) and \\(\\cos\\theta=-\\frac{5}{13}\\). What is the value of \\(\\sin(\\theta+\\pi)\\)?","choices":["\\(-\\dfrac{12}{13}\\)","\\(\\dfrac{5}{13}\\)","\\(\\dfrac{12}{13}\\)","\\(-\\dfrac{5}{13}\\)"],"ans":"C","sol":"Quadrant III: sine and cosine are both negative, so \\(\\sin\\theta=-\\frac{12}{13}\\) (5-12-13 triangle). Adding \\(\\pi\\) flips both signs: \\(\\sin(\\theta+\\pi)=-\\sin\\theta=\\frac{12}{13}\\).","src":"m2q20"},{"id":"p12","like":"M2 Q21","type":"mcq","q":"The value, in dollars, of a savings account \\(t\\) years after it was opened is \\(A(t)=1500(1.02)^{3t}\\). To the nearest hundredth of a percent, by what percent does the value increase each year?","choices":["2.00%","6.12%","6.00%","8.24%"],"ans":"B","sol":"\\((1.02)^{3t}=\\left((1.02)^3\\right)^t\\) and \\((1.02)^3=1.061208\\). So the yearly factor is 1.0612: a 6.12% increase. 2% is per third of a year; 6% ignores compounding.","src":"m2q21"},{"id":"p13","like":"M2 Q22","type":"spr","q":"The graph of \\(5x+ky=30\\), where \\(k\\) is a positive constant, forms a triangle with the \\(x\\)-axis and the \\(y\\)-axis. If the area of this triangle is 15, what is the value of \\(k\\)?","accept":[6],"sol":"\\(x\\)-intercept: 6. \\(y\\)-intercept: \\(\\frac{30}{k}\\). Area \\(=\\frac12\\cdot6\\cdot\\frac{30}{k}=\\frac{90}{k}=15\\Rightarrow k=6\\).","src":"m2q22"}];
+const LAB_SIMILAR = [{"id":"s1","type":"spr","svg":{"kind":"sim","AD":"4","DB":"6","DE":"6","BC":"?"},"q":"In the figure, \\(\\overline{DE}\\parallel\\overline{BC}\\), \\(AD=4\\), \\(DB=6\\), and \\(DE=6\\). What is the length of \\(\\overline{BC}\\)?","accept":[15],"sol":"Scale factor uses the <b>whole<\/b> side: \\(\\frac{AD}{AB}=\\frac{4}{10}=\\frac25\\). So \\(\\frac{DE}{BC}=\\frac25\\Rightarrow BC=6\\cdot\\frac52=15\\). (Using \\(\\frac46\\) gives 9, a trap.)"},{"id":"s2","type":"spr","svg":{"kind":"sim","AD":"3","DB":"6","small":"10","quad":"?"},"q":"\\(\\overline{DE}\\parallel\\overline{BC}\\), \\(AD=3\\), \\(DB=6\\), and the area of triangle \\(ADE\\) is 10. What is the area of quadrilateral \\(DBCE\\)?","accept":[80],"sol":"Scale factor \\(\\frac{3}{9}=\\frac13\\), so the area ratio is \\(\\frac19\\). Area of \\(ABC=10\\cdot9=90\\). Quadrilateral \\(=90-10=80\\)."},{"id":"s3","type":"mcq","svg":{"kind":"sim","AD":"6","DB":"?"},"q":"\\(\\overline{DE}\\parallel\\overline{BC}\\). The ratio of the area of triangle \\(ADE\\) to the area of triangle \\(ABC\\) is \\(9:49\\). If \\(AD=6\\), what is \\(DB\\)?","choices":["\\(14\\)","\\(8\\)","\\(10\\)","\\(26\\)"],"ans":"B","sol":"Area ratio \\(9:49\\) ⇒ length ratio \\(3:7\\). \\(\\frac{AD}{AB}=\\frac37\\Rightarrow AB=14\\). Then \\(DB=AB-AD=14-6=8\\). Choice A is \\(AB\\), the trap."},{"id":"s4","type":"spr","svg":{"kind":"sim"},"q":"\\(\\overline{DE}\\parallel\\overline{BC}\\), and the area of quadrilateral \\(DBCE\\) is 3 times the area of triangle \\(ADE\\). What is the value of \\(\\frac{AD}{AB}\\)?","accept":[0.5],"sol":"If \\(ADE\\) has area \\(x\\), then \\(DBCE=3x\\) and \\(ABC=4x\\). Area ratio \\(\\frac14\\) ⇒ length ratio \\(\\sqrt{\\frac14}=\\frac12\\)."},{"id":"s5","type":"spr","svg":{"kind":"shadow"},"q":"A student who is 1.8 meters tall casts a shadow 2.4 meters long. At the same time, a tree casts a shadow 16 meters long. How tall, in meters, is the tree?","accept":[12],"sol":"The sun's rays make the same angle, so the two right triangles are similar: \\(\\frac{h}{16}=\\frac{1.8}{2.4}=0.75\\Rightarrow h=12\\)."},{"id":"s6","type":"spr","q":"Two similar triangles have perimeters 12 and 18. The area of the smaller triangle is 32. What is the area of the larger triangle?","accept":[72],"sol":"Perimeters are lengths: ratio \\(\\frac{18}{12}=\\frac32\\). Areas scale by \\(\\left(\\frac32\\right)^2=\\frac94\\). Larger \\(=32\\cdot\\frac94=72\\)."}];
+const LAB_TRIG = [{"id":"t1","type":"mcq","svg":{"kind":"right","opp":"?","adj":"8","hyp":"17"},"q":"In right triangle \\(ABC\\), angle \\(C\\) is the right angle and \\(\\cos A=\\frac{8}{17}\\). What is \\(\\tan A\\)?","choices":["\\(\\dfrac{8}{15}\\)","\\(\\dfrac{15}{17}\\)","\\(\\dfrac{15}{8}\\)","\\(\\dfrac{17}{8}\\)"],"ans":"C","sol":"Adjacent 8, hypotenuse 17 ⇒ opposite \\(=\\sqrt{17^2-8^2}=15\\). \\(\\tan A=\\frac{\\text{opp}}{\\text{adj}}=\\frac{15}{8}\\)."},{"id":"t2","type":"spr","q":"In right triangle \\(ABC\\), angle \\(C\\) is the right angle and \\(\\sin A=0.6\\). What is the value of \\(\\cos B\\)?","accept":[0.6],"sol":"The side opposite \\(A\\) is the side adjacent to \\(B\\). So \\(\\cos B=\\sin A=0.6\\). No calculation needed."},{"id":"t3","type":"spr","q":"In a right triangle, \\(\\tan A=\\frac34\\) for one of the acute angles \\(A\\). What is the value of \\(\\sin A+\\cos A\\)?","accept":[1.4],"sol":"Opposite 3, adjacent 4, hypotenuse 5. \\(\\sin A+\\cos A=\\frac35+\\frac45=\\frac75=1.4\\)."},{"id":"t4","type":"spr","q":"If \\(\\sin(x^\\circ)=\\cos(40^\\circ)\\) and \\(0<x<90\\), what is the value of \\(x\\)?","accept":[50],"sol":"Sine of an angle equals cosine of its complement: \\(\\sin x^\\circ=\\cos(90^\\circ-x^\\circ)\\). So \\(90-x=40\\Rightarrow x=50\\)."},{"id":"t5","type":"spr","svg":{"kind":"right","opp":"?","adj":"?","hyp":"26"},"q":"In right triangle \\(ABC\\), angle \\(C\\) is the right angle, \\(AB=26\\), and \\(\\sin A=\\frac{5}{13}\\). What is the area of triangle \\(ABC\\)?","accept":[120],"sol":"\\(\\sin A=\\frac{BC}{AB}\\Rightarrow BC=26\\cdot\\frac5{13}=10\\). Then \\(AC=\\sqrt{26^2-10^2}=24\\) (a 5-12-13 triangle doubled). Area \\(=\\frac12\\cdot10\\cdot24=120\\)."},{"id":"t6","type":"mcq","q":"In right triangle \\(ABC\\), angle \\(C\\) is the right angle and \\(\\tan A=\\frac{12}{5}\\). What is \\(\\cos B\\)?","choices":["\\(\\dfrac{5}{13}\\)","\\(\\dfrac{12}{13}\\)","\\(\\dfrac{5}{12}\\)","\\(\\dfrac{13}{12}\\)"],"ans":"B","sol":"Sides 12 (opposite \\(A\\)), 5 (adjacent \\(A\\)), 13. From \\(B\\), the side 12 is <b>adjacent<\/b>. \\(\\cos B=\\frac{12}{13}\\) (and it equals \\(\\sin A\\))."},{"id":"t7","type":"spr","q":"In a 30°-60°-90° triangle, the hypotenuse has length 10. What is the length of the longer leg? (Round to the nearest hundredth.)","accept":[8.66],"tol":0.006,"sol":"Sides \\(x,\\ x\\sqrt3,\\ 2x\\) with \\(2x=10\\Rightarrow x=5\\). Longer leg \\(=5\\sqrt3\\approx8.66\\). Check with trig: \\(10\\cos30^\\circ=10\\cdot\\frac{\\sqrt3}{2}\\)."},{"id":"t8","type":"spr","q":"The legs of a right triangle are 7 and 24. If \\(A\\) and \\(B\\) are the acute angles, what is \\(\\tan A+\\tan B\\)? (Enter a fraction.)","accept":[3.7202380952380953],"tol":0.001,"sol":"Hypotenuse \\(=25\\). \\(\\tan A+\\tan B=\\frac{7}{24}+\\frac{24}{7}=\\frac{49+576}{168}=\\frac{625}{168}\\). Shortcut: \\(\\frac{c^2}{ab}=\\frac{25^2}{7\\cdot24}\\)."}];
+
+const L = ["A", "B", "C", "D"];
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const typeset = (el) => { if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise(el ? [el] : undefined).catch(() => {}); };
+
+/* ---------------- Figures (inline SVG) ---------------- */
+function svgSim(o = {}) {
+  const A = [160, 18], B = [26, 200], C = [294, 200], t = 0.4;
+  const D = [A[0] + t * (B[0] - A[0]), A[1] + t * (B[1] - A[1])], E = [A[0] + t * (C[0] - A[0]), A[1] + t * (C[1] - A[1])];
+  const P = (p) => p.join(",");
+  const lab = (x, y, s, anchor = "middle", w = 700, col = "var(--ink)") => s ? `<text x="${x}" y="${y}" text-anchor="${anchor}" font-size="14" font-weight="${w}" style="fill:${col}">${esc(s)}</text>` : "";
+  return `<svg viewBox="0 0 320 228" width="320" role="img" aria-label="Triangle ABC with segment DE parallel to BC">
+    <polygon points="${P(D)} ${P(B)} ${P(C)} ${P(E)}" style="fill:var(--fig-b)"/>
+    <polygon points="${P(A)} ${P(D)} ${P(E)}" style="fill:var(--fig-a)"/>
+    <polygon points="${P(A)} ${P(B)} ${P(C)}" fill="none" style="stroke:var(--fig-line)" stroke-width="2"/>
+    <line x1="${D[0]}" y1="${D[1]}" x2="${E[0]}" y2="${E[1]}" style="stroke:var(--fig-hi)" stroke-width="2.5"/>
+    ${lab(A[0], A[1] - 4, "A")}${lab(B[0] - 8, B[1] + 14, "B")}${lab(C[0] + 8, C[1] + 14, "C")}${lab(D[0] - 10, D[1] + 4, "D", "end")}${lab(E[0] + 10, E[1] + 4, "E", "start")}
+    ${lab((A[0] + D[0]) / 2 - 10, (A[1] + D[1]) / 2, o.AD, "end", 600, "var(--accent-ink)")}
+    ${lab((D[0] + B[0]) / 2 - 10, (D[1] + B[1]) / 2, o.DB, "end", 600, "var(--accent-ink)")}
+    ${lab((D[0] + E[0]) / 2, D[1] - 6, o.DE, "middle", 600, "var(--fig-hi)")}
+    ${lab(160, 220, o.BC ? "BC = " + o.BC : "", "middle", 600, "var(--accent-ink)")}
+    ${lab(160, D[1] - 22, o.small ? "Area " + o.small : "", "middle", 600)}
+    ${lab(160, 160, o.quad ? "Area " + o.quad : "", "middle", 600)}
+  </svg>`;
+}
+function svgGrid(n) {
+  const A = [130, 14], B = [14, 196], C = [246, 196];
+  const pt = (i, j) => [A[0] + (i / n) * (B[0] - A[0]) + (j / n) * (C[0] - B[0]), A[1] + (i / n) * (B[1] - A[1]) + (j / n) * (C[1] - B[1])];
+  let tris = "";
+  for (let i = 0; i < n; i++) for (let j = 0; j <= i; j++) {
+    const up = [pt(i, j), pt(i + 1, j), pt(i + 1, j + 1)];
+    tris += `<polygon points="${up.map(p => p.join(",")).join(" ")}" style="fill:${i === 0 ? "var(--fig-a)" : "var(--fig-b)"};stroke:var(--fig-line)" stroke-width="1.2"/>`;
+    if (j < i) { const dn = [pt(i, j), pt(i, j + 1), pt(i + 1, j + 1)]; tris += `<polygon points="${dn.map(p => p.join(",")).join(" ")}" style="fill:var(--fig-b);stroke:var(--fig-line)" stroke-width="1.2"/>`; }
+  }
+  return `<svg viewBox="0 0 260 210" width="240" role="img" aria-label="Triangle scaled by ${n} contains ${n * n} copies">${tris}
+    <polygon points="${[A, B, C].map(p => p.join(",")).join(" ")}" fill="none" style="stroke:var(--fig-line)" stroke-width="2.2"/></svg>
+    <figcaption>Sides × ${n} → area × ${n * n} (${n * n} copies of the blue triangle)</figcaption>`;
+}
+function svgRight(o = {}) {
+  const C = [44, 168], A = [284, 168], B = [44, 36];
+  const lab = (x, y, s, anchor = "middle", col = "var(--ink)", w = 700, size = 14) => s ? `<text x="${x}" y="${y}" text-anchor="${anchor}" font-size="${size}" font-weight="${w}" style="fill:${col}">${s}</text>` : "";
+  const hiA = o.from === "A", hiB = o.from === "B";
+  const sideCol = (role) => role === "opposite" ? "var(--fig-hi)" : role === "adjacent" ? "var(--accent-ink)" : "var(--ink)";
+  const vert = o.vert || "", horiz = o.horiz || "";
+  return `<svg viewBox="-96 0 416 200" width="340" role="img" aria-label="Right triangle ABC with right angle at C">
+    <polygon points="${C.join(",")} ${A.join(",")} ${B.join(",")}" style="fill:var(--fig-a);stroke:var(--fig-line)" stroke-width="2"/>
+    <polyline points="${C[0]},${C[1] - 14} ${C[0] + 14},${C[1] - 14} ${C[0] + 14},${C[1]}" fill="none" style="stroke:var(--fig-line)" stroke-width="1.5"/>
+    ${hiA ? `<path d="M ${A[0] - 34} ${A[1]} A 34 34 0 0 1 ${A[0] - 30.1} ${A[1] - 15.9}" fill="none" style="stroke:var(--fig-hi)" stroke-width="3"/>` : ""}
+    ${hiB ? `<path d="M ${B[0]} ${B[1] + 34} A 34 34 0 0 0 ${B[0] + 29.8} ${B[1] + 16.4}" fill="none" style="stroke:var(--fig-hi)" stroke-width="3"/>` : ""}
+    ${lab(A[0] + 10, A[1] + 6, "A", "start")}${lab(B[0] - 6, B[1] - 6, "B", "end")}${lab(C[0] - 8, C[1] + 16, "C", "end")}
+    ${lab(C[0] - 10, (B[1] + C[1]) / 2 + 5, o.opp !== undefined ? o.opp : vert, "end", vert ? sideCol(o.vertRole) : "var(--fig-hi)", 700)}
+    ${lab((C[0] + A[0]) / 2, C[1] + 22, o.adj !== undefined ? o.adj : horiz, "middle", horiz ? sideCol(o.horizRole) : "var(--accent-ink)", 700)}
+    ${lab((A[0] + B[0]) / 2 + 14, (A[1] + B[1]) / 2 - 8, o.hyp || "", "start", "var(--ink)", 700)}
+  </svg>`;
+}
+function svgShadow() {
+  return `<svg viewBox="0 0 340 200" width="320" role="img" aria-label="A tree and a student with their shadows">
+    <line x1="10" y1="170" x2="330" y2="170" style="stroke:var(--fig-line)" stroke-width="2"/>
+    <polygon points="60,170 60,40 220,170" style="fill:var(--fig-a);stroke:var(--fig-line)" stroke-width="1.5"/>
+    <polygon points="250,170 250,140 286,170" style="fill:var(--fig-b);stroke:var(--fig-line)" stroke-width="1.5"/>
+    <line x1="60" y1="170" x2="60" y2="40" style="stroke:#2f7d32" stroke-width="5"/><circle cx="60" cy="44" r="16" fill="#4caf50" opacity=".8"/>
+    <line x1="250" y1="170" x2="250" y2="140" style="stroke:var(--fig-hi)" stroke-width="4"/><circle cx="250" cy="134" r="5" style="fill:var(--fig-hi)"/>
+    <text x="48" y="110" text-anchor="end" font-size="14" font-weight="700">h</text>
+    <text x="140" y="190" text-anchor="middle" font-size="13" font-weight="600">tree shadow 16 m</text>
+    <text x="240" y="158" text-anchor="end" font-size="12" font-weight="600">1.8 m</text>
+    <text x="268" y="190" text-anchor="middle" font-size="12" font-weight="600">2.4 m</text>
+  </svg>`;
+}
+function figureFor(svg) {
+  if (!svg) return "";
+  if (svg.kind === "sim") return `<figure>${svgSim(svg)}</figure>`;
+  if (svg.kind === "right") return `<figure>${svgRight(svg)}</figure>`;
+  if (svg.kind === "shadow") return `<figure>${svgShadow()}</figure>`;
+  return "";
+}
+
+/* ---------------- Review cards ---------------- */
+function renderReview() {
+  $("reviewList").innerHTML = REVIEW.map(q => {
+    const n = q.note, blank = !n.student;
+    let body = "";
+    if (q.type === "mcq") {
+      body = `<ul class="choices">${q.choices.map((c, i) => {
+        const Lt = L[i]; let cls = "choice", tag = "";
+        if (Lt === q.correctAnswer) { cls += " ok"; tag = `<span class="tag">Correct answer</span>`; }
+        if (Lt === n.student) { cls += " bad"; tag = `<span class="tag">Your answer</span>`; }
+        return `<li class="${cls}"><span class="L">${Lt}</span><span>${c}</span>${tag}</li>`;
+      }).join("")}</ul>`;
+    }
+    const yours = blank ? "Left blank" : (q.type === "mcq" ? n.student : n.student);
+    const right = q.type === "mcq" ? q.correctAnswer : q.acceptedAnswers.join(" or ");
+    return `<article class="q" id="r-${q.id}">
+      <div class="q-head"><span class="qn">M${q.module} · Q${q.number}</span><span class="pill">${esc(q.domain)}</span><span class="pill">${esc(q.skill)}</span>
+        <span class="res ${blank ? "blank" : "wrong"}">${blank ? "Blank" : "Wrong"}</span></div>
+      <div class="stem">${q.question}</div>${body}
+      <div class="compare"><div class="yours ${blank ? "blank" : ""}"><small>Your answer</small><b>${esc(yours)}</b></div>
+        <div class="right"><small>Correct answer</small><b>${esc(right)}</b></div></div>
+      <div class="call why ${blank ? "blank" : ""}"><h5>${blank ? "What this question tests" : "Why it went wrong"}</h5>${n.why}</div>
+      <div class="steps-h">Step-by-step solution</div><ol class="steps">${n.steps.map(s => `<li>${s}</li>`).join("")}</ol>
+      <div class="call fast"><h5>⏱ Fastest approach on test day</h5>${n.fast}</div>
+      <div class="like">Time on this question: ${n.time} · Hints used: ${n.hints} · <a href="#practice" data-goto-p="${q.id}">Try the look-alike question →</a></div>
+    </article>`;
+  }).join("");
+}
+
+/* ---------------- Interactive exercises ---------------- */
+const solved = {};
+function parseNum(s) {
+  s = String(s).trim().replace(/\s+/g, "").replace("−", "-");
+  if (/^-?(\d+\.?\d*|\.\d+)\/-?(\d+\.?\d*|\.\d+)$/.test(s)) { const [a, b] = s.split("/").map(Number); return b ? a / b : NaN; }
+  return /^-?(\d+\.?\d*|\.\d+)$/.test(s) ? Number(s) : NaN;
+}
+function exHtml(ex, label) {
+  let input;
+  if (ex.type === "mcq") {
+    input = `<div class="choices">${ex.choices.map((c, i) => `<button class="choice" data-ex="${ex.id}" data-c="${L[i]}"><span class="L">${L[i]}</span><span>${c}</span></button>`).join("")}</div>`;
+  } else {
+    input = `<div class="ans-row"><input id="in-${ex.id}" inputmode="decimal" autocomplete="off" placeholder="Your answer" aria-label="Your answer"></div>`;
+  }
+  return `<article class="q" id="ex-${ex.id}">
+    <div class="q-head"><span class="qn">${label}</span>${ex.like ? `<span class="pill">Like ${ex.like}</span>` : ""}<span class="pill">${ex.type === "mcq" ? "Multiple choice" : "Fill-in"}</span>
+      <span class="res" id="st-${ex.id}"></span></div>
+    ${figureFor(ex.svg)}
+    <div class="stem">${ex.q}</div>${input}
+    <div class="ans-row" style="margin-top:10px"><button class="btn" data-check="${ex.id}">Check</button>
+      <button class="btn ghost" data-sol="${ex.id}">Show solution</button><span class="fb" id="fb-${ex.id}"></span></div>
+    <div class="sol" id="sol-${ex.id}"><b>Solution.</b> ${ex.sol}</div>
+  </article>`;
+}
+function bindExercises(list, onChange) {
+  const byId = Object.fromEntries(list.map(e => [e.id, e]));
+  const pick = {};
+  list.forEach(ex => {
+    const root = $("ex-" + ex.id);
+    root.querySelectorAll("[data-c]").forEach(b => b.onclick = () => {
+      pick[ex.id] = b.dataset.c;
+      root.querySelectorAll("[data-c]").forEach(x => x.classList.toggle("sel", x === b));
+    });
+    const inp = $("in-" + ex.id);
+    if (inp) inp.addEventListener("keydown", e => { if (e.key === "Enter") root.querySelector("[data-check]").click(); });
+    root.querySelector("[data-check]").onclick = () => {
+      let ok, given;
+      if (ex.type === "mcq") { given = pick[ex.id]; if (!given) { setFb(ex.id, "Choose an answer first.", false); return; } ok = given === ex.ans; }
+      else { given = parseNum(inp.value); if (isNaN(given)) { setFb(ex.id, "Enter a number or fraction, like 3/4.", false); return; } ok = ex.accept.some(a => Math.abs(a - given) <= (ex.tol || 0.002)); }
+      if (ok) {
+        setFb(ex.id, "✓ Correct!", true); solved[ex.id] = true;
+        if (ex.type === "mcq") root.querySelectorAll("[data-c]").forEach(x => { x.disabled = true; x.classList.toggle("ok", x.dataset.c === ex.ans); x.classList.remove("sel"); });
+        if (inp) inp.disabled = true;
+        $("sol-" + ex.id).classList.add("on");
+      } else {
+        setFb(ex.id, "✗ Not yet. Try again, or open the solution.", false);
+        if (ex.type === "mcq") root.querySelector(`[data-c="${given}"]`).classList.add("bad");
+      }
+      const st = $("st-" + ex.id); st.textContent = ok ? "Solved" : "Try again"; st.className = "res " + (ok ? "" : "wrong"); if (ok) st.style.cssText = "background:var(--right-soft);color:var(--right)";
+      onChange && onChange();
+    };
+    root.querySelector("[data-sol]").onclick = () => $("sol-" + ex.id).classList.toggle("on");
+  });
+}
+function setFb(id, msg, ok) { const f = $("fb-" + id); f.textContent = msg; f.className = "fb " + (ok ? "ok" : "bad"); }
+function updateProgress() {
+  const n = PRACTICE.filter(p => solved[p.id]).length;
+  $("pScore").textContent = n + " / " + PRACTICE.length + " correct";
+  $("pBar").style.width = (n / PRACTICE.length * 100) + "%";
+}
+
+/* ---------------- Views (hash routing) ---------------- */
+const VIEWS = ["results", "review", "practice", "triangles"];
+function show(view, scrollTo) {
+  if (!VIEWS.includes(view)) view = "results";
+  document.querySelectorAll("section.view").forEach(s => s.classList.toggle("on", s.id === "v-" + view));
+  document.querySelectorAll("nav.tabs a").forEach(a => a.classList.toggle("on", a.dataset.view === view));
+  if (scrollTo) { const el = $(scrollTo); if (el) setTimeout(() => el.scrollIntoView({ behavior: "smooth", block: "start" }), 30); }
+  else window.scrollTo({ top: 0 });
+}
+document.addEventListener("click", (e) => {
+  const go = e.target.closest("[data-go]"), gp = e.target.closest("[data-goto-p]"), jump = e.target.closest("[data-jump]");
+  if (go) { e.preventDefault(); history.replaceState(null, "", "#review"); show("review", "r-" + go.dataset.go); }
+  if (gp) { e.preventDefault(); const p = PRACTICE.find(x => x.src === gp.dataset.gotoP); history.replaceState(null, "", "#practice"); show("practice", p ? "ex-" + p.id : null); }
+  if (jump) { e.preventDefault(); show("triangles", jump.dataset.jump); }
+});
+window.addEventListener("hashchange", () => show(location.hash.slice(1)));
+
+/* ---------------- Init ---------------- */
+renderReview();
+$("practiceList").innerHTML = PRACTICE.map((p, i) => exHtml(p, "P" + (i + 1))).join("");
+$("labSim").innerHTML = LAB_SIMILAR.map((p, i) => exHtml(p, "A" + (i + 1))).join("");
+$("labTrig").innerHTML = LAB_TRIG.map((p, i) => exHtml(p, "B" + (i + 1))).join("");
+bindExercises(PRACTICE, updateProgress); bindExercises(LAB_SIMILAR); bindExercises(LAB_TRIG);
+$("figQ7").innerHTML = svgSim({ AD: "6", DB: "9", small: "24", quad: "?" }) + `<figcaption>Blue: triangle ADE (area 24). Orange: quadrilateral DBCE (the answer).</figcaption>`;
+$("figGrid2").innerHTML = svgGrid(2);
+$("figGrid3").innerHTML = svgGrid(3);
+$("figFromA").innerHTML = svgRight({ from: "A", vert: "opposite · 5", vertRole: "opposite", horiz: "adjacent · 12", horizRole: "adjacent", hyp: "13" }) + `<figcaption>Standing at A</figcaption>`;
+$("figFromB").innerHTML = svgRight({ from: "B", vert: "adjacent · 5", vertRole: "adjacent", horiz: "opposite · 12", horizRole: "opposite", hyp: "13" }) + `<figcaption>Standing at B: the legs swap names</figcaption>`;
+show(location.hash.slice(1));
+</script>
+</body>
+</html>
