@@ -1153,6 +1153,23 @@ function correctExam() {
 /* =========================================================
    13. REPORT + EMAILJS
    ========================================================= */
+/* ---------- Estimated SAT scores (200–800 per section) ----------
+   Typical raw-to-scaled curves for the digital SAT. The real test uses IRT and an
+   adaptive Module 2, so these are estimates, not official scores. */
+const RW_CURVE = [[0,200],[5,250],[10,320],[15,380],[20,430],[25,480],[30,520],[35,570],[40,620],[45,680],[50,740],[52,770],[54,800]];
+const MATH_CURVE = [[0,200],[5,290],[10,360],[15,420],[20,480],[25,540],[30,600],[35,670],[38,710],[40,740],[42,770],[44,800]];
+function estimateScaled(raw, curve) {
+  for (let i = 1; i < curve.length; i++) {
+    const [x0, y0] = curve[i - 1], [x1, y1] = curve[i];
+    if (raw <= x1) return Math.max(200, Math.min(800, Math.round((y0 + (raw - x0) * (y1 - y0) / (x1 - x0)) / 10) * 10));
+  }
+  return 800;
+}
+function estimateSAT(rwRaw, mathRaw) {
+  const rw = estimateScaled(rwRaw, RW_CURVE), math = estimateScaled(mathRaw, MATH_CURVE);
+  return { rw, math, total: rw + math };
+}
+
 function buildReport() {
   const s = buildStats();
   const date = new Date().toLocaleString();
@@ -1162,6 +1179,7 @@ function buildReport() {
   const ans = (r) => r.status === "unanswered" ? "(blank)" : r.answer;
   const sec = (rw) => { const rs = s.rows.filter(r => isRW(r.q.module) === rw); return { c: rs.filter(r => r.status === "correct").length, n: rs.length }; };
   const RWs = sec(true), MAs = sec(false);
+  const est = estimateSAT(RWs.c, MAs.c);
   const mistakes = s.rows.filter(r => r.status !== "correct");
   const how = state.autoSubmitted ? "automatically (time ran out in the last module)" : "by the student";
 
@@ -1170,6 +1188,9 @@ function buildReport() {
   t += "Reading and Writing: " + RWs.c + "/" + RWs.n + " (" + pct(RWs.c, RWs.n) + "%)\n";
   t += "Math: " + MAs.c + "/" + MAs.n + " (" + pct(MAs.c, MAs.n) + "%)\n";
   t += "TOTAL: " + s.total + "/" + s.count + " (" + pct(s.total, s.count) + "%)\n\n";
+  t += "ESTIMATED SAT SCORE: " + est.total + " / 1600\n";
+  t += "  Reading and Writing: " + est.rw + " / 800\n  Math: " + est.math + " / 800\n";
+  t += "  (Estimate from a typical digital SAT conversion. The real SAT adjusts for question difficulty, so official scores can differ.)\n\n";
   s.perModule.forEach(pm => { t += modLabel(pm.m) + ": " + pm.correct + "/" + pm.total + " | time used " + used(pm.m) + "\n"; });
   t += "\nSCORE BY DOMAIN\n";
   s.perDomain.forEach(d => { t += "- " + d.d + ": " + d.correct + "/" + d.total + " (" + d.pct + "%)\n"; });
@@ -1185,7 +1206,12 @@ function buildReport() {
   const tr = (cells) => `<tr><td>${cells.join("</td><td>")}</td></tr>`;
   let h = `<div style="font:14px Arial"><h2 style="color:#1d6a96">Amro Academy – Full SAT Practice Test Report</h2>`;
   h += `<p><b>Student:</b> ${esc(state.studentName)}<br><b>Date:</b> ${esc(date)}<br><b>Submitted:</b> ${how}</p>`;
-  h += tbl(["Section", "Correct", "%"], [tr(["Reading and Writing", RWs.c + "/" + RWs.n, pct(RWs.c, RWs.n) + "%"]), tr(["Math", MAs.c + "/" + MAs.n, pct(MAs.c, MAs.n) + "%"]), tr(["<b>Total</b>", "<b>" + s.total + "/" + s.count + "</b>", "<b>" + pct(s.total, s.count) + "%</b>"])]);
+  h += `<div style="border:2px solid #3a9fd1;border-radius:8px;padding:10px 14px;margin:8px 0 14px;background:#e8f6fc">
+    <div style="font-size:12px;color:#1d6a96;font-weight:bold;text-transform:uppercase">Estimated SAT score</div>
+    <div style="font-size:28px;font-weight:bold;margin:2px 0">${est.total} <span style="font-size:16px;color:#555">/ 1600</span></div>
+    <div>Reading and Writing: <b>${est.rw}</b> / 800 &nbsp;·&nbsp; Math: <b>${est.math}</b> / 800</div>
+    <div style="font-size:12px;color:#555;margin-top:4px">Estimate based on a typical digital SAT conversion. The real SAT adjusts for question difficulty, so official scores can differ.</div></div>`;
+  h += tbl(["Section", "Correct", "%", "Estimated score"], [tr(["Reading and Writing", RWs.c + "/" + RWs.n, pct(RWs.c, RWs.n) + "%", est.rw + " / 800"]), tr(["Math", MAs.c + "/" + MAs.n, pct(MAs.c, MAs.n) + "%", est.math + " / 800"]), tr(["<b>Total</b>", "<b>" + s.total + "/" + s.count + "</b>", "<b>" + pct(s.total, s.count) + "%</b>", "<b>" + est.total + " / 1600</b>"])]);
   h += `<h3>By module</h3>` + tbl(["Module", "Correct", "Time used"], s.perModule.map(pm => tr([modLabel(pm.m), pm.correct + "/" + pm.total, used(pm.m)])));
   h += `<h3>By domain</h3>` + tbl(["Domain", "Correct", "%"], s.perDomain.map(d => tr([d.d, d.correct + "/" + d.total, d.pct + "%"])));
   h += `<h3>Mistakes &amp; blanks (${mistakes.length})</h3>` + (mistakes.length ? tbl(["Q", "Domain", "Skill", "Student", "Correct"],
@@ -1230,7 +1256,7 @@ async function sendReport() {
     to_email: RECIPIENT_EMAIL,
     student_name: state.studentName,
     submit_date: rep.date,
-    score: rep.stats.total + "/" + rep.stats.count + " (R&W " + rep.stats.rows.filter(r => isRW(r.q.module) && r.status === "correct").length + "/54 · Math " + rep.stats.rows.filter(r => !isRW(r.q.module) && r.status === "correct").length + "/44)",
+    score: (() => { const rw = rep.stats.rows.filter(r => isRW(r.q.module) && r.status === "correct").length, ma = rep.stats.rows.filter(r => !isRW(r.q.module) && r.status === "correct").length, e = estimateSAT(rw, ma); return "≈" + e.total + " (R&W ≈" + e.rw + ", Math ≈" + e.math + ") · raw "; })() + rep.stats.total + "/" + rep.stats.count + " (R&W " + rep.stats.rows.filter(r => isRW(r.q.module) && r.status === "correct").length + "/54 · Math " + rep.stats.rows.filter(r => !isRW(r.q.module) && r.status === "correct").length + "/44)",
     total_time: MODULES.map(m => MODULE_INFO[m].tab + " " + fmt(Math.min(moduleElapsed(m), modTime(m)))).join(" · "),
     report: rep.text,
     report_html: rep.html
