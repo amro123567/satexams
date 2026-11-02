@@ -1,0 +1,1409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Amro Academy – SAT Math Exam 2</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<style>
+/* =========================================================
+   THEME
+   ========================================================= */
+:root{
+  --sky:#87CEEB; --sky-light:#e8f6fc; --sky-soft:#cdebf7; --sky-dark:#3a9fd1; --sky-deep:#1d6a96;
+  --ink:#1b1b1b; --muted:#5f6b75; --line:#d5dde3; --bg:#ffffff;
+  --green:#1e8e3e; --green-bg:#e6f4ea; --red:#c5221f; --red-bg:#fce8e6; --amber:#b06000;
+  --radius:10px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{font-family:"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;color:var(--ink);background:var(--bg);display:flex;flex-direction:column;min-height:100vh}
+button{font-family:inherit;cursor:pointer}
+button:disabled{cursor:not-allowed;opacity:.55}
+
+/* ---------- Top bar ---------- */
+.topbar{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:12px;padding:10px 20px;background:var(--sky-light);border-bottom:1px solid var(--sky-soft)}
+.tb-left{display:flex;align-items:center;gap:12px;min-width:0}
+.tb-left img{height:44px;width:auto;border-radius:6px}
+.brand{font-weight:700;font-size:15px;color:var(--sky-deep);white-space:nowrap}
+.sec-label{font-size:14px;color:var(--ink);margin-top:2px}
+.tb-center{display:flex;flex-direction:column;align-items:center}
+.timer{font-size:22px;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:.5px}
+.timer.low{color:var(--red)}
+.link-btn{background:none;border:1px solid var(--line);border-radius:14px;font-size:12px;padding:2px 12px;margin-top:3px;color:var(--ink)}
+.link-btn:hover{border-color:var(--sky-dark)}
+.tb-right{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end}
+.tool-btn{background:#fff;border:1px solid var(--line);border-radius:8px;padding:7px 12px;font-size:13px;font-weight:600;color:var(--ink)}
+.tool-btn:hover:not(:disabled){border-color:var(--sky-dark);background:var(--sky-light)}
+.tool-btn.primary{background:var(--sky-dark);border-color:var(--sky-dark);color:#fff}
+.tool-btn.primary:hover:not(:disabled){background:var(--sky-deep)}
+.tool-btn.danger{color:var(--red)}
+.tool-btn.success{background:var(--green);border-color:var(--green);color:#fff}
+
+/* ---------- Module tabs ---------- */
+.module-tabs{display:flex;align-items:center;gap:6px;padding:8px 20px 0}
+.module-tabs .tab{border:1px solid var(--line);border-bottom:none;background:#f6f8fa;padding:8px 18px;border-radius:8px 8px 0 0;font-weight:600;font-size:14px;color:var(--muted)}
+.module-tabs .tab.active{background:var(--sky);color:#0c3a52;border-color:var(--sky)}
+.status-pill{margin-left:auto;font-size:12px;font-weight:600;padding:4px 10px;border-radius:12px;background:#f1f3f4;color:var(--muted)}
+.status-pill.ok{background:var(--green-bg);color:var(--green)}
+.dash-line{height:0;border-top:3px dashed var(--sky);margin:0 0 0}
+
+/* ---------- Main ---------- */
+main{flex:1;overflow:auto;padding:0 0 24px}
+.wrap{max-width:1180px;margin:0 auto;padding:0 20px}
+.q-wrap{display:grid;grid-template-columns:1fr;gap:0;margin-top:20px}
+.q-wrap.spr{grid-template-columns:minmax(260px,1fr) 1.3fr}
+.spr-dir{padding:4px 28px 20px 4px;border-right:3px solid var(--sky-soft);font-size:14.5px;line-height:1.6}
+.spr-dir h3{margin:4px 0 10px;font-size:16px}
+.spr-dir ul{padding-left:18px;margin:0 0 12px}
+.spr-dir li{margin-bottom:6px}
+.ex-table{border-collapse:collapse;width:100%;font-size:13.5px;margin-top:6px}
+.ex-table th,.ex-table td{border:1px solid var(--line);padding:6px 8px;text-align:left}
+.ex-table th{background:var(--sky-light)}
+.q-main{max-width:760px;width:100%;margin:0 auto;padding:0 4px}
+.q-wrap.spr .q-main{padding-left:28px;margin:0}
+.q-head{display:flex;align-items:center;gap:10px;background:#eef1f4;border-bottom:2px dashed #9aa5ad;padding:0 8px 0 0;margin-bottom:18px;min-height:40px}
+.q-num{background:#111;color:#fff;font-weight:700;min-width:40px;height:40px;display:flex;align-items:center;justify-content:center;font-size:17px}
+.flag-btn,.hint-btn{background:none;border:none;font-size:14px;font-weight:600;display:flex;align-items:center;gap:6px;padding:6px 8px;border-radius:6px;color:var(--ink)}
+.flag-btn:hover,.hint-btn:hover{background:#e1e6ea}
+.flag-btn.on{color:#b3261e}
+.flag-icon{display:inline-block;width:14px;height:16px}
+.hint-btn{color:var(--sky-deep);border:1px solid var(--sky);background:#fff}
+.hint-btn:hover{background:var(--sky-light)}
+.hint-btn.on{background:var(--sky);color:#0c3a52}
+.spacer{flex:1}
+.abc-btn{border:1px solid #444;background:#fff;border-radius:5px;padding:3px 6px;font-size:13px;font-weight:700;text-decoration:line-through}
+.abc-btn.on{background:var(--sky-deep);color:#fff;border-color:var(--sky-deep)}
+.q-text{font-size:17px;line-height:1.7;margin-bottom:20px}
+.q-text .katex-display{margin:.6em 0}
+.data-table{border-collapse:collapse;margin:12px auto;font-size:15px}
+.data-table th,.data-table td{border:1px solid #8b959c;padding:6px 14px;text-align:center}
+.data-table thead th{background:var(--sky-light)}
+
+/* ---------- Choices ---------- */
+.choices{display:flex;flex-direction:column;gap:12px}
+.choice-row{display:flex;align-items:center;gap:10px}
+.choice{flex:1;display:flex;align-items:center;gap:14px;text-align:left;background:#fff;border:1.5px solid #5f6b75;border-radius:var(--radius);padding:12px 14px;font-size:16px;color:var(--ink);transition:background .12s,border-color .12s;position:relative}
+.choice:hover:not(:disabled){border-color:var(--sky-dark);background:var(--sky-light)}
+.choice .letter{flex:none;width:28px;height:28px;border:1.5px solid #333;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px}
+.choice.selected{border:3px solid var(--sky-dark);background:var(--sky-light);padding:10.5px 12.5px}
+.choice.selected .letter{background:var(--sky-dark);border-color:var(--sky-dark);color:#fff}
+.choice:disabled{opacity:1;cursor:default}
+.choice.eliminated,.choice.eliminated:disabled{opacity:.45}
+.choice.eliminated::after{content:"";position:absolute;left:-6px;right:-6px;top:50%;border-top:2px solid #222}
+.choice.correct{border:3px solid var(--green);background:var(--green-bg);padding:10.5px 12.5px}
+.choice.correct .letter{background:var(--green);border-color:var(--green);color:#fff}
+.choice.wrong{border:3px solid var(--red);background:var(--red-bg);padding:10.5px 12.5px}
+.choice.wrong .letter{background:var(--red);border-color:var(--red);color:#fff}
+.tag{margin-left:auto;font-size:12px;font-weight:700;padding:2px 8px;border-radius:10px;white-space:nowrap}
+.tag.g{background:var(--green);color:#fff}.tag.r{background:var(--red);color:#fff}
+.elim-btn{flex:none;width:30px;height:30px;border-radius:50%;border:1.5px solid #333;background:#fff;font-weight:700;font-size:13px;text-decoration:line-through;position:relative}
+.elim-btn:hover{background:#f1f1f1}
+.elim-undo{flex:none;background:none;border:none;text-decoration:underline;font-weight:700;font-size:13px;width:44px}
+
+/* ---------- SPR ---------- */
+.spr-input{width:200px;font-size:20px;padding:10px 12px;border:1.5px solid #5f6b75;border-radius:8px;border-bottom:3px solid #222;font-family:inherit}
+.spr-input:focus{outline:none;border-color:var(--sky-dark);box-shadow:0 0 0 3px var(--sky-soft)}
+.spr-input:disabled{background:#f6f8fa}
+.spr-input.correct{border-color:var(--green);background:var(--green-bg)}
+.spr-input.wrong{border-color:var(--red);background:var(--red-bg)}
+.preview{margin-top:12px;font-size:15px;color:var(--muted);min-height:34px}
+.preview b{color:var(--ink)}
+.preview .pv{font-size:20px;color:var(--ink);margin-left:6px}
+
+/* ---------- Tools under question ---------- */
+.q-tools{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-top:24px;padding-top:14px;border-top:1px solid var(--line)}
+.timer-btn{background:#fff;border:1.5px solid var(--sky-dark);color:var(--sky-deep);border-radius:20px;padding:6px 16px;font-weight:600;font-size:14px}
+.timer-btn.running{background:var(--sky-dark);color:#fff}
+.q-clock{font-variant-numeric:tabular-nums;font-weight:700;font-size:16px}
+.q-clock-label{font-size:13px;color:var(--muted)}
+.hint-box{margin-top:16px;background:var(--sky-light);border:1px solid var(--sky);border-left:5px solid var(--sky-dark);border-radius:8px;padding:12px 16px;font-size:15px;line-height:1.6}
+.hint-box .hint{margin-bottom:8px}
+.hint-box .hint b{color:var(--sky-deep)}
+.small-btn{background:#fff;border:1px solid var(--sky-dark);color:var(--sky-deep);border-radius:6px;padding:4px 10px;font-size:13px;font-weight:600}
+.review-box{margin-top:16px;border-radius:8px;padding:12px 16px;font-size:15px;line-height:1.6;border:1px solid var(--line);background:#fafbfc}
+.status-badge{display:inline-block;font-weight:700;padding:4px 12px;border-radius:14px;margin-bottom:8px}
+.status-badge.correct{background:var(--green-bg);color:var(--green)}
+.status-badge.wrong{background:var(--red-bg);color:var(--red)}
+.status-badge.unanswered{background:#fef7e0;color:var(--amber)}
+.ans-g{color:var(--green);font-weight:700}.ans-r{color:var(--red);font-weight:700}
+
+/* ---------- Results panel ---------- */
+.results{margin-top:18px;border:1px solid var(--sky);border-radius:12px;background:linear-gradient(180deg,var(--sky-light),#fff 120px);padding:16px 20px}
+.results-head{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.results-head h2{margin:0;font-size:20px;color:var(--sky-deep)}
+.big-score{font-size:30px;font-weight:800}
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin:14px 0}
+.stat{background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.stat .k{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px}
+.stat .v{font-size:20px;font-weight:700;margin-top:2px}
+.rtable{width:100%;border-collapse:collapse;font-size:13.5px;background:#fff}
+.rtable th,.rtable td{border:1px solid var(--line);padding:6px 8px;text-align:left}
+.rtable th{background:var(--sky-light)}
+.rtable tr.clickable{cursor:pointer}
+.rtable tr.clickable:hover td{background:var(--sky-light)}
+.res-correct{color:var(--green);font-weight:700}.res-wrong{color:var(--red);font-weight:700}.res-unanswered{color:var(--amber);font-weight:700}
+details summary{cursor:pointer;font-weight:600;margin:10px 0 8px;color:var(--sky-deep)}
+.table-scroll{overflow-x:auto}
+
+/* ---------- Bottom bar ---------- */
+.bottombar{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px;padding:10px 20px;border-top:3px dashed var(--sky);background:var(--sky-light)}
+.student{font-weight:600;font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.nav-pill{background:#111;color:#fff;border:none;border-radius:8px;padding:9px 18px;font-weight:700;font-size:14px}
+.nav-pill:hover{background:#333}
+.bb-right{display:flex;gap:10px;justify-content:flex-end}
+.nav-btn{background:var(--sky-dark);color:#fff;border:none;border-radius:22px;padding:10px 26px;font-weight:700;font-size:15px}
+.nav-btn:hover:not(:disabled){background:var(--sky-deep)}
+
+/* ---------- Modals ---------- */
+.overlay{position:fixed;inset:0;background:rgba(10,30,45,.45);display:none;align-items:center;justify-content:center;z-index:50;padding:16px}
+.overlay.open{display:flex}
+.modal{background:#fff;border-radius:14px;max-width:640px;width:100%;max-height:88vh;overflow:auto;box-shadow:0 20px 50px rgba(0,0,0,.25)}
+.modal.wide{max-width:820px}
+.modal-head{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px solid var(--line);background:var(--sky-light);position:sticky;top:0}
+.modal-head h3{margin:0;font-size:18px}
+.x-btn{background:none;border:none;font-size:24px;line-height:1;color:var(--muted)}
+.modal-body{padding:18px 20px;font-size:15px;line-height:1.6}
+.modal-foot{display:flex;gap:10px;justify-content:flex-end;padding:12px 20px;border-top:1px solid var(--line)}
+.name-input{width:100%;font-size:17px;padding:10px 12px;border:1.5px solid var(--line);border-radius:8px;margin-top:8px}
+.name-input:focus{outline:none;border-color:var(--sky-dark)}
+.nav-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(44px,1fr));gap:10px;margin:14px 0}
+.nav-cell{position:relative;height:44px;border:2px dashed #555;background:#fff;font-weight:700;font-size:15px;border-radius:4px;color:var(--sky-deep)}
+.nav-cell.answered{border:2px solid var(--sky-dark);background:var(--sky-dark);color:#fff}
+.nav-cell.current{outline:3px solid #111;outline-offset:2px}
+.nav-cell.flagged::after{content:"";position:absolute;top:-7px;right:-7px;width:14px;height:14px;background:#b3261e;clip-path:polygon(0 0,100% 30%,0 60%)}
+.nav-cell.c{background:var(--green);border:2px solid var(--green);color:#fff}
+.nav-cell.w{background:var(--red);border:2px solid var(--red);color:#fff}
+.nav-cell.u{background:#fef7e0;border:2px solid var(--amber);color:var(--amber)}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:13px;color:var(--muted)}
+.legend span{display:flex;align-items:center;gap:6px}
+.lg{width:16px;height:16px;border-radius:3px;display:inline-block}
+.ref-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.ref-item{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:#fbfdfe}
+.ref-item b{display:block;margin-bottom:4px;color:var(--sky-deep)}
+.list-q{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 14px}
+.chip{border:1px solid var(--sky-dark);background:#fff;color:var(--sky-deep);border-radius:14px;padding:3px 10px;font-size:13px;font-weight:600}
+.msg{padding:10px 12px;border-radius:8px;margin-top:10px;font-weight:600}
+.msg.ok{background:var(--green-bg);color:var(--green)}
+.msg.err{background:var(--red-bg);color:var(--red)}
+.msg.info{background:var(--sky-light);color:var(--sky-deep)}
+.toast{position:fixed;top:84px;left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:12px 20px;border-radius:10px;z-index:60;font-weight:600;display:none;max-width:90vw;text-align:center}
+.toast.show{display:block}
+
+/* ---------- Question timer (top bar) ---------- */
+.q-head{flex-wrap:wrap;row-gap:6px}
+.qtimer{display:inline-flex;align-items:center;gap:7px;border:1.5px solid var(--sky-dark);background:#fff;color:var(--sky-deep);border-radius:18px;padding:5px 12px;font-weight:700;font-size:13.5px;line-height:1}
+.qtimer:hover:not(:disabled){background:var(--sky-light)}
+.qtimer .qt-clock{font-variant-numeric:tabular-nums;font-size:14px;padding-left:7px;border-left:1.5px solid currentColor;opacity:.9}
+.qtimer.running{background:var(--sky-dark);color:#fff}
+.qtimer.running:hover{background:var(--sky-deep)}
+.qtimer.running .qt-dot{width:8px;height:8px;border-radius:50%;background:#fff;animation:qtblink 1s steps(2) infinite}
+.qtimer.idle{animation:qtpulse 1.8s ease-in-out infinite}
+@keyframes qtpulse{0%,100%{box-shadow:0 0 0 0 rgba(58,159,209,.5)}50%{box-shadow:0 0 0 7px rgba(58,159,209,0)}}
+@keyframes qtblink{50%{opacity:.2}}
+.qtimer kbd{font:600 11px inherit;border:1px solid currentColor;border-radius:4px;padding:1px 4px;opacity:.7}
+.qtimer.running kbd{display:none}
+
+/* ---------- Freeze / overtime / review navigation ---------- */
+.tool-btn.frozen{background:#dff3fb;border-color:var(--sky-dark);color:var(--sky-deep)}
+.timer.frozen{color:var(--sky-dark)}
+.timer.over{color:var(--red)}
+.timer-sub{font-size:11px;font-weight:700;color:var(--sky-deep);letter-spacing:.4px;text-transform:uppercase;min-height:14px}
+.late-badge{font-size:12px;font-weight:700;color:var(--amber);background:#fef7e0;border:1px solid #f3d27a;border-radius:12px;padding:2px 9px;white-space:nowrap}
+.late-badge[hidden]{display:none}
+.nav-cell.late::before{content:"⏰";position:absolute;bottom:-10px;left:-8px;font-size:12px}
+.review-nav{position:sticky;top:0;z-index:5;background:#fff;border:1px solid var(--sky);border-radius:12px;padding:10px 12px;margin-top:16px;box-shadow:0 4px 14px rgba(29,106,150,.10)}
+.rv-row{display:flex;align-items:center;gap:5px;flex-wrap:wrap;margin-bottom:6px}
+.rv-m{font-size:12px;font-weight:700;color:var(--muted);width:26px}
+.rv-chip{width:30px;height:28px;border-radius:6px;border:none;font-size:12px;font-weight:700;color:#fff;position:relative;padding:0}
+.rv-chip.c{background:var(--green)}.rv-chip.w{background:var(--red)}
+.rv-chip.u{background:#fef7e0;color:var(--amber);box-shadow:inset 0 0 0 1.5px var(--amber)}
+.rv-chip.cur{outline:3px solid #111;outline-offset:1px}
+.rv-chip.late::after{content:"";position:absolute;top:2px;right:2px;width:7px;height:7px;border-radius:50%;background:#ffd166;box-shadow:0 0 0 1px #8a5a00}
+.rv-chip:hover{filter:brightness(1.1)}
+.rv-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:4px;font-size:14px}
+.rv-actions label{display:flex;align-items:center;gap:6px;margin-left:auto;font-size:13px;color:var(--muted);cursor:pointer}
+.rv-tip{font-size:12px;color:var(--muted);margin-top:4px}
+.q-wrap{animation:qfade .18s ease}
+@keyframes qfade{from{opacity:.3;transform:translateY(4px)}to{opacity:1;transform:none}}
+
+/* ---------- Responsive ---------- */
+@media (max-width:900px){
+  .topbar{grid-template-columns:1fr auto;grid-template-areas:"l c" "r r"}
+  .tb-left{grid-area:l}.tb-center{grid-area:c}.tb-right{grid-area:r;justify-content:flex-start}
+  .q-wrap.spr{grid-template-columns:1fr}
+  .spr-dir{order:2;border-right:none;border-top:3px solid var(--sky-soft);padding:14px 0 0;margin-top:20px;font-size:13.5px}
+  .q-wrap.spr .q-main{padding-left:4px}
+}
+@media (max-width:560px){
+  .topbar,.bottombar,.module-tabs{padding-left:12px;padding-right:12px}
+  .wrap{padding:0 12px}
+  .brand{font-size:13px;white-space:normal}
+  .tb-left img{height:36px}
+  .timer{font-size:18px}
+  .tool-btn{padding:6px 9px;font-size:12px}
+  .bottombar{grid-template-columns:1fr 1fr;grid-template-areas:"n n" "s r"}
+  .student{grid-area:s}.nav-pill{grid-area:n;justify-self:center}.bb-right{grid-area:r}
+  .nav-btn{padding:8px 18px}
+  .q-text{font-size:16px}
+  .choice{font-size:15px}
+}
+</style>
+</head>
+<body>
+
+<!-- ============================ TOP BAR ============================ -->
+<header class="topbar">
+  <div class="tb-left">
+    <img src="image.png" alt="Amro Academy logo" onerror="this.style.display='none'">
+    <div>
+      <div class="brand">Amro Academy – SAT Math Exam 2</div>
+      <div class="sec-label" id="secLabel">Section 2, Module 1: Math</div>
+    </div>
+  </div>
+  <div class="tb-center">
+    <div class="timer" id="moduleTimer">35:00</div>
+    <div class="timer-sub" id="timerSub"></div>
+    <button class="link-btn" id="hideTimerBtn">Hide</button>
+  </div>
+  <div class="tb-right">
+    <button class="tool-btn" id="directionsBtn">Directions</button>
+    <button class="tool-btn" id="refBtn">Reference</button>
+    <button class="tool-btn" id="freezeBtn">❄ Freeze Time</button>
+    <button class="tool-btn" id="correctBtn">Correct Exam</button>
+    <button class="tool-btn primary" id="submitBtn">Submit Exam</button>
+    <button class="tool-btn danger" id="resetBtn">Reset Exam</button>
+  </div>
+</header>
+
+<nav class="module-tabs">
+  <button class="tab" data-module="1">Module 1</button>
+  <button class="tab" data-module="2">Module 2</button>
+  <span class="status-pill" id="statusPill">In progress</span>
+</nav>
+<div class="dash-line"></div>
+
+<!-- ============================ MAIN ============================ -->
+<main id="main">
+  <div class="wrap">
+    <div id="results"></div>
+    <div id="questionArea"></div>
+  </div>
+</main>
+
+<!-- ============================ BOTTOM BAR ============================ -->
+<footer class="bottombar">
+  <div class="student" id="studentLabel"></div>
+  <button class="nav-pill" id="navBtn">Question 1 of 22 ▲</button>
+  <div class="bb-right">
+    <button class="nav-btn" id="backBtn">Back</button>
+    <button class="nav-btn" id="nextBtn">Next</button>
+  </div>
+</footer>
+
+<div class="overlay" id="overlay"><div class="modal" id="modal"></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* =========================================================
+   1. DATA — question bank
+   ========================================================= */
+/* =========================================================
+   EXAM 2 QUESTION BANK — adaptive to Exam 1 results.
+   Weighted toward Advanced Math (18) and the geometry formula topics
+   that were skipped (sector/radians, similar solids, unit circle).
+   Difficulty: realistic SAT, slightly harder. Each module goes easy → hard.
+   ========================================================= */
+const QUESTIONS = [
+  /* ------------------------------ MODULE 1 ------------------------------ */
+  { id: "e2m1q1", module: 1, number: 1, domain: "Algebra", skill: "Linear equations in one variable", type: "mcq",
+    question: String.raw`\[5(x-2)+3=2x+11\] What value of \(x\) is the solution to the equation above?`,
+    choices: [String.raw`\(4\)`, String.raw`\(6\)`, String.raw`\(8\)`, String.raw`\(\dfrac{18}{7}\)`], correctAnswer: "B",
+    hints: [String.raw`Distribute the 5 first, then combine the constants on the left.`, String.raw`You should get \(5x-7=2x+11\). Collect the \(x\)-terms on one side.`],
+    solution: String.raw`\(5x-10+3=2x+11\Rightarrow5x-7=2x+11\Rightarrow3x=18\Rightarrow x=6\).` },
+  { id: "e2m1q2", module: 1, number: 2, domain: "Problem-Solving and Data Analysis", skill: "Percentages", type: "mcq",
+    question: String.raw`A shirt has an original price of $40. It is discounted by 15%, and then an 8% sales tax is added to the discounted price. What is the final price of the shirt?`,
+    choices: [String.raw`$37.20`, String.raw`$34.00`, String.raw`$39.68`, String.raw`$36.72`], correctAnswer: "D",
+    hints: [String.raw`Turn each percent change into a multiplier: a 15% discount is \(\times0.85\).`, String.raw`An 8% tax is \(\times1.08\). Multiply \(40\times0.85\times1.08\).`],
+    solution: String.raw`\(40\times0.85=34\), then \(34\times1.08=36.72\). Subtracting \(15-8=7\%\) gives the trap $37.20.` },
+  { id: "e2m1q3", module: 1, number: 3, domain: "Algebra", skill: "Linear functions — slope", type: "spr",
+    question: String.raw`A line in the \(xy\)-plane passes through the points \((-2,\,5)\) and \((4,\,-7)\). What is the slope of the line?`,
+    correctAnswer: "-2", acceptedAnswers: ["-2"],
+    hints: [String.raw`Slope \(=\dfrac{y_2-y_1}{x_2-x_1}\).`, String.raw`Be careful with the signs: \(\dfrac{-7-5}{4-(-2)}\).`],
+    solution: String.raw`\(\dfrac{-7-5}{4-(-2)}=\dfrac{-12}{6}=-2\).` },
+  { id: "e2m1q4", module: 1, number: 4, domain: "Advanced Math", skill: "Exponent rules", type: "mcq",
+    question: String.raw`Which of the following is equivalent to \(\dfrac{(3x^2)^3}{9x^4}\), where \(x\neq0\)?`,
+    choices: [String.raw`\(x^2\)`, String.raw`\(3x^2\)`, String.raw`\(9x^2\)`, String.raw`\(3x^{10}\)`], correctAnswer: "B",
+    hints: [String.raw`Raise both the 3 and the \(x^2\) to the third power.`, String.raw`\((3x^2)^3=27x^6\). Now divide the numbers and subtract the exponents.`],
+    solution: String.raw`\((3x^2)^3=27x^6\). \(\dfrac{27x^6}{9x^4}=3x^{6-4}=3x^2\).` },
+  { id: "e2m1q5", module: 1, number: 5, domain: "Geometry and Trigonometry", skill: "Angles in a triangle", type: "mcq",
+    question: String.raw`The measures of the three angles of a triangle are \((2x+10)^\circ\), \((3x)^\circ\), and \((x+20)^\circ\). What is the measure of the largest angle?`,
+    choices: [String.raw`\(25^\circ\)`, String.raw`\(60^\circ\)`, String.raw`\(75^\circ\)`, String.raw`\(45^\circ\)`], correctAnswer: "C",
+    hints: [String.raw`The angles of a triangle add up to \(180^\circ\).`, String.raw`\(6x+30=180\). After finding \(x\), compute all three angles. The question asks for an angle, not \(x\).`],
+    solution: String.raw`\(6x+30=180\Rightarrow x=25\). Angles: \(60^\circ,\ 75^\circ,\ 45^\circ\). The largest is \(75^\circ\). (25 is \(x\), the trap.)` },
+  { id: "e2m1q6", module: 1, number: 6, domain: "Advanced Math", skill: "Equivalent expressions (rational)", type: "mcq",
+    question: String.raw`Which of the following is equivalent to \(\dfrac{x^2-16}{x^2-x-12}\) for \(x>4\)?`,
+    choices: [String.raw`\(\dfrac{x+4}{x+3}\)`, String.raw`\(\dfrac{x-4}{x-3}\)`, String.raw`\(\dfrac{x+4}{x-3}\)`, String.raw`\(\dfrac43\)`], correctAnswer: "A",
+    hints: [String.raw`The top is a difference of squares. For the bottom, find two numbers that multiply to \(-12\) and add to \(-1\).`, String.raw`\(x^2-16=(x-4)(x+4)\) and \(x^2-x-12=(x-4)(x+3)\). Cancel the common factor.`],
+    solution: String.raw`\(\dfrac{(x-4)(x+4)}{(x-4)(x+3)}=\dfrac{x+4}{x+3}\). Check with \(x=5\): \(\frac{9}{8}\) and \(\frac{9}{8}\) ✓.` },
+  { id: "e2m1q7", module: 1, number: 7, domain: "Algebra", skill: "Systems of two linear equations", type: "spr",
+    question: String.raw`\[x+2y=11\]\[3x-y=5\] If \((x,\,y)\) is the solution to the system of equations above, what is the value of \(x+y\)?`,
+    correctAnswer: "7", acceptedAnswers: ["7"],
+    hints: [String.raw`Solve the second equation for \(y\): \(y=3x-5\).`, String.raw`Substitute into the first equation, solve for \(x\), then find \(y\). The question asks for \(x+y\).`],
+    solution: String.raw`\(x+2(3x-5)=11\Rightarrow7x=21\Rightarrow x=3\), \(y=4\). So \(x+y=7\).` },
+  { id: "e2m1q8", module: 1, number: 8, domain: "Problem-Solving and Data Analysis", skill: "Mean of a data set", type: "spr",
+    question: String.raw`The mean of a list of 5 numbers is 18. When a sixth number is added to the list, the mean of the 6 numbers is 20. What is the sixth number?`,
+    correctAnswer: "30", acceptedAnswers: ["30"],
+    hints: [String.raw`Work with sums: sum \(=\) mean \(\times\) count.`, String.raw`The first sum is \(5\times18\). The new sum is \(6\times20\).`],
+    solution: String.raw`Sum of 5 numbers \(=90\). Sum of 6 numbers \(=120\). Sixth number \(=120-90=30\).` },
+  { id: "e2m1q9", module: 1, number: 9, domain: "Advanced Math", skill: "Quadratics — discriminant", type: "mcq",
+    question: String.raw`\[x^2-kx+16=0\] In the equation above, \(k\) is a positive constant. If the equation has exactly one real solution, what is that solution?`,
+    choices: [String.raw`\(8\)`, String.raw`\(16\)`, String.raw`\(-4\)`, String.raw`\(4\)`], correctAnswer: "D",
+    hints: [String.raw`One real solution means the quadratic is a perfect square.`, String.raw`\(16=4^2\) and \(k>0\), so the equation is \((x-4)^2=0\). The question asks for \(x\), not \(k\).`],
+    solution: String.raw`\((x-4)^2=x^2-8x+16\), so \(k=8\) (choice A, the trap) and the solution is \(x=4\). Discriminant check: \(64-64=0\) ✓.` },
+  { id: "e2m1q10", module: 1, number: 10, domain: "Geometry and Trigonometry", skill: "Arc length (radians)", type: "mcq",
+    question: String.raw`A circle has a radius of 6 centimeters. What is the length, in centimeters, of an arc of the circle with a central angle of \(\frac{\pi}{3}\) radians?`,
+    choices: [String.raw`\(2\pi\)`, String.raw`\(6\pi\)`, String.raw`\(\dfrac{\pi}{3}\)`, String.raw`\(12\pi\)`], correctAnswer: "A",
+    hints: [String.raw`When the angle is in radians, arc length \(s=r\theta\).`, String.raw`\(s=6\cdot\frac{\pi}{3}\).`],
+    solution: String.raw`\(s=r\theta=6\cdot\frac{\pi}{3}=2\pi\). Choice B (\(6\pi\)) is the sector <i>area</i>, \(\frac12r^2\theta\).` },
+  { id: "e2m1q11", module: 1, number: 11, domain: "Algebra", skill: "Interpreting linear models", type: "mcq",
+    question: String.raw`A plumber uses the equation \(C=75+60h\) to find the total charge \(C\), in dollars, for a job that takes \(h\) hours. What is the best interpretation of the number 60 in this context?`,
+    choices: [String.raw`The total charge for a 1-hour job`, String.raw`The charge for each hour of work`, String.raw`The fixed fee charged for every job`, String.raw`The number of hours the plumber works`], correctAnswer: "B",
+    hints: [String.raw`In \(C=b+mh\), which number is multiplied by the hours?`, String.raw`The number multiplied by \(h\) is the rate: the change in \(C\) for each additional hour.`],
+    solution: String.raw`60 is the slope: each additional hour adds $60. The 75 is the fixed fee, and a 1-hour job would cost \(75+60=135\).` },
+  { id: "e2m1q12", module: 1, number: 12, domain: "Advanced Math", skill: "Exponential decay rate", type: "mcq",
+    question: String.raw`The value, in dollars, of a car \(t\) years after it was purchased is modeled by \(V(t)=24{,}000(0.81)^{t/2}\). By what percent does the value of the car decrease each year?`,
+    choices: [String.raw`19%`, String.raw`9.5%`, String.raw`81%`, String.raw`10%`], correctAnswer: "D",
+    hints: [String.raw`Rewrite \((0.81)^{t/2}\) as \(\left((0.81)^{1/2}\right)^t\).`, String.raw`\((0.81)^{1/2}=\sqrt{0.81}\). That is the fraction of value kept each year.`],
+    solution: String.raw`\(\sqrt{0.81}=0.9\), so \(V(t)=24{,}000(0.9)^t\): the car keeps 90% each year and loses 10%. 19% is the loss every 2 years; 9.5% treats it as linear.` },
+  { id: "e2m1q13", module: 1, number: 13, domain: "Problem-Solving and Data Analysis", skill: "Conditional probability (two-way table)", type: "mcq",
+    question: String.raw`The table shows the club memberships of 100 students. Each student is in exactly one of the two clubs.
+<table class="data-table"><thead><tr><th></th><th>Science club</th><th>Art club</th><th>Total</th></tr></thead>
+<tbody><tr><th>Juniors</th><td>24</td><td>16</td><td>40</td></tr>
+<tr><th>Seniors</th><td>36</td><td>24</td><td>60</td></tr>
+<tr><th>Total</th><td>60</td><td>40</td><td>100</td></tr></tbody></table>
+If one of the seniors is selected at random, what is the probability that the student is in the art club?`,
+    choices: [String.raw`\(\dfrac{6}{25}\)`, String.raw`\(\dfrac{3}{5}\)`, String.raw`\(\dfrac{2}{5}\)`, String.raw`\(\dfrac{12}{25}\)`], correctAnswer: "C",
+    hints: [String.raw`"One of the seniors" tells you the denominator: only the Seniors row.`, String.raw`Probability \(=\dfrac{\text{seniors in art}}{\text{all seniors}}\).`],
+    solution: String.raw`\(\dfrac{24}{60}=\dfrac25\). Using 100 gives \(\frac{6}{25}\); using 40 gives \(\frac35\).` },
+  { id: "e2m1q14", module: 1, number: 14, domain: "Advanced Math", skill: "Polynomial factors (factor theorem)", type: "spr",
+    question: String.raw`\[p(x)=2x^3-5x^2+ax-6\] In the polynomial above, \(a\) is a constant. If \(x-3\) is a factor of \(p(x)\), what is the value of \(a\)?`,
+    correctAnswer: "-1", acceptedAnswers: ["-1"],
+    hints: [String.raw`If \(x-3\) is a factor, then \(p(3)=0\).`, String.raw`\(2(27)-5(9)+3a-6=0\). Work each term in brackets.`],
+    solution: String.raw`\(p(3)=54-45+3a-6=3+3a=0\Rightarrow a=-1\).` },
+  { id: "e2m1q15", module: 1, number: 15, domain: "Algebra", skill: "Linear inequalities", type: "mcq",
+    question: String.raw`Which of the following is the solution set of the inequality \(3(2-x)\ge2x-9\)?`,
+    choices: [String.raw`\(x\le3\)`, String.raw`\(x\ge3\)`, String.raw`\(x\le-3\)`, String.raw`\(x\ge-3\)`], correctAnswer: "A",
+    hints: [String.raw`Distribute: \(6-3x\ge2x-9\).`, String.raw`Move the \(x\)-terms to the side where they stay positive to avoid flipping the sign.`],
+    solution: String.raw`\(6-3x\ge2x-9\Rightarrow15\ge5x\Rightarrow3\ge x\), so \(x\le3\). Check \(x=0\): \(6\ge-9\) ✓.` },
+  { id: "e2m1q16", module: 1, number: 16, domain: "Geometry and Trigonometry", skill: "Similar solids — volume", type: "mcq",
+    question: String.raw`Two rectangular prisms are similar. The ratio of their corresponding edge lengths is \(2:5\). If the volume of the smaller prism is 40 cubic centimeters, what is the volume, in cubic centimeters, of the larger prism?`,
+    choices: [String.raw`\(100\)`, String.raw`\(250\)`, String.raw`\(625\)`, String.raw`\(1{,}000\)`], correctAnswer: "C",
+    hints: [String.raw`Lengths scale by \(k\), areas by \(k^2\), volumes by \(k^3\).`, String.raw`The volume ratio is \(2^3:5^3=8:125\).`],
+    solution: String.raw`\(40\cdot\frac{125}{8}=625\). Using \(\frac52\) gives 100; using \(\frac{25}{4}\) gives 250.` },
+  { id: "e2m1q17", module: 1, number: 17, domain: "Advanced Math", skill: "Function transformations", type: "mcq",
+    question: String.raw`The function \(f\) is defined by \(f(x)=x^2-6x+5\). The function \(g\) is defined by \(g(x)=f(x-2)+3\). What is the vertex of the graph of \(y=g(x)\)?`,
+    choices: [String.raw`\((5,\,-1)\)`, String.raw`\((1,\,-1)\)`, String.raw`\((5,\,-7)\)`, String.raw`\((3,\,-1)\)`], correctAnswer: "A",
+    hints: [String.raw`Find the vertex of \(f\) first: \(x=-\frac{b}{2a}\).`, String.raw`\(f(x-2)\) moves the graph 2 units <b>right</b>; \(+3\) moves it 3 units up.`],
+    solution: String.raw`Vertex of \(f\): \(x=3\), \(f(3)=9-18+5=-4\). Right 2 and up 3: \((5,\,-1)\). Moving left gives the trap \((1,-1)\).` },
+  { id: "e2m1q18", module: 1, number: 18, domain: "Algebra", skill: "Linear functions", type: "spr",
+    question: String.raw`For the linear function \(f\), \(f(1)=2\) and \(f(4)=11\). The function \(h\) is defined by \(h(x)=f(x+2)\). For what value of \(x\) is \(h(x)=2x\)?`,
+    correctAnswer: "-5", acceptedAnswers: ["-5"],
+    hints: [String.raw`Find the slope and intercept of \(f\) from the two values.`, String.raw`\(f(x)=3x-1\), so \(h(x)=3(x+2)-1\). Set it equal to \(2x\).`],
+    solution: String.raw`Slope \(=\frac{11-2}{4-1}=3\), \(f(x)=3x-1\). \(h(x)=3x+5\). \(3x+5=2x\Rightarrow x=-5\).` },
+  { id: "e2m1q19", module: 1, number: 19, domain: "Advanced Math", skill: "Exponential growth", type: "mcq",
+    question: String.raw`The number of bacteria in a sample \(t\) hours after an experiment begins is modeled by \(N(t)=300\cdot2^{t/3}\). How many hours does it take for the number of bacteria to reach 4,800?`,
+    choices: [String.raw`\(8\)`, String.raw`\(12\)`, String.raw`\(16\)`, String.raw`\(4\)`], correctAnswer: "B",
+    hints: [String.raw`Divide both sides by 300: \(2^{t/3}=16\).`, String.raw`\(16=2^4\), so \(\frac{t}{3}=4\).`],
+    solution: String.raw`\(2^{t/3}=16=2^4\Rightarrow\frac t3=4\Rightarrow t=12\). Choice C (16) is the growth factor; D (4) is \(\frac t3\).` },
+  { id: "e2m1q20", module: 1, number: 20, domain: "Geometry and Trigonometry", skill: "Unit circle (radians)", type: "mcq",
+    question: String.raw`What is the value of \(\sin\left(\frac{5\pi}{6}\right)\)?`,
+    choices: [String.raw`\(-\dfrac12\)`, String.raw`\(\dfrac{\sqrt3}{2}\)`, String.raw`\(-\dfrac{\sqrt3}{2}\)`, String.raw`\(\dfrac12\)`], correctAnswer: "D",
+    hints: [String.raw`\(\frac{5\pi}{6}=150^\circ\). Which quadrant is that in?`, String.raw`Its reference angle is \(\frac{\pi}{6}=30^\circ\), and sine is positive in Quadrant II.`],
+    solution: String.raw`\(\frac{5\pi}{6}\) is in Quadrant II with reference angle \(\frac{\pi}{6}\). \(\sin\frac{\pi}{6}=\frac12\) and sine is positive there, so the value is \(\frac12\).` },
+  { id: "e2m1q21", module: 1, number: 21, domain: "Advanced Math", skill: "Linear–quadratic systems", type: "spr",
+    question: String.raw`\[y=x^2+4x+c\]\[y=2x\] In the system above, \(c\) is a constant. If the graphs of the equations intersect at exactly one point, what is the value of \(c\)?`,
+    correctAnswer: "1", acceptedAnswers: ["1"],
+    hints: [String.raw`Set the expressions equal and move everything to one side.`, String.raw`\(x^2+2x+c=0\). One intersection point means the discriminant is 0.`],
+    solution: String.raw`\(x^2+4x+c=2x\Rightarrow x^2+2x+c=0\). Discriminant: \(4-4c=0\Rightarrow c=1\).` },
+  { id: "e2m1q22", module: 1, number: 22, domain: "Algebra", skill: "Linear equations — intercepts and area", type: "mcq",
+    question: String.raw`The graph of \(3x+4y=k\), where \(k\) is a positive constant, forms a triangle with the \(x\)-axis and the \(y\)-axis. If the area of the triangle is 24, what is the value of \(k\)?`,
+    choices: [String.raw`\(12\)`, String.raw`\(48\)`, String.raw`\(24\)`, String.raw`\(576\)`], correctAnswer: "C",
+    hints: [String.raw`The intercepts are \(\frac{k}{3}\) and \(\frac{k}{4}\).`, String.raw`Area \(=\frac12\cdot\frac k3\cdot\frac k4=\frac{k^2}{24}\). Set it equal to 24.`],
+    solution: String.raw`\(\frac{k^2}{24}=24\Rightarrow k^2=576\Rightarrow k=24\). Choice D is \(k^2\).` },
+
+  /* ------------------------------ MODULE 2 ------------------------------ */
+  { id: "e2m2q1", module: 2, number: 1, domain: "Algebra", skill: "Systems — no solution", type: "mcq",
+    question: String.raw`\[2x-3y=7\]\[6x+ky=15\] In the system of equations above, \(k\) is a constant. For what value of \(k\) does the system have no solution?`,
+    choices: [String.raw`\(-9\)`, String.raw`\(9\)`, String.raw`\(-3\)`, String.raw`\(3\)`], correctAnswer: "A",
+    hints: [String.raw`No solution means parallel lines: the \(x\)- and \(y\)-coefficients are in the same ratio.`, String.raw`The \(x\)-coefficient is multiplied by 3, so \(k=3(-3)\). Check that the constants are <b>not</b> in that ratio.`],
+    solution: String.raw`\(\frac62=3\), so \(k=-9\). Constants: \(\frac{15}{7}\neq3\), so the lines are parallel and distinct.` },
+  { id: "e2m2q2", module: 2, number: 2, domain: "Advanced Math", skill: "Rational expressions", type: "mcq",
+    question: String.raw`Which of the following is equivalent to \(\dfrac{2}{x+3}+\dfrac{x}{x^2-9}\) for \(x\neq3\) and \(x\neq-3\)?`,
+    choices: [String.raw`\(\dfrac{x+2}{x^2-9}\)`, String.raw`\(\dfrac{3}{x-3}\)`, String.raw`\(\dfrac{3x-6}{x^2-9}\)`, String.raw`\(\dfrac{3x+6}{x^2-9}\)`], correctAnswer: "C",
+    hints: [String.raw`\(x^2-9=(x-3)(x+3)\) is the common denominator.`, String.raw`Multiply the first fraction by \(\frac{x-3}{x-3}\), then add the numerators.`],
+    solution: String.raw`\(\frac{2(x-3)}{x^2-9}+\frac{x}{x^2-9}=\frac{2x-6+x}{x^2-9}=\frac{3x-6}{x^2-9}\). Writing \(2(x-3)\) as \(2x+6\) gives the trap D.` },
+  { id: "e2m2q3", module: 2, number: 3, domain: "Problem-Solving and Data Analysis", skill: "Line of best fit — prediction", type: "mcq",
+    question: String.raw`For a group of houses, the line of best fit relating floor area \(x\), in hundreds of square feet, to price \(y\), in thousands of dollars, is \(y=12.5x+40\). Based on the line of best fit, what is the predicted price of a house with a floor area of 1,800 square feet?`,
+    choices: [String.raw`$225,040`, String.raw`$265,000`, String.raw`$22,540`, String.raw`$305,000`], correctAnswer: "B",
+    hints: [String.raw`\(x\) is measured in hundreds of square feet. What is \(x\) for 1,800 square feet?`, String.raw`\(x=18\). The answer for \(y\) is in thousands of dollars.`],
+    solution: String.raw`\(y=12.5(18)+40=265\), which is $265,000.` },
+  { id: "e2m2q4", module: 2, number: 4, domain: "Advanced Math", skill: "Exponential growth — equivalent forms", type: "mcq",
+    question: String.raw`The population of a town \(t\) years from now is modeled by \(P(t)=800(1.44)^{t/2}\). By what percent does the population increase each year?`,
+    choices: [String.raw`44%`, String.raw`22%`, String.raw`20%`, String.raw`12%`], correctAnswer: "C",
+    hints: [String.raw`Rewrite as \(\left((1.44)^{1/2}\right)^t\).`, String.raw`\(\sqrt{1.44}\) is the yearly growth factor.`],
+    solution: String.raw`\(\sqrt{1.44}=1.2\), so \(P(t)=800(1.2)^t\): a 20% increase per year. 44% is per 2 years; 22% is \(44\div2\).` },
+  { id: "e2m2q5", module: 2, number: 5, domain: "Geometry and Trigonometry", skill: "Sector area (radians)", type: "mcq",
+    question: String.raw`A circle has a radius of 10 inches. A sector of the circle has an area of \(15\pi\) square inches. What is the central angle of the sector, in radians?`,
+    choices: [String.raw`\(\dfrac{3\pi}{5}\)`, String.raw`\(\dfrac{3}{10}\)`, String.raw`\(\dfrac{3\pi}{20}\)`, String.raw`\(\dfrac{3\pi}{10}\)`], correctAnswer: "D",
+    hints: [String.raw`Sector area in radians: \(A=\frac12r^2\theta\).`, String.raw`\(\frac12(100)\theta=15\pi\).`],
+    solution: String.raw`\(50\theta=15\pi\Rightarrow\theta=\frac{3\pi}{10}\). Check by fraction of circle: \(\frac{15\pi}{100\pi}=\frac{3}{20}\), and \(\frac{3}{20}\cdot2\pi=\frac{3\pi}{10}\) ✓.` },
+  { id: "e2m2q6", module: 2, number: 6, domain: "Advanced Math", skill: "Polynomial functions", type: "mcq",
+    question: String.raw`\[p(x)=(x+2)(x-k)(x-1)\] In the function above, \(k\) is a constant. If \(p(0)=-6\), what is the value of \(p(2)\)?`,
+    choices: [String.raw`\(-4\)`, String.raw`\(20\)`, String.raw`\(-20\)`, String.raw`\(4\)`], correctAnswer: "B",
+    hints: [String.raw`\(p(0)=(2)(-k)(-1)\). Simplify and solve for \(k\).`, String.raw`After finding \(k\), write the factor \((x-k)\) with the number in it before evaluating \(p(2)\).`],
+    solution: String.raw`\(p(0)=2k=-6\Rightarrow k=-3\). The factor is \(x-(-3)=x+3\). \(p(2)=(4)(5)(1)=20\). Using \(k=3\) gives \(-4\) (trap).` },
+  { id: "e2m2q7", module: 2, number: 7, domain: "Algebra", skill: "Linear functions — intercepts", type: "spr",
+    question: String.raw`The graph of a line in the \(xy\)-plane has a \(y\)-intercept of 6 and an \(x\)-intercept of 4. What is the value of \(y\) when \(x=10\)?`,
+    correctAnswer: "-9", acceptedAnswers: ["-9"],
+    hints: [String.raw`The line passes through \((0,6)\) and \((4,0)\). Find the slope.`, String.raw`Slope \(=-\frac{6}{4}=-1.5\), so \(y=-1.5x+6\).`],
+    solution: String.raw`\(y=-1.5(10)+6=-9\).` },
+  { id: "e2m2q8", module: 2, number: 8, domain: "Advanced Math", skill: "Quadratic models — maximum", type: "spr",
+    question: String.raw`The height \(h\), in feet, of a ball \(t\) seconds after it is thrown is modeled by \(h(t)=-16t^2+64t+5\). What is the maximum height, in feet, that the ball reaches?`,
+    correctAnswer: "69", acceptedAnswers: ["69"],
+    hints: [String.raw`The maximum is at the vertex, \(t=-\frac{b}{2a}\).`, String.raw`\(t=\frac{-64}{2(-16)}=2\). Now find \(h(2)\). The question asks for the height, not the time.`],
+    solution: String.raw`\(t=2\): \(h(2)=-64+128+5=69\) feet.` },
+  { id: "e2m2q9", module: 2, number: 9, domain: "Problem-Solving and Data Analysis", skill: "Mean and median", type: "spr",
+    question: String.raw`A data set consists of the values \(4,\ 7,\ 7,\ 9,\ 12,\) and \(x\). The mean of the data set is 9. What is the median of the data set?`,
+    correctAnswer: "8", acceptedAnswers: ["8"],
+    hints: [String.raw`Use the mean to find \(x\): the sum of the 6 values is \(6\times9\).`, String.raw`Then put all 6 values in order. With 6 values, the median is the average of the 3rd and 4th.`],
+    solution: String.raw`Sum \(=54\Rightarrow x=54-39=15\). Ordered: 4, 7, 7, 9, 12, 15. Median \(=\frac{7+9}{2}=8\).` },
+  { id: "e2m2q10", module: 2, number: 10, domain: "Advanced Math", skill: "Function transformations", type: "mcq",
+    question: String.raw`The function \(f\) is defined by \(f(x)=(x+3)(x-5)\). The function \(g\) is defined by \(g(x)=f\left(\frac{x}{2}\right)\). What are the \(x\)-intercepts of the graph of \(y=g(x)\)?`,
+    choices: [String.raw`\(-6\) and \(10\)`, String.raw`\(-1.5\) and \(2.5\)`, String.raw`\(-3\) and \(5\)`, String.raw`\(6\) and \(-10\)`], correctAnswer: "A",
+    hints: [String.raw`\(g(x)=0\) when \(\frac{x}{2}\) equals a zero of \(f\).`, String.raw`Solve \(\frac{x}{2}=-3\) and \(\frac{x}{2}=5\).`],
+    solution: String.raw`\(\frac x2=-3\Rightarrow x=-6\); \(\frac x2=5\Rightarrow x=10\). \(f\!\left(\frac x2\right)\) stretches horizontally, so the \(x\)-values double. Halving them gives the trap B.` },
+  { id: "e2m2q11", module: 2, number: 11, domain: "Geometry and Trigonometry", skill: "Similar solids — volume", type: "mcq",
+    question: String.raw`Two right circular cones are similar. The height of the smaller cone is 6 centimeters, and the height of the larger cone is 9 centimeters. If the volume of the larger cone is \(135\pi\) cubic centimeters, what is the volume, in cubic centimeters, of the smaller cone?`,
+    choices: [String.raw`\(90\pi\)`, String.raw`\(60\pi\)`, String.raw`\(40\pi\)`, String.raw`\(45\pi\)`], correctAnswer: "C",
+    hints: [String.raw`The length ratio is \(\frac{6}{9}=\frac23\).`, String.raw`Volumes scale by the cube: \(\left(\frac23\right)^3=\frac{8}{27}\).`],
+    solution: String.raw`\(135\pi\cdot\frac{8}{27}=40\pi\). Using \(\frac23\) gives \(90\pi\); using \(\frac49\) gives \(60\pi\).` },
+  { id: "e2m2q12", module: 2, number: 12, domain: "Algebra", skill: "Linear inequalities in context", type: "spr",
+    question: String.raw`A student has $60 to spend on snacks and drinks for a party. Each snack costs $2.50 and each drink costs $1.75. If the student buys 12 drinks, what is the greatest number of snacks the student can buy?`,
+    correctAnswer: "15", acceptedAnswers: ["15"],
+    hints: [String.raw`Write \(2.50s+1.75(12)\le60\).`, String.raw`Solve for \(s\). Snacks come in whole numbers, so round <b>down</b>.`],
+    solution: String.raw`\(1.75(12)=21\). \(2.5s\le39\Rightarrow s\le15.6\). The greatest whole number is 15.` },
+  { id: "e2m2q13", module: 2, number: 13, domain: "Advanced Math", skill: "Quadratics — number of solutions", type: "mcq",
+    question: String.raw`\[3x^2-6x+c=0\] In the equation above, \(c\) is a constant. For which of the following values of \(c\) does the equation have no real solutions?`,
+    choices: [String.raw`\(3\)`, String.raw`\(2\)`, String.raw`\(0\)`, String.raw`\(4\)`], correctAnswer: "D",
+    hints: [String.raw`No real solutions means the discriminant is negative.`, String.raw`\(36-12c<0\). Solve for \(c\).`],
+    solution: String.raw`\(36-12c<0\Rightarrow c>3\). Only \(c=4\) works. \(c=3\) gives exactly one solution.` },
+  { id: "e2m2q14", module: 2, number: 14, domain: "Problem-Solving and Data Analysis", skill: "Conditional probability", type: "spr",
+    question: String.raw`A factory has two machines. Machine A makes 60% of the parts, and 5% of its parts are defective. Machine B makes the other 40% of the parts, and 2% of its parts are defective. If a defective part is selected at random, what is the probability that it was made by Machine A? (Enter your answer as a fraction or a decimal.)`,
+    correctAnswer: "15/19", acceptedAnswers: ["15/19", ".7894", ".7895", "0.789"],
+    hints: [String.raw`Imagine 1,000 parts. How many defective parts come from each machine?`, String.raw`A: \(0.05\times600=30\). B: \(0.02\times400=8\). The denominator is all defective parts.`],
+    solution: String.raw`Out of 1,000 parts: 30 defective from A, 8 from B. Probability \(=\frac{30}{38}=\frac{15}{19}\approx0.7895\).` },
+  { id: "e2m2q15", module: 2, number: 15, domain: "Geometry and Trigonometry", skill: "Unit circle and radians", type: "mcq",
+    question: String.raw`The angle \(\theta\), in radians, satisfies \(\frac{3\pi}{2}<\theta<2\pi\) and \(\sin\theta=-\frac{8}{17}\). What is the value of \(\cos(\theta-\pi)\)?`,
+    choices: [String.raw`\(-\dfrac{15}{17}\)`, String.raw`\(\dfrac{15}{17}\)`, String.raw`\(\dfrac{8}{17}\)`, String.raw`\(-\dfrac{8}{17}\)`], correctAnswer: "A",
+    hints: [String.raw`\(\frac{3\pi}{2}<\theta<2\pi\) is Quadrant IV, where cosine is positive. Use the 8-15-17 triangle.`, String.raw`Subtracting \(\pi\) moves the point to the opposite side of the circle, so \(\cos(\theta-\pi)=-\cos\theta\).`],
+    solution: String.raw`\(\cos\theta=+\frac{15}{17}\) in Quadrant IV. \(\cos(\theta-\pi)=-\cos\theta=-\frac{15}{17}\).` },
+  { id: "e2m2q16", module: 2, number: 16, domain: "Advanced Math", skill: "Polynomial remainders", type: "spr",
+    question: String.raw`When the polynomial \(p(x)=x^3-2x^2+kx+4\) is divided by \(x+1\), the remainder is 7. What is the value of \(k\)?`,
+    correctAnswer: "-6", acceptedAnswers: ["-6"],
+    hints: [String.raw`Remainder theorem: dividing by \(x+1\) gives remainder \(p(-1)\).`, String.raw`\(p(-1)=(-1)^3-2(-1)^2+k(-1)+4\). Bracket each term.`],
+    solution: String.raw`\(p(-1)=-1-2-k+4=1-k=7\Rightarrow k=-6\).` },
+  { id: "e2m2q17", module: 2, number: 17, domain: "Algebra", skill: "Function composition", type: "mcq",
+    question: String.raw`The function \(f\) is defined by \(f(x)=2x+5\). The function \(g\) is defined by \(g(x)=f(f(x))\). For what value of \(x\) is \(g(x)=x\)?`,
+    choices: [String.raw`\(5\)`, String.raw`\(-\dfrac{15}{4}\)`, String.raw`\(-15\)`, String.raw`\(-5\)`], correctAnswer: "D",
+    hints: [String.raw`Work from the inside out: \(f(f(x))=2(2x+5)+5\).`, String.raw`\(g(x)=4x+15\). Set it equal to \(x\).`],
+    solution: String.raw`\(g(x)=4x+15\). \(4x+15=x\Rightarrow3x=-15\Rightarrow x=-5\).` },
+  { id: "e2m2q18", module: 2, number: 18, domain: "Advanced Math", skill: "Exponential equations", type: "mcq",
+    question: String.raw`\[9^{x+1}=27^{x-1}\] What value of \(x\) satisfies the equation above?`,
+    choices: [String.raw`\(5\)`, String.raw`\(1\)`, String.raw`\(-5\)`, String.raw`\(\dfrac15\)`], correctAnswer: "A",
+    hints: [String.raw`Write both sides as powers of 3: \(9=3^2\), \(27=3^3\).`, String.raw`\(3^{2(x+1)}=3^{3(x-1)}\). Set the exponents equal.`],
+    solution: String.raw`\(2x+2=3x-3\Rightarrow x=5\).` },
+  { id: "e2m2q19", module: 2, number: 19, domain: "Geometry and Trigonometry", skill: "Circles in the xy-plane", type: "mcq",
+    question: String.raw`\[x^2+y^2+8x-6y=11\] The equation above defines a circle in the \(xy\)-plane. What is the radius of the circle?`,
+    choices: [String.raw`\(\sqrt{11}\)`, String.raw`\(36\)`, String.raw`\(6\)`, String.raw`\(5\)`], correctAnswer: "C",
+    hints: [String.raw`Complete the square for \(x\) and for \(y\). Add the same amounts to the right side.`, String.raw`\((x+4)^2+(y-3)^2=11+16+9\).`],
+    solution: String.raw`\((x+4)^2+(y-3)^2=36\), so \(r=6\). 36 is \(r^2\), a trap.` },
+  { id: "e2m2q20", module: 2, number: 20, domain: "Advanced Math", skill: "Linear–quadratic systems", type: "mcq",
+    question: String.raw`\[y=x^2-2x+3\]\[y=mx-1\] In the system above, \(m\) is a positive constant. If the graphs intersect at exactly one point, what is the value of \(m\)?`,
+    choices: [String.raw`\(-6\)`, String.raw`\(4\)`, String.raw`\(2\)`, String.raw`\(6\)`], correctAnswer: "C",
+    hints: [String.raw`Set equal: \(x^2-(2+m)x+4=0\).`, String.raw`Discriminant 0: \((2+m)^2=16\). Two values come out; the question says \(m\) is positive.`],
+    solution: String.raw`\((2+m)^2-16=0\Rightarrow2+m=\pm4\Rightarrow m=2\) or \(m=-6\). Since \(m>0\), \(m=2\).` },
+  { id: "e2m2q21", module: 2, number: 21, domain: "Advanced Math", skill: "Exponential growth — equivalent forms", type: "mcq",
+    question: String.raw`An investment is modeled by \(f(t)=5000(1.08)^t\), where \(t\) is the number of years. Which of the following equivalent expressions models the investment in terms of months, \(12t\), rounded to four decimal places?`,
+    choices: [String.raw`\(5000(1.0067)^{12t}\)`, String.raw`\(5000(1.0064)^{12t}\)`, String.raw`\(5000(1.08)^{t/12}\)`, String.raw`\(5000(1.0064)^{t/12}\)`], correctAnswer: "B",
+    hints: [String.raw`You need a monthly factor \(b\) with \(b^{12}=1.08\).`, String.raw`\(b=(1.08)^{1/12}\). Compute it on the calculator; dividing 8% by 12 ignores compounding.`],
+    solution: String.raw`\((1.08)^t=\left((1.08)^{1/12}\right)^{12t}\approx(1.0064)^{12t}\). Choice A uses \(1+\frac{0.08}{12}\), which is not equivalent.` },
+  { id: "e2m2q22", module: 2, number: 22, domain: "Algebra", skill: "Lines and area", type: "mcq",
+    question: String.raw`In the \(xy\)-plane, the lines \(y=2x+4\) and \(y=-x+7\) and the \(x\)-axis form a triangle. What is the area of the triangle?`,
+    choices: [String.raw`\(54\)`, String.raw`\(18\)`, String.raw`\(24\)`, String.raw`\(27\)`], correctAnswer: "D",
+    hints: [String.raw`Find where each line crosses the \(x\)-axis; that gives the base.`, String.raw`The height is the \(y\)-value where the two lines meet.`],
+    solution: String.raw`\(x\)-intercepts: \(-2\) and \(7\), so the base is 9. Intersection: \(2x+4=-x+7\Rightarrow x=1,\ y=6\), so the height is 6. Area \(=\frac12\cdot9\cdot6=27\). Forgetting the \(\frac12\) gives 54.` }
+];
+
+
+/* =========================================================
+   2. CONFIG
+   ========================================================= */
+const EMAILJS_CONFIG = {
+  publicKey: "r7tBHktw3unegDdMM",
+  serviceId: "service_6gulv0u",
+  templateId: "template_nxcnl2g"
+};
+const RECIPIENT_EMAIL = "amroacademylb@gmail.com";
+
+const STORAGE_KEY = "amroacademy_sat_math_exam2_v1";
+const MODULE_TIME_MS = 35 * 60 * 1000;
+const DOMAINS = ["Algebra", "Advanced Math", "Problem-Solving and Data Analysis", "Geometry and Trigonometry"];
+const LETTERS = ["A", "B", "C", "D"];
+
+/* =========================================================
+   3. STATE & STORAGE
+   ========================================================= */
+function freshState() {
+  return {
+    studentName: "",
+    currentModule: 1,
+    currentIndex: { 1: 0, 2: 0 },
+    answers: {},        // qid -> "A".."D" or SPR string
+    eliminated: {},     // qid -> ["B", ...]
+    eliminatorOn: {},   // qid -> bool
+    marked: {},         // qid -> bool
+    qTimers: {},        // qid -> { acc: ms, start: timestamp|null }
+    hintOpen: {},       // qid -> bool
+    hintLevel: {},      // qid -> 0|1|2 (hints revealed)
+    moduleTimers: { 1: { elapsed: 0, start: null }, 2: { elapsed: 0, start: null } },
+    timeUpShown: { 1: false, 2: false },
+    timerHidden: false,
+    submitted: false, submittedAt: null, emailSent: false,
+    corrected: false, correctedAt: null,
+    resultsOpen: true,
+    frozen: false,           // Freeze Time on/off
+    lateAnswers: {},         // qid -> true when answered after the module time ran out
+    reviewOnlyMistakes: false
+  };
+}
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return freshState();
+    const s = JSON.parse(raw);
+    const base = freshState();
+    return Object.assign(base, s, {
+      currentIndex: Object.assign(base.currentIndex, s.currentIndex || {}),
+      moduleTimers: Object.assign(base.moduleTimers, s.moduleTimers || {}),
+      timeUpShown: Object.assign(base.timeUpShown, s.timeUpShown || {})
+    });
+  } catch (e) { return freshState(); }
+}
+function saveState() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) { /* storage full or blocked */ }
+}
+let state = loadState();
+let sending = false;
+
+/* =========================================================
+   4. HELPERS
+   ========================================================= */
+const $ = (id) => document.getElementById(id);
+const byModule = (m) => QUESTIONS.filter(q => q.module === m).sort((a, b) => a.number - b.number);
+const findQ = (id) => QUESTIONS.find(q => q.id === id);
+const currentQ = () => byModule(state.currentModule)[state.currentIndex[state.currentModule]];
+const isLocked = () => state.submitted || state.corrected;
+const hasAnswer = (q) => { const a = state.answers[q.id]; return a !== undefined && a !== null && String(a).trim() !== ""; };
+
+function fmt(ms) {
+  ms = Math.max(0, ms);
+  const total = Math.floor(ms / 1000);
+  const m = Math.floor(total / 60), s = total % 60;
+  return String(m).padStart(2, "0") + ":" + String(s).padStart(2, "0");
+}
+function esc(s) {
+  return String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+}
+function typeset(el) {
+  if (window.renderMathInElement && el) {
+    renderMathInElement(el, {
+      delimiters: [{ left: "\\[", right: "\\]", display: true }, { left: "\\(", right: "\\)", display: false }],
+      throwOnError: false
+    });
+  }
+}
+function toast(msg, ms = 3500) {
+  const t = $("toast"); t.textContent = msg; t.classList.add("show");
+  clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.remove("show"), ms);
+}
+
+/* =========================================================
+   5. TIMERS (module countdown + per-question stopwatch)
+   ========================================================= */
+function moduleElapsed(m) {
+  const t = state.moduleTimers[m];
+  return t.elapsed + (t.start ? Date.now() - t.start : 0);
+}
+function pauseModule(m) {
+  const t = state.moduleTimers[m];
+  if (t.start) { t.elapsed += Date.now() - t.start; t.start = null; }
+}
+function startModule(m) {
+  const t = state.moduleTimers[m];
+  if (!t.start && !isLocked() && state.studentName && !state.frozen) t.start = Date.now();
+}
+function qt(id) {
+  if (!state.qTimers[id]) state.qTimers[id] = { acc: 0, start: null };
+  return state.qTimers[id];
+}
+const qElapsed = (id) => { const t = qt(id); return t.acc + (t.start ? Date.now() - t.start : 0); };
+function stopQ(id) { const t = qt(id); if (t.start) { t.acc += Date.now() - t.start; t.start = null; } }
+function stopAllQ() { Object.keys(state.qTimers).forEach(stopQ); }
+function startQ(id) { if (state.frozen) return; stopAllQ(); qt(id).start = Date.now(); }
+const isOvertime = (m) => moduleElapsed(m) >= MODULE_TIME_MS;
+function markTiming(q) {
+  if (!hasAnswer(q)) delete state.lateAnswers[q.id];
+  else if (isOvertime(q.module)) state.lateAnswers[q.id] = true;
+}
+function stopAllTimers() { stopAllQ(); pauseModule(1); pauseModule(2); }
+
+function tick() {
+  const m = state.currentModule;
+  const remaining = MODULE_TIME_MS - moduleElapsed(m);
+  const el = $("moduleTimer");
+  const over = remaining <= 0;
+  el.textContent = state.timerHidden ? "" : (over ? "+" + fmt(-remaining) : fmt(remaining));
+  el.classList.toggle("low", !over && remaining < 5 * 60 * 1000);
+  el.classList.toggle("over", over);
+  el.classList.toggle("frozen", !!state.frozen);
+  const sub = $("timerSub");
+  if (sub) sub.textContent = state.frozen && !isLocked() ? "❄ Time frozen" : (over && !isLocked() ? "Time's up · overtime" : "");
+  if (over && !state.timeUpShown[m] && !isLocked()) {
+    state.timeUpShown[m] = true; saveState();
+    toast("Time is up for Module " + m + ". You can keep answering, but new answers will be marked as answered after time.", 8000);
+  }
+  const q = currentQ();
+  const clock = $("qClock");
+  if (q && clock) clock.textContent = fmt(qElapsed(q.id));
+}
+
+/* =========================================================
+   6. GRADING
+   ========================================================= */
+function parseNum(str) {
+  if (str === undefined || str === null) return NaN;
+  const s = String(str).trim();
+  if (/^-?(\d+\.?\d*|\.\d+)\/(\d+\.?\d*|\.\d+)$/.test(s)) {
+    const [a, b] = s.split("/").map(Number);
+    return b === 0 ? NaN : a / b;
+  }
+  if (/^-?(\d+\.?\d*|\.\d+)$/.test(s)) return Number(s);
+  return NaN;
+}
+function normalizeSpr(s) {
+  let t = String(s).trim().replace(/\s+/g, "");
+  if (/^-?0\.\d/.test(t)) t = t.replace("0.", ".");
+  return t;
+}
+function isCorrect(q, ans) {
+  if (ans === undefined || ans === null || String(ans).trim() === "") return false;
+  if (q.type === "mcq") return ans === q.correctAnswer;
+  const n = normalizeSpr(ans);
+  if (q.acceptedAnswers.some(a => normalizeSpr(a) === n)) return true;
+  const v = parseNum(ans), target = parseNum(q.correctAnswer);
+  return !isNaN(v) && !isNaN(target) && Math.abs(v - target) < 1e-9;
+}
+function statusOf(q) {
+  if (!hasAnswer(q)) return "unanswered";
+  return isCorrect(q, state.answers[q.id]) ? "correct" : "wrong";
+}
+function buildStats() {
+  const rows = QUESTIONS.map(q => ({
+    q, status: statusOf(q), time: qElapsed(q.id), hints: state.hintLevel[q.id] || 0,
+    late: hasAnswer(q) && !!state.lateAnswers[q.id],
+    answer: hasAnswer(q) ? String(state.answers[q.id]) : "—"
+  }));
+  const total = rows.filter(r => r.status === "correct").length;
+  const perModule = [1, 2].map(m => {
+    const rs = rows.filter(r => r.q.module === m);
+    return { m, correct: rs.filter(r => r.status === "correct").length, onTime: rs.filter(r => r.status === "correct" && !r.late).length, late: rs.filter(r => r.late).length, total: rs.length, time: moduleElapsed(m) };
+  });
+  const perDomain = DOMAINS.map(d => {
+    const rs = rows.filter(r => r.q.domain === d);
+    const correct = rs.filter(r => r.status === "correct").length;
+    const time = rs.reduce((s, r) => s + r.time, 0);
+    return { d, correct, total: rs.length, pct: rs.length ? Math.round(correct / rs.length * 100) : 0, avg: rs.length ? time / rs.length : 0, hints: rs.reduce((s, r) => s + r.hints, 0) };
+  });
+  const totalTime = rows.reduce((s, r) => s + r.time, 0);
+  const hintsUsed = rows.reduce((s, r) => s + r.hints, 0);
+  const correctNoHint = rows.filter(r => r.status === "correct" && r.hints === 0).length;
+  const onTime = rows.filter(r => r.status === "correct" && !r.late).length;
+  const lateCount = rows.filter(r => r.late).length;
+  return { rows, total, perModule, perDomain, totalTime, hintsUsed, correctNoHint, onTime, lateCount, count: rows.length };
+}
+const correctDisplay = (q) => q.type === "mcq" ? q.correctAnswer : q.acceptedAnswers.join(" or ");
+const statusLabel = (s) => ({ correct: "Correct", wrong: "Wrong", unanswered: "Unanswered" }[s]);
+
+/* =========================================================
+   7. RENDERING
+   ========================================================= */
+function render() {
+  renderTop();
+  renderResults();
+  renderQuestion();
+  renderBottom();
+  tick();
+}
+
+function renderTop() {
+  const m = state.currentModule;
+  $("secLabel").textContent = "Section 2, Module " + m + ": Math";
+  $("hideTimerBtn").textContent = state.timerHidden ? "Show" : "Hide";
+  document.querySelectorAll(".module-tabs .tab").forEach(b => b.classList.toggle("active", Number(b.dataset.module) === m));
+  const pill = $("statusPill");
+  const parts = [];
+  if (state.frozen && !isLocked()) parts.push("❄ Time frozen");
+  if (state.corrected) parts.push("Corrected");
+  if (state.emailSent) parts.push("Submitted ✓");
+  else if (state.submitted) parts.push("Submitted (email not sent)");
+  pill.textContent = parts.length ? parts.join(" · ") : "In progress";
+  pill.classList.toggle("ok", parts.length > 0);
+  $("submitBtn").textContent = state.emailSent ? "Submitted ✓" : "Submit Exam";
+  $("submitBtn").className = "tool-btn " + (state.emailSent ? "success" : "primary");
+  $("submitBtn").disabled = state.emailSent;
+  $("correctBtn").textContent = state.corrected ? "View Results" : "Correct Exam";
+  const fb = $("freezeBtn");
+  fb.textContent = state.frozen ? "▶ Resume Time" : "❄ Freeze Time";
+  fb.classList.toggle("frozen", !!state.frozen);
+  fb.disabled = isLocked();
+}
+
+function renderBottom() {
+  const m = state.currentModule, i = state.currentIndex[m], n = byModule(m).length;
+  $("navBtn").textContent = "Question " + (i + 1) + " of " + n + " ▲";
+  $("studentLabel").textContent = state.studentName || "";
+  $("backBtn").disabled = (m === 1 && i === 0);
+}
+
+function sprDirections() {
+  return `<aside class="spr-dir">
+    <h3>Student-produced response directions</h3>
+    <ul>
+      <li>If you find <b>more than one correct answer</b>, enter only one answer.</li>
+      <li>You can enter up to <b>5 characters</b> for a positive answer and up to <b>6 characters</b> (including the negative sign) for a negative answer.</li>
+      <li>If your answer is a <b>fraction</b> that doesn't fit in the space, enter the decimal equivalent.</li>
+      <li>If your answer is a <b>decimal</b> that doesn't fit, enter it by truncating or rounding at the fourth digit.</li>
+      <li>If your answer is a <b>mixed number</b> (such as 3½), enter it as an improper fraction (7/2) or its decimal equivalent (3.5).</li>
+      <li>Don't enter <b>symbols</b> such as a percent sign, comma, or dollar sign.</li>
+    </ul>
+    <table class="ex-table"><thead><tr><th>Answer</th><th>Acceptable ways to enter</th><th>Unacceptable</th></tr></thead>
+    <tbody><tr><td>3.5</td><td>3.5 &nbsp; 3.50 &nbsp; 7/2</td><td>31/2 &nbsp; 3 1/2</td></tr>
+    <tr><td>2/3</td><td>2/3 &nbsp; .6666 &nbsp; .6667 &nbsp; 0.666 &nbsp; 0.667</td><td>0.66 &nbsp; .66 &nbsp; 0.67 &nbsp; .67</td></tr>
+    <tr><td>−1/3</td><td>−1/3 &nbsp; −.3333 &nbsp; −0.333</td><td>−.33 &nbsp; −0.33</td></tr></tbody></table>
+  </aside>`;
+}
+
+function flagSvg(on) {
+  return `<svg class="flag-icon" viewBox="0 0 14 16"><path d="M2 1v14" stroke="currentColor" stroke-width="1.6"/><path d="M2.5 1.5h9l-2.2 3 2.2 3h-9z" fill="${on ? "currentColor" : "none"}" stroke="currentColor" stroke-width="1.3"/></svg>`;
+}
+
+function renderQuestion() {
+  const q = currentQ();
+  const area = $("questionArea");
+  const locked = isLocked();
+  const corrected = state.corrected;
+  const ans = state.answers[q.id];
+  const elimOn = !!state.eliminatorOn[q.id] && !locked;
+  const elim = state.eliminated[q.id] || [];
+  const running = !!qt(q.id).start;
+  const hintLevel = state.hintLevel[q.id] || 0;
+  const hintOpen = !!state.hintOpen[q.id];
+
+  let body = "";
+  if (q.type === "mcq") {
+    body = `<div class="choices">` + q.choices.map((c, i) => {
+      const L = LETTERS[i];
+      const isElim = elim.includes(L);
+      let cls = "choice";
+      let tag = "";
+      if (corrected) {
+        if (L === q.correctAnswer) { cls += " correct"; tag = `<span class="tag g">Correct answer</span>`; }
+        if (ans === L && L !== q.correctAnswer) { cls += " wrong"; tag = `<span class="tag r">Your answer</span>`; }
+        if (ans === L && L === q.correctAnswer) tag = `<span class="tag g">Your answer ✓</span>`;
+      } else {
+        if (ans === L) cls += " selected";
+        if (isElim) cls += " eliminated";
+      }
+      let elimCtl = "";
+      if (elimOn) {
+        elimCtl = isElim
+          ? `<button class="elim-undo" data-undo="${L}" aria-label="Undo eliminate ${L}">Undo</button>`
+          : `<button class="elim-btn" data-elim="${L}" aria-label="Eliminate choice ${L}">${L}</button>`;
+      }
+      return `<div class="choice-row"><button class="${cls}" data-choice="${L}" ${locked || isElim ? "disabled" : ""}>
+        <span class="letter">${L}</span><span class="ctext">${c}</span>${tag}</button>${elimCtl}</div>`;
+    }).join("") + `</div>`;
+  } else {
+    const val = ans || "";
+    let cls = "spr-input";
+    if (corrected && hasAnswer(q)) cls += isCorrect(q, val) ? " correct" : " wrong";
+    body = `<input class="${cls}" id="sprInput" type="text" inputmode="decimal" autocomplete="off" spellcheck="false"
+              maxlength="${val.startsWith("-") ? 6 : 5}" value="${esc(val)}" ${locked ? "disabled" : ""} aria-label="Your answer">
+            <div class="preview" id="sprPreview"></div>`;
+  }
+
+  // hints
+  let hintHtml = "";
+  if (hintOpen) {
+    hintHtml = `<div class="hint-box">`;
+    if (hintLevel === 0) hintHtml += `<div class="hint" style="color:var(--muted)">Hints are revealed one at a time.</div>`;
+    for (let i = 0; i < hintLevel; i++) hintHtml += `<div class="hint"><b>Hint ${i + 1}:</b> ${q.hints[i]}</div>`;
+    if (hintLevel < q.hints.length) hintHtml += `<button class="small-btn" id="nextHintBtn">${hintLevel === 0 ? "Reveal Hint 1" : "Reveal Hint 2"}</button>`;
+    else hintHtml += `<div style="font-size:13px;color:var(--muted)">All hints revealed.</div>`;
+    hintHtml += `</div>`;
+  }
+
+  // review (after correction)
+  let reviewHtml = "";
+  if (corrected) {
+    const st = statusOf(q);
+    reviewHtml = `<div class="review-box"><span class="status-badge ${st}">${st === "correct" ? "✓ Correct" : st === "wrong" ? "✗ Incorrect" : "Not answered"}</span>`;
+    if (q.type === "spr") {
+      reviewHtml += `<div>Your answer: ${hasAnswer(q) ? `<span class="${st === "correct" ? "ans-g" : "ans-r"}">${esc(ans)}</span>` : "<i>none</i>"}
+        &nbsp;|&nbsp; Accepted answer(s): <span class="ans-g">${esc(q.acceptedAnswers.join(", "))}</span></div>`;
+    } else if (st === "unanswered") {
+      reviewHtml += `<div>Correct answer: <span class="ans-g">${q.correctAnswer}</span></div>`;
+    }
+    reviewHtml += `<div style="margin-top:8px"><b>Step-by-step solution:</b> ${q.solution}</div>
+      <div style="margin-top:6px;font-size:13px;color:var(--muted)">${esc(q.domain)} · ${esc(q.skill)} · Time: ${fmt(qElapsed(q.id))} · Hints used: ${hintLevel}${hasAnswer(q) && state.lateAnswers[q.id] ? " · ⏰ Answered after time" : ""}</div></div>`;
+  }
+
+  area.innerHTML = (corrected ? reviewNavHtml(q) : "") + `
+    <div class="q-wrap ${q.type === "spr" ? "spr" : ""}">
+      ${q.type === "spr" ? sprDirections() : ""}
+      <section class="q-main">
+        <div class="q-head">
+          <span class="q-num">${q.number}</span>
+          <button class="flag-btn ${state.marked[q.id] ? "on" : ""}" id="flagBtn">${flagSvg(!!state.marked[q.id])} Mark for Review</button>
+          <button class="hint-btn ${hintOpen ? "on" : ""}" id="hintBtn">💡 ${hintOpen ? "Hide Hint" : "Show Hint"}</button>
+          <button class="qtimer ${timerClass(q)}" id="timerBtn" ${locked || state.frozen ? "disabled" : ""}
+            title="${locked ? "Timer locked" : state.frozen ? "Time is frozen" : "Time this question (shortcut: T)"}">${timerInner(q)}</button>
+          <span class="late-badge" id="lateBadge" title="This answer was given after the module time ran out" ${hasAnswer(q) && state.lateAnswers[q.id] ? "" : "hidden"}>⏰ Answered after time</span>
+          <span class="spacer"></span>
+          ${q.type === "mcq" && !locked ? `<button class="abc-btn ${elimOn ? "on" : ""}" id="abcBtn" title="Cross out answer choices">ABC</button>` : ""}
+        </div>
+        <div class="q-text">${q.question}</div>
+        ${body}
+        ${hintHtml}
+        ${reviewHtml}
+      </section>
+    </div>`;
+
+  if (q.type === "spr") updatePreview();
+  typeset(area);
+  bindQuestionEvents(q);
+  if (corrected) bindReviewNav();
+}
+
+/* ---------- Review navigation (after correction) ---------- */
+const ORDER = () => [...byModule(1), ...byModule(2)];
+function reviewNavHtml(q) {
+  const cls = { correct: "c", wrong: "w", unanswered: "u" };
+  const row = (m) => `<div class="rv-row"><span class="rv-m">M${m}</span>${byModule(m).map(x => {
+    const st = statusOf(x), late = hasAnswer(x) && state.lateAnswers[x.id];
+    return `<button class="rv-chip ${cls[st]} ${x.id === q.id ? "cur" : ""} ${late ? "late" : ""}" data-rv="${x.id}"
+      title="Module ${m} Q${x.number}: ${statusLabel(st)}${late ? " (answered after time)" : ""}">${x.number}</button>`;
+  }).join("")}</div>`;
+  const st = statusOf(q);
+  const mistakes = ORDER().filter(x => statusOf(x) !== "correct").length;
+  return `<div class="review-nav" id="reviewNav">${row(1)}${row(2)}
+    <div class="rv-actions">
+      <button class="small-btn" id="prevMistake" ${mistakes ? "" : "disabled"}>← Previous mistake</button>
+      <span class="res-${st}">Module ${q.module} · Q${q.number} · ${statusLabel(st)}</span>
+      <button class="small-btn" id="nextMistake" ${mistakes ? "" : "disabled"}>Next mistake →</button>
+      <label><input type="checkbox" id="onlyMistakes" ${state.reviewOnlyMistakes ? "checked" : ""}> Back / Next skip correct answers</label>
+    </div>
+    <div class="rv-tip">Click any number to jump to it · use the ← → arrow keys to move · a yellow dot means answered after time</div>
+  </div>`;
+}
+function stepTo(dir, onlyMistakes) {
+  const list = ORDER(), cur = currentQ();
+  let i = list.findIndex(x => x.id === cur.id);
+  while (true) {
+    i += dir;
+    if (i < 0 || i >= list.length) break;
+    if (!onlyMistakes || statusOf(list[i]) !== "correct") { goTo(list[i].module, list[i].number - 1); return true; }
+  }
+  toast(onlyMistakes ? (dir > 0 ? "No more mistakes after this question." : "No mistakes before this question.")
+                     : (dir > 0 ? "This is the last question." : "This is the first question."), 2500);
+  return false;
+}
+function bindReviewNav() {
+  document.querySelectorAll("[data-rv]").forEach(b => b.onclick = () => { const x = findQ(b.dataset.rv); goTo(x.module, x.number - 1); });
+  const p = $("prevMistake"), n = $("nextMistake"), o = $("onlyMistakes");
+  if (p) p.onclick = () => stepTo(-1, true);
+  if (n) n.onclick = () => stepTo(1, true);
+  if (o) o.onchange = () => { state.reviewOnlyMistakes = o.checked; saveState(); };
+}
+
+function updatePreview() {
+  const inp = $("sprInput"), pv = $("sprPreview");
+  if (!inp || !pv) return;
+  const v = inp.value.trim();
+  if (!v) { pv.innerHTML = ""; return; }
+  let tex = v.replace(/-/g, "-");
+  const m = v.match(/^(-?)(.+)\/(.+)$/);
+  if (m) tex = `${m[1]}\\dfrac{${m[2]}}{${m[3]}}`;
+  let html = esc(v);
+  if (window.katex) { try { html = katex.renderToString(tex, { throwOnError: false }); } catch (e) {} }
+  const valid = !isNaN(parseNum(v));
+  pv.innerHTML = `<b>Answer Preview:</b><span class="pv">${html}</span>${valid ? "" : ` <span style="color:var(--red);font-size:13px;margin-left:8px">Not a valid number yet</span>`}`;
+}
+
+function renderResults() {
+  const box = $("results");
+  if (!state.corrected) { box.innerHTML = ""; return; }
+  const s = buildStats();
+  const pct = Math.round(s.total / s.count * 100);
+  const rowsHtml = s.rows.map(r => `<tr class="clickable" data-goto="${r.q.id}">
+      <td>M${r.q.module} Q${r.q.number}</td><td>${esc(r.q.domain)}</td><td>${r.q.type.toUpperCase()}</td>
+      <td class="res-${r.status}">${statusLabel(r.status)}</td><td>${esc(r.answer)}</td><td>${esc(correctDisplay(r.q))}</td>
+      <td>${fmt(r.time)}</td><td>${r.hints}</td><td>${r.late ? "⏰ After time" : (r.status === "unanswered" ? "—" : "On time")}</td></tr>`).join("");
+  box.innerHTML = `<div class="results">
+    <div class="results-head"><h2>Your Results</h2><span class="big-score">${s.total} / ${s.count}</span>
+      <span style="color:var(--muted)">(${pct}%)</span><span class="spacer"></span>
+      <button class="small-btn" id="toggleResults">${state.resultsOpen ? "Hide details" : "Show details"}</button></div>
+    ${state.resultsOpen ? `
+    <div class="stat-grid">
+      ${s.perModule.map(pm => `<div class="stat"><div class="k">Module ${pm.m}</div><div class="v">${pm.correct} / ${pm.total}</div><div style="font-size:12px;color:var(--muted)">Module time used: ${fmt(pm.time)}</div></div>`).join("")}
+      <div class="stat"><div class="k">Score within time</div><div class="v">${s.onTime} / ${s.count}</div><div style="font-size:12px;color:var(--muted)">Answered after time: ${s.lateCount}</div></div>
+      <div class="stat"><div class="k">Time on questions</div><div class="v">${fmt(s.totalTime)}</div></div>
+      <div class="stat"><div class="k">Hints used</div><div class="v">${s.hintsUsed}</div><div style="font-size:12px;color:var(--muted)">Correct without hints: ${s.correctNoHint}</div></div>
+    </div>
+    <div class="table-scroll"><table class="rtable"><thead><tr><th>Domain</th><th>Correct</th><th>%</th><th>Avg time / question</th><th>Hints</th></tr></thead><tbody>
+      ${s.perDomain.map(d => `<tr><td>${esc(d.d)}</td><td>${d.correct} / ${d.total}</td><td>${d.pct}%</td><td>${fmt(d.avg)}</td><td>${d.hints}</td></tr>`).join("")}
+    </tbody></table></div>
+    <details><summary>Per-question breakdown (click a row to open that question)</summary>
+      <div class="table-scroll"><table class="rtable"><thead><tr><th>Q</th><th>Domain</th><th>Type</th><th>Result</th><th>Your answer</th><th>Correct</th><th>Time</th><th>Hints</th><th>Timing</th></tr></thead>
+      <tbody>${rowsHtml}</tbody></table></div></details>` : ""}
+  </div>`;
+  const tg = $("toggleResults");
+  if (tg) tg.onclick = () => { state.resultsOpen = !state.resultsOpen; saveState(); renderResults(); };
+  box.querySelectorAll("[data-goto]").forEach(tr => tr.onclick = () => {
+    const q = findQ(tr.dataset.goto); goTo(q.module, q.number - 1);
+  });
+}
+
+/* =========================================================
+   8. QUESTION EVENTS
+   ========================================================= */
+function bindQuestionEvents(q) {
+  $("flagBtn").onclick = () => { state.marked[q.id] = !state.marked[q.id]; saveState(); renderQuestion(); };
+  $("hintBtn").onclick = () => {
+    state.hintOpen[q.id] = !state.hintOpen[q.id];
+    if (state.hintOpen[q.id] && !state.hintLevel[q.id]) state.hintLevel[q.id] = 1; // first open reveals Hint 1
+    saveState(); renderQuestion();
+  };
+  const nh = $("nextHintBtn");
+  if (nh) nh.onclick = () => { state.hintLevel[q.id] = Math.min(2, (state.hintLevel[q.id] || 0) + 1); saveState(); renderQuestion(); };
+
+  const abc = $("abcBtn");
+  if (abc) abc.onclick = () => { state.eliminatorOn[q.id] = !state.eliminatorOn[q.id]; saveState(); renderQuestion(); };
+
+  $("timerBtn").onclick = () => {
+    if (isLocked()) return;
+    if (qt(q.id).start) stopQ(q.id); else startQ(q.id);
+    saveState(); renderQuestion();
+  };
+
+  document.querySelectorAll("[data-choice]").forEach(btn => btn.onclick = () => {
+    if (isLocked()) return;
+    const L = btn.dataset.choice;
+    if ((state.eliminated[q.id] || []).includes(L)) return;
+    state.answers[q.id] = L;
+    markTiming(q);               // flag answers given after the module time ran out
+    stopQ(q.id);                 // answering stops the stopwatch
+    saveState(); renderQuestion();
+  });
+  document.querySelectorAll("[data-elim]").forEach(btn => btn.onclick = () => {
+    const L = btn.dataset.elim;
+    const arr = state.eliminated[q.id] || (state.eliminated[q.id] = []);
+    if (!arr.includes(L)) arr.push(L);
+    if (state.answers[q.id] === L) { delete state.answers[q.id]; markTiming(q); } // crossing out the selected choice clears it
+    saveState(); renderQuestion();
+  });
+  document.querySelectorAll("[data-undo]").forEach(btn => btn.onclick = () => {
+    state.eliminated[q.id] = (state.eliminated[q.id] || []).filter(x => x !== btn.dataset.undo);
+    saveState(); renderQuestion();
+  });
+
+  const inp = $("sprInput");
+  if (inp) {
+    inp.oninput = () => {
+      let v = inp.value.replace(/[^0-9.\/-]/g, "");
+      v = v.replace(/(?!^)-/g, "");                 // minus only at the start
+      const parts = v.split("/"); if (parts.length > 2) v = parts[0] + "/" + parts.slice(1).join("");
+      const max = v.startsWith("-") ? 6 : 5;
+      v = v.slice(0, max);
+      inp.maxLength = max;
+      if (inp.value !== v) inp.value = v;
+      state.answers[q.id] = v;
+      markTiming(q);
+      const lb = $("lateBadge"); if (lb) lb.hidden = !(hasAnswer(q) && state.lateAnswers[q.id]);
+      if (v.length) stopQ(q.id);                    // typing an answer stops the stopwatch
+      saveState(); updatePreview(); refreshTimerUi(q);
+    };
+  }
+}
+function timerClass(q) {
+  const running = !!qt(q.id).start;
+  return running ? "running" : (qElapsed(q.id) === 0 && !isLocked() && !state.frozen && !hasAnswer(q) ? "idle" : "");
+}
+function timerInner(q) {
+  const running = !!qt(q.id).start, el = qElapsed(q.id);
+  const icon = running ? '<span class="qt-dot"></span>' : "⏱";
+  const label = running ? "Stop" : (el > 0 ? "Resume" : "Start timer");
+  return `${icon}<span>${label}</span>${running ? "" : "<kbd>T</kbd>"}<span class="qt-clock" id="qClock">${fmt(el)}</span>`;
+}
+function refreshTimerUi(q) {
+  const b = $("timerBtn"); if (!b) return;
+  b.className = "qtimer " + timerClass(q);
+  b.innerHTML = timerInner(q);
+}
+
+/* =========================================================
+   9. NAVIGATION
+   ========================================================= */
+function goTo(m, idx) {
+  const n = byModule(m).length;
+  idx = Math.max(0, Math.min(n - 1, idx));
+  stopAllQ();                                  // leaving a question pauses its stopwatch
+  if (m !== state.currentModule) { pauseModule(state.currentModule); state.currentModule = m; startModule(m); }
+  state.currentIndex[m] = idx;
+  saveState(); render();
+  const main = $("main");
+  if (state.corrected) {
+    // keep the review bar in view instead of jumping back to the results panel
+    const top = $("questionArea").getBoundingClientRect().top - main.getBoundingClientRect().top + main.scrollTop - 8;
+    main.scrollTop = Math.max(0, top);
+  } else main.scrollTop = 0;
+}
+function next() {
+  if (state.corrected) { stepTo(1, state.reviewOnlyMistakes); return; }
+  const m = state.currentModule, i = state.currentIndex[m], n = byModule(m).length;
+  if (i < n - 1) goTo(m, i + 1);
+  else if (m === 1) goTo(2, 0);
+  else openNavigator();
+}
+function back() {
+  if (state.corrected) { stepTo(-1, state.reviewOnlyMistakes); return; }
+  const m = state.currentModule, i = state.currentIndex[m];
+  if (i > 0) goTo(m, i - 1);
+  else if (m === 2) goTo(1, byModule(1).length - 1);
+}
+
+/* =========================================================
+   10. MODALS
+   ========================================================= */
+function openModal(html, wide = false, dismissable = true) {
+  $("modal").className = "modal" + (wide ? " wide" : "");
+  $("modal").innerHTML = html;
+  $("overlay").classList.add("open");
+  $("overlay").dataset.dismiss = dismissable ? "1" : "0";
+  $("modal").querySelectorAll("[data-close]").forEach(b => b.onclick = closeModal);
+  typeset($("modal"));
+}
+function closeModal() { $("overlay").classList.remove("open"); $("modal").innerHTML = ""; }
+const head = (title, closable = true) => `<div class="modal-head"><h3>${title}</h3>${closable ? `<button class="x-btn" data-close aria-label="Close">×</button>` : ""}</div>`;
+
+function openNameModal() {
+  openModal(head("Welcome to Amro Academy", false) + `<div class="modal-body">
+    <p>This practice test has <b>2 modules × 22 questions</b> of SAT Math at real test level or a little harder, built around the topics from your Exam 1 report.
+    Each module has a 35-minute timer. Your progress is saved automatically, even if you refresh the page.</p>
+    <label for="nameInput"><b>Enter your full name to begin:</b></label>
+    <input class="name-input" id="nameInput" placeholder="Your name" maxlength="60">
+    <div id="nameErr"></div></div>
+    <div class="modal-foot"><button class="tool-btn primary" id="startBtn">Start Exam</button></div>`, false, false);
+  const go = () => {
+    const v = $("nameInput").value.trim();
+    if (v.length < 2) { $("nameErr").innerHTML = `<div class="msg err">Please enter your name.</div>`; return; }
+    state.studentName = v; startModule(state.currentModule); saveState(); closeModal(); render();
+  };
+  $("startBtn").onclick = go;
+  $("nameInput").onkeydown = (e) => { if (e.key === "Enter") go(); };
+  setTimeout(() => $("nameInput") && $("nameInput").focus(), 50);
+}
+
+function openNavigator() {
+  const m = state.currentModule;
+  const cells = byModule(m).map((q, i) => {
+    let cls = "nav-cell";
+    if (state.corrected) cls += " " + ({ correct: "c", wrong: "w", unanswered: "u" }[statusOf(q)]);
+    else if (hasAnswer(q)) cls += " answered";
+    if (state.marked[q.id]) cls += " flagged";
+    if (hasAnswer(q) && state.lateAnswers[q.id]) cls += " late";
+    if (i === state.currentIndex[m]) cls += " current";
+    return `<button class="${cls}" data-jump="${i}">${q.number}</button>`;
+  }).join("");
+  const legend = state.corrected
+    ? `<span><i class="lg" style="background:var(--green)"></i>Correct</span><span><i class="lg" style="background:var(--red)"></i>Wrong</span><span><i class="lg" style="background:#fef7e0;border:2px solid var(--amber)"></i>Unanswered</span><span><i class="lg" style="background:#b3261e;clip-path:polygon(0 0,100% 30%,0 60%)"></i>For Review</span>`
+    : `<span><i class="lg" style="outline:2px solid #111"></i>Current</span><span><i class="lg" style="border:2px dashed #555"></i>Unanswered</span><span><i class="lg" style="background:var(--sky-dark)"></i>Answered</span><span><i class="lg" style="background:#b3261e;clip-path:polygon(0 0,100% 30%,0 60%)"></i>For Review</span>`;
+  openModal(head("Section 2, Module " + m + ": Math Questions") + `<div class="modal-body">
+    <div class="legend">${legend}<span>⏰ Answered after time</span></div>
+    <div class="nav-grid">${cells}</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="small-btn" data-mod="1" ${m === 1 ? "disabled" : ""}>Go to Module 1</button>
+      <button class="small-btn" data-mod="2" ${m === 2 ? "disabled" : ""}>Go to Module 2</button>
+    </div></div>`);
+  $("modal").querySelectorAll("[data-jump]").forEach(b => b.onclick = () => { closeModal(); goTo(m, Number(b.dataset.jump)); });
+  $("modal").querySelectorAll("[data-mod]").forEach(b => b.onclick = () => { goTo(Number(b.dataset.mod), state.currentIndex[Number(b.dataset.mod)]); openNavigator(); });
+}
+
+function openReference() {
+  const items = [
+    ["Circle", String.raw`\(A=\pi r^2\) &nbsp; \(C=2\pi r\)`],
+    ["Rectangle", String.raw`\(A=\ell w\)`],
+    ["Triangle", String.raw`\(A=\tfrac12 bh\)`],
+    ["Pythagorean theorem", String.raw`\(c^2=a^2+b^2\)`],
+    ["Special right triangles", String.raw`30°-60°-90°: \(x,\ x\sqrt3,\ 2x\)<br>45°-45°-90°: \(s,\ s,\ s\sqrt2\)`],
+    ["Rectangular prism", String.raw`\(V=\ell wh\)`],
+    ["Cylinder", String.raw`\(V=\pi r^2h\)`],
+    ["Sphere", String.raw`\(V=\tfrac43\pi r^3\)`],
+    ["Cone", String.raw`\(V=\tfrac13\pi r^2h\)`],
+    ["Pyramid", String.raw`\(V=\tfrac13\ell wh\)`]
+  ];
+  openModal(head("Reference Sheet") + `<div class="modal-body"><div class="ref-grid">
+    ${items.map(([t, f]) => `<div class="ref-item"><b>${t}</b>${f}</div>`).join("")}</div>
+    <ul style="margin-top:14px">
+      <li>The number of degrees of arc in a circle is 360.</li>
+      <li>The number of radians of arc in a circle is \(2\pi\).</li>
+      <li>The sum of the measures in degrees of the angles of a triangle is 180.</li>
+    </ul></div>`, true);
+}
+
+function openDirections() {
+  openModal(head("Directions") + `<div class="modal-body">
+    <p>The questions in this section address a number of important math skills.</p>
+    <p>Use of a calculator is permitted for all questions. A reference sheet is available by selecting <b>Reference</b>.</p>
+    <p>Unless otherwise indicated: all variables and expressions represent real numbers; figures are drawn to scale; figures lie in a plane;
+    and the domain of a given function \(f\) is the set of all real numbers \(x\) for which \(f(x)\) is a real number.</p>
+    <p>For <b>multiple-choice questions</b>, choose the single best answer. Use the <b>ABC</b> tool to cross out choices.</p>
+    <p>For <b>student-produced response questions</b>, type your answer in the box and check the Answer Preview.</p>
+    <p><b>Practice tools:</b> 💡 <i>Show Hint</i> reveals up to two hints; the <b>⏱ timer at the top of each question</b> (shortcut: <b>T</b>) stops automatically when you answer; <i>❄ Freeze Time</i> pauses all timers. When a module's time runs out you can keep answering, but those answers are marked as <b>answered after time</b>.
+    Use <i>Submit Exam</i> to send your report to your teacher, and <i>Correct Exam</i> to see your score and solutions.</p></div>`);
+}
+
+function confirmModal(title, text, okLabel, onOk, danger = false) {
+  openModal(head(title) + `<div class="modal-body"><p>${text}</p></div>
+    <div class="modal-foot"><button class="tool-btn" data-close>Cancel</button>
+    <button class="tool-btn ${danger ? "danger" : "primary"}" id="okBtn">${okLabel}</button></div>`);
+  $("okBtn").onclick = () => { closeModal(); onOk(); };
+}
+
+/* =========================================================
+   11. RESET
+   ========================================================= */
+/* =========================================================
+   FREEZE TIME
+   ========================================================= */
+function toggleFreeze() {
+  if (isLocked()) return;
+  if (state.frozen) { state.frozen = false; startModule(state.currentModule); toast("Time resumed.", 2500); }
+  else { stopAllTimers(); state.frozen = true; toast("Time frozen. The module timer and question stopwatch are paused.", 3500); }
+  saveState(); render();
+}
+
+function resetExam() {
+  confirmModal("Reset Exam", "Are you sure? All answers and times will be erased.", "Yes, reset everything", () => {
+    localStorage.removeItem(STORAGE_KEY);
+    state = freshState();
+    sending = false;
+    saveState(); render(); openNameModal();
+  }, true);
+}
+
+/* =========================================================
+   12. CORRECTION
+   ========================================================= */
+function correctExam() {
+  if (state.corrected) { state.resultsOpen = true; saveState(); renderResults(); $("main").scrollTop = 0; return; }
+  confirmModal("Correct Exam", "This will calculate your score, show correct answers in green and wrong answers in red, and <b>lock your answers</b>. Continue?", "Correct now", () => {
+    stopAllTimers();
+    state.corrected = true; state.correctedAt = new Date().toISOString(); state.resultsOpen = true;
+    saveState(); render(); $("main").scrollTop = 0;
+    const s = buildStats();
+    toast("Score: " + s.total + " / " + s.count);
+  });
+}
+
+/* =========================================================
+   13. REPORT + EMAILJS
+   ========================================================= */
+function buildReport() {
+  const s = buildStats();
+  const date = new Date().toLocaleString();
+  const pct = (a, b) => b ? Math.round(a / b * 100) : 0;
+  const mistakes = s.rows.filter(r => r.status !== "correct");
+
+  let t = "";
+  t += "AMRO ACADEMY – SAT MATH EXAM 2 REPORT\n";
+  t += "========================================\n";
+  t += "Student: " + state.studentName + "\n";
+  t += "Date: " + date + "\n";
+  t += "Total score: " + s.total + "/" + s.count + " (" + pct(s.total, s.count) + "%)\n";
+  s.perModule.forEach(pm => { t += "Module " + pm.m + ": " + pm.correct + "/" + pm.total + " (module time used " + fmt(pm.time) + ")\n"; });
+  t += "Total time on questions (stopwatch): " + fmt(s.totalTime) + "\n";
+  t += "Hints used: " + s.hintsUsed + " | Correct without hints: " + s.correctNoHint + "\n";
+  t += "Score within time limit: " + s.onTime + "/" + s.count + " | Answered after time: " + s.lateCount + "\n\n";
+  t += "SCORE BY DOMAIN\n";
+  s.perDomain.forEach(d => { t += "- " + d.d + ": " + d.correct + "/" + d.total + " (" + d.pct + "%) | avg time " + fmt(d.avg) + " | hints " + d.hints + "\n"; });
+  t += "\nMISTAKES & UNANSWERED (" + mistakes.length + ")\n";
+  if (!mistakes.length) t += "None — perfect score!\n";
+  mistakes.forEach(r => {
+    t += "- Module " + r.q.module + " Q" + r.q.number + " | " + r.q.domain + " – " + r.q.skill +
+      " | Student: " + (r.status === "unanswered" ? "(no answer)" : r.answer) + " | Correct: " + correctDisplay(r.q) +
+      " | Time: " + fmt(r.time) + " | Hints: " + r.hints + (r.late ? " | AFTER TIME" : "") + "\n";
+  });
+  t += "\nPER-QUESTION TABLE\n";
+  s.rows.forEach(r => {
+    t += "M" + r.q.module + " Q" + r.q.number + " | " + r.q.domain + " | " + r.q.type.toUpperCase() + " | " +
+      statusLabel(r.status) + " | " + fmt(r.time) + " | Hints: " + r.hints + (r.late ? " | AFTER TIME" : "") + "\n";
+  });
+
+  // Compact HTML (EmailJS caps all variables at 50 KB, so no per-cell inline styles)
+  const color = { correct: "#1e8e3e", wrong: "#c5221f", unanswered: "#b06000" };
+  const res = (st) => `<font color="${color[st]}"><b>${statusLabel(st)}</b></font>`;
+  const tbl = (heads, rows) => `<table border="1" cellpadding="5" cellspacing="0" style="border-collapse:collapse;font:13px Arial;margin:6px 0 16px"><tr bgcolor="#e8f6fc"><th>${heads.join("</th><th>")}</th></tr>${rows.join("")}</table>`;
+  const timing = (r) => r.late ? `<font color="#b06000"><b>After time</b></font>` : (r.status === "unanswered" ? "—" : "On time");
+  const tr = (cells) => `<tr><td>${cells.join("</td><td>")}</td></tr>`;
+  let h = `<div style="font:14px Arial">`;
+  h += `<h2 style="color:#1d6a96">Amro Academy – SAT Math Exam 2 Report</h2>`;
+  h += `<p><b>Student:</b> ${esc(state.studentName)}<br><b>Date:</b> ${esc(date)}<br><b>Total score:</b> ${s.total}/${s.count} (${pct(s.total, s.count)}%)<br>`;
+  h += s.perModule.map(pm => `<b>Module ${pm.m}:</b> ${pm.correct}/${pm.total} (time used ${fmt(pm.time)})`).join("<br>");
+  h += `<br><b>Time on questions:</b> ${fmt(s.totalTime)}<br><b>Hints used:</b> ${s.hintsUsed} | <b>Correct without hints:</b> ${s.correctNoHint}<br><b>Score within time limit:</b> ${s.onTime}/${s.count} | <b>Answered after time:</b> ${s.lateCount}</p>`;
+  h += `<h3>Score by domain</h3>` + tbl(["Domain", "Correct", "%", "Avg time", "Hints"],
+    s.perDomain.map(d => tr([d.d, d.correct + "/" + d.total, d.pct + "%", fmt(d.avg), d.hints])));
+  h += `<h3>Mistakes &amp; unanswered (${mistakes.length})</h3>` + (mistakes.length ? tbl(["Q", "Domain", "Skill", "Student", "Correct", "Time", "Hints", "Timing"],
+    mistakes.map(r => tr(["M" + r.q.module + " Q" + r.q.number, r.q.domain, esc(r.q.skill),
+      r.status === "unanswered" ? res("unanswered") : `<font color="#c5221f"><b>${esc(r.answer)}</b></font>`,
+      esc(correctDisplay(r.q)), fmt(r.time), r.hints, timing(r)]))) : "<p>None — perfect score!</p>");
+  h += `<h3>Per-question table</h3>` + tbl(["Q", "Domain", "Type", "Result", "Time", "Hints", "Timing"],
+    s.rows.map(r => tr(["M" + r.q.module + " Q" + r.q.number, r.q.domain, r.q.type.toUpperCase(), res(r.status), fmt(r.time), r.hints, timing(r)])));
+  h += `</div>`;
+  return { text: t, html: h, stats: s, date };
+}
+
+function openSubmitReview() {
+  if (state.emailSent) { toast("This exam has already been submitted."); return; }
+  const un = QUESTIONS.filter(q => !hasAnswer(q));
+  const mk = QUESTIONS.filter(q => state.marked[q.id]);
+  const chips = (list) => list.length
+    ? `<div class="list-q">${list.map(q => `<button class="chip" data-go="${q.id}">M${q.module} Q${q.number}</button>`).join("")}</div>`
+    : `<p style="color:var(--green);font-weight:600">None</p>`;
+  openModal(head("Check Your Work") + `<div class="modal-body">
+    <p>Once you submit, your answers are locked and a report is sent to your teacher.</p>
+    <b>Unanswered questions (${un.length})</b>${chips(un)}
+    <b>Marked for review (${mk.length})</b>${chips(mk)}
+    <div id="sendStatus"></div></div>
+    <div class="modal-foot"><button class="tool-btn" data-close>Back to exam</button>
+    <button class="tool-btn primary" id="confirmSubmit">Confirm Submit</button></div>`);
+  $("modal").querySelectorAll("[data-go]").forEach(b => b.onclick = () => { const q = findQ(b.dataset.go); closeModal(); goTo(q.module, q.number - 1); });
+  $("confirmSubmit").onclick = sendReport;
+}
+
+async function sendReport() {
+  if (sending || state.emailSent) return;            // prevent double sending
+  const btn = $("confirmSubmit"), status = $("sendStatus");
+  sending = true;
+  if (btn) { btn.disabled = true; btn.textContent = "Sending…"; }
+  if (status) status.innerHTML = `<div class="msg info">Sending your report…</div>`;
+
+  stopAllTimers();
+  state.submitted = true; state.submittedAt = state.submittedAt || new Date().toISOString();
+  saveState(); render();
+
+  const rep = buildReport();
+  const sizeOf = (o) => new Blob([JSON.stringify(o)]).size;
+  const params = {
+    to_email: RECIPIENT_EMAIL,
+    student_name: state.studentName,
+    submit_date: rep.date,
+    score: rep.stats.total + "/" + rep.stats.count,
+    total_time: fmt(rep.stats.totalTime),
+    report: rep.text,
+    report_html: rep.html
+  };
+  // EmailJS limit is 50 KB: trim the plain-text copy first if needed
+  if (sizeOf(params) > 48000) params.report = rep.text.split("\nPER-QUESTION TABLE")[0] + "\n(Per-question table: see HTML version.)";
+  if (sizeOf(params) > 48000) params.report = "See the HTML report.";
+  try {
+    if (!window.emailjs) throw new Error("EmailJS could not be loaded. Check your internet connection.");
+    await emailjs.send(EMAILJS_CONFIG.serviceId, EMAILJS_CONFIG.templateId, params);
+    state.emailSent = true; saveState(); render();
+    if (status) status.innerHTML = `<div class="msg ok">✓ Your exam was submitted and the report was sent successfully.</div>`;
+    if (btn) { btn.textContent = "Submitted ✓"; }
+    const foot = $("modal").querySelector(".modal-foot");
+    if (foot) foot.innerHTML = `<button class="tool-btn primary" data-close>Close</button>`, foot.querySelector("[data-close]").onclick = closeModal;
+  } catch (err) {
+    const reason = (err && (err.text || err.message)) || "Unknown error";
+    if (status) status.innerHTML = `<div class="msg err">✗ The report could not be sent: ${esc(reason)}. Your answers are saved.
+      <div style="margin-top:8px"><button class="small-btn" id="retryBtn">Retry</button></div></div>`;
+    if (btn) { btn.disabled = false; btn.textContent = "Confirm Submit"; }
+    const r = $("retryBtn"); if (r) r.onclick = sendReport;
+  } finally {
+    sending = false;
+  }
+}
+
+/* =========================================================
+   14. INIT
+   ========================================================= */
+function init() {
+  try { if (window.emailjs) emailjs.init({ publicKey: EMAILJS_CONFIG.publicKey }); } catch (e) {}
+
+  document.querySelectorAll(".module-tabs .tab").forEach(b => b.onclick = () => { const m = Number(b.dataset.module); goTo(m, state.currentIndex[m]); });
+  $("hideTimerBtn").onclick = () => { state.timerHidden = !state.timerHidden; saveState(); renderTop(); tick(); };
+  $("refBtn").onclick = openReference;
+  $("freezeBtn").onclick = toggleFreeze;
+  $("directionsBtn").onclick = openDirections;
+  $("navBtn").onclick = openNavigator;
+  $("nextBtn").onclick = next;
+  $("backBtn").onclick = back;
+  $("resetBtn").onclick = resetExam;
+  $("correctBtn").onclick = correctExam;
+  $("submitBtn").onclick = openSubmitReview;
+  $("overlay").onclick = (e) => { if (e.target.id === "overlay" && $("overlay").dataset.dismiss === "1") closeModal(); };
+  document.addEventListener("keydown", (e) => {
+    const modalOpen = $("overlay").classList.contains("open");
+    if (e.key === "Escape" && modalOpen && $("overlay").dataset.dismiss === "1") closeModal();
+    // T toggles the question timer
+    if (!modalOpen && (e.key === "t" || e.key === "T") && !e.ctrlKey && !e.metaKey && !e.altKey && !/INPUT|TEXTAREA|SELECT/.test(e.target.tagName)) {
+      const b = $("timerBtn"); if (b && !b.disabled) { e.preventDefault(); b.click(); }
+    }
+    // Arrow keys move between questions in review mode
+    if (!modalOpen && state.corrected && !/INPUT|TEXTAREA|SELECT/.test(e.target.tagName)) {
+      if (e.key === "ArrowRight") { e.preventDefault(); next(); }
+      if (e.key === "ArrowLeft") { e.preventDefault(); back(); }
+    }
+  });
+
+  // Persist running timers when leaving (timestamps already make them refresh-safe)
+  window.addEventListener("beforeunload", saveState);
+
+  if (state.studentName) startModule(state.currentModule);
+  saveState();
+  render();
+  if (!state.studentName) openNameModal();
+  setInterval(tick, 250);
+}
+
+// KaTeX scripts are deferred; wait for them so math renders on first paint.
+if (document.readyState === "complete") init();
+else window.addEventListener("load", init);
+</script>
+</body>
+</html>
