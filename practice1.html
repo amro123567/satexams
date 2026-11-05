@@ -1,0 +1,168 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Hrag – Full SAT 2 Practice</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}],throwOnError:false})"></script>
+<style>
+:root{--sky-light:#eaf6fc;--sky-dark:#2f8fc4;--deep:#174f70;--ink:#1b2730;--muted:#5d6b75;--line:#d6e2e9;--green:#1e8e3e;--green-bg:#e7f5ec;--red:#c5221f;--red-bg:#fdecea;--bg:#f5fafd;--card:#fff;--psg:#f6f9fb}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--sky-light:#15303e;--deep:#9fd6f2;--ink:#e5eef3;--muted:#93a4b0;--line:#26343f;--green:#5cc982;--green-bg:#16301f;--red:#ff8a80;--red-bg:#3a1c1b;--bg:#0f171d;--card:#152129;--psg:#1a2831}}
+:root[data-theme="dark"]{--sky-light:#15303e;--deep:#9fd6f2;--ink:#e5eef3;--muted:#93a4b0;--line:#26343f;--green:#5cc982;--green-bg:#16301f;--red:#ff8a80;--red-bg:#3a1c1b;--bg:#0f171d;--card:#152129;--psg:#1a2831}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 "Segoe UI",Roboto,Arial,sans-serif}
+.wrap{max-width:880px;margin:0 auto;padding:28px 16px 60px}
+.hero{background:#174f70;color:#fff;border-radius:14px;padding:20px 22px;margin-bottom:16px}
+.hero .eyebrow{font-size:12px;letter-spacing:.1em;text-transform:uppercase;opacity:.85}
+.hero h1{margin:4px 0 6px;font-size:26px;line-height:1.2}
+.hero p{margin:0;opacity:.92}
+.nav{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 18px}
+.nav a{text-decoration:none;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:999px;padding:3px 11px;font-size:13px;font-weight:600}
+.nav a:hover{border-color:var(--sky-dark)}
+h2.sec{font-size:20px;margin:22px 0 10px;color:var(--deep)}
+.q{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-bottom:16px;scroll-margin-top:60px}
+.q header{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.num{width:34px;height:34px;border-radius:50%;background:var(--sky-dark);color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center;flex:none;font-size:14px}
+.lab{font-weight:700}.dom{font-size:13px;color:var(--muted)}
+.score{margin-left:auto;font-size:14px;color:var(--muted)}
+.r{color:var(--red)}.g{color:var(--green)}
+.psg{background:var(--psg);border-left:4px solid var(--line);border-radius:0 10px 10px 0;padding:10px 14px;margin-bottom:10px;font-size:15.5px}
+.psg p{margin:0 0 8px}.psg p:last-child{margin:0}
+.psg table{border-collapse:collapse;margin:4px 0 8px;font-size:14px}.psg th,.psg td{border:1px solid var(--line);padding:4px 10px;text-align:center}
+.psg caption{font-weight:700;text-align:left;margin-bottom:4px}
+.psg ul{margin:4px 0 0;padding-left:20px}
+.stem{margin-bottom:12px;overflow-x:auto}
+.choices{display:grid;gap:8px;margin-bottom:14px}
+.choice{display:flex;align-items:center;gap:12px;border:1.5px solid var(--line);border-radius:10px;padding:9px 12px;background:var(--card);color:var(--ink);font:inherit;text-align:left;width:100%}
+button.choice{cursor:pointer}button.choice:hover:not(:disabled){border-color:var(--sky-dark);background:var(--sky-light)}
+.choice .L{width:26px;height:26px;border-radius:50%;border:1.5px solid var(--muted);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex:none}
+.choice.sel{border-color:var(--sky-dark);background:var(--sky-light)}.choice.sel .L{background:var(--sky-dark);border-color:var(--sky-dark);color:#fff}
+.choice.ok{border-color:var(--green);background:var(--green-bg)}.choice.ok .L{background:var(--green);border-color:var(--green);color:#fff}
+.choice.bad{border-color:var(--red);background:var(--red-bg)}.choice.bad .L{background:var(--red);border-color:var(--red);color:#fff}
+.tag{margin-left:auto;font-size:12px;font-weight:700;white-space:nowrap}.tag.ok{color:var(--green)}.tag.bad{color:var(--red)}
+.spr{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.box{border-radius:10px;padding:10px 14px}.box small{display:block;font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em}.box b{font-size:21px}
+.box.ok{background:var(--green-bg)}.box.ok small{color:var(--green)}.box.bad{background:var(--red-bg)}.box.bad small{color:var(--red)}
+section h4{margin:0 0 4px;font-size:12.5px;text-transform:uppercase;letter-spacing:.07em}
+section p{margin:0}
+.why{background:var(--red-bg);border-radius:10px;padding:10px 14px;margin-bottom:10px}.why h4{color:var(--red)}
+.sol h4{color:var(--muted)}.sol ol{margin:4px 0 0;padding-left:22px}.sol li{margin-bottom:4px}
+.tip{background:var(--sky-light);border-left:4px solid var(--sky-dark);border-radius:0 10px 10px 0;padding:10px 14px;margin-top:8px}.tip h4{color:var(--deep)}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:6px}
+.btn{font:600 14px inherit;font-family:inherit;padding:8px 16px;border-radius:999px;border:1.5px solid var(--sky-dark);background:var(--sky-dark);color:#fff;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--deep)}
+.btn:disabled{opacity:.5;cursor:default}
+input.spr-in{font:600 17px inherit;font-family:inherit;width:160px;padding:8px 10px;border:1.5px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink)}
+input.spr-in:focus{outline:none;border-color:var(--sky-dark)}
+.fb{font-weight:700;font-size:14px}.fb.ok{color:var(--green)}.fb.bad{color:var(--red)}
+.solbox{display:none;margin-top:12px}.solbox.on{display:block}
+.like{font-size:12.5px;color:var(--muted);margin-left:auto}
+.progress{position:sticky;top:0;z-index:5;background:var(--bg);padding:10px 0;display:flex;align-items:center;gap:12px;margin-bottom:8px}
+.bar{flex:1;height:10px;background:var(--line);border-radius:6px;overflow:hidden}.bar i{display:block;height:100%;width:0;background:var(--sky-dark);border-radius:6px;transition:width .3s}
+.rules{background:var(--card);border:2px solid var(--sky-dark);border-radius:14px;padding:16px 20px}
+.rules h2{margin:0 0 8px;font-size:19px;color:var(--deep)}.rules ol{margin:0;padding-left:22px}.rules li{margin-bottom:6px}
+@media (max-width:560px){.score,.like{margin-left:0;width:100%}.spr{grid-template-columns:1fr}.hero h1{font-size:22px}.q{padding:16px 14px}}
+@media print{body{background:#fff}.q{break-inside:avoid}.nav,.progress{display:none}.solbox{display:block}}
+</style></head><body><div class="wrap">
+<div class="hero"><div class="eyebrow">Amro Academy · Practice after Full SAT Practice Test 2</div><h1>Hrag – Practice Set</h1>
+<p>15 new questions, one for each question missed on Full SAT 2: the same skill and the same trap, with new content. Solve each one, press <b>Check</b>, then open the solution.</p></div>
+<div class="progress"><b id="score">0 / 15 correct</b><div class="bar"><i id="bar"></i></div></div>
+<h2 class="sec">Reading and Writing (3)</h2><article class="q" id="p1"><header><span class="num">1</span><div><div class="lab">Words in context</div><div class="dom">Multiple choice</div></div>
+    <span class="like">Same type as R&W M1 Q1</span></header>
+    <div class="psg"><p>The committee's final report was anything but ______: it ran to just four pages and left most of the technical questions for future study.</p></div><div class="stem">Which choice completes the text with the most logical and precise word or phrase?</div><div class="choices"><button class="choice" data-q="p1" data-c="A"><span class="L">A</span><span>concise</span></button><button class="choice" data-q="p1" data-c="B"><span class="L">B</span><span>preliminary</span></button><button class="choice" data-q="p1" data-c="C"><span class="L">C</span><span>comprehensive</span></button><button class="choice" data-q="p1" data-c="D"><span class="L">D</span><span>persuasive</span></button></div>
+    <div class="row"><button class="btn" data-check="p1">Check</button><button class="btn ghost" data-show="p1">Show solution</button><span class="fb" id="fb-p1"></span></div>
+    <div class="solbox" id="sol-p1"><section class="tip"><h4>Solution · C</h4><p>The report was short and left most questions for later, so it was <b>incomplete</b>. “Anything but” flips the blank, so the blank means complete: <b>comprehensive</b>. The report <i>was</i> concise and preliminary, so “anything but concise/preliminary” contradicts the text.</p></section></div></article><article class="q" id="p2"><header><span class="num">2</span><div><div class="lab">Command of evidence (textual)</div><div class="dom">Multiple choice</div></div>
+    <span class="like">Same type as R&W M1 Q10</span></header>
+    <div class="psg"><p>Biologist Rena Takeda hypothesizes that the bright coloring of a species of tree frog mainly warns predators that the frog is toxic, rather than helping the frogs attract mates.</p></div><div class="stem">Which finding, if true, would most directly support Takeda's hypothesis?</div><div class="choices"><button class="choice" data-q="p2" data-c="A"><span class="L">A</span><span>Brightly colored frogs of the species are more toxic than dull ones.</span></button><button class="choice" data-q="p2" data-c="B"><span class="L">B</span><span>Predators that have eaten a toxic frog avoid brightly colored frogs afterward, while females choose mates without regard to the males' coloring.</span></button><button class="choice" data-q="p2" data-c="C"><span class="L">C</span><span>The frogs' coloring is brighter in some forests than in others.</span></button><button class="choice" data-q="p2" data-c="D"><span class="L">D</span><span>Male frogs with brighter coloring attract more mates than males with duller coloring.</span></button></div>
+    <div class="row"><button class="btn" data-check="p2">Check</button><button class="btn ghost" data-show="p2">Show solution</button><span class="fb" id="fb-p2"></span></div>
+    <div class="solbox" id="sol-p2"><section class="tip"><h4>Solution · B</h4><p>The right evidence must support “warning predators” <b>and</b> rule out “attracting mates.” Choice B does both. Choice A fits either explanation, C is irrelevant, and D supports the explanation Takeda rejects.</p></section></div></article><article class="q" id="p3"><header><span class="num">3</span><div><div class="lab">Inferences</div><div class="dom">Multiple choice</div></div>
+    <span class="like">Same type as R&W M1 Q15</span></header>
+    <div class="psg"><p>A painting long attributed to the artist Mira Solberg is signed and dated 1888. Records kept by Solberg's paint supplier show that she first purchased a particular blue pigment in 1892, yet that pigment appears throughout the painting's sky. If the supplier's records are accurate, it is most reasonable to conclude that ______</p></div><div class="stem">Which choice most logically completes the text?</div><div class="choices"><button class="choice" data-q="p3" data-c="A"><span class="L">A</span><span>Solberg could not have painted any part of the work.</span></button><button class="choice" data-q="p3" data-c="B"><span class="L">B</span><span>Solberg's paint supplier kept unreliable records.</span></button><button class="choice" data-q="p3" data-c="C"><span class="L">C</span><span>the blue pigment was invented in 1888.</span></button><button class="choice" data-q="p3" data-c="D"><span class="L">D</span><span>at least part of the painting was completed after 1888, the date it bears.</span></button></div>
+    <div class="row"><button class="btn" data-check="p3">Check</button><button class="btn ghost" data-show="p3">Show solution</button><span class="fb" id="fb-p3"></span></div>
+    <div class="solbox" id="sol-p3"><section class="tip"><h4>Solution · D</h4><p>The pigment wasn't available to her until 1892, so the sky must have been painted (or repainted) after 1888. Choice A is too strong: she could still have painted the rest of the work. Choices C and D contradict or go beyond the text.</p></section></div></article>
+<h2 class="sec">Math (12)</h2><article class="q" id="p4"><header><span class="num">4</span><div><div class="lab">Linear equations</div><div class="dom">Multiple choice</div></div>
+    <span class="like">Same type as Math M1 Q4</span></header>
+    <div class="stem">If \(4-3x=x-20\), what is the value of \(x\)?</div><div class="choices"><button class="choice" data-q="p4" data-c="A"><span class="L">A</span><span>\(6\)</span></button><button class="choice" data-q="p4" data-c="B"><span class="L">B</span><span>\(-6\)</span></button><button class="choice" data-q="p4" data-c="C"><span class="L">C</span><span>\(-4\)</span></button><button class="choice" data-q="p4" data-c="D"><span class="L">D</span><span>\(4\)</span></button></div>
+    <div class="row"><button class="btn" data-check="p4">Check</button><button class="btn ghost" data-show="p4">Show solution</button><span class="fb" id="fb-p4"></span></div>
+    <div class="solbox" id="sol-p4"><section class="tip"><h4>Solution · A</h4><p>Add \(3x\) and 20 to both sides: \(24=4x\), so \(x=6\). Check: \(4-18=-14\) and \(6-20=-14\) ✓. (\(-6\) is the sign-error trap.)</p></section></div></article><article class="q" id="p5"><header><span class="num">5</span><div><div class="lab">Similar triangles</div><div class="dom">Multiple choice</div></div>
+    <span class="like">Same type as Math M1 Q20</span></header>
+    <div class="stem">In triangle \(ABC\), point \(D\) is on \(\overline{AB}\) and point \(E\) is on \(\overline{AC}\) so that \(\overline{DE}\parallel\overline{BC}\). If \(AD=6\), \(DB=9\), and \(DE=4\), what is the length of \(\overline{BC}\)?</div><div class="choices"><button class="choice" data-q="p5" data-c="A"><span class="L">A</span><span>\(6\)</span></button><button class="choice" data-q="p5" data-c="B"><span class="L">B</span><span>\(8\)</span></button><button class="choice" data-q="p5" data-c="C"><span class="L">C</span><span>\(10\)</span></button><button class="choice" data-q="p5" data-c="D"><span class="L">D</span><span>\(7.5\)</span></button></div>
+    <div class="row"><button class="btn" data-check="p5">Check</button><button class="btn ghost" data-show="p5">Show solution</button><span class="fb" id="fb-p5"></span></div>
+    <div class="solbox" id="sol-p5"><section class="tip"><h4>Solution · C</h4><p>\(AB=6+9=15\). Scale factor \(=\frac{AD}{AB}=\frac{6}{15}=\frac25\), so \(BC=4\times\frac52=10\). (6 is the trap from using \(\frac{DB}{AD}\).)</p></section></div></article><article class="q" id="p6"><header><span class="num">6</span><div><div class="lab">Conditional probability</div><div class="dom">Fill-in</div></div>
+    <span class="like">Same type as Math M2 Q3</span></header>
+    <div class="stem">Of the members of a club, 60% are adults and the rest are children. Of the adults, 25% volunteer at events. Of the children, 40% volunteer at events. If a member who volunteers is selected at random, what is the probability that the member is an adult? (Enter a fraction or a decimal.)</div><div class="row"><input class="spr-in" id="in-p6" inputmode="decimal" autocomplete="off" placeholder="Your answer" aria-label="Your answer"></div>
+    <div class="row"><button class="btn" data-check="p6">Check</button><button class="btn ghost" data-show="p6">Show solution</button><span class="fb" id="fb-p6"></span></div>
+    <div class="solbox" id="sol-p6"><section class="tip"><h4>Solution · 15/31 ≈ 0.4839</h4><p>Out of 1,000 members: 600 adults, of whom 150 volunteer; 400 children, of whom 160 volunteer. Volunteers \(=310\). Probability \(=\frac{150}{310}=\frac{15}{31}\approx0.484\).</p></section></div></article><article class="q" id="p7"><header><span class="num">7</span><div><div class="lab">Arc length</div><div class="dom">Multiple choice</div></div>
+    <span class="like">Same type as Math M2 Q5</span></header>
+    <div class="stem">A circle has center \(O\) and a radius of 9. Points \(A\) and \(B\) are on the circle, and chord \(\overline{AB}\) has length 9. What is the length of minor arc \(AB\)?</div><div class="choices"><button class="choice" data-q="p7" data-c="A"><span class="L">A</span><span>\(9\pi\)</span></button><button class="choice" data-q="p7" data-c="B"><span class="L">B</span><span>\(6\pi\)</span></button><button class="choice" data-q="p7" data-c="C"><span class="L">C</span><span>\(\pi\)</span></button><button class="choice" data-q="p7" data-c="D"><span class="L">D</span><span>\(3\pi\)</span></button></div>
+    <div class="row"><button class="btn" data-check="p7">Check</button><button class="btn ghost" data-show="p7">Show solution</button><span class="fb" id="fb-p7"></span></div>
+    <div class="solbox" id="sol-p7"><section class="tip"><h4>Solution · D</h4><p>\(OA=OB=AB=9\), so triangle \(OAB\) is equilateral and the central angle is \(60^\circ\). Arc \(=\frac{60}{360}\times18\pi=3\pi\).</p></section></div></article><article class="q" id="p8"><header><span class="num">8</span><div><div class="lab">Sum and product of roots</div><div class="dom">Fill-in</div></div>
+    <span class="like">Same type as Math M2 Q8</span></header>
+    <div class="stem">The solutions to \(x^2-6x+4=0\) are \(r\) and \(s\). What is the value of \(r^2+s^2\)?</div><div class="row"><input class="spr-in" id="in-p8" inputmode="decimal" autocomplete="off" placeholder="Your answer" aria-label="Your answer"></div>
+    <div class="row"><button class="btn" data-check="p8">Check</button><button class="btn ghost" data-show="p8">Show solution</button><span class="fb" id="fb-p8"></span></div>
+    <div class="solbox" id="sol-p8"><section class="tip"><h4>Solution · 28</h4><p>\(r+s=6\) and \(rs=4\). \(r^2+s^2=(r+s)^2-2rs=36-8=28\).</p></section></div></article><article class="q" id="p9"><header><span class="num">9</span><div><div class="lab">Rational equations</div><div class="dom">Multiple choice</div></div>
+    <span class="like">Same type as Math M2 Q14</span></header>
+    <div class="stem">\[\frac{2x}{x-2}-\frac{4}{x-2}=2\] How many solutions does the equation above have?</div><div class="choices"><button class="choice" data-q="p9" data-c="A"><span class="L">A</span><span>Zero</span></button><button class="choice" data-q="p9" data-c="B"><span class="L">B</span><span>Exactly one</span></button><button class="choice" data-q="p9" data-c="C"><span class="L">C</span><span>Exactly two</span></button><button class="choice" data-q="p9" data-c="D"><span class="L">D</span><span>Infinitely many</span></button></div>
+    <div class="row"><button class="btn" data-check="p9">Check</button><button class="btn ghost" data-show="p9">Show solution</button><span class="fb" id="fb-p9"></span></div>
+    <div class="solbox" id="sol-p9"><section class="tip"><h4>Solution · D</h4><p>Combine: \(\frac{2x-4}{x-2}=\frac{2(x-2)}{x-2}=2\) for every \(x\neq2\). The equation is true for every allowed value of \(x\), so there are <b>infinitely many</b> solutions. Only \(x=2\) is excluded. Compare with M2 Q14 on the test, where the left side simplified to 1 and the answer was zero.</p></section></div></article><article class="q" id="p10"><header><span class="num">10</span><div><div class="lab">Complementary angles</div><div class="dom">Multiple choice</div></div>
+    <span class="like">Same type as Math M2 Q15</span></header>
+    <div class="stem">In a right triangle, the measures of the two acute angles are \((2x+14)^\circ\) and \((3x-4)^\circ\). What is the value of \(x\)?</div><div class="choices"><button class="choice" data-q="p10" data-c="A"><span class="L">A</span><span>\(15.2\)</span></button><button class="choice" data-q="p10" data-c="B"><span class="L">B</span><span>\(16\)</span></button><button class="choice" data-q="p10" data-c="C"><span class="L">C</span><span>\(18.8\)</span></button><button class="choice" data-q="p10" data-c="D"><span class="L">D</span><span>\(20\)</span></button></div>
+    <div class="row"><button class="btn" data-check="p10">Check</button><button class="btn ghost" data-show="p10">Show solution</button><span class="fb" id="fb-p10"></span></div>
+    <div class="solbox" id="sol-p10"><section class="tip"><h4>Solution · B</h4><p>\((2x+14)+(3x-4)=90\), so \(5x+10=90\) and \(x=16\). Check: \(46^\circ+44^\circ=90^\circ\) ✓. (15.2 and 18.8 come from dropping one of the constants.)</p></section></div></article><article class="q" id="p11"><header><span class="num">11</span><div><div class="lab">Quadratic vertex</div><div class="dom">Multiple choice</div></div>
+    <span class="like">Same type as Math M2 Q17</span></header>
+    <div class="stem">The vertex of the graph of \(y=x^2+bx+20\), where \(b\) is a positive constant, lies on the line \(y=-5\). What is the value of \(b\)?</div><div class="choices"><button class="choice" data-q="p11" data-c="A"><span class="L">A</span><span>\(100\)</span></button><button class="choice" data-q="p11" data-c="B"><span class="L">B</span><span>\(25\)</span></button><button class="choice" data-q="p11" data-c="C"><span class="L">C</span><span>\(10\)</span></button><button class="choice" data-q="p11" data-c="D"><span class="L">D</span><span>\(5\)</span></button></div>
+    <div class="row"><button class="btn" data-check="p11">Check</button><button class="btn ghost" data-show="p11">Show solution</button><span class="fb" id="fb-p11"></span></div>
+    <div class="solbox" id="sol-p11"><section class="tip"><h4>Solution · C</h4><p>The vertex's \(y\)-value is \(20-\frac{b^2}{4}=-5\), so \(\frac{b^2}{4}=25\), \(b^2=100\), and \(b=10\). (100 is \(b^2\), the trap.)</p></section></div></article><article class="q" id="p12"><header><span class="num">12</span><div><div class="lab">Function transformations</div><div class="dom">Multiple choice</div></div>
+    <span class="like">Same type as Math M2 Q19</span></header>
+    <div class="stem">The function \(f\) is defined by \(f(x)=(x+2)(x-4)\). The function \(g\) is defined by \(g(x)=f(x-k)\), where \(k\) is a constant and \(0<k<6\). If the graph of \(y=g(x)\) has an \(x\)-intercept at \(x=5\), what is the \(x\)-coordinate of the other \(x\)-intercept?</div><div class="choices"><button class="choice" data-q="p12" data-c="A"><span class="L">A</span><span>\(11\)</span></button><button class="choice" data-q="p12" data-c="B"><span class="L">B</span><span>\(1\)</span></button><button class="choice" data-q="p12" data-c="C"><span class="L">C</span><span>\(-1\)</span></button><button class="choice" data-q="p12" data-c="D"><span class="L">D</span><span>\(3\)</span></button></div>
+    <div class="row"><button class="btn" data-check="p12">Check</button><button class="btn ghost" data-show="p12">Show solution</button><span class="fb" id="fb-p12"></span></div>
+    <div class="solbox" id="sol-p12"><section class="tip"><h4>Solution · C</h4><p>\(g\) has zeros \(-2+k\) and \(4+k\). If \(-2+k=5\), then \(k=7\): not allowed, since \(k<6\). So \(4+k=5\) and \(k=1\); the other zero is \(-2+1=-1\). (11 comes from using \(k=7\).)</p></section></div></article><article class="q" id="p13"><header><span class="num">13</span><div><div class="lab">Volume</div><div class="dom">Multiple choice</div></div>
+    <span class="like">Same type as Math M2 Q20</span></header>
+    <div class="stem">The radius of a right circular cone is increased by 10%, and its height is decreased by 10%. How does the volume of the new cone compare with the volume of the original cone?</div><div class="choices"><button class="choice" data-q="p13" data-c="A"><span class="L">A</span><span>It is the same.</span></button><button class="choice" data-q="p13" data-c="B"><span class="L">B</span><span>It is 1% less.</span></button><button class="choice" data-q="p13" data-c="C"><span class="L">C</span><span>It is 1% greater.</span></button><button class="choice" data-q="p13" data-c="D"><span class="L">D</span><span>It is 8.9% greater.</span></button></div>
+    <div class="row"><button class="btn" data-check="p13">Check</button><button class="btn ghost" data-show="p13">Show solution</button><span class="fb" id="fb-p13"></span></div>
+    <div class="solbox" id="sol-p13"><section class="tip"><h4>Solution · D</h4><p>\(V=\frac13\pi r^2h\). New volume factor: \(1.1^2\times0.9=1.21\times0.9=1.089\), which is 8.9% greater. (“1% less” comes from \(1.1\times0.9\), forgetting to square the radius.)</p></section></div></article><article class="q" id="p14"><header><span class="num">14</span><div><div class="lab">Polynomial roots</div><div class="dom">Fill-in</div></div>
+    <span class="like">Same type as Math M2 Q21</span></header>
+    <div class="stem">\[p(x)=3x^3-4x^2-5x+2\] The value of \(p(2)\) is 0. What is the sum of the other two solutions to \(p(x)=0\)? (Enter a fraction or a decimal.)</div><div class="row"><input class="spr-in" id="in-p14" inputmode="decimal" autocomplete="off" placeholder="Your answer" aria-label="Your answer"></div>
+    <div class="row"><button class="btn" data-check="p14">Check</button><button class="btn ghost" data-show="p14">Show solution</button><span class="fb" id="fb-p14"></span></div>
+    <div class="solbox" id="sol-p14"><section class="tip"><h4>Solution · −2/3</h4><p>The sum of all three roots is \(-\frac ba=\frac43\). The other two add to \(\frac43-2=-\frac23\). Check: \(p(x)=(x-2)(3x-1)(x+1)\), with roots \(\frac13\) and \(-1\).</p></section></div></article><article class="q" id="p15"><header><span class="num">15</span><div><div class="lab">Infinitely many solutions</div><div class="dom">Multiple choice</div></div>
+    <span class="like">Same type as Math M2 Q22</span></header>
+    <div class="stem">\[ax+by=9\]\[3x+6y=27\] In the system of equations above, \(a\) and \(b\) are constants. If the system has infinitely many solutions, what is the value of \(a+b\)?</div><div class="choices"><button class="choice" data-q="p15" data-c="A"><span class="L">A</span><span>\(9\)</span></button><button class="choice" data-q="p15" data-c="B"><span class="L">B</span><span>\(\dfrac13\)</span></button><button class="choice" data-q="p15" data-c="C"><span class="L">C</span><span>\(3\)</span></button><button class="choice" data-q="p15" data-c="D"><span class="L">D</span><span>\(27\)</span></button></div>
+    <div class="row"><button class="btn" data-check="p15">Check</button><button class="btn ghost" data-show="p15">Show solution</button><span class="fb" id="fb-p15"></span></div>
+    <div class="solbox" id="sol-p15"><section class="tip"><h4>Solution · C</h4><p>\(\frac{9}{27}=\frac13\), so the first equation is the second times \(\frac13\): \(a=1\) and \(b=2\). Then \(a+b=3\). (9 comes from copying \(3+6\) without scaling.)</p></section></div></article>
+</div>
+<script>
+const KEY = {"p1":{"t":"mcq","a":"C"},"p2":{"t":"mcq","a":"B"},"p3":{"t":"mcq","a":"D"},"p4":{"t":"mcq","a":"A"},"p5":{"t":"mcq","a":"C"},"p6":{"t":"spr","a":[0.4838709677419355],"tol":0.0006},"p7":{"t":"mcq","a":"D"},"p8":{"t":"spr","a":[28],"tol":0.0005},"p9":{"t":"mcq","a":"D"},"p10":{"t":"mcq","a":"B"},"p11":{"t":"mcq","a":"C"},"p12":{"t":"mcq","a":"C"},"p13":{"t":"mcq","a":"D"},"p14":{"t":"spr","a":[-0.6666666666666666],"tol":0.0015},"p15":{"t":"mcq","a":"C"}};
+const pick = {}, solved = {};
+const $ = (id) => document.getElementById(id);
+function num(s) {
+  s = String(s).trim().replace(/\s+/g, "").replace("−", "-");
+  if (/^-?(\d+\.?\d*|\.\d+)\/-?(\d+\.?\d*|\.\d+)$/.test(s)) { const [a, b] = s.split("/").map(Number); return b ? a / b : NaN; }
+  return /^-?(\d+\.?\d*|\.\d+)$/.test(s) ? Number(s) : NaN;
+}
+function fb(id, msg, ok) { const f = $("fb-" + id); f.textContent = msg; f.className = "fb " + (ok ? "ok" : "bad"); }
+function update() { const n = Object.keys(solved).length; $("score").textContent = n + " / 15 correct"; $("bar").style.width = (n / 15 * 100) + "%"; }
+document.querySelectorAll("[data-c]").forEach(b => b.onclick = () => {
+  const id = b.dataset.q; if (solved[id]) return; pick[id] = b.dataset.c;
+  document.querySelectorAll('[data-q="' + id + '"]').forEach(x => { x.classList.toggle("sel", x === b); x.classList.remove("bad"); });
+});
+document.querySelectorAll(".spr-in").forEach(inp => inp.addEventListener("keydown", e => { if (e.key === "Enter") document.querySelector('[data-check="' + inp.id.slice(3) + '"]').click(); }));
+document.querySelectorAll("[data-check]").forEach(b => b.onclick = () => {
+  const id = b.dataset.check, k = KEY[id]; if (solved[id]) return;
+  let ok;
+  if (k.t === "mcq") {
+    if (!pick[id]) { fb(id, "Choose an answer first.", false); return; }
+    ok = pick[id] === k.a;
+    if (!ok) document.querySelector('[data-q="' + id + '"][data-c="' + pick[id] + '"]').classList.add("bad");
+  } else {
+    const v = num($("in-" + id).value);
+    if (isNaN(v)) { fb(id, "Enter a number or a fraction, like 3/4.", false); return; }
+    ok = k.a.some(a => Math.abs(a - v) <= k.tol);
+  }
+  if (ok) {
+    solved[id] = true; fb(id, "✓ Correct!", true); $("sol-" + id).classList.add("on");
+    if (k.t === "mcq") document.querySelectorAll('[data-q="' + id + '"]').forEach(x => { x.disabled = true; x.classList.remove("sel"); x.classList.toggle("ok", x.dataset.c === k.a); });
+    else $("in-" + id).disabled = true;
+    update();
+  } else fb(id, "✗ Not yet. Try again, or open the solution.", false);
+});
+document.querySelectorAll("[data-show]").forEach(b => b.onclick = () => $("sol-" + b.dataset.show).classList.toggle("on"));
+</script></body></html>
