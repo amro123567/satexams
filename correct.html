@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Hrag – Math Mistakes Review</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}],throwOnError:false})"></script>
+<style>
+:root{--sky:#87CEEB;--sky-light:#eaf6fc;--sky-dark:#2f8fc4;--deep:#174f70;--ink:#1b2730;--muted:#5d6b75;--line:#d6e2e9;
+--green:#1e8e3e;--green-bg:#e7f5ec;--red:#c5221f;--red-bg:#fdecea;--bg:#f5fafd;--card:#fff}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--sky-light:#15303e;--deep:#9fd6f2;--ink:#e5eef3;--muted:#93a4b0;--line:#26343f;--green:#5cc982;--green-bg:#16301f;--red:#ff8a80;--red-bg:#3a1c1b;--bg:#0f171d;--card:#152129}}
+:root[data-theme="dark"]{--sky-light:#15303e;--deep:#9fd6f2;--ink:#e5eef3;--muted:#93a4b0;--line:#26343f;--green:#5cc982;--green-bg:#16301f;--red:#ff8a80;--red-bg:#3a1c1b;--bg:#0f171d;--card:#152129}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 "Segoe UI",Roboto,Arial,sans-serif}
+.wrap{max-width:860px;margin:0 auto;padding:28px 16px 60px}
+.hero{background:var(--deep);color:#fff;border-radius:14px;padding:20px 22px;margin-bottom:18px}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .hero{background:#174f70}}
+.hero .eyebrow{font-size:12px;letter-spacing:.1em;text-transform:uppercase;opacity:.85}
+.hero h1{margin:4px 0 6px;font-size:26px;line-height:1.2}
+.hero p{margin:0;opacity:.92}
+.summary{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 20px}
+.summary a{text-decoration:none;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:999px;padding:4px 12px;font-size:13.5px;font-weight:600}
+.summary a:hover{border-color:var(--sky-dark)}
+.q{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-bottom:16px;scroll-margin-top:12px}
+.q header{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.num{width:34px;height:34px;border-radius:50%;background:var(--sky-dark);color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center;flex:none}
+.lab{font-weight:700}
+.dom{font-size:13px;color:var(--muted)}
+.score{margin-left:auto;font-size:14px;color:var(--muted)}
+.r{color:var(--red)} .g{color:var(--green)}
+.stem{margin-bottom:12px;overflow-x:auto}
+.choices{display:grid;gap:8px;margin-bottom:14px}
+.choice{display:flex;align-items:center;gap:12px;border:1.5px solid var(--line);border-radius:10px;padding:9px 12px}
+.choice .L{width:26px;height:26px;border-radius:50%;border:1.5px solid var(--muted);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex:none}
+.choice.ok{border-color:var(--green);background:var(--green-bg)} .choice.ok .L{background:var(--green);border-color:var(--green);color:#fff}
+.choice.bad{border-color:var(--red);background:var(--red-bg)} .choice.bad .L{background:var(--red);border-color:var(--red);color:#fff}
+.tag{margin-left:auto;font-size:12px;font-weight:700;white-space:nowrap}
+.tag.ok{color:var(--green)} .tag.bad{color:var(--red)}
+.spr{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.box{border-radius:10px;padding:10px 14px}
+.box small{display:block;font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.box b{font-size:22px}
+.box.ok{background:var(--green-bg)} .box.ok small{color:var(--green)}
+.box.bad{background:var(--red-bg)} .box.bad small{color:var(--red)}
+section h4{margin:0 0 4px;font-size:12.5px;text-transform:uppercase;letter-spacing:.07em}
+section p{margin:0}
+.why{background:var(--red-bg);border-radius:10px;padding:10px 14px;margin-bottom:10px}
+.why h4{color:var(--red)}
+.sol{padding:2px 2px 6px}
+.sol h4{color:var(--muted)}
+.sol ol{margin:4px 0 0;padding-left:22px}
+.sol li{margin-bottom:4px}
+.tip{background:var(--sky-light);border-left:4px solid var(--sky-dark);border-radius:0 10px 10px 0;padding:10px 14px;margin-top:6px}
+.tip h4{color:var(--deep)}
+.rules{background:var(--card);border:2px solid var(--sky-dark);border-radius:14px;padding:16px 20px}
+.rules h2{margin:0 0 8px;font-size:19px;color:var(--deep)}
+.rules ol{margin:0;padding-left:22px}
+.rules li{margin-bottom:6px}
+@media (max-width:560px){.score{margin-left:0;width:100%}.spr{grid-template-columns:1fr}.hero h1{font-size:22px}}
+@media print{body{background:#fff}.q{break-inside:avoid}.summary{display:none}}
+</style></head><body><div class="wrap">
+<div class="hero"><div class="eyebrow">Amro Academy · Full SAT Practice Test · Math</div>
+<h1>Hrag – Math Mistakes Review</h1>
+<p>The 7 Math questions Hrag missed (37/44). For each one: the question, his answer in red, the correct answer in green, and how to solve it.</p></div>
+<nav class="summary"><a href="#q1">1. M1 Q12</a><a href="#q2">2. M1 Q16</a><a href="#q3">3. M2 Q1</a><a href="#q4">4. M2 Q16</a><a href="#q5">5. M2 Q17</a><a href="#q6">6. M2 Q19</a><a href="#q7">7. M2 Q20</a></nav>
+<article class="q" id="q1">
+  <header><span class="num">1</span><div><div class="lab">Math Module 1 · Question 12</div><div class="dom">Algebra · Linear inequalities</div></div>
+    <span class="score">His answer: <b class="r">C</b> · Correct: <b class="g">D</b></span></header>
+  <div class="stem">Which of the following values of \(x\) satisfies the inequality \(2x-5>9\)?</div>
+  <div class="choices"><div class="choice "><span class="L">A</span><span class="txt">\(5\)</span></div><div class="choice "><span class="L">B</span><span class="txt">\(6\)</span></div><div class="choice bad"><span class="L">C</span><span class="txt">\(7\)</span><span class="tag bad">His answer</span></div><div class="choice ok"><span class="L">D</span><span class="txt">\(8\)</span><span class="tag ok">Correct answer</span></div></div>
+  <section class="why"><h4>Why his answer is wrong</h4><p>He solved the inequality correctly and got \(x>7\), then chose 7. With a strict inequality (\(>\)), the boundary number is <b>not</b> included: at \(x=7\), \(2(7)-5=9\), and \(9>9\) is false.</p></section>
+  <section class="sol"><h4>Step-by-step solution</h4><ol><li>Add 5 to both sides: \(2x>14\).</li><li>Divide by 2: \(x>7\).</li><li>The only choice greater than 7 is <b>8</b>.</li></ol></section>
+  <section class="tip"><h4>Remember</h4><p>With \(>\) or \(<\), always test the boundary value. If both sides come out equal, it's wrong.</p></section>
+</article>
+<article class="q" id="q2">
+  <header><span class="num">2</span><div><div class="lab">Math Module 1 · Question 16</div><div class="dom">Advanced Math · Radical equations</div></div>
+    <span class="score">His answer: <b class="r">4</b> · Correct: <b class="g">9</b></span></header>
+  <div class="stem">\[\sqrt{x+7}=x-5\] What is the solution to the equation above?</div>
+  <div class="spr"><div class="box bad"><small>His answer</small><b>4</b></div><div class="box ok"><small>Correct answer</small><b>9</b></div></div>
+  <section class="why"><h4>Why his answer is wrong</h4><p>4 does not satisfy the equation: \(\sqrt{11}\approx3.3\) on the left and \(-1\) on the right. The most common slip here is squaring \((x-5)\) incorrectly, and plugging the answer back in would have caught it.</p></section>
+  <section class="sol"><h4>Step-by-step solution</h4><ol><li>Square both sides: \(x+7=(x-5)^2=x^2-10x+25\).</li><li>Rearrange: \(x^2-11x+18=0\), so \((x-9)(x-2)=0\).</li><li>Check \(x=9\): \(\sqrt{16}=4\) and \(9-5=4\) ✓.</li><li>Check \(x=2\): \(\sqrt9=3\) but \(2-5=-3\) ✗. This is an extraneous solution.</li><li>The answer is <b>9</b>.</li></ol></section>
+  <section class="tip"><h4>Remember</h4><p>A square root is never negative, so \(x-5\ge0\), which means \(x\ge5\). Always check every solution of a radical equation in the original equation.</p></section>
+</article>
+<article class="q" id="q3">
+  <header><span class="num">3</span><div><div class="lab">Math Module 2 · Question 1</div><div class="dom">Algebra · Linear equations in one variable</div></div>
+    <span class="score">His answer: <b class="r">C</b> · Correct: <b class="g">B</b></span></header>
+  <div class="stem">\[3(x-4)=2(x+1)\] What value of \(x\) is the solution to the equation above?</div>
+  <div class="choices"><div class="choice "><span class="L">A</span><span class="txt">\(10\)</span></div><div class="choice ok"><span class="L">B</span><span class="txt">\(14\)</span><span class="tag ok">Correct answer</span></div><div class="choice bad"><span class="L">C</span><span class="txt">\(13\)</span><span class="tag bad">His answer</span></div><div class="choice "><span class="L">D</span><span class="txt">\(2\)</span></div></div>
+  <section class="why"><h4>Why his answer is wrong</h4><p>13 is exactly what you get from \(3x-12=2x+1\): the 2 was multiplied by \(x\) but not by the 1.</p></section>
+  <section class="sol"><h4>Step-by-step solution</h4><ol><li>Distribute both sides: \(3x-12=2x+2\).</li><li>Subtract \(2x\) and add 12: \(x=14\).</li><li>Check: \(3(14-4)=30\) and \(2(14+1)=30\) ✓.</li></ol></section>
+  <section class="tip"><h4>Remember</h4><p>The number outside the parentheses multiplies <b>every</b> term inside. Then plug the answer back in (about 10 seconds): \(13\) gives \(27\neq28\).</p></section>
+</article>
+<article class="q" id="q4">
+  <header><span class="num">4</span><div><div class="lab">Math Module 2 · Question 16</div><div class="dom">Geometry and Trigonometry · Arc length</div></div>
+    <span class="score">His answer: <b class="r">C</b> · Correct: <b class="g">A</b></span></header>
+  <div class="stem">A circle has a circumference of \(36\pi\) centimeters. What is the length, in centimeters, of an arc of the circle with a central angle of \(40^\circ\)?</div>
+  <div class="choices"><div class="choice ok"><span class="L">A</span><span class="txt">\(4\pi\)</span><span class="tag ok">Correct answer</span></div><div class="choice "><span class="L">B</span><span class="txt">\(2\pi\)</span></div><div class="choice bad"><span class="L">C</span><span class="txt">\(8\pi\)</span><span class="tag bad">His answer</span></div><div class="choice "><span class="L">D</span><span class="txt">\(9\pi\)</span></div></div>
+  <section class="why"><h4>Why his answer is wrong</h4><p>\(8\pi\) is double the answer: it comes from using 36 as the radius. From \(2\pi r=36\pi\), the radius is 18, and 36 is the diameter.</p></section>
+  <section class="sol"><h4>Step-by-step solution</h4><ol><li>An arc is a fraction of the circumference: \(\dfrac{40^\circ}{360^\circ}=\dfrac19\).</li><li>Arc length \(=\dfrac19\times36\pi=4\pi\).</li><li>Radian check: \(40^\circ=\dfrac{2\pi}{9}\), and \(s=r\theta=18\cdot\dfrac{2\pi}{9}=4\pi\) ✓.</li></ol></section>
+  <section class="tip"><h4>Remember</h4><p>When the circumference is given, you don't need the radius: arc \(=\dfrac{\theta}{360^\circ}\times\) circumference.</p></section>
+</article>
+<article class="q" id="q5">
+  <header><span class="num">5</span><div><div class="lab">Math Module 2 · Question 17</div><div class="dom">Advanced Math · Function notation</div></div>
+    <span class="score">His answer: <b class="r">4</b> · Correct: <b class="g">1</b></span></header>
+  <div class="stem">The function \(f\) is defined by \(f(x)=x^2-4x\). For what value of \(a\) is \(f(a)=f(a+2)\)?</div>
+  <div class="spr"><div class="box bad"><small>His answer</small><b>4</b></div><div class="box ok"><small>Correct answer</small><b>1</b></div></div>
+  <section class="why"><h4>Why his answer is wrong</h4><p>4 is a zero of \(f\) (\(f(4)=0\)), but \(f(6)=12\), so \(f(4)\neq f(6)\).</p></section>
+  <section class="sol"><h4>Step-by-step solution</h4><ol><li>Algebra: \(a^2-4a=(a+2)^2-4(a+2)=a^2-4\).</li><li>So \(-4a=-4\) and \(a=1\).</li><li>Check: \(f(1)=-3\) and \(f(3)=-3\) ✓.</li></ol></section>
+  <section class="tip"><h4>Remember</h4><p>Symmetry shortcut: the parabola's axis is \(x=-\frac{b}{2a}=2\). Two inputs with equal outputs are equally far from the axis, so \(a\) and \(a+2\) are 1 and 3.</p></section>
+</article>
+<article class="q" id="q6">
+  <header><span class="num">6</span><div><div class="lab">Math Module 2 · Question 19</div><div class="dom">Advanced Math · Equivalent forms of quadratics</div></div>
+    <span class="score">His answer: <b class="r">A</b> · Correct: <b class="g">B</b></span></header>
+  <div class="stem">The function \(f\) is defined by \(f(x)=x^2-8x+7\). Which of the following equivalent forms of \(f(x)\) displays the minimum value of \(f\) as a constant or coefficient?</div>
+  <div class="choices"><div class="choice bad"><span class="L">A</span><span class="txt">\((x-1)(x-7)\)</span><span class="tag bad">His answer</span></div><div class="choice ok"><span class="L">B</span><span class="txt">\((x-4)^2-9\)</span><span class="tag ok">Correct answer</span></div><div class="choice "><span class="L">C</span><span class="txt">\((x+4)^2-9\)</span></div><div class="choice "><span class="L">D</span><span class="txt">\(x(x-8)+7\)</span></div></div>
+  <section class="why"><h4>Why his answer is wrong</h4><p>Factored form shows the <b>zeros</b> (1 and 7), not the minimum. The minimum appears as \(k\) in vertex form \(a(x-h)^2+k\).</p></section>
+  <section class="sol"><h4>Step-by-step solution</h4><ol><li>Complete the square: half of \(-8\) is \(-4\), and \((-4)^2=16\).</li><li>\(x^2-8x+16-16+7=(x-4)^2-9\).</li><li>\((x-4)^2\ge0\), so the minimum value is \(-9\), at \(x=4\).</li><li>Choice C has the wrong sign: \((x+4)^2\) puts the vertex at \(x=-4\).</li></ol></section>
+  <section class="tip"><h4>Remember</h4><p>Standard form shows the \(y\)-intercept, factored form shows the zeros, and vertex form shows the minimum or maximum.</p></section>
+</article>
+<article class="q" id="q7">
+  <header><span class="num">7</span><div><div class="lab">Math Module 2 · Question 20</div><div class="dom">Geometry and Trigonometry · Similar triangles — area</div></div>
+    <span class="score">His answer: <b class="r">A</b> · Correct: <b class="g">D</b></span></header>
+  <div class="stem">Triangle \(ABC\) is similar to triangle \(DEF\), where \(\overline{AB}\) corresponds to \(\overline{DE}\). If \(AB=6\), \(DE=15\), and the area of triangle \(ABC\) is 20, what is the area of triangle \(DEF\)?</div>
+  <div class="choices"><div class="choice bad"><span class="L">A</span><span class="txt">\(50\)</span><span class="tag bad">His answer</span></div><div class="choice "><span class="L">B</span><span class="txt">\(75\)</span></div><div class="choice "><span class="L">C</span><span class="txt">\(300\)</span></div><div class="choice ok"><span class="L">D</span><span class="txt">\(125\)</span><span class="tag ok">Correct answer</span></div></div>
+  <section class="why"><h4>Why his answer is wrong</h4><p>\(50=20\times2.5\): the length ratio was applied to the area. Areas scale by the <b>square</b> of the length ratio.</p></section>
+  <section class="sol"><h4>Step-by-step solution</h4><ol><li>Scale factor: \(k=\dfrac{15}{6}=2.5\).</li><li>Area ratio: \(k^2=6.25\).</li><li>Area of \(DEF=20\times6.25=125\).</li></ol></section>
+  <section class="tip"><h4>Remember</h4><p>Lengths scale by \(k\), areas by \(k^2\), and volumes by \(k^3\).</p></section>
+</article>
+<div class="rules"><h2>Four rules to remember</h2><ol>
+<li><b>Plug it back in.</b> Check every answer in the original question (about 10 seconds). This would have saved 4 of these 7 points.</li>
+<li><b>Lengths × k, areas × k², volumes × k³.</b> Find the radius before using a formula that needs it.</li>
+<li><b>Vertex form shows the minimum or maximum; factored form shows the zeros.</b> Equal outputs mean the inputs are mirror images around the axis.</li>
+<li><b>Check radical solutions.</b> A square root can never equal a negative number.</li></ol></div>
+</div></body></html>
