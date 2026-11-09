@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Murex Technical Analyst Assessment 2026 — Practice Exam</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f3f5f8; --panel:#fff; --ink:#0e141e; --ink2:#39424e; --muted:#738f93; --line:#e3e7ed;
+  --top:#0e141e; --top2:#1d2633; --green:#1ba94c; --green-d:#13893c; --blue:#2e6fd8;
+  --red:#d6363c; --amber:#e6a100; --code:#f7f9fb; --sel:#e8f6ee;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;background:var(--bg);color:var(--ink);font-size:15px;line-height:1.5}
+code,pre,textarea.code{font-family:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace}
+code{background:#eef1f5;padding:1px 5px;border-radius:4px;font-size:.88em}
+pre{background:var(--code);border:1px solid var(--line);border-radius:6px;padding:12px 14px;overflow:auto;font-size:13px;line-height:1.55;margin:10px 0}
+pre code{background:none;padding:0}
+.muted{color:var(--muted)} .small{font-size:12.5px}
+button{font:inherit;cursor:pointer;border:0;border-radius:6px}
+.btn{padding:9px 18px;font-weight:600;font-size:14px}
+.btn-g{background:var(--green);color:#fff}.btn-g:hover{background:var(--green-d)}
+.btn-o{background:#fff;color:var(--ink2);border:1px solid #c9d1db}.btn-o:hover{border-color:var(--ink2)}
+.btn-d{background:var(--top2);color:#fff}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.hidden{display:none!important}
+
+/* ---------- home ---------- */
+#home{min-height:100%;display:flex;flex-direction:column}
+.hero{background:var(--top);color:#fff;padding:22px 32px;display:flex;align-items:center;gap:12px}
+.logo{width:30px;height:30px;border-radius:6px;background:var(--green);display:grid;place-items:center;font-weight:700;font-size:15px}
+.hero h1{font-size:17px;margin:0;font-weight:600}
+.hero .sub{color:#9aa7b4;font-size:13px}
+.home-body{max-width:980px;margin:0 auto;padding:30px 24px 50px;width:100%}
+.home-body h2{font-size:22px;margin:0 0 4px}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:22px 0}
+.card{background:#fff;border:2px solid var(--line);border-radius:10px;padding:18px 20px;cursor:pointer;transition:.15s}
+.card:hover{border-color:#b9c3cf}
+.card.on{border-color:var(--green);box-shadow:0 0 0 3px #1ba94c22}
+.card h3{margin:0 0 6px;font-size:16px}
+.card .meta{font-size:13px;color:var(--ink2)}
+.tag{display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:20px;background:#eef1f5;color:var(--ink2);margin-right:6px}
+.tag.g{background:var(--sel);color:var(--green-d)}
+.modes{display:flex;gap:10px;margin:8px 0 22px;flex-wrap:wrap}
+.mode{flex:1;min-width:240px;background:#fff;border:2px solid var(--line);border-radius:10px;padding:14px 16px;cursor:pointer}
+.mode.on{border-color:var(--green)}
+.mode b{display:block;margin-bottom:2px}
+.mode span{font-size:13px;color:var(--ink2)}
+.rules{background:#fff;border:1px solid var(--line);border-radius:10px;padding:16px 20px;font-size:14px;color:var(--ink2)}
+.rules ul{margin:6px 0 0;padding-left:20px}
+.secs{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+
+/* ---------- test ---------- */
+#test{height:100%;display:flex;flex-direction:column}
+.bar{background:var(--top);color:#fff;height:56px;display:flex;align-items:center;padding:0 18px;gap:14px;flex-shrink:0}
+.bar .ttl{font-weight:600;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar .sec{color:#9aa7b4;font-size:13px;white-space:nowrap}
+.bar .sp{flex:1}
+.timer{font-family:"JetBrains Mono",monospace;font-size:15px;background:var(--top2);padding:6px 12px;border-radius:6px;min-width:96px;text-align:center}
+.timer.warn{background:#5a1d1f;color:#ffb3b5}
+.main{flex:1;display:flex;min-height:0}
+.side{width:260px;background:#fff;border-right:1px solid var(--line);overflow:auto;flex-shrink:0}
+.side h4{margin:0;padding:14px 16px 6px;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);display:flex;justify-content:space-between;align-items:center}
+.side h4 .lock{font-size:10px;font-weight:600;color:var(--muted);text-transform:none;letter-spacing:0}
+.qn{display:flex;align-items:center;gap:10px;padding:7px 16px;font-size:13px;cursor:pointer;color:var(--ink2);border-left:3px solid transparent}
+.qn:hover{background:#f6f8fa}
+.qn.cur{background:#eef6f1;border-left-color:var(--green);color:var(--ink);font-weight:600}
+.qn.dis{opacity:.4;cursor:not-allowed}
+.qn .dot{width:9px;height:9px;border-radius:50%;border:2px solid #b8c2cc;flex-shrink:0}
+.qn .dot.a{background:var(--green);border-color:var(--green)}
+.qn .dot.ok{background:var(--green);border-color:var(--green)}
+.qn .dot.bad{background:var(--red);border-color:var(--red)}
+.qn .t{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.content{flex:1;overflow:auto;padding:26px 34px 120px}
+.qwrap{max-width:860px}
+.qhead{display:flex;align-items:center;gap:10px;margin-bottom:4px;flex-wrap:wrap}
+.qnum{font-size:12px;font-weight:600;color:var(--muted)}
+.qtype{font-size:11px;font-weight:600;padding:2px 8px;border-radius:20px;background:#eef1f5;color:var(--ink2)}
+.qtitle{font-size:20px;font-weight:600;margin:2px 0 12px}
+.qtext{color:var(--ink2)} .qtext h4{margin:14px 0 4px;font-size:13px;color:var(--ink)}
+.tbl{overflow:auto;margin:6px 0}
+.tbl table{border-collapse:collapse;font-size:13px}
+.tbl th,.tbl td{border:1px solid var(--line);padding:4px 12px;text-align:left}
+.tbl th{background:#f3f5f8;font-weight:600}
+.opts{margin-top:16px;display:flex;flex-direction:column;gap:8px}
+.opt{display:flex;gap:12px;align-items:flex-start;background:#fff;border:1px solid var(--line);border-radius:8px;padding:11px 14px;cursor:pointer}
+.opt:hover{border-color:#b9c3cf}
+.opt.on{border-color:var(--green);background:var(--sel)}
+.opt.ok{border-color:var(--green);background:#e3f6ea}
+.opt.bad{border-color:var(--red);background:#fdeced}
+.opt .box{width:18px;height:18px;border:2px solid #9aa7b4;flex-shrink:0;margin-top:2px;display:grid;place-items:center}
+.opt .box.r{border-radius:50%}.opt .box.c{border-radius:4px}
+.opt.on .box{border-color:var(--green)}
+.opt.on .box.r::after{content:"";width:8px;height:8px;border-radius:50%;background:var(--green)}
+.opt.on .box.c{background:var(--green)}
+.opt.on .box.c::after{content:"✓";color:#fff;font-size:12px;font-weight:700;line-height:1}
+.locked .opt{cursor:default}
+input.short{font:inherit;font-family:"JetBrains Mono",monospace;padding:10px 12px;border:1px solid #c9d1db;border-radius:6px;width:100%;max-width:420px;margin-top:14px}
+.editor{margin-top:16px;border:1px solid #c9d1db;border-radius:8px;overflow:hidden;background:#fff}
+.edbar{display:flex;align-items:center;gap:10px;background:#f3f5f8;border-bottom:1px solid var(--line);padding:6px 10px;font-size:12px;color:var(--ink2)}
+.edbar .sp{flex:1}
+textarea.code{width:100%;min-height:230px;border:0;padding:12px 14px;font-size:13px;line-height:1.55;resize:vertical;outline:none;tab-size:2;color:var(--ink);background:#fff}
+textarea.free{font-family:Inter,system-ui,sans-serif;font-size:14px}
+.out{background:#0e141e;color:#d7e0ea;font-family:"JetBrains Mono",monospace;font-size:12.5px;padding:10px 14px;white-space:pre-wrap;max-height:220px;overflow:auto;border-top:1px solid #000}
+.out .e{color:#ff9a9e}
+.fb{margin-top:16px;border-radius:8px;padding:14px 16px;font-size:14px;color:var(--ink2);background:#fff;border:1px solid var(--line);border-left:4px solid var(--blue)}
+.fb.ok{border-left-color:var(--green)} .fb.bad{border-left-color:var(--red)}
+.fb b.v{display:block;margin-bottom:4px;color:var(--ink)}
+.fb ul,.fb ol{margin:6px 0;padding-left:20px}
+.foot{position:fixed;bottom:0;left:260px;right:0;background:#fff;border-top:1px solid var(--line);padding:12px 34px;display:flex;gap:10px;align-items:center}
+.foot .sp{flex:1}
+
+/* ---------- modal ---------- */
+.modal{position:fixed;inset:0;background:#0e141e99;display:grid;place-items:center;z-index:50;padding:20px}
+.dlg{background:#fff;border-radius:10px;max-width:440px;width:100%;padding:22px 24px}
+.dlg h3{margin:0 0 8px;font-size:17px}
+.dlg p{margin:0 0 18px;color:var(--ink2);font-size:14px}
+.dlg .row{display:flex;gap:10px;justify-content:flex-end}
+
+/* ---------- results ---------- */
+#results{min-height:100%}
+.res{max-width:980px;margin:0 auto;padding:28px 24px 60px}
+.score{display:flex;gap:24px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:10px;padding:20px 24px;flex-wrap:wrap}
+.big{font-size:44px;font-weight:700;line-height:1}
+.secbars{flex:1;min-width:280px;display:flex;flex-direction:column;gap:8px}
+.sb{display:grid;grid-template-columns:200px 1fr 70px;gap:10px;align-items:center;font-size:13px}
+.sb .track{height:8px;background:#eef1f5;border-radius:5px;overflow:hidden}
+.sb .fill{height:100%;background:var(--green)}
+.filters{display:flex;gap:8px;margin:22px 0 12px;flex-wrap:wrap}
+.chip{padding:6px 12px;border-radius:20px;background:#fff;border:1px solid var(--line);font-size:13px;cursor:pointer}
+.chip.on{background:var(--top);color:#fff;border-color:var(--top)}
+.ritem{background:#fff;border:1px solid var(--line);border-radius:10px;padding:16px 20px;margin-bottom:12px}
+.ritem .rh{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.badge{font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px}
+.badge.ok{background:#e3f6ea;color:var(--green-d)} .badge.bad{background:#fdeced;color:var(--red)} .badge.self{background:#fff5d6;color:#8a6200}
+.ritem .yours{font-size:13px;color:var(--ink2);margin-top:8px}
+.selfmark{margin-top:10px;display:flex;gap:8px;align-items:center;font-size:13px}
+
+@media (max-width:820px){
+  .cards{grid-template-columns:1fr}
+  .side{display:none}
+  .foot{left:0;padding:10px 16px}
+  .content{padding:20px 16px 110px}
+  .sb{grid-template-columns:120px 1fr 56px}
+  .bar .sec{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- HOME -->
+<div id="home">
+  <div class="hero"><div class="logo">M</div><div><h1>Murex Technical Analyst Assessment 2026 — Practice</h1><div class="sub">Paper 2 · Technical Analyst · QA · 108 minutes</div></div></div>
+  <div class="home-body">
+    <h2>Choose a paper</h2>
+    <div class="muted">Version A rebuilds the shared 2026 Assessment paper question-for-question. Version B is a fresh paper in the same style and section order.</div>
+    <div class="cards" id="cards"></div>
+    <h2 style="font-size:17px">Mode</h2>
+    <div class="modes">
+      <div class="mode on" data-m="exam"><b>Exam mode</b><span>108-minute timer · sections lock once submitted · answers revealed at the end. Use this for dress rehearsals.</span></div>
+      <div class="mode" data-m="practice"><b>Practice mode</b><span>No timer · move freely · “Check” shows the answer and explanation right away.</span></div>
+    </div>
+    <div class="rules">
+      <b>Instructions (as in the real test)</b>
+      <ul>
+        <li>Select one answer where a question says <i>Pick ONE option</i>; select all applicable answers where it says <i>Pick ONE OR MORE options</i>.</li>
+        <li>You <b>cannot revisit a section</b> once you submit it — answer everything before moving on.</li>
+        <li>Coding questions accept any language. JavaScript can be run in the built-in console.</li>
+        <li>Open questions are self-marked on the results page against a model answer.</li>
+        <li>Real test: camera proctoring on, browser zoom 100%, extensions/sidebars closed.</li>
+      </ul>
+    </div>
+    <div style="margin-top:22px;display:flex;gap:12px;align-items:center">
+      <button class="btn btn-g" id="startBtn">Start test</button>
+      <span class="muted small" id="startInfo"></span>
+    </div>
+  </div>
+</div>
+
+<!-- TEST -->
+<div id="test" class="hidden">
+  <div class="bar">
+    <div class="logo">M</div>
+    <div class="ttl" id="barTitle"></div>
+    <div class="sec" id="barSec"></div>
+    <div class="sp"></div>
+    <div class="timer" id="timer">--:--</div>
+    <button class="btn btn-d" id="quitBtn">End test</button>
+  </div>
+  <div class="main">
+    <div class="side" id="side"></div>
+    <div class="content" id="content"><div class="qwrap" id="q"></div></div>
+  </div>
+  <div class="foot">
+    <button class="btn btn-o" id="prevBtn">← Previous</button>
+    <button class="btn btn-o" id="checkBtn">Check</button>
+    <div class="sp"></div>
+    <span class="muted small" id="footInfo"></span>
+    <button class="btn btn-o" id="nextBtn">Next →</button>
+    <button class="btn btn-g" id="submitSecBtn">Submit section</button>
+  </div>
+</div>
+
+<!-- RESULTS -->
+<div id="results" class="hidden">
+  <div class="hero"><div class="logo">M</div><div><h1 id="resTitle">Results</h1><div class="sub" id="resSub"></div></div><div style="flex:1"></div><button class="btn btn-g" id="homeBtn">Back to start</button></div>
+  <div class="res">
+    <div class="score"><div><div class="big" id="bigScore">0%</div><div class="muted small" id="scoreDetail"></div></div><div class="secbars" id="secbars"></div></div>
+    <div class="filters" id="filters"></div>
+    <div id="review"></div>
+  </div>
+</div>
+
+<div class="modal hidden" id="modal"><div class="dlg"><h3 id="mTitle"></h3><p id="mText"></p><div class="row"><button class="btn btn-o" id="mNo">Cancel</button><button class="btn btn-g" id="mYes">Confirm</button></div></div></div>
+
+<script>
+// ===== PAPER 2 — "Murex Technical Analyst Assessment 2026" — original questions =====
+const T = (h, rows) => '<div class="tbl"><table><thead><tr>' + h.map(x => '<th>' + x + '</th>').join('') + '</tr></thead><tbody>' +
+  rows.map(r => '<tr>' + r.map(c => '<td>' + c + '</td>').join('') + '</tr>').join('') + '</tbody></table></div>';
+
+const EXAM_A = {
+  key: 'A',
+  title: 'Version A — Original 2026 paper',
+  sections: [
+  { name: 'Software Testing', qs: [
+    { t:'open', title:'Testing Question 1C', text:'Name the four main levels of testing.',
+      model:'<ol><li><b>Unit</b> testing: individual components/functions in isolation (developers).</li><li><b>Integration</b> testing: interfaces and interaction between modules/services.</li><li><b>System</b> testing: the complete integrated system against the requirements.</li><li><b>Acceptance</b> testing (UAT): does it meet business/user needs (alpha/beta).</li></ol>Don’t confuse <i>levels</i> with <i>types</i> (regression, smoke, performance…).' },
+    { t:'open', title:'Testing Question 1D', text:'While testing a shopping cart application, you add an item to the cart and proceed to checkout. The application crashes during the checkout process. What information would you collect to help diagnose the issue?',
+      model:'<ul><li><b>Exact steps to reproduce</b>, and whether it happens every time.</li><li>Test data: item, quantity, price, user account, payment method, coupon, address.</li><li><b>Error message</b>, screenshot or screen recording, <b>timestamp</b>.</li><li><b>Application/server logs</b> and the <b>stack trace</b>.</li><li>Browser console and network tab (failed API call, HTTP status, response body).</li><li>Environment: build/version, browser, OS, device, test environment URL, configuration.</li><li>Expected vs actual result; does it happen in other environments; recent changes/deployments.</li></ul>' },
+    { t:'single', title:'Testing Question 2D', text:'Which of the following statements is the most valid goal for a test team?',
+      opts:['Determine whether enough confidence has been reached to allow release.','Cause as many failures as possible so faults can be found and fixed.','Prove that all faults are detected.','Prove that any remaining faults will not cause failures.'], ans:0,
+      exp:'ISTQB principle: testing can’t prove the absence of defects (C, D are impossible), and maximising failures (B) isn’t the goal by itself. Testing gives information to decide whether the product is <b>good enough to release</b>.' },
+    { t:'multi', title:'Testing Question 2F — Pick TWO', text:'Consider the following tests that check modifications of customers on a database. Which two steps would be the lowest priority if there were not enough time to execute all of them?',
+      opts:['Open the database and confirm existing customers.','Change a customer’s marital status from single to married.','Change a customer’s street name from Park Road to Pat Road.','Change a customer’s credit limit from 500 to 50.','Replace a customer’s first name with exactly the same first name.','Close the customer record and close the database.'], ans:[2,4],
+      exp:'Prioritise by <b>risk</b>. Opening and closing are needed for every other test. The credit limit (money) and marital status (business rules) are risky changes. A small street-name edit is low risk, and replacing a name with <i>the same</i> value changes nothing. Those two are the lowest priority.' },
+    { t:'single', title:'Testing Question 2U', text:'Which of the following skills are considered the most important skills that testers should have in agile methodologies?',
+      opts:['Having product knowledge, being a good team player, and critical thinking.','Creating a product vision, planning the work of the team, and critical thinking.','Being a good team player, creating a product vision, and having product knowledge.','Planning the work of the team, creating a product vision, and being a good team player.'], ans:0,
+      exp:'Product vision belongs to the <b>Product Owner</b> and planning is done by the self-organising team. A tester in agile needs domain/product knowledge, collaboration and critical thinking.' },
+    { t:'open', title:'Testing Question 3B', text:'You are a software tester testing a signup page for a social media application. Focus your tests on its username field, which accepts alphanumeric input (numbers and letters) and has a maximum length of 16 characters. Provide as many use cases as possible to validate that the field works well before release to the client.',
+      model:'<b>Valid (positive)</b><ul><li>Letters only (<code>mohamad</code>), digits only (<code>12345</code>), a mix (<code>amro2026</code>), upper/lower case.</li><li>Length 1 (minimum), 15, <b>16</b> (max boundary).</li></ul><b>Invalid (negative)</b><ul><li><b>17</b> characters (max+1). Also very long input (1000 chars): is it rejected or truncated?</li><li>Empty field, or spaces only.</li><li>Special characters <code>@ # _ - .</code>, emoji, accented/Arabic letters.</li><li>Leading/trailing/internal spaces.</li><li>SQL injection <code>\' OR 1=1--</code>, script <code>&lt;script&gt;</code> (XSS).</li></ul><b>Behaviour</b><ul><li>Username already taken: is the check case-insensitive (<code>Amro</code> vs <code>amro</code>)?</li><li>Clear error messages, client-side <i>and</i> server-side validation (bypass the UI via the API).</li><li>Copy/paste input, the 16-char limit enforced while typing, the saved value equals the entered value, it displays correctly after signup, accessibility, different browsers/mobile.</li></ul>Name the techniques you used: equivalence partitions and boundary values (0, 1, 16, 17).' },
+    { t:'multi', title:'Testing Question 4A', text:'A tester encounters a failure while running a test on machine A. The test takes two JSON files as input and compares them. The error stack reports that it failed to create a temporary file for <code>/com/sun/jna/linux-x86-64/libjnidispatch.so: No space left on device</code>. Which of the following could be a reasonable workaround or solution?',
+      opts:['Run the test on a newly introduced machine in the production chain pool.','Re-run the test on machine A.','Clean up machine A and re-run the test.','Descope the test.'], ans:[0,2],
+      exp:'This is an <b>environment</b> issue (disk full), not a product bug. Either free space on machine A or use a healthy machine. Re-running as is will fail again; descoping hides a valid test.' },
+    { t:'single', title:'Testing Question 4G', text:'Rank the steps in increasing order of the cost of fixing the bugs.<ol><li>Bugs found on the client side.</li><li>Bugs found while the developer is writing and testing their own code.</li><li>Bugs found during an internal system-test campaign in the company.</li><li>Bugs found by a tester working with the developer shortly after development is complete.</li></ol>',
+      opts:['(1, 2, 3, 4)','(2, 4, 3, 1)','(2, 3, 4, 1)','(4, 3, 2, 1)','(4, 2, 3, 1)'], ans:1, exp:'Earlier = cheaper: developer (2) → tester right after dev (4) → system campaign (3) → client (1).' }
+  ]},
+  { name: 'UNIX & Networking', qs: [
+    { t:'single', title:'UNIX Question 1B', text:'Which crontab entry schedules a task to run every 30 minutes past the hour on the 15th day of every month?', opts:['<code>30 * 15 * *</code>','<code>*/30 * 15 * *</code>','<code>0 30 15 * *</code>','<code>0 */30 15 * *</code>'], ans:0, exp:'minute=30, hour=*, day-of-month=15. <code>*/30</code> would run at :00 and :30.' },
+    { t:'single', title:'UNIX Question 1E', text:'Which command creates an empty file named <code>file_name</code>?', opts:['<code>mkdir file_name</code>','<code>touch file_name</code>','<code>vim file_name</code>','All of the above.','None of the above.'], ans:1, exp:'<code>mkdir</code> makes a directory; <code>vim</code> only creates the file if you save it. <code>touch</code> creates an empty file (or updates the timestamp).' },
+    { t:'single', title:'UNIX Question 1L', text:'Which command displays the current working directory in Linux?', opts:['<code>ls</code>','<code>pwd</code>','<code>cd</code>','<code>cat</code>'], ans:1, exp:'<code>pwd</code> = print working directory.' },
+    { t:'single', title:'UNIX Question 1V', text:'What is the output of the following command?', code:'find /var/log -type f -exec du -h {} + | sort -rh | head -n 10',
+      opts:['Displays the top ten directories in <code>/var/log</code>.','Lists the ten largest files in <code>/var/log</code>, in descending size order.','Lists all files in <code>/var/log</code> by size.','Finds and sorts all files in <code>/var/log</code>.'], ans:1, exp:'<code>-type f</code> = files only; <code>sort -rh</code> = human sizes descending; <code>head -n 10</code> = top 10.' },
+    { t:'single', title:'UNIX Question 1Y', text:'In Unix-based systems, what does the command <code>chmod 755 filename</code> do?', opts:['Changes the file ownership to user 755.','Sets the file permissions to read, write, and execute for the owner, and read and execute for the group and others.','Sets the file permissions to read and write for everyone.','Deletes the file named 755.'], ans:1, exp:'7 = rwx, 5 = r-x, 5 = r-x → <code>rwxr-xr-x</code>.' },
+    { t:'single', title:'UNIX Question 2AB', text:'Which command finds files modified in the last three days?', opts:['<code>find /var/log -ctime -3</code>','<code>find /var/log -mtime -3</code>','<code>grep -m3 /var/log</code>','<code>grep -c3 /var/log</code>'], ans:1,
+      exp:'<code>-mtime</code> = content <b>modified</b>; <code>-ctime</code> = inode/status <b>changed</b> (permissions, owner, rename). <code>-3</code> = less than 3 days ago. grep searches content, not dates.' },
+    { t:'short', title:'UNIX Question 2B', text:'What is the outcome of the following command? Give the permission string for a file that was <code>rwx------</code> before.', code:'chmod a+rw filelist', ans:['rwxrw-rw-','-rwxrw-rw-'],
+      exp:'<code>a</code> = all (user, group, others). <code>+rw</code> <b>adds</b> read and write for everyone and leaves execute as it was. <code>rwx------</code> → <code>rwxrw-rw-</code>. In words: everybody can read and write <code>filelist</code>.' },
+    { t:'open', title:'UNIX Question 2E', text:'List the contents of a directory named <code>data</code> and redirect the output to <code>data/files</code>.',
+      model:'<pre>ls data &gt; data/files\n# or with details:\nls -l data &gt; data/files</pre><b>Subtle point:</b> the shell creates (truncates) <code>data/files</code> <i>before</i> <code>ls</code> runs, so the listing includes the name <code>files</code> itself. Use <code>&gt;&gt;</code> to append instead of overwrite.' },
+    { t:'single', title:'UNIX Question 2F', text:'What is the purpose of the command <code>top</code> in Linux-based systems?', opts:['Displays the currently running processes and their resource usage.','Shows the disk-space usage of the system.','Lists all active network connections.','Displays the contents of a file.'], ans:0, exp:'Live view of CPU, memory, load average and processes. Disk = <code>df</code>, connections = <code>ss</code>/<code>netstat</code>.' },
+    { t:'single', title:'UNIX Question 2W', text:'What does <code>tail -f testlog</code> do?', opts:['Stores encrypted passwords.','Shows the first line of the file.','Shows the final line of the file.','Shows the error messages in the file.','Continuously shows new lines added to the file.','None of the above.'], ans:4, exp:'<code>-f</code> = follow. It prints the last 10 lines, then keeps printing new lines as they’re written. Used for live log monitoring.' },
+    { t:'multi', title:'UNIX Question 2X', text:'What does the <code>ping</code> command test?', opts:['Network reachability.','Port availability.','Network latency.','Network encryption.','Network permissions.'], ans:[0,2],
+      exp:'Ping sends ICMP echo requests: is the host reachable, and what is the round-trip time (latency) and packet loss. ICMP has <b>no ports</b>. To test a port use <code>telnet</code>/<code>nc</code>.' },
+    { t:'multi', title:'UNIX Question 2AA', text:'Which commands can show open ports on a Linux system?', opts:['<code>ss -tuln</code>','<code>lsof -i</code>','<code>netstat -tuln</code>','<code>netstat -plnt</code>'], ans:[0,1,2,3],
+      exp:'All four work. <code>-t</code> tcp, <code>-u</code> udp, <code>-l</code> listening, <code>-n</code> numeric, <code>-p</code> show the process. <code>lsof -i</code> lists open internet sockets.' },
+    { t:'single', title:'UNIX Question 12K', text:'You need to erase all files in the current directory, including its subdirectories, using one single UNIX command. Which command would you use?', opts:['<code>rm *</code>','<code>rm -r</code>','<code>rm -r *</code>','<code>rm -f *</code>'], ans:2,
+      exp:'<code>-r</code> (recursive) is needed for directories, and <code>*</code> says what to delete. <code>rm -r</code> alone has no operand; <code>rm *</code> and <code>rm -f *</code> skip directories. (<code>*</code> doesn’t match hidden dot-files.)' },
+    { t:'multi', title:'UNIX Question 12L', text:'Select the correct UNIX command(s) for finding the number of files and directories in a directory.', opts:['<code>ls -l | wc -l</code>','<code>ls -l | grep -l</code>','<code>ls -l | grep -c .</code>','<code>ls -l | wc -c</code>'], ans:[0,2], exp:'Both count lines. <code>grep -l</code> prints file names with matches; <code>wc -c</code> counts bytes.' },
+    { t:'single', title:'UNIX Question 12O', text:'Which function converts JSON text into an object?', opts:['<code>conv</code>','<code>eval</code>','<code>parse</code>','<code>stringify</code>'], ans:2,
+      exp:'<code>JSON.parse(text)</code> turns text into an object; <code>JSON.stringify(obj)</code> does the reverse. <code>eval</code> technically works but is unsafe (it executes code).' },
+    { t:'single', title:'UNIX Question 12P', text:'Choose one command that does not display the content of a file.', opts:['<code>vi</code>','<code>less</code>','<code>more</code>','<code>cat</code>'], ans:0,
+      exp:'<code>less</code>, <code>more</code> and <code>cat</code> are <b>viewers/printers</b>. <code>vi</code> is an <b>editor</b> (it opens the file for editing). <span class="muted">Debatable, since vi does show the text, but it’s the intended odd one out.</span>' },
+    { t:'single', title:'UNIX Question 12W', text:'How can you check the current user and group information on a UNIX system?', opts:['<code>id</code>','<code>user</code>','<code>group</code>','<code>info</code>'], ans:0, exp:'<code>id</code> → <code>uid=1000(mohamad) gid=1000(mohamad) groups=…</code>. (<code>whoami</code> = name only, <code>groups</code> = group list; there is no <code>user</code> or <code>group</code> command.)' },
+    { t:'single', title:'Network Diagnostic Prompt', text:'What issue is indicated by the following ping output?', code:`Pinging google.com [216.58.217.46] with 32 bytes of data:
+10 replies received; 10 packets sent; 0% packet loss.
+Round-trip times: minimum 102 ms, maximum 126 ms, average about 114 ms.`,
+      opts:['Unresponsive website.','Slow network connection.','Wrong URL.'], ans:1,
+      exp:'All packets came back (reachable), and the name resolved to an IP (the URL is fine). The only issue left is latency, which is relatively high (~114 ms) → slow connection. (In the other paper the times were &gt;1000 ms, which makes it obvious.)' }
+  ]},
+  { name: 'General Computing, Cloud & Hardware', qs: [
+    { t:'single', title:'General Discussion 13P', text:'Which protocol is used to assign IP addresses automatically to devices on a network?', opts:['DNS','FTP','DHCP','HTTP'], ans:2, exp:'DHCP (Dynamic Host Configuration Protocol) assigns the IP, mask, gateway and DNS server. DNS resolves names.' },
+    { t:'single', title:'Network Question 4C', text:'Which protocol is used to assign IP addresses automatically to devices on a network? <span class="muted small">(Repeated in the paper with shuffled options; watch the order.)</span>', opts:['DNS','DHCP','FTP','HTTP'], ans:1, exp:'Same question, options shuffled. The real test does this too.' },
+    { t:'single', title:'General Discussion 13Q', text:'What is the main purpose of a hypervisor in virtualization?', opts:['To run Linux containers.','To manage virtual machines on a host.','To compile application code.','To monitor network traffic.'], ans:1, exp:'A hypervisor creates and runs VMs and shares the CPU, RAM and disk between them. Type 1 = bare-metal (ESXi, Hyper-V, KVM); type 2 = hosted (VirtualBox, VMware Workstation).' },
+    { t:'single', title:'General Discussion 13S', text:'A single host can run both containers and virtual machines.', opts:['True.','False.'], ans:0, exp:'Yes. A host can run VMs on a hypervisor and containers at the same time. Containers are also often run <i>inside</i> VMs (e.g. Docker on EC2).' },
+    { t:'single', title:'General Discussion 13U', text:'What is the primary difference between a Java thread dump and a heap dump?', opts:['A thread dump captures memory usage; a heap dump shows thread states.','A thread dump is used for performance profiling; a heap dump is used for I/O statistics.','A thread dump shows active threads and their states; a heap dump shows objects in memory and their references.','There is no difference between the two.'], ans:2,
+      exp:'<b>Thread dump</b> (<code>jstack PID</code>, <code>kill -3</code>): each thread’s stack and state (RUNNABLE/BLOCKED/WAITING). Use it for hangs and deadlocks. <b>Heap dump</b> (<code>jmap -dump</code>, <code>-XX:+HeapDumpOnOutOfMemoryError</code>): all objects and their references. Use it for memory leaks and OOM, analysed with Eclipse MAT.' },
+    { t:'single', title:'Cloud Question 2J', text:'What does IAM control in cloud services?', opts:['Access speed.','User authentication and authorization.','Data latency.','Resource usage on the cloud.'], ans:1, exp:'Identity and Access Management: who you are (users, roles, groups) and what you may do (policies). Use least privilege.' },
+    { t:'open', title:'Cloud Question 10B', text:'In cloud computing, what are the differences between vertical scaling and horizontal scaling strategies, and when would you use each?',
+      model:'<b>Vertical scaling (scale up)</b>: give a machine more CPU/RAM. + Simple, with no code changes. − Hardware ceiling, often downtime, single point of failure. <i>Use for</i> monoliths, relational databases, quick fixes.<br><b>Horizontal scaling (scale out)</b>: add more instances behind a load balancer. + Practically unlimited, fault tolerant, can auto-scale with load. − The app must be stateless, and data needs replication/sharding. <i>Use for</i> web/API tiers, microservices, unpredictable traffic.' },
+    { t:'open', title:'Cloud Question 10D', text:'List two main advantages of SaaS (Software as a Service) over traditional on-premises deployment methods.',
+      model:'<ul><li><b>Lower upfront cost</b>: subscription (OPEX) instead of buying servers and licences (CAPEX), and no infrastructure to run.</li><li><b>No maintenance</b>: the provider handles updates, patches, backups and security.</li><li>Others: fast to deploy, accessible anywhere through a browser, scales automatically, high availability backed by SLAs.</li></ul>' },
+    { t:'single', title:'DevOps Question 4D', text:'What is the purpose of the staging area in Git?', opts:['To track the history of all commits in the repository.','To temporarily store changes that are going to be committed next.','To track different stages of a repository.','To store production releases for the company.'], ans:1, exp:'The index/staging area holds what <code>git add</code> prepared for the <b>next commit</b>.' },
+    { t:'multi', title:'DevOps Question 4G', text:'What does CI/CD stand for?', opts:['Computing Intelligence / Cyber Defense.','Code Injection / Container Deployment.','Continuous Integration / Continuous Delivery.','Continuous Integration / Continuous Deployment.','Continuous Integration / Continuous Development.'], ans:[2,3],
+      exp:'Both are correct. <b>Delivery</b> means the build is always releasable but production releases are manual. <b>Deployment</b> means every passing change goes to production automatically.' },
+    { t:'open', title:'Hardware Question 2F', text:'Describe the differences between VMware, VirtualBox, and Hyper-V in terms of features and use cases.',
+      model:'<div class="tbl"><table><tr><th></th><th>VMware</th><th>VirtualBox</th><th>Hyper-V</th></tr><tr><td>Vendor / cost</td><td>Broadcom (VMware). ESXi/vSphere are commercial; Workstation/Fusion for desktops</td><td>Oracle, free and open source</td><td>Microsoft, built into Windows Server and Pro/Enterprise</td></tr><tr><td>Type</td><td><b>ESXi = type 1</b> (bare-metal); Workstation = type 2</td><td><b>Type 2</b> (hosted on Windows/Linux/macOS)</td><td><b>Type 1</b> (runs under Windows)</td></tr><tr><td>Features</td><td>Enterprise grade: vMotion live migration, HA, DRS, vCenter management, strong performance</td><td>Snapshots, cross-platform, easy GUI, Vagrant support; lower performance</td><td>Windows/Azure integration, live migration, checkpoints, PowerShell management</td></tr><tr><td>Use case</td><td>Data centres, production server virtualisation</td><td>Developers and students testing other OSes locally</td><td>Microsoft shops, Windows servers, hybrid with Azure</td></tr></table></div>' },
+    { t:'single', title:'Hardware Question 3Q', text:'What is the default subnet mask for a Class C IPv4 address?', opts:['255.255.255.255','255.0.0.0','255.255.255.0','255.255.0.0'], ans:2, exp:'A = 255.0.0.0 (/8), B = 255.255.0.0 (/16), <b>C = 255.255.255.0 (/24)</b>, first octet 192–223.' },
+    { t:'single', title:'Hardware Question 3X (ROM)', text:'Which of the following is true about ROM?', opts:['It is volatile memory.','It can be easily modified during normal computer operation.','It stores permanent instructions, such as BIOS.','It is faster than RAM.'], ans:2, exp:'ROM is <b>non-volatile</b> read-only memory holding firmware (BIOS/UEFI). RAM is volatile and faster.' },
+    { t:'single', title:'Hardware Question 3X (zero-trust model)', text:'Which of the following best describes a zero-trust security model?', opts:['Trust all internal traffic by default.','Use firewalls to block external threats only.','Never trust; always verify, regardless of location.','Allow access based on IP address alone.'], ans:2, exp:'No implicit trust based on network location. Every request is authenticated, authorised and encrypted, with least privilege, MFA and micro-segmentation.' },
+    { t:'open', title:'Hardware Prompt', text:'What is the advantage of using SSD disks versus normal spinning hard disk drives?',
+      model:'<ul><li><b>Much faster</b>: higher read/write throughput and near-zero seek time (random I/O especially), so faster boot, app launches and database queries.</li><li><b>No moving parts</b>: more resistant to shock, more reliable, silent.</li><li>Lower power use and heat, smaller and lighter.</li></ul>Trade-offs: higher cost per GB and a limited number of write cycles (though modern SSDs last a long time). HDDs remain cheaper for bulk/archive storage.' }
+  ]},
+  { name: 'Compilation & Web Concepts', qs: [
+    { t:'open', title:'Compilation Question 7B', text:'<ol><li>What do you typically get when you compile a Java file using <code>javac</code>?</li><li>Is the output portable between different types of servers that have different operating systems or architectures?</li><li>Why?</li></ol>',
+      model:'<ol><li>A <b><code>.class</code> file containing Java bytecode</b>: platform-independent instructions for the JVM, not native machine code.</li><li><b>Yes, it is portable.</b></li><li>Because each OS/architecture has its own <b>JVM</b>, which interprets/JIT-compiles the same bytecode to native code at runtime (“write once, run anywhere”). The bytecode only needs a compatible Java version (class-file version), and native libraries (JNI) are still platform-specific.</li></ol>Contrast: a C compiler produces native binaries that are <b>not</b> portable. The other paper asks the C version.' },
+    { t:'single', title:'Compilation Question 8F', text:'When does Java full garbage collection trigger?', opts:['When the JVM does not have the necessary memory space.','When the garbage-collection method is called.','When a threshold time limit is surpassed.','All of the above.'], ans:0,
+      exp:'A full GC happens when the old generation/heap (or metaspace) runs out of space for allocations. <code>System.gc()</code> is only a <b>request</b> that the JVM may ignore, and there is no time-based trigger.' },
+    { t:'multi', title:'Compilation Question 8I', text:'Which statements describe <code>localStorage</code> objects in HTML?', opts:['Stores data for only one session.','Data can be shared between multiple windows of the browser.','Data is not deleted when the browser window closes.','None of the above.'], ans:[1,2],
+      exp:'localStorage is persistent (no expiry) and shared across all tabs and windows of the <b>same origin</b>, with about 5–10 MB of string key/values. Per-session storage that is cleared when the tab closes is <b>sessionStorage</b>.' },
+    { t:'single', title:'Compilation Question 8K', text:'In software development, what is a module?', opts:['A reusable unit of code or functionality that can be used in a program.','A cloud service that automatically scales applications.','A container that packages and deploys software applications.','A virtual machine that runs an application in an isolated environment.'], ans:0, exp:'Modularity means separating code into independent, reusable units with clear interfaces (Java packages/modules, Python modules, npm packages).' }
+  ]},
+  { name: 'SQL', qs: [
+    { t:'open', title:'Database Prompt', text:'List three benefits of hosting an RDBMS system on multiple servers.',
+      model:'<ul><li><b>High availability / failover</b>: no single point of failure.</li><li><b>Scalability and load balancing</b>: read replicas, sharding.</li><li><b>Performance</b>: more combined resources, and data served closer to users.</li><li><b>Disaster recovery</b> and maintenance without downtime.</li></ul>' },
+    { t:'open', title:'SQL Syntax Question 4J', text:'A company is interested in analyzing data about students at a university. The data is in a table named <code>Students</code> with the following columns and types:', code:`ID          INT
+First_Name  CHAR(15)
+Family_Name CHAR(15)
+Grade       INT
+Major       CHAR(15)`, subtext:'Write a SQL query to print the first three characters of <code>First_Name</code> for all students in the <code>Students</code> table.',
+      model:'<pre>SELECT SUBSTR(First_Name, 1, 3) AS first3 FROM Students;      -- Oracle / MySQL\nSELECT SUBSTRING(First_Name, 1, 3) FROM Students;              -- MySQL / SQL Server / Postgres\nSELECT LEFT(First_Name, 3) FROM Students;                      -- MySQL / SQL Server</pre>SQL strings are <b>1-indexed</b>, so the start position is 1, not 0.' },
+    { t:'open', title:'SQL Syntax Question 4L', text:'Explain the purpose of the <code>GROUP BY</code> clause in SQL.',
+      model:'<code>GROUP BY</code> collects rows that have the same value(s) in the given column(s) into <b>groups</b>, so aggregate functions (<code>COUNT</code>, <code>SUM</code>, <code>AVG</code>, <code>MIN</code>, <code>MAX</code>) return <b>one result per group</b> instead of one for the whole table. Every non-aggregated SELECT column must appear in GROUP BY. Filter groups with <code>HAVING</code> (WHERE filters rows before grouping).<pre>SELECT Major, COUNT(*) FROM Students GROUP BY Major;</pre>' },
+    { t:'multi', title:'SQL Syntax Question 4N', text:'Assume the following table contains orders made by Murex employees:', code:'Orders(order_id, employee_id, order_date, total_amount)', subtext:'Which queries return the average order value per employee?',
+      opts:['<code>SELECT employee_id, AVG(total_amount) FROM Orders GROUP BY employee_id;</code>','<code>SELECT employee_id, SUM(total_amount)/COUNT(*) FROM Orders GROUP BY employee_id;</code>','<code>SELECT employee_id, AVG(total_amount) FROM Orders;</code>','<code>SELECT order_id, AVG(total_amount) FROM Orders GROUP BY order_id;</code>'], ans:[0,1],
+      exp:'B equals AVG when <code>total_amount</code> has no NULLs (AVG ignores NULLs, but COUNT(*) counts them). C has no GROUP BY (an error in strict SQL). D groups per order, not per employee.' },
+    { t:'single', title:'SQL Syntax Question 3AB', text:'Which of the following does <b>not</b> help optimize a slow SQL query?', opts:['Use indexes.','Use <code>SELECT *</code>.','Use <code>WHERE</code>.','Use <code>LIMIT</code>.'], ans:1, exp:'<code>SELECT *</code> fetches unnecessary columns (more I/O and network, and prevents covering indexes). Select only the columns you need.' },
+    { t:'single', title:'SQL Syntax Question 3Z', text:'What does the following SQL query do?', code:`SELECT DISTINCT employee_name
+FROM employees_data e
+JOIN projects_assignment p
+  ON e.employee_id = p.employee_id
+GROUP BY employee_name
+HAVING COUNT(project_id) = 1;`,
+      opts:['Lists the unique names of employees assigned to more than one project.','Lists the names of employees assigned to exactly one project.','Lists the distinct names of employees not assigned to any project.','Lists the unique names of employees assigned to at least one project.','Lists the names of employees assigned to all projects.'], ans:1,
+      exp:'The INNER JOIN keeps only employees who have assignments; <code>HAVING COUNT = 1</code> keeps exactly one project. (Employees with no project would need a LEFT JOIN with IS NULL.)' },
+    { t:'multi', title:'SQL Syntax Question 3AI', text:'Which of the following statements correctly update multiple rows in a table?', opts:['<code>UPDATE table SET column = value WHERE column IN (\'A\', \'B\');</code>','<code>UPDATE table SET column = value WHERE column = \'A\' OR column = \'B\';</code>','<code>UPDATE table SET column = value WHERE column = \'A\' OR \'B\';</code>','<code>UPDATE table SET column = value WHERE column = \'A\' AND column = \'B\';</code>'], ans:[0,1],
+      exp:'C parses as <code>(column = \'A\') OR (\'B\')</code>, which is a type error, or in MySQL <code>\'B\'</code> evaluates as false, so only A matches. D can never be true (one value can’t equal both A and B).' },
+    { t:'single', title:'SQL Syntax Question 3AK', text:'You are executing a query intended to remove students who have not enrolled in any course for over a year. The DELETE statement fails with:', code:`ORA-02292: integrity constraint (ENROLLMENTS.STUDENT_ID_FK) violated - child record found
+
+DELETE FROM students
+WHERE last_enrollment_date < TO_DATE('2024-01-01', 'YYYY-MM-DD');`,
+      subtext:'The <code>students.id</code> column is the primary key in <code>students</code>; <code>enrollments.student_id</code> is a foreign key referencing it, using the default ON DELETE RESTRICT behavior. Why does Oracle block this delete operation?',
+      opts:['Because the student is marked as active.','Because foreign key constraints prevent deleting a parent record if child records still reference it.','Because <code>last_enrollment_date</code> cannot be used in a DELETE statement.','Because Oracle does not support DELETE statements with a WHERE clause.'], ans:1,
+      exp:'Referential integrity: deleting the parent would orphan rows in <code>enrollments</code>. Fixes: delete the children first, define <code>ON DELETE CASCADE</code>/<code>SET NULL</code>, or archive instead of deleting. (ORA-02291 is the opposite: inserting a child with no parent.)' },
+    { t:'single', title:'SQL Syntax Question 3T', text:'Which SQL command is correctly formulated to change the data type of an existing column in a database table while also setting a default value?',
+      opts:['<code>ALTER TABLE table_name ALTER COLUMN column_name SET DATA TYPE ... DEFAULT value;</code>','<code>ALTER TABLE table_name MODIFY column_name new_data_type DEFAULT default_value;</code>','<code>ALTER TABLE table_name CHANGE column_name ... DEFAULT value;</code>','<code>UPDATE TABLE table_name ALTER COLUMN ... DEFAULT value;</code>'], ans:1,
+      exp:'Oracle/MySQL: <code>ALTER TABLE t MODIFY col NUMBER(10) DEFAULT 0;</code>. MySQL’s <code>CHANGE</code> needs the old <i>and</i> new name. Standard/Postgres uses <code>ALTER COLUMN … TYPE</code> and <code>SET DEFAULT</code> as separate actions. <code>UPDATE</code> changes data, not structure.' },
+    { t:'open', title:'SQL Syntax Question 1N', text:'Consider a university database with the following simplified data model:', code:`Students(student_id, first_name, last_name, age, major)
+Courses(course_id, course_name, credits)
+Grades(student_id, course_id, grade)`, subtext:'Find the full names of students who scored strictly above 85 in the <code>Database Structures</code> course.',
+      model:'<pre>SELECT s.first_name || \' \' || s.last_name AS full_name   -- MySQL: CONCAT(s.first_name, \' \', s.last_name)\nFROM Students s\nJOIN Grades  g ON g.student_id = s.student_id\nJOIN Courses c ON c.course_id  = g.course_id\nWHERE c.course_name = \'Database Structures\'\n  AND g.grade &gt; 85;</pre>“Strictly above” means <code>&gt;</code>, not <code>&gt;=</code>.' },
+    { t:'open', title:'SQL Syntax Question 1Z', text:'Write a query that categorizes employees as Junior (less than 3 years), Mid-Level (3–7 years), or Senior (more than 7 years) based on their years of experience, using a <code>CASE</code> statement. The <code>Employees</code> table has columns <code>employeeID</code>, <code>employeeName</code>, and <code>yearsOfExperience</code>.',
+      model:'<pre>SELECT employeeID,\n       employeeName,\n       yearsOfExperience,\n       CASE\n         WHEN yearsOfExperience &lt; 3 THEN \'Junior\'\n         WHEN yearsOfExperience BETWEEN 3 AND 7 THEN \'Mid-Level\'\n         ELSE \'Senior\'\n       END AS seniority\nFROM Employees;</pre>Conditions are checked in order, and BETWEEN is inclusive (3 and 7 are Mid-Level). Mention what happens to NULL experience: it falls into ELSE, so add <code>WHEN yearsOfExperience IS NULL THEN \'Unknown\'</code>.' },
+    { t:'open', title:'SQL Syntax Question 2U', text:'Assume these two tables are linked and contain information about employees working at Murex:', code:`Employees(Employee_ID, Employee_Name, Employee_Salary, Department_ID)
+Departments(Department_ID, Department_Name)`, subtext:'Write an SQL query that displays the three highest-paid employees per department and all columns from both tables.',
+      model:'<pre>SELECT *\nFROM (\n  SELECT e.Employee_ID, e.Employee_Name, e.Employee_Salary, e.Department_ID,\n         d.Department_Name,\n         DENSE_RANK() OVER (PARTITION BY e.Department_ID\n                            ORDER BY e.Employee_Salary DESC) AS rnk\n  FROM Employees e\n  JOIN Departments d ON d.Department_ID = e.Department_ID\n) ranked\nWHERE rnk &lt;= 3\nORDER BY Department_ID, Employee_Salary DESC;</pre><b>Without window functions</b> (older MySQL):<pre>SELECT e.*, d.*\nFROM Employees e\nJOIN Departments d ON d.Department_ID = e.Department_ID\nWHERE (SELECT COUNT(DISTINCT e2.Employee_Salary)\n       FROM Employees e2\n       WHERE e2.Department_ID = e.Department_ID\n         AND e2.Employee_Salary &gt; e.Employee_Salary) &lt; 3;</pre>Say how you handle ties: <code>ROW_NUMBER</code> gives exactly 3 rows; <code>DENSE_RANK</code> keeps everyone tied in the top 3 salaries.' }
+  ]},
+  { name: 'Problem Analysis', qs: [
+    { t:'open', title:'Problem Analysis Question 1F', text:'You are troubleshooting a process that is taking a long time to execute, making the session appear unresponsive. Running <code>pstack</code> on the process shows the following excerpt:', code:`kpuexec()
+OCIStmtExecute()
+OCI_RequestExecuteWithParameters(...)
+SQLPrepareAndExecuteWithParameters(...)
+SQLPrepareAndExecute(...)
+RDB_Read(...)
+RDBPosition(...)
+RDBXPosition(...)
+SQLPrepareAndExecuteWithParameters: arg 4 = "USERS_TABLE"`, subtext:'1) How would you interpret and analyze this information to diagnose the issue?<br>2) Are there suggestions or corrective actions that could help enhance performance?',
+      model:'<b>1) Interpretation.</b> The top frames, <code>kpuexec</code> and <code>OCIStmtExecute</code>, are in the <b>Oracle client library (OCI)</b>. The process sent a SQL statement on <b>USERS_TABLE</b> (arg 4) and is <b>waiting for the database</b> to return. It isn’t looping in application code; the time is spent in the DB call. Take several pstacks a few seconds apart: the same frames every time confirm it is stuck there. Then go to the DB side: find the session in <code>v$session</code>/<code>v$session_wait</code> (wait event, blocking_session) and the SQL in <code>v$sql</code>.<br><br><b>2) Corrective actions</b><ul><li>Check for <b>locks</b> or another session blocking it, and resolve the blocker.</li><li>Get the <b>execution plan</b>. If it does a full scan of USERS_TABLE, add or fix an <b>index</b> on the filtered columns.</li><li>Refresh optimizer <b>statistics</b>, and check for a plan change after a stats or DB update.</li><li>Rewrite the query: only the needed columns/rows, bind variables, no functions on indexed columns.</li><li>Check DB server resources (CPU, I/O, AWR report) and network latency between the app and DB.</li><li>Add a query timeout, and archive/purge old data if the table has grown too large.</li></ul>' },
+    { t:'open', title:'Problem Analysis Question 2D', text:'Write pseudocode for a traffic-light controller that manages two intersecting roads. Requirements:<ul><li>Each traffic light has two states: red and green. Green lasts for one minute.</li><li>The lights alternate, with one green for one minute while the other is red.</li></ul>Hint: You can use variables to represent the current state (red or green) of each traffic light.',
+      model:'<pre>lightA = GREEN\nlightB = RED\n\nloop forever:\n    display(lightA, lightB)\n    wait(60 seconds)\n\n    if lightA == GREEN:\n        lightA = RED\n        lightB = GREEN\n    else:\n        lightA = GREEN\n        lightB = RED</pre>Invariant to state: <b>never both GREEN</b>. Possible extensions: a short all-red safety interval or a yellow phase before switching, a pedestrian button, sensors. It’s a 2-state <b>state machine</b>, so you can also draw it as a state-transition diagram.' },
+    { t:'code', title:'Problem Analysis Question 3A', text:'Write a program that generates the first 100 elements of the sequence <code>1, 1, 2, 3, 5, 8, 13, 21, 34, …</code>, where each next number is equal to the sum of the previous two numbers.',
+      starter:`// print the first 100 Fibonacci numbers
+`,
+      model:'<pre>let a = 1n, b = 1n;               // BigInt\nfor (let i = 0; i &lt; 100; i++) {\n  console.log(a.toString());\n  [a, b] = [b, a + b];\n}</pre>The 100th term (354224848179261915075) overflows a 64-bit <code>long</code> after F(92). Use <code>BigInteger</code> in Java or BigInt in JS (Python ints are unbounded). Iterative, O(n).' },
+    { t:'code', title:'Problem Analysis Question 4F', text:'Write code in any programming language that reverses the elements of an array. Do not use library functions.',
+      starter:`function reverseArray(arr) {
+  // in place, no arr.reverse()
+}
+const a = [1, 2, 3, 4, 5];
+reverseArray(a);
+console.log(a); // [5,4,3,2,1]`,
+      model:'<pre>function reverseArray(arr) {\n  let i = 0, j = arr.length - 1;\n  while (i &lt; j) {\n    const tmp = arr[i];\n    arr[i] = arr[j];\n    arr[j] = tmp;\n    i++; j--;\n  }\n  return arr;\n}</pre>Two pointers, O(n) time, O(1) extra space. Works for empty, single-element, even and odd lengths.' },
+    { t:'code', title:'Problem Analysis Question 5A', text:'Write a program that returns the angle in degrees between a clock’s hour and minute hands. Notes:<ul><li>Try breaking down the problem by first calculating each angle alone.</li><li>The hour hand’s position is affected by the minutes. In the example below, the angle is lower than 90 degrees.</li></ul><b>Example 1:</b> Input 3:00 → output 90 degrees.<br><b>Example 2:</b> Input 3:30 → output 75 degrees.',
+      starter:`function clockAngle(hour, minute) {
+  // your code
+}
+console.log(clockAngle(3, 0));   // 90
+console.log(clockAngle(3, 30));  // 75
+console.log(clockAngle(12, 0));  // 0
+console.log(clockAngle(9, 0));   // 90`,
+      model:'<pre>function clockAngle(hour, minute) {\n  const minuteAngle = 6 * minute;                      // 360/60\n  const hourAngle   = 30 * (hour % 12) + 0.5 * minute; // 360/12, +0.5° per minute\n  const diff = Math.abs(hourAngle - minuteAngle);\n  return Math.min(diff, 360 - diff);                   // smaller angle\n}</pre>3:30 → hour hand at 90 + 15 = 105°, minute hand at 180°, so 75°. Edge cases: 12 → 0 via <code>% 12</code>; take the smaller angle (9:00 → 270 → 90).' }
+  ]},
+  { name: 'Crash & Code Analysis', qs: [
+    { t:'open', title:'Crash and Code Analysis 1H', text:'A person encounters a failure while running a test case that executes a scenario through a script and is expected to complete within a predefined time limit of x seconds. The task reports that the task was interrupted because it did not complete within the predefined time limit. List two possible reasons for this error.',
+      model:'<ul><li><b>Performance regression</b> in the software under test: a new code change made the scenario slower (an inefficient query, missing index, extra processing).</li><li><b>Environment problem</b>: the test machine or DB is overloaded or slow (CPU, memory, disk full, other jobs running in parallel), or there is network latency.</li><li>The process is <b>hung</b>: deadlock, infinite loop, waiting on a lock or an unavailable external service/resource.</li><li>Larger input data than before, or a <b>time limit that is too strict</b> and no longer realistic.</li></ul>Next step: compare durations with previous runs, take a <code>pstack</code>/thread dump while it runs, and check the logs for where the time goes.' },
+    { t:'open', title:'Crash and Code Analysis 2G — Git Branches', text:'After executing the following commands, what is the content of <code>mymurexfile</code> in the Git branches <code>murex</code> and <code>master</code>, respectively?', code:`mkdir murex_test
+git init murex_test
+git checkout -b murex
+echo "MUREX ROCKS" > mymurexfile
+touch mymurexfile
+git commit -am "my Murex file changes"
+git add mymurexfile
+echo "MUREX ALWAYS ROCKS" >> mymurexfile
+git branch
+git diff murex master
+git push origin master
+git branch -D murex`,
+      model:'This is the harder variant. The key observations:<ol><li><code>git commit -am</code> only auto-stages <b>tracked</b> files. <code>mymurexfile</code> is new and untracked, so <b>nothing is committed</b> (“nothing added to commit”).</li><li><code>git add</code> comes <i>after</i> the commit, so the file is only <b>staged</b>, never committed.</li><li>With no commits, the <code>murex</code> branch is “unborn” and <code>master</code> doesn’t exist. <code>git diff murex master</code> and <code>git push origin master</code> fail (no such revision, no remote). <code>git branch -D murex</code> fails because there is no such branch ref yet (and you can’t delete the current branch anyway).</li></ol><b>Answer:</b> neither <code>murex</code> nor <code>master</code> contains the file. It exists only in the working directory, with <code>MUREX ROCKS</code> + <code>MUREX ALWAYS ROCKS</code>, and only the first line is staged.<br><span class="muted">Extra trap: <code>git init murex_test</code> creates the repo in a subfolder without <code>cd</code>-ing into it, so as written, the following git commands run outside the repo (“not a git repository”). Mention it.</span>' },
+    { t:'single', title:'Crash and Code Analysis 3I', text:'What is the expected output of the following Python code?', code:`def f(x, y=[]):
+    y.append(x)
+    return y
+
+print(f(1))
+print(f(2))
+print(f(3, []))
+print(f(4))`,
+      opts:['<code>[1], [1, 2], [3], [1, 2, 4]</code>','<code>[1], [1, 2], [3], [4]</code>','<code>[1], [2], [3], [4]</code>','None of the above.'], ans:0,
+      exp:'The default <code>[]</code> is created <b>once</b>, when the function is defined, and shared between calls. f(1) → [1], f(2) → [1, 2], f(3, []) uses a fresh list → [3], f(4) is back to the shared list → [1, 2, 4]. Fix: <code>def f(x, y=None): if y is None: y = []</code>.' },
+    { t:'open', title:'Crash and Code Analysis 4C', text:'Explain the expected output of the following code snippet.', code:`public class HelloMurex {
+    public static void main(String[] args) {
+        System.out.println(100 + 100 + "MUREX" + 100 + 100);
+        System.out.println("Murex Company" + 100 + 100);
+    }
+}`,
+      model:'<pre>200MUREX100100\nMurex Company100100</pre>Evaluation is left to right. <code>100 + 100</code> = 200 (int addition). Then <code>+ "MUREX"</code> → "200MUREX", and from that point every <code>+</code> is String concatenation, so the remaining 100s are appended as text. The second line starts with a String, so it is all concatenation.' },
+    { t:'single', title:'Crash and Code Analysis 5H', text:'Does this code compile?', code:`public class ToCompile {
+    public static void main(String[] args) {
+        int x = 0;
+        int y = 1;
+        int z = y / x;
+    }
+}`, opts:['Compiler error.','Compiles and runs fine.','Compiles, then throws an exception at runtime.','None of the above.'], ans:2, exp:'It compiles; integer division by zero throws <code>ArithmeticException</code> at <b>runtime</b>.' },
+    { t:'multi', title:'Crash and Code Analysis 5L', text:'The following error occurs while a Java application is attempting a network connection:', code:`java.net.ConnectException: Connection refused: connect
+    at java.net.Socket.connect(...)
+    at sun.net.www.http.HttpClient.openServer(...)`, subtext:'What are possible causes of the error? Select all that apply.',
+      opts:['The client is trying to connect to a port while the server is not listening.','The client is trying to connect to a server where the requested port is not open.','A firewall is blocking the connection to the server.','A firewall is blocking the connection from the server.'], ans:[0,1,2],
+      exp:'“Refused” = the target sent back a reset: nothing is listening on the port, the port is closed, or a firewall in front of the server <b>rejects</b> the inbound connection. A firewall that silently drops traffic usually gives a <i>timeout</i> instead. Blocking traffic “from the server” is an outbound rule on the server side and isn’t the usual cause of “refused”.' },
+    { t:'single', title:'Crash and Code Analysis 5M', text:'You encounter a crash in a multithreaded application. The stack trace shows several threads stuck on the same monitor. What issue is likely?', opts:['Null reference.','Stack overflow.','Deadlock.','Out of memory.'], ans:2,
+      exp:'Threads BLOCKED waiting to lock a monitor that another blocked thread holds is a <b>deadlock</b> (or severe lock contention). A thread dump (<code>jstack</code>) reports “Found one Java-level deadlock”. Fix: acquire locks in a consistent order, use timeouts (<code>tryLock</code>), keep lock scope small.' }
+  ]}
+  ]
+};
+
+// ===== PAPER 2 — Version B: new questions in the 2026 Assessment style =====
+const EXAM_B = {
+  key: 'B',
+  title: 'Version B — New 2026-style paper',
+  sections: [
+  { name: 'Software Testing', qs: [
+    { t:'single', title:'Testing Objectives', text:'Which statement about testing is correct according to standard testing principles?', opts:['Exhaustive testing is achievable with enough automation.','Testing shows the presence of defects, not their absence.','A test that finds no defects is a wasted test.','Testing should start only after coding is finished.'], ans:1, exp:'Testing reduces risk but can’t prove a product is defect-free. Other principles: exhaustive testing is impossible, test early, defects cluster, pesticide paradox.' },
+    { t:'single', title:'Test Prioritisation', text:'Time is short before a release of a trade-booking screen. Which test should you run first?', opts:['Changing the colour theme of the screen.','Booking a trade and verifying the notional and counterparty are saved correctly.','Checking the tooltip text of the Help button.','Verifying the screen’s font size on a 4K monitor.'], ans:1, exp:'Risk-based testing: the core business flow with financial impact comes first.' },
+    { t:'single', title:'Agile Roles', text:'In Scrum, who is responsible for maximising product value and ordering the product backlog?', opts:['The Scrum Master','The Product Owner','The testers','The development manager'], ans:1, exp:'The Product Owner owns the backlog and the vision. The Scrum Master facilitates and removes blockers. The developers (including testers) self-organise.' },
+    { t:'single', title:'Retesting vs Regression', text:'A bug was fixed. You run the failing test again to confirm the fix. This is…', opts:['Regression testing','Retesting (confirmation testing)','Smoke testing','Exploratory testing'], ans:1, exp:'Retesting confirms <i>this</i> fix. Regression testing checks that the fix didn’t break <i>other</i> things.' },
+    { t:'multi', title:'Static Testing', text:'Which of these are static testing activities?', opts:['Code review','Running unit tests','Requirements walkthrough','Static analysis with SonarQube','Load testing'], ans:[0,2,3], exp:'Static testing examines artefacts without executing the code: reviews, walkthroughs, inspections, linters/static analysis.' },
+    { t:'open', title:'Password Field Test Cases', text:'A password field requires 8–20 characters, at least one uppercase letter, one digit and one special character. List as many test cases as you can.',
+      model:'<b>Boundaries</b>: 7 (invalid), 8, 9, 19, 20 (valid), 21 (invalid). <b>Missing one rule at a time</b>: no uppercase, no digit, no special character, all lowercase. <b>Valid</b>: <code>Murex@2026</code>. <b>Edge cases</b>: spaces (leading/trailing/inside), Unicode and emoji, only special characters, empty, pasted input, very long (1000 chars). <b>Security</b>: masked input, not logged or shown in error messages, stored hashed, SQL/XSS strings handled safely, server-side validation (call the API directly). <b>UX</b>: clear rule messages, show/hide toggle, confirm-password mismatch.' },
+    { t:'single', title:'Entry and Exit Criteria', text:'Which is a typical <b>exit</b> criterion for a system-test phase?', opts:['The test environment is ready.','All critical and high-severity defects are closed and planned tests are executed.','The requirements are signed off.','Test cases are written.'], ans:1, exp:'Entry criteria = conditions to start (environment, build, test cases ready). Exit criteria = conditions to stop (coverage reached, no open critical bugs, results reported).' },
+    { t:'single', title:'Defect Clustering', text:'You notice 80% of the bugs come from the pricing module. What should you do next?', opts:['Stop testing the pricing module because it is already covered.','Focus more testing effort on the pricing module.','Test all modules equally regardless.','Ignore it; it is a coincidence.'], ans:1, exp:'Defect clustering (the Pareto principle): defects concentrate in a few modules, so put more effort where the risk is.' }
+  ]},
+  { name: 'UNIX & Networking', qs: [
+    { t:'single', title:'Create Directories', text:'Which command creates the directory path <code>a/b/c</code> even if <code>a</code> and <code>b</code> don’t exist?', opts:['<code>mkdir a/b/c</code>','<code>mkdir -p a/b/c</code>','<code>touch -p a/b/c</code>','<code>md a/b/c</code>'], ans:1, exp:'<code>-p</code> creates parent directories as needed and doesn’t complain if they already exist.' },
+    { t:'single', title:'Hidden Files', text:'Which command lists hidden files too?', opts:['<code>ls -h</code>','<code>ls -a</code>','<code>ls -r</code>','<code>ls -t</code>'], ans:1, exp:'<code>-a</code> shows all files, including dot files. <code>-h</code> = human-readable sizes.' },
+    { t:'single', title:'chmod Symbolic', text:'A file is <code>rw-r-----</code>. After <code>chmod o+r,g+w file</code>, it is…', opts:['<code>rw-rw-r--</code>','<code>rw-r--r--</code>','<code>rwxrw-r--</code>','<code>rw-rw----</code>'], ans:0, exp:'The group gains w (rw-), others gain r (r--), and the owner is unchanged → <code>rw-rw-r--</code> = 664.' },
+    { t:'single', title:'Recursive Delete Safety', text:'Which command deletes the directory <code>old_logs</code> and everything inside it?', opts:['<code>rmdir old_logs</code>','<code>rm old_logs</code>','<code>rm -r old_logs</code>','<code>del old_logs</code>'], ans:2, exp:'<code>rmdir</code> only removes empty directories; <code>rm</code> without -r refuses directories.' },
+    { t:'single', title:'find by Change Time', text:'Which finds files whose content changed in the last 60 minutes?', opts:['<code>find . -mmin -60</code>','<code>find . -mtime -60</code>','<code>find . -cmin +60</code>','<code>grep -m 60 .</code>'], ans:0, exp:'<code>-mmin</code> counts in minutes, <code>-mtime</code> in days. <code>-</code> = less than, <code>+</code> = more than.' },
+    { t:'open', title:'Redirect Errors Only', text:'Run <code>./batch.sh</code> so that normal output goes to <code>out.log</code> and errors go to <code>err.log</code>. Then show how to append both to <code>all.log</code>.',
+      model:'<pre>./batch.sh &gt; out.log 2&gt; err.log\n./batch.sh &gt;&gt; all.log 2&gt;&amp;1</pre>The order matters in the second command: redirect stdout first, then point stderr at it.' },
+    { t:'single', title:'User Info', text:'Which command prints only the current username?', opts:['<code>id -g</code>','<code>whoami</code>','<code>who -b</code>','<code>user</code>'], ans:1, exp:'<code>whoami</code> prints the username; <code>id</code> prints uid, gid and groups; <code>who -b</code> shows the last boot time.' },
+    { t:'single', title:'Memory Usage', text:'Which command shows free and used RAM and swap?', opts:['<code>df -h</code>','<code>free -h</code>','<code>du -h</code>','<code>mem -a</code>'], ans:1, exp:'<code>free</code> = memory, <code>df</code> = filesystems, <code>du</code> = directory sizes.' },
+    { t:'multi', title:'Viewing Files', text:'Which commands let you <b>page</b> through a large log file without loading it all into an editor?', opts:['<code>less</code>','<code>more</code>','<code>vi</code>','<code>cat</code>'], ans:[0,1], exp:'<code>less</code> and <code>more</code> are pagers. <code>cat</code> dumps everything at once; <code>vi</code> is an editor.' },
+    { t:'single', title:'traceroute', text:'Users in Dubai report slowness reaching a server in Paris. Which tool shows at which network hop the delay appears?', opts:['<code>ping</code>','<code>traceroute</code>','<code>nslookup</code>','<code>netstat</code>'], ans:1, exp:'traceroute (or mtr) lists every router on the path with its latency. Ping only gives the end-to-end time.' },
+    { t:'single', title:'DNS Record', text:'Which DNS record maps a hostname to an IPv4 address?', opts:['MX','CNAME','A','PTR'], ans:2, exp:'A = IPv4, AAAA = IPv6, CNAME = alias, MX = mail server, PTR = reverse lookup.' },
+    { t:'short', title:'Subnet Hosts', text:'How many usable host addresses are in <code>172.16.4.0/22</code>?', ans:['1022','1,022'], exp:'32 − 22 = 10 host bits → 1024 addresses − 2 = 1022 usable. Range: 172.16.4.0 – 172.16.7.255.' },
+    { t:'single', title:'Port Check', text:'Which command checks whether TCP port 1521 is reachable on host <code>db01</code>?', opts:['<code>ping db01:1521</code>','<code>nc -zv db01 1521</code>','<code>dig db01 1521</code>','<code>traceroute -p db01</code>'], ans:1, exp:'<code>nc -zv</code> (or <code>telnet db01 1521</code>) tries a TCP connection. Ping can’t test ports.' }
+  ]},
+  { name: 'General Computing, Cloud & Hardware', qs: [
+    { t:'single', title:'Thread Dump Use', text:'An application is hung but CPU usage is near 0%. Which artefact should you collect first?', opts:['A heap dump','A thread dump','A GC log','A network capture'], ans:1, exp:'0% CPU plus a hang means threads are waiting (locks, I/O, DB). A thread dump shows where. Use a heap dump for memory problems.' },
+    { t:'single', title:'Hypervisor Type', text:'Which is a type-1 (bare-metal) hypervisor?', opts:['VirtualBox','VMware Workstation','VMware ESXi','Docker'], ans:2, exp:'ESXi, Hyper-V and KVM run directly on the hardware. VirtualBox and Workstation run on top of a host OS. Docker isn’t a hypervisor.' },
+    { t:'single', title:'Least Privilege', text:'A developer only needs to read logs from one S3 bucket. What IAM policy should they get?', opts:['AdministratorAccess','Read-only access to that specific bucket','Full S3 access to all buckets','Root account credentials'], ans:1, exp:'Least privilege: grant the minimum permissions needed, scoped to the specific resource.' },
+    { t:'single', title:'Cloud Service Model', text:'A company uses Salesforce through the browser without managing any servers. This is…', opts:['IaaS','PaaS','SaaS','On-premises'], ans:2, exp:'SaaS: the provider runs everything and you just use the application.' },
+    { t:'single', title:'Volatile Memory', text:'Which memory loses its content when power is turned off?', opts:['ROM','SSD','RAM','HDD'], ans:2, exp:'RAM is volatile. ROM, SSD and HDD are non-volatile.' },
+    { t:'single', title:'MFA', text:'Which is an example of multi-factor authentication?', opts:['Password + security question','Password + code from an authenticator app','Two different passwords','Username + password'], ans:1, exp:'MFA combines <b>different factor types</b>: something you know, have, or are. A password and a security question are both “know”.' },
+    { t:'multi', title:'Container Benefits', text:'Which are advantages of containers over VMs?', opts:['Faster start-up','Smaller footprint','Each container has its own kernel','Consistent environment from dev to prod'], ans:[0,1,3], exp:'Containers share the host kernel; having their own kernel is a VM property.' },
+    { t:'open', title:'Auto-scaling', text:'Explain how auto-scaling works in the cloud and give one metric you would scale on.',
+      model:'A scaling group monitors metrics (e.g. <b>average CPU &gt; 70% for 5 minutes</b>, request count per instance, queue length, latency). When a threshold is breached it <b>adds instances</b> (scale out) behind the load balancer; when load drops it removes them (scale in), within min/max limits. Health checks replace unhealthy instances. Benefits: availability during peaks and lower cost off-peak. The app must be stateless.' },
+    { t:'single', title:'Git Index', text:'Which command shows the changes that are staged but not yet committed?', opts:['<code>git diff</code>','<code>git diff --staged</code>','<code>git log -p</code>','<code>git status -s</code>'], ans:1, exp:'<code>git diff</code> = working directory vs staging; <code>--staged</code> (<code>--cached</code>) = staging vs the last commit.' },
+    { t:'single', title:'SSD vs HDD', text:'Which workload benefits most from moving from HDD to SSD?', opts:['Sequential backup to tape','A database with many random reads and writes','Long-term cold archive','Streaming one large video file'], ans:1, exp:'SSDs have near-zero seek time, which matters most for random I/O. HDDs are acceptable for sequential/cold data.' }
+  ]},
+  { name: 'Compilation & Web Concepts', qs: [
+    { t:'single', title:'sessionStorage', text:'Which statement about <code>sessionStorage</code> is true?', opts:['It is shared across all tabs of the same site.','It is cleared when the tab is closed.','It never expires.','It is sent to the server with every request.'], ans:1, exp:'sessionStorage is per tab and cleared when the tab closes. localStorage persists and is shared across tabs of the same origin. <b>Cookies</b> are sent with every request.' },
+    { t:'single', title:'JSON.stringify', text:'What does <code>JSON.stringify({a: 1, b: [2, 3]})</code> return?', opts:['An object','<code>\'{"a":1,"b":[2,3]}\'</code>','<code>\'{a:1,b:[2,3]}\'</code>','An error'], ans:1, exp:'It converts an object to a JSON <b>string</b>, with keys in double quotes. <code>JSON.parse</code> does the reverse.' },
+    { t:'single', title:'Java Bytecode', text:'Which component makes Java bytecode run on Linux and Windows without recompiling?', opts:['javac','The JVM','The JDK installer','The operating system kernel'], ans:1, exp:'Each platform has its own JVM that executes (and JIT-compiles) the same <code>.class</code> files.' },
+    { t:'single', title:'Garbage Collection', text:'Which object becomes eligible for garbage collection?', code:`String a = new String("x");
+String b = a;
+a = null;
+b = new String("y");`, opts:['None','The "x" object','The "y" object','Both'], ans:1, exp:'After <code>b</code> is reassigned, nothing references "x", so it becomes eligible. "y" is still referenced by b.' },
+    { t:'single', title:'Interpreted vs Compiled', text:'Which statement is correct?', opts:['C is compiled to bytecode.','Python source is typically compiled to bytecode and run by an interpreter/VM.','Java is compiled directly to native machine code by javac.','JavaScript must be compiled before the browser can run it.'], ans:1, exp:'CPython compiles to .pyc bytecode run by its VM; C compiles to native code; javac compiles to bytecode; browsers JIT-compile JavaScript themselves.' },
+    { t:'single', title:'HTTP Methods', text:'Which HTTP method should be used to retrieve data without modifying anything?', opts:['POST','PUT','GET','DELETE'], ans:2, exp:'GET is safe and idempotent. POST creates, PUT replaces, PATCH updates partially, DELETE removes.' }
+  ]},
+  { name: 'SQL', qs: [
+    { t:'open', title:'Last Three Characters', text:'Using <code>Students(ID, First_Name, Family_Name, Grade, Major)</code>, print each student’s family name in uppercase and the length of their first name.',
+      model:'<pre>SELECT UPPER(Family_Name) AS family_upper,\n       LENGTH(First_Name)  AS first_len     -- SQL Server: LEN()\nFROM Students;</pre>With <code>CHAR(15)</code> the value is padded with spaces, so use <code>LENGTH(TRIM(First_Name))</code> to get the real length.' },
+    { t:'multi', title:'Average per Department', text:'<code>Employees(emp_id, dept_id, salary)</code>. Which queries return departments whose average salary exceeds 5000?', opts:['<code>SELECT dept_id FROM Employees GROUP BY dept_id HAVING AVG(salary) &gt; 5000;</code>','<code>SELECT dept_id FROM Employees WHERE AVG(salary) &gt; 5000 GROUP BY dept_id;</code>','<code>SELECT dept_id FROM (SELECT dept_id, AVG(salary) a FROM Employees GROUP BY dept_id) t WHERE a &gt; 5000;</code>','<code>SELECT dept_id, AVG(salary) FROM Employees HAVING AVG(salary) &gt; 5000;</code>'], ans:[0,2], exp:'Aggregates can’t appear in WHERE (B). D has no GROUP BY. A derived table (C) works.' },
+    { t:'single', title:'ALTER TABLE Add Column', text:'Which statement adds a NOT NULL column <code>status</code> with default <code>\'ACTIVE\'</code> to <code>Students</code> (Oracle/MySQL)?', opts:['<code>ALTER TABLE Students ADD status VARCHAR(10) DEFAULT \'ACTIVE\' NOT NULL;</code>','<code>UPDATE Students ADD status = \'ACTIVE\';</code>','<code>INSERT COLUMN status INTO Students;</code>','<code>ALTER Students NEW COLUMN status;</code>'], ans:0, exp:'DDL change → <code>ALTER TABLE … ADD</code>. The default fills existing rows, so NOT NULL is satisfied.' },
+    { t:'single', title:'ORA-02291', text:'Inserting into <code>enrollments(student_id, course_id)</code> fails with <code>ORA-02291: integrity constraint violated - parent key not found</code>. Why?', opts:['The enrollments table is full.','The student_id doesn’t exist in the students table.','The course_id is duplicated.','Oracle doesn’t allow inserts with foreign keys.'], ans:1, exp:'ORA-02291 = a child row referencing a parent that doesn’t exist. ORA-02292 = deleting a parent that still has children. ORA-00001 = unique constraint violated.' },
+    { t:'single', title:'HAVING Meaning', text:'What does this return?', code:`SELECT customer_id
+FROM Orders
+GROUP BY customer_id
+HAVING COUNT(*) >= 2;`, opts:['Customers with exactly 2 orders','Customers with at least 2 orders','Customers with no orders','All customers'], ans:1, exp:'<code>&gt;= 2</code> means at least two orders. Customers with no orders aren’t in Orders at all.' },
+    { t:'open', title:'CASE Bucketing', text:'<code>Trades(trade_id, notional)</code>. Label each trade as Small (&lt; 1M), Medium (1M–10M) or Large (&gt; 10M), and count the trades in each label.',
+      model:'<pre>SELECT bucket, COUNT(*) AS trades\nFROM (\n  SELECT CASE\n           WHEN notional &lt; 1000000 THEN \'Small\'\n           WHEN notional &lt;= 10000000 THEN \'Medium\'\n           ELSE \'Large\'\n         END AS bucket\n  FROM Trades\n) t\nGROUP BY bucket;</pre>(Repeating the same CASE expression in GROUP BY is also valid.)' },
+    { t:'open', title:'Top-2 per Category', text:'<code>Products(product_id, name, category, price)</code>. Return the two most expensive products in each category.',
+      model:'<pre>SELECT product_id, name, category, price\nFROM (\n  SELECT p.*, ROW_NUMBER() OVER (PARTITION BY category ORDER BY price DESC) AS rn\n  FROM Products p\n) x\nWHERE rn &lt;= 2;</pre>Use DENSE_RANK instead if tied prices should all be included.' },
+    { t:'single', title:'Multi-row UPDATE', text:'Which statement raises the salary by 10% for employees in departments 10 <b>and</b> 20 (i.e. both departments)?', opts:['<code>UPDATE Employees SET salary = salary * 1.1 WHERE dept_id = 10 AND dept_id = 20;</code>','<code>UPDATE Employees SET salary = salary * 1.1 WHERE dept_id IN (10, 20);</code>','<code>UPDATE Employees SET salary = salary * 1.1 WHERE dept_id = 10 OR 20;</code>','<code>UPDATE Employees SET salary * 1.1 WHERE dept_id IN (10, 20);</code>'], ans:1, exp:'“Both departments” in plain English means 10 <i>or</i> 20 per row. <code>AND</code> on the same column is never true; <code>= 10 OR 20</code> is a precedence trap; D lacks <code>salary =</code>.' },
+    { t:'single', title:'Index Choice', text:'Queries on <code>Trades</code> always filter by <code>book_id</code> and then by <code>trade_date</code> range. Best index?', opts:['Index on trade_date only','Composite index on (book_id, trade_date)','Composite index on (trade_date, book_id)','No index; use a view'], ans:1, exp:'Equality column first, range column second, so the index can seek directly to one book and scan the date range.' }
+  ]},
+  { name: 'Problem Analysis', qs: [
+    { t:'open', title:'Elevator Pseudocode', text:'Write pseudocode for a simple elevator in a 10-floor building that receives a requested floor, moves one floor at a time, and opens the doors on arrival. Ignore requests outside 0–9.',
+      model:'<pre>current = 0\nloop forever:\n    target = waitForRequest()\n    if target &lt; 0 or target &gt; 9:\n        continue                  # ignore invalid\n    while current != target:\n        if target &gt; current: current = current + 1\n        else:                current = current - 1\n        display(current)\n        wait(travelTime)\n    openDoors(); wait(10 seconds); closeDoors()</pre>Mention possible extensions: a request queue, direction priority, door obstruction sensor.' },
+    { t:'code', title:'Second Hand Angle', text:'Write a function that returns the angle in degrees between the <b>minute</b> and <b>second</b> hands, given minutes and seconds (the minute hand moves with the seconds). Return the smaller angle.',
+      starter:`function minSecAngle(m, s) {
+  // your code
+}
+console.log(minSecAngle(0, 30));  // 177
+console.log(minSecAngle(15, 0));  // 90`,
+      model:'<pre>function minSecAngle(m, s) {\n  const sec = 6 * s;                // 360/60 per second\n  const min = 6 * m + 0.1 * s;      // 6° per minute, +0.1° per second\n  const d = Math.abs(min - sec);\n  return Math.min(d, 360 - d);\n}</pre>Same method as the hour/minute clock question: compute each hand’s angle, take the absolute difference, then the smaller of d and 360 − d.' },
+    { t:'code', title:'Rotate Array', text:'Rotate an array to the right by k positions in place, without library functions. <code>[1,2,3,4,5]</code>, k = 2 → <code>[4,5,1,2,3]</code>.',
+      starter:`function rotate(arr, k) {
+  // your code
+}
+const a = [1,2,3,4,5];
+rotate(a, 2);
+console.log(a); // [4,5,1,2,3]`,
+      model:'<pre>function rev(a, i, j) { while (i &lt; j) { const t = a[i]; a[i] = a[j]; a[j] = t; i++; j--; } }\nfunction rotate(arr, k) {\n  const n = arr.length; if (n === 0) return arr;\n  k = k % n;\n  rev(arr, 0, n - 1);   // 5 4 3 2 1\n  rev(arr, 0, k - 1);   // 4 5 3 2 1\n  rev(arr, k, n - 1);   // 4 5 1 2 3\n  return arr;\n}</pre>Reversal trick: O(n) time, O(1) space. Handle k &gt; n with <code>%</code>.' },
+    { t:'code', title:'Count Vowels', text:'Count the vowels in a string (case-insensitive) without regular expressions.',
+      starter:`function vowels(s) {
+  // your code
+}
+console.log(vowels("Murex Technical Analyst")); // 7`,
+      model:'<pre>function vowels(s) {\n  let c = 0;\n  for (const ch of s.toLowerCase())\n    if ("aeiou".includes(ch)) c++;\n  return c;\n}</pre>' },
+    { t:'short', title:'Decision Trace', text:'What is printed?', code:`a = 7
+b = 3
+if a % b == 1 and a > b:
+    r = a * b
+elif a > b:
+    r = a - b
+else:
+    r = 0
+print(r)`, ans:['21'], exp:'7 % 3 = 1 and 7 &gt; 3 → the first branch: 7 × 3 = 21.' }
+  ]},
+  { name: 'Crash & Code Analysis', qs: [
+    { t:'single', title:'Python List Aliasing', text:'What is printed?', code:`a = [1, 2, 3]
+b = a
+b.append(4)
+print(a)`, opts:['[1, 2, 3]','[1, 2, 3, 4]','[4]','Error'], ans:1, exp:'<code>b = a</code> copies the <b>reference</b>, so both names point to the same list. Use <code>a.copy()</code> or <code>a[:]</code> to make a copy.' },
+    { t:'single', title:'Python Integer Division', text:'What does <code>print(7 // 2, 7 / 2, -7 // 2)</code> output in Python 3?', opts:['3 3.5 -3','3 3.5 -4','3 3 -3','3.5 3.5 -3.5'], ans:1, exp:'<code>//</code> is floor division (rounds toward −∞, so −7 // 2 = −4); <code>/</code> always returns a float. Java truncates toward zero (−7 / 2 = −3).' },
+    { t:'short', title:'Java Concatenation', text:'What is printed?', code:'System.out.println("Sum: " + 10 + 20 + (10 + 20));', ans:['Sum: 102030'], exp:'"Sum: " + 10 → "Sum: 10", + 20 → "Sum: 1020". The parentheses are evaluated first (30) and appended → <code>Sum: 102030</code>.' },
+    { t:'single', title:'finally and return', text:'What does <code>test()</code> return?', code:`static int test() {
+    try {
+        return 1;
+    } finally {
+        return 2;
+    }
+}`, opts:['1','2','Compiler error','Throws an exception'], ans:1, exp:'<code>finally</code> always runs, and a <code>return</code> inside it overrides the try’s return value. Bad practice, but valid Java.' },
+    { t:'single', title:'StackOverflowError', text:'What happens?', code:`static int f(int n) {
+    return n * f(n - 1);
+}
+public static void main(String[] a) { System.out.println(f(5)); }`, opts:['Prints 120','Prints 0','Throws StackOverflowError','Compiler error'], ans:2, exp:'There is no base case, so the recursion never stops and the call stack fills up. Fix: <code>if (n &lt;= 1) return 1;</code>.' },
+    { t:'multi', title:'Timeout Causes', text:'<code>java.net.SocketTimeoutException: Read timed out</code> appears when calling a pricing service. Possible causes?', opts:['The service is slow (e.g. heavy DB query)','The read timeout configured on the client is too low','The hostname cannot be resolved by DNS','Network congestion between client and service'], ans:[0,1,3], exp:'A read timeout means the connection succeeded but the response took too long. A DNS failure would give <code>UnknownHostException</code> before connecting.' },
+    { t:'single', title:'Deadlock Fix', text:'Two threads deadlock: T1 locks A then B, T2 locks B then A. Best fix?', opts:['Add more threads','Make both threads acquire the locks in the same order (A then B)','Increase heap size','Call System.gc()'], ans:1, exp:'A consistent lock ordering breaks the circular wait, one of the four conditions needed for deadlock.' },
+    { t:'open', title:'Intermittent Test Failure', text:'An automated test passes on your machine but fails about 1 in 5 times in the CI pipeline. List possible reasons.',
+      model:'<ul><li><b>Timing/race conditions</b>: hard-coded sleeps, async operations not awaited, parallel tests sharing data.</li><li><b>Test order dependency</b>: shared state that isn’t reset between tests.</li><li><b>Environment differences</b>: CI machines slower or overloaded, different OS/time zone/locale/JDK, missing resources, disk full.</li><li>External dependencies: network, a third-party service or the DB unavailable or slow.</li><li>Random or date-dependent data (e.g. tests that fail at month end).</li></ul>Approach: rerun with logs, isolate the test, compare environments, replace sleeps with explicit waits, make the data deterministic.' }
+  ]}
+  ]
+};
+
+</script>
+<script>
+const EXAMS = { A: EXAM_A, B: EXAM_B };
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const TYPE_LABEL = { single:'Pick ONE option', multi:'Pick ONE OR MORE options', short:'Short answer', open:'Open answer', code:'Coding' };
+const DURATION = 108 * 60;
+
+let pick = 'A', mode = 'exam';
+let S = null; // state
+
+// ---------- home ----------
+function renderHome(){
+  $('cards').innerHTML = ['A','B'].map(k => {
+    const e = EXAMS[k], n = e.sections.reduce((a,s)=>a+s.qs.length,0);
+    const auto = e.sections.reduce((a,s)=>a+s.qs.filter(q=>['single','multi','short'].includes(q.t)).length,0);
+    return `<div class="card ${pick===k?'on':''}" data-k="${k}"><span class="tag ${k==='A'?'g':''}">${k==='A'?'From the shared paper':'New questions'}</span>
+      <h3>${e.title}</h3><div class="meta">${n} questions · ${auto} auto-graded · ${n-auto} self-marked</div>
+      <div class="secs">${e.sections.map(s=>`<span class="tag">${s.name} · ${s.qs.length}</span>`).join('')}</div></div>`;
+  }).join('');
+  document.querySelectorAll('.card').forEach(c => c.onclick = () => { pick = c.dataset.k; renderHome(); });
+  document.querySelectorAll('.mode').forEach(m => { m.classList.toggle('on', m.dataset.m===mode); m.onclick = () => { mode = m.dataset.m; renderHome(); }; });
+  $('startInfo').textContent = mode==='exam' ? 'Timer starts immediately: 108 minutes.' : 'Untimed practice.';
+}
+$('startBtn').onclick = start;
+
+function start(){
+  const ex = EXAMS[pick];
+  const flat = [];
+  ex.sections.forEach((s,si)=>s.qs.forEach((q,qi)=>{ q._id = pick+'-'+si+'-'+qi; flat.push({q,si}); }));
+  S = { ex, flat, cur:0, sec:0, ans:{}, checked:{}, self:{}, code:{}, end: Date.now()+DURATION*1000, timer:null, done:false };
+  $('home').classList.add('hidden'); $('results').classList.add('hidden'); $('test').classList.remove('hidden');
+  $('barTitle').textContent = 'Murex Assessment 2026 · ' + (pick==='A'?'Version A':'Version B');
+  $('checkBtn').classList.toggle('hidden', mode==='exam');
+  $('submitSecBtn').classList.toggle('hidden', mode!=='exam');
+  if (mode==='exam'){ tick(); S.timer = setInterval(tick, 1000); } else $('timer').textContent = 'Practice';
+  $('timer').classList.remove('warn');
+  go(0);
+}
+
+function tick(){
+  const left = Math.max(0, Math.round((S.end - Date.now())/1000));
+  const m = Math.floor(left/60), s = left%60;
+  $('timer').textContent = String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+  $('timer').classList.toggle('warn', left < 600);
+  if (left === 0) finish(true);
+}
+
+// ---------- navigation ----------
+const canGo = i => mode==='practice' || S.flat[i].si === S.sec;
+function go(i){
+  if (i<0 || i>=S.flat.length || !canGo(i)) return;
+  saveFree(); S.cur = i; renderSide(); renderQ();
+  $('content').scrollTop = 0;
+}
+$('prevBtn').onclick = () => go(S.cur-1);
+$('nextBtn').onclick = () => go(S.cur+1);
+
+function answered(q){
+  const a = S.ans[q._id];
+  if (a===undefined||a===null) return false;
+  if (Array.isArray(a)) return a.length>0;
+  return String(a).trim()!=='';
+}
+function renderSide(){
+  let h = '', idx = 0;
+  S.ex.sections.forEach((s,si)=>{
+    const lock = mode==='exam' ? (si<S.sec?'submitted':si>S.sec?'locked':'') : '';
+    h += `<h4><span>${si+1}. ${s.name}</span><span class="lock">${lock}</span></h4>`;
+    s.qs.forEach(q=>{
+      const i = idx++;
+      let dot = answered(q)?'a':'';
+      if (S.checked[q._id]!==undefined) dot = S.checked[q._id]===true?'ok':S.checked[q._id]===false?'bad':'a';
+      h += `<div class="qn ${i===S.cur?'cur':''} ${canGo(i)?'':'dis'}" data-i="${i}"><span class="dot ${dot}"></span><span class="t">${i+1}. ${q.title}</span></div>`;
+    });
+  });
+  $('side').innerHTML = h;
+  $('side').querySelectorAll('.qn').forEach(el => el.onclick = () => go(+el.dataset.i));
+  const cur = S.flat[S.cur];
+  $('barSec').textContent = 'Section ' + (cur.si+1) + ' / ' + S.ex.sections.length + ' · ' + S.ex.sections[cur.si].name;
+  const secQs = S.ex.sections[S.sec].qs;
+  $('footInfo').textContent = mode==='exam' ? `${secQs.filter(answered).length}/${secQs.length} answered in this section` : `${S.flat.filter(f=>answered(f.q)).length}/${S.flat.length} answered`;
+  $('prevBtn').disabled = S.cur===0 || !canGo(S.cur-1);
+  $('nextBtn').disabled = S.cur===S.flat.length-1 || !canGo(S.cur+1);
+  if (mode==='exam') $('submitSecBtn').textContent = S.sec===S.ex.sections.length-1 ? 'Finish test' : 'Submit section';
+}
+
+// ---------- question ----------
+function renderQ(){
+  const {q} = S.flat[S.cur];
+  const a = S.ans[q._id];
+  let h = `<div class="qhead"><span class="qnum">QUESTION ${S.cur+1} OF ${S.flat.length}</span><span class="qtype">${TYPE_LABEL[q.t]}</span></div>
+    <div class="qtitle">${q.title}</div><div class="qtext">${q.text||''}</div>`;
+  if (q.code) h += `<pre><code>${esc(q.code)}</code></pre>`;
+  if (q.subtext) h += `<div class="qtext">${q.subtext}</div>`;
+  if (q.t==='single'||q.t==='multi'){
+    h += '<div class="opts">' + q.opts.map((o,i)=>{
+      const on = q.t==='single' ? a===i : (a||[]).includes(i);
+      return `<div class="opt ${on?'on':''}" data-i="${i}"><span class="box ${q.t==='single'?'r':'c'}"></span><span>${o}</span></div>`;
+    }).join('') + '</div>';
+  } else if (q.t==='short'){
+    h += `<input class="short" id="shortIn" placeholder="Type your answer" value="${esc(a||'')}" autocomplete="off" spellcheck="false">`;
+  } else if (q.t==='open'){
+    h += `<div class="editor"><div class="edbar">Your answer<span class="sp"></span><span>self-marked against a model answer</span></div><textarea class="code free" id="freeIn" placeholder="Write your answer (SQL, commands or prose)…">${esc(a||'')}</textarea></div>`;
+  } else if (q.t==='code'){
+    const v = a!==undefined ? a : q.starter;
+    h += `<div class="editor"><div class="edbar"><b>Code editor</b> · any language — JavaScript is runnable<span class="sp"></span><button class="btn btn-o" style="padding:4px 12px;font-size:12px" id="runBtn">▶ Run JS</button></div>
+      <textarea class="code" id="freeIn" spellcheck="false">${esc(v||'')}</textarea><div class="out hidden" id="out"></div></div>`;
+  }
+  h += '<div id="fbBox"></div>';
+  $('q').innerHTML = h;
+
+  document.querySelectorAll('.opt').forEach(el => el.onclick = () => {
+    if (S.checked[q._id]!==undefined && mode==='practice') return;
+    const i = +el.dataset.i;
+    if (q.t==='single') S.ans[q._id] = i;
+    else { const s = new Set(S.ans[q._id]||[]); s.has(i)?s.delete(i):s.add(i); S.ans[q._id] = [...s].sort((x,y)=>x-y); }
+    renderQ(); renderSide();
+  });
+  const si = $('shortIn'); if (si) si.oninput = () => { S.ans[q._id] = si.value; renderSide(); };
+  const fi = $('freeIn');
+  if (fi){
+    fi.oninput = () => { S.ans[q._id] = fi.value; };
+    fi.onblur = renderSide;
+    fi.onkeydown = e => { if (e.key==='Tab'){ e.preventDefault(); const s=fi.selectionStart; fi.value = fi.value.slice(0,s)+'  '+fi.value.slice(fi.selectionEnd); fi.selectionStart=fi.selectionEnd=s+2; S.ans[q._id]=fi.value; } };
+  }
+  const rb = $('runBtn'); if (rb) rb.onclick = () => runJS(fi.value);
+  if (S.checked[q._id]!==undefined) showFeedback(q);
+  $('checkBtn').disabled = S.checked[q._id]!==undefined;
+}
+function saveFree(){ const fi = $('freeIn'); if (fi && S && S.flat[S.cur]) S.ans[S.flat[S.cur].q._id] = fi.value; }
+
+// ---------- grading ----------
+const norm = s => String(s||'').trim().replace(/^["'`]+|["'`]+$/g,'').replace(/\s+/g,' ');
+function grade(q){
+  const a = S.ans[q._id];
+  if (q.t==='single') return a===q.ans;
+  if (q.t==='multi') return Array.isArray(a) && a.length===q.ans.length && q.ans.every(x=>a.includes(x));
+  if (q.t==='short'){
+    const v = norm(a);
+    return q.ans.some(x => q.caseSensitive ? v===x : v.toLowerCase()===x.toLowerCase());
+  }
+  return null; // self-marked
+}
+function correctText(q){
+  if (q.t==='single') return String.fromCharCode(65+q.ans) + '. ' + q.opts[q.ans];
+  if (q.t==='multi') return q.ans.map(i=>String.fromCharCode(65+i)+'. '+q.opts[i]).join('<br>');
+  if (q.t==='short') return '<code>'+esc(q.ans[0])+'</code>';
+  return '';
+}
+function feedbackHTML(q){
+  const g = grade(q);
+  if (g===null) return `<div class="fb"><b class="v">Model answer</b>${q.model}</div>`;
+  return `<div class="fb ${g?'ok':'bad'}"><b class="v">${g?'Correct.':'Not quite — correct answer:'}</b>${g?'':'<div style="margin-bottom:6px">'+correctText(q)+'</div>'}${q.exp||''}</div>`;
+}
+function showFeedback(q){
+  $('fbBox').innerHTML = feedbackHTML(q);
+  if (q.t==='single'||q.t==='multi'){
+    const right = q.t==='single'?[q.ans]:q.ans;
+    document.querySelectorAll('.opt').forEach(el=>{ const i=+el.dataset.i; if (right.includes(i)) el.classList.add('ok'); else if (el.classList.contains('on')) el.classList.add('bad'); });
+  }
+}
+$('checkBtn').onclick = () => {
+  saveFree();
+  const {q} = S.flat[S.cur];
+  const g = grade(q);
+  S.checked[q._id] = g===null ? 'seen' : g;
+  renderQ(); renderSide();
+};
+
+// ---------- sections & finish ----------
+function confirmBox(title, text, yes){
+  $('mTitle').textContent = title; $('mText').innerHTML = text; $('modal').classList.remove('hidden');
+  $('mYes').onclick = () => { $('modal').classList.add('hidden'); yes(); };
+  $('mNo').onclick = () => $('modal').classList.add('hidden');
+}
+$('submitSecBtn').onclick = () => {
+  saveFree();
+  const qs = S.ex.sections[S.sec].qs, un = qs.filter(q=>!answered(q)).length;
+  const last = S.sec===S.ex.sections.length-1;
+  confirmBox(last?'Finish the test?':'Submit this section?',
+    (un?`<b>${un} question${un>1?'s are':' is'} unanswered.</b> `:'') + 'You will <b>not</b> be able to come back to this section.',
+    () => {
+      if (last) return finish(false);
+      S.sec++; go(S.flat.findIndex(f=>f.si===S.sec));
+    });
+};
+$('quitBtn').onclick = () => confirmBox('End the test now?', 'Your answers so far will be graded.', () => finish(false));
+
+function finish(timeUp){
+  if (S.done) return; S.done = true;
+  saveFree(); clearInterval(S.timer);
+  S.used = Math.round((DURATION*1000 - (S.end-Date.now()))/1000);
+  $('test').classList.add('hidden'); $('results').classList.remove('hidden');
+  $('resTitle').textContent = (timeUp?'Time is up — ':'') + S.ex.title;
+  $('resSub').textContent = mode==='exam' ? `Exam mode · time used ${Math.floor(S.used/60)} min ${S.used%60} s of 108` : 'Practice mode';
+  S.filter = 'all';
+  renderResults();
+  window.scrollTo(0,0);
+}
+
+function qScore(q){ const g = grade(q); return g===null ? (S.self[q._id]===true) : g; }
+function renderResults(){
+  let tot=0, ok=0, autoT=0, autoOk=0;
+  const bars = S.ex.sections.map(s=>{
+    let t=0,o=0; s.qs.forEach(q=>{ t++; if (qScore(q)) o++; if (grade(q)!==null){ autoT++; if (grade(q)) autoOk++; } });
+    tot+=t; ok+=o;
+    return `<div class="sb"><span>${s.name}</span><div class="track"><div class="fill" style="width:${t?o/t*100:0}%"></div></div><span><b>${o}</b>/${t}</span></div>`;
+  }).join('');
+  const pct = Math.round(ok/tot*100);
+  $('bigScore').textContent = pct+'%';
+  $('bigScore').style.color = pct>=70?'var(--green)':pct>=50?'var(--amber)':'var(--red)';
+  const selfLeft = S.flat.filter(f=>grade(f.q)===null && S.self[f.q._id]===undefined).length;
+  $('scoreDetail').innerHTML = `${ok} / ${tot} correct<br>Auto-graded: ${autoOk}/${autoT}${selfLeft?`<br>${selfLeft} open answers still to self-mark ↓`:''}`;
+  $('secbars').innerHTML = bars;
+
+  const F = [['all','All'],['wrong','Wrong / unmarked'],['self','Self-mark'],...S.ex.sections.map((s,i)=>['s'+i,s.name])];
+  $('filters').innerHTML = F.map(([k,l])=>`<span class="chip ${S.filter===k?'on':''}" data-k="${k}">${l}</span>`).join('');
+  $('filters').querySelectorAll('.chip').forEach(c=>c.onclick=()=>{ S.filter=c.dataset.k; renderResults(); });
+
+  let h='';
+  S.flat.forEach(({q,si},i)=>{
+    const g = grade(q), sc = qScore(q);
+    if (S.filter==='wrong' && sc) return;
+    if (S.filter==='self' && g!==null) return;
+    if (S.filter[0]==='s' && S.filter!=='self' && +S.filter.slice(1)!==si) return;
+    const badge = g===null ? (S.self[q._id]===undefined?'<span class="badge self">Self-mark</span>':S.self[q._id]?'<span class="badge ok">Marked correct</span>':'<span class="badge bad">Marked wrong</span>') : (g?'<span class="badge ok">Correct</span>':'<span class="badge bad">'+(answered(q)?'Wrong':'Unanswered')+'</span>');
+    let yours = '';
+    const a = S.ans[q._id];
+    if (q.t==='single') yours = a===undefined?'—':String.fromCharCode(65+a)+'. '+q.opts[a];
+    else if (q.t==='multi') yours = (a&&a.length)?a.map(x=>String.fromCharCode(65+x)).join(', '):'—';
+    else yours = answered(q) ? '<pre>'+esc(a)+'</pre>' : '—';
+    h += `<div class="ritem"><div class="rh"><span class="qnum">Q${i+1} · ${S.ex.sections[si].name}</span>${badge}</div>
+      <div class="qtitle" style="font-size:16px;margin:6px 0">${q.title}</div>
+      <div class="yours"><b>Your answer:</b> ${yours}</div>${feedbackHTML(q)}
+      ${g===null?`<div class="selfmark">Compare with the model answer — did you get it?
+        <button class="btn btn-o" style="padding:4px 12px;font-size:12px" data-id="${q._id}" data-v="1">✓ Got it</button>
+        <button class="btn btn-o" style="padding:4px 12px;font-size:12px" data-id="${q._id}" data-v="0">✗ Missed it</button></div>`:''}</div>`;
+  });
+  $('review').innerHTML = h || '<div class="muted">Nothing here.</div>';
+  $('review').querySelectorAll('[data-id]').forEach(b=>b.onclick=()=>{ S.self[b.dataset.id] = b.dataset.v==='1'; renderResults(); });
+}
+$('homeBtn').onclick = () => { $('results').classList.add('hidden'); $('home').classList.remove('hidden'); renderHome(); };
+
+// ---------- JS runner (sandboxed worker) ----------
+let worker = null;
+function runJS(code){
+  const out = $('out'); out.classList.remove('hidden'); out.innerHTML = '';
+  if (worker) worker.terminate();
+  const pre = `const __s=v=>typeof v==='bigint'?v+'n':typeof v==='object'&&v!==null?JSON.stringify(v):String(v);
+const console={log:(...a)=>postMessage({t:'log',v:a.map(__s).join(' ')}),error:(...a)=>postMessage({t:'err',v:a.map(__s).join(' ')})};
+try{\n`;
+  const post = `\n}catch(e){postMessage({t:'err',v:String(e)})}\npostMessage({t:'done'});`;
+  let url;
+  try { url = URL.createObjectURL(new Blob([pre+code+post],{type:'text/javascript'})); worker = new Worker(url); }
+  catch(e){ out.innerHTML = '<span class="e">Runner unavailable here: '+esc(e.message)+'</span>'; return; }
+  const add = (t,cls) => { const d=document.createElement('div'); if(cls) d.className=cls; d.textContent=t; out.appendChild(d); out.scrollTop=out.scrollHeight; };
+  const kill = setTimeout(()=>{ worker.terminate(); add('⏱ Stopped after 3 s (infinite loop?)','e'); }, 3000);
+  worker.onmessage = e => { const m=e.data; if (m.t==='done'){ clearTimeout(kill); if(!out.childNodes.length) add('(no output)'); URL.revokeObjectURL(url);} else add(m.v, m.t==='err'?'e':''); };
+  worker.onerror = e => { clearTimeout(kill); add('SyntaxError: '+(e.message||'check your code'),'e'); e.preventDefault(); };
+}
+
+renderHome();
+
+</script>
+</body>
+</html>

@@ -1,0 +1,1873 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Murex Technical Test — Complete Concept Review</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f4f6f9;--panel:#fff;--ink:#0e141e;--ink2:#3a4553;--muted:#6f7f8f;--line:#e2e7ee;--top:#0e141e;--green:#1ba94c;--green-d:#13893c;--blue:#2e6fd8;--red:#d6363c;--amber:#b77900;--code:#f6f8fa}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;background:var(--bg);color:var(--ink);font-size:15px;line-height:1.6}
+code,pre,kbd{font-family:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace}
+code{background:#eaeef3;padding:1px 5px;border-radius:4px;font-size:.86em;white-space:nowrap}
+pre{background:var(--code);border:1px solid var(--line);border-radius:6px;padding:11px 14px;overflow:auto;font-size:12.8px;line-height:1.55;margin:10px 0}
+pre code{background:none;padding:0;white-space:pre}
+.c{color:#6a7a89}
+header.top{position:sticky;top:0;z-index:20;background:var(--top);color:#fff;height:58px;display:flex;align-items:center;gap:14px;padding:0 20px}
+.logo{width:30px;height:30px;border-radius:6px;background:var(--green);display:grid;place-items:center;font-weight:700}
+header h1{font-size:15px;margin:0;font-weight:600;white-space:nowrap}
+header .sp{flex:1}
+#search{width:300px;max-width:40vw;padding:8px 12px;border-radius:6px;border:0;background:#1d2633;color:#fff;font:inherit;font-size:14px}
+#search::placeholder{color:#8794a3}
+#prog{font-size:12.5px;color:#9aa7b4;white-space:nowrap}
+.layout{display:flex;max-width:1400px;margin:0 auto}
+nav#toc{width:270px;flex-shrink:0;position:sticky;top:58px;height:calc(100vh - 58px);overflow:auto;padding:18px 0 40px;border-right:1px solid var(--line);background:#fff}
+nav#toc a{display:block;padding:4px 18px;color:var(--ink2);text-decoration:none;font-size:13px;border-left:3px solid transparent}
+nav#toc a.h2{font-weight:600;color:var(--ink);margin-top:10px;font-size:13.5px}
+nav#toc a.h3{padding-left:30px;font-size:12.5px}
+nav#toc a:hover{background:#f3f6f9}
+nav#toc a.act{border-left-color:var(--green);background:#eef7f1;color:var(--ink)}
+nav#toc a .ck{color:var(--green);font-weight:700}
+main{flex:1;min-width:0;padding:26px 36px 120px;max-width:1080px}
+.intro{background:#fff;border:1px solid var(--line);border-radius:10px;padding:18px 22px;margin-bottom:24px}
+.intro h2{margin:0 0 6px;font-size:22px}
+section.topic{background:#fff;border:1px solid var(--line);border-radius:10px;padding:8px 26px 22px;margin-bottom:22px}
+section.topic>h2{font-size:23px;margin:16px 0 4px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+section.topic>h2 .num{font-size:13px;background:var(--top);color:#fff;border-radius:5px;padding:2px 8px}
+section.topic>h2 label{margin-left:auto;font-size:12.5px;font-weight:500;color:var(--muted);display:flex;align-items:center;gap:6px;cursor:pointer}
+.lead{color:var(--ink2);margin:0 0 6px}
+h3{font-size:17px;margin:26px 0 6px;padding-top:12px;border-top:1px solid var(--line)}
+h4{font-size:14.5px;margin:16px 0 4px}
+p{margin:6px 0}
+ul,ol{margin:6px 0;padding-left:22px}
+li{margin:2px 0}
+table{border-collapse:collapse;font-size:13.5px;margin:10px 0;width:100%}
+th,td{border:1px solid var(--line);padding:6px 10px;text-align:left;vertical-align:top}
+th{background:#f3f5f8;font-weight:600}
+td code{white-space:normal}
+.tw{overflow-x:auto}
+.trap,.tip,.key{border-radius:8px;padding:10px 14px;margin:12px 0;font-size:14px}
+.trap{background:#fdf0f0;border-left:4px solid var(--red)}
+.trap::before{content:"EXAM TRAP";display:block;font-size:10.5px;font-weight:700;letter-spacing:.07em;color:var(--red);margin-bottom:2px}
+.tip{background:#eef4fd;border-left:4px solid var(--blue)}
+.tip::before{content:"HOW TO ANSWER";display:block;font-size:10.5px;font-weight:700;letter-spacing:.07em;color:var(--blue);margin-bottom:2px}
+.key{background:#ecf8f0;border-left:4px solid var(--green)}
+.key::before{content:"REMEMBER";display:block;font-size:10.5px;font-weight:700;letter-spacing:.07em;color:var(--green-d);margin-bottom:2px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.hide{display:none!important}
+mark{background:#ffe58a;padding:0 1px;border-radius:2px}
+.done>h2{color:var(--green-d)}
+@media(max-width:900px){nav#toc{display:none}main{padding:16px 12px 80px}section.topic{padding:6px 14px 16px}.grid2{grid-template-columns:1fr}#prog{display:none}}
+@media print{header.top,nav#toc{display:none}section.topic{break-inside:auto;border:0}}
+</style>
+</head>
+<body>
+<header class="top"><div class="logo">M</div><h1>Murex Technical Test — Concept Review</h1><div class="sp"></div><input id="search" type="search" placeholder="Search any concept… (e.g. chmod, HAVING, 403)"><span id="prog"></span></header>
+<div class="layout">
+<nav id="toc"></nav>
+<main id="main">
+<div class="intro">
+<h2>Everything to know before the test</h2>
+<p class="lead">This covers the five areas in Murex’s invitation email (General tech knowledge, Crash analysis, SQL, Problem analysis, Testing) plus everything both shared papers (Technical Analyst EMEA and Assessment 2026) touched: Linux, Bash, Git, networking, SQL, Java &amp; C errors, troubleshooting, testing, algorithms, hardware, cloud and DevOps.</p>
+<p class="lead">Red <b>Exam trap</b> boxes mark the patterns the test likes to catch you on. Tick <b>Reviewed</b> on each section when you’re done. Search filters the whole page.</p>
+</div>
+<section class="topic" id="linux">
+<h2><span class="num">1</span>Linux / UNIX</h2>
+<p class="lead">The biggest section of the paper (23 questions). Know each command, its most-used flags, and how to read a one-liner.</p>
+
+<h3 id="linux-fs">Filesystem &amp; navigation</h3>
+<div class="tw"><table>
+<tr><th>Path</th><th>Contains</th><th>Path</th><th>Contains</th></tr>
+<tr><td><code>/</code></td><td>root of everything</td><td><code>/var/log</code></td><td>log files (syslog, messages, app logs)</td></tr>
+<tr><td><code>/home/user</code> (<code>~</code>)</td><td>user home directories</td><td><code>/tmp</code></td><td>temporary files (often wiped on reboot)</td></tr>
+<tr><td><code>/root</code></td><td>root user’s home</td><td><code>/etc</code></td><td>configuration files (<code>/etc/passwd</code>, <code>/etc/hosts</code>, <code>/etc/crontab</code>)</td></tr>
+<tr><td><code>/bin</code>, <code>/usr/bin</code></td><td>user commands</td><td><code>/sbin</code></td><td>admin/system commands</td></tr>
+<tr><td><code>/opt</code></td><td>optional/third-party software</td><td><code>/dev</code></td><td>device files (<code>/dev/null</code>, <code>/dev/sda</code>)</td></tr>
+<tr><td><code>/proc</code></td><td>virtual: running processes &amp; kernel info (<code>/proc/cpuinfo</code>, <code>/proc/meminfo</code>)</td><td><code>/lib</code></td><td>shared libraries (<code>.so</code>)</td></tr>
+</table></div>
+<div class="tw"><table>
+<tr><th>Command</th><th>Meaning</th></tr>
+<tr><td><code>pwd</code></td><td>print working directory</td></tr>
+<tr><td><code>cd dir</code> · <code>cd ..</code> · <code>cd ~</code> · <code>cd -</code></td><td>change directory · parent · home · previous directory</td></tr>
+<tr><td><code>ls</code></td><td>list. <code>-l</code> long format (permissions, owner, group, size, date) · <code>-a</code> include hidden (dot) files · <code>-h</code> human sizes · <code>-t</code> sort by time (newest first) · <code>-r</code> reverse · <code>-S</code> sort by size · <code>-R</code> recursive. <code>ls -ltr</code> = long, oldest first, newest at bottom.</td></tr>
+<tr><td>Absolute vs relative path</td><td><code>/var/log/app.log</code> starts at root; <code>logs/app.log</code> starts at current dir. <code>.</code> = current, <code>..</code> = parent.</td></tr>
+</table></div>
+<p>Reading <code>ls -l</code>: <code>-rwxr-x--- 1 mohamad dev 4096 Nov 9 10:00 run.sh</code> → type(<code>-</code> file, <code>d</code> dir, <code>l</code> link) · permissions · link count · owner · group · size (bytes) · modified date · name.</p>
+
+<h3 id="linux-files">File operations &amp; viewing</h3>
+<div class="tw"><table>
+<tr><th>Command</th><th>What it does</th></tr>
+<tr><td><code>touch f</code></td><td>create empty file or update its timestamp</td></tr>
+<tr><td><code>mkdir d</code> · <code>mkdir -p a/b/c</code></td><td>make directory · with parents</td></tr>
+<tr><td><code>cp src dst</code> · <code>cp -r</code></td><td>copy · recursively (directories)</td></tr>
+<tr><td><code>mv src dst</code></td><td>move <b>or rename</b></td></tr>
+<tr><td><code>rm f</code> · <code>rm -r d</code> · <code>rm -rf d</code> · <code>rmdir d</code></td><td>delete file · directory recursively · force, no prompts (dangerous) · remove <i>empty</i> dir</td></tr>
+<tr><td><code>cat f</code></td><td>print whole file (also concatenates: <code>cat a b &gt; c</code>)</td></tr>
+<tr><td><code>less f</code> / <code>more f</code></td><td>page through a file (<code>/word</code> search, <code>q</code> quit, <code>G</code> end)</td></tr>
+<tr><td><code>head f</code> · <code>head -n 20 f</code></td><td>first 10 lines · first 20</td></tr>
+<tr><td><code>tail f</code> · <code>tail -n 50 f</code> · <code>tail -f f</code></td><td>last 10 lines · last 50 · <b>follow</b> live as the file grows (log monitoring)</td></tr>
+<tr><td><code>wc f</code></td><td>count: <code>-l</code> lines, <code>-w</code> words, <code>-c</code> bytes, <code>-m</code> chars</td></tr>
+<tr><td><code>file f</code></td><td>detect the type of a file</td></tr>
+<tr><td><code>diff a b</code></td><td>line-by-line differences</td></tr>
+<tr><td><code>ln -s target link</code> · <code>ln target link</code></td><td>symbolic (soft) link — a pointer to a path, breaks if target deleted, can cross filesystems · hard link — another name for the same inode, survives deletion of the original, same filesystem only, not for directories</td></tr>
+<tr><td><code>stat f</code></td><td>detailed metadata (inode, times, permissions)</td></tr>
+</table></div>
+
+<h3 id="linux-perm">Permissions: chmod, chown, umask</h3>
+<p>Three classes: <b>u</b>ser (owner), <b>g</b>roup, <b>o</b>thers (<b>a</b> = all). Three rights: <b>r</b>ead = 4, <b>w</b>rite = 2, e<b>x</b>ecute = 1. Add them per class.</p>
+<div class="tw"><table>
+<tr><th>Digit</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th></tr>
+<tr><td>Rights</td><td><code>---</code></td><td><code>--x</code></td><td><code>-w-</code></td><td><code>-wx</code></td><td><code>r--</code></td><td><code>r-x</code></td><td><code>rw-</code></td><td><code>rwx</code></td></tr>
+</table></div>
+<div class="tw"><table>
+<tr><th>Numeric</th><th>Symbolic</th><th>Typical use</th></tr>
+<tr><td><code>777</code></td><td><code>rwxrwxrwx</code></td><td>everyone everything (insecure)</td></tr>
+<tr><td><code>755</code></td><td><code>rwxr-xr-x</code></td><td>scripts/programs, directories</td></tr>
+<tr><td><code>750</code></td><td><code>rwxr-x---</code></td><td>owner full, group read+run, others nothing</td></tr>
+<tr><td><code>744</code></td><td><code>rwxr--r--</code></td><td>owner full, everyone else read-only</td></tr>
+<tr><td><code>700</code></td><td><code>rwx------</code></td><td><b>owner only</b>, everything</td></tr>
+<tr><td><code>644</code></td><td><code>rw-r--r--</code></td><td>normal files</td></tr>
+<tr><td><code>640</code></td><td><code>rw-r-----</code></td><td>config files readable by group</td></tr>
+<tr><td><code>600</code></td><td><code>rw-------</code></td><td>private files, SSH keys</td></tr>
+<tr><td><code>400</code></td><td><code>r--------</code></td><td>read-only for owner (AWS .pem keys)</td></tr>
+</table></div>
+<h4>Symbolic mode (relative changes)</h4>
+<pre>chmod u+x run.sh          <span class="c"># add execute for owner</span>
+chmod go-rwx file1.txt    <span class="c"># remove ALL rights from group and others; owner unchanged</span>
+chmod a+r file            <span class="c"># everyone can read (a = ugo)</span>
+chmod ugo+r f &amp;&amp; chmod go-wx f &amp;&amp; chmod u+wx f   <span class="c"># ends as rwxr--r-- = 744</span>
+chmod u=rwx,g=rx,o= f     <span class="c"># "=" sets exactly → 750</span>
+chmod -R 755 /data        <span class="c"># -R = recursive (dir + contents)</span></pre>
+<div class="trap">Numeric mode <b>sets</b> all bits absolutely; symbolic <code>+</code>/<code>-</code> <b>changes</b> only what you name. <code>chmod 700 f</code> does not change the owner to “user 700” — it’s rwx for owner only. “Exclusively the owner” → <code>700</code>.</div>
+<div class="tw"><table>
+<tr><th>Command</th><th>Meaning</th></tr>
+<tr><td><code>chown user file</code> · <code>chown user:group file</code> · <code>chown -R</code></td><td>change owner · owner and group · recursive</td></tr>
+<tr><td><code>chgrp group file</code></td><td>change group</td></tr>
+<tr><td><code>umask 022</code></td><td>default mask removed from new files: files 666−022 = <code>644</code>, dirs 777−022 = <code>755</code></td></tr>
+<tr><td>Directory permissions</td><td><b>r</b> = list names, <b>w</b> = create/delete files inside, <b>x</b> = enter (<code>cd</code>) and access files</td></tr>
+<tr><td>Special bits</td><td><b>SUID</b> (4xxx, <code>s</code> in user x) runs with owner’s rights (e.g. <code>passwd</code>) · <b>SGID</b> (2xxx) group’s rights / inherit group in dir · <b>Sticky</b> (1xxx, <code>t</code>) only owner can delete their files (<code>/tmp</code> is 1777)</td></tr>
+<tr><td><code>sudo cmd</code> · <code>su - user</code></td><td>run as root · switch user</td></tr>
+<tr><td><code>whoami</code> · <code>id</code> · <code>groups</code></td><td>current user · uid/gid/groups · group list</td></tr>
+<tr><td><code>useradd</code>, <code>passwd</code>, <code>usermod -aG grp user</code></td><td>create user · set password · add to group</td></tr>
+</table></div>
+
+<h3 id="linux-redir">Redirection, pipes &amp; /dev/null</h3>
+<p>Every process has 3 streams: <b>0 = stdin</b>, <b>1 = stdout</b>, <b>2 = stderr</b>.</p>
+<div class="tw"><table>
+<tr><th>Syntax</th><th>Meaning</th></tr>
+<tr><td><code>cmd &gt; f</code></td><td>stdout to file, <b>overwrite</b> (same as <code>1&gt; f</code>)</td></tr>
+<tr><td><code>cmd &gt;&gt; f</code></td><td>stdout to file, <b>append</b></td></tr>
+<tr><td><code>cmd 2&gt; f</code></td><td>stderr to file</td></tr>
+<tr><td><code>cmd &gt; f 2&gt;&amp;1</code></td><td>stdout to f, then stderr to <b>where stdout points</b> → both into f</td></tr>
+<tr><td><code>cmd &amp;&gt; f</code></td><td>bash shortcut: both to f</td></tr>
+<tr><td><code>cmd 2&gt;&amp;1 &gt; f</code></td><td>order matters! stderr copied to the terminal (stdout’s target <i>at that moment</i>), then stdout moved to f → <b>stderr still on screen</b></td></tr>
+<tr><td><code>cmd 2&gt;1</code></td><td><b>no &amp;</b> → stderr goes to a <b>file named “1”</b></td></tr>
+<tr><td><code>cmd &gt; /dev/null 2&gt;&amp;1</code></td><td>discard all output (<code>/dev/null</code> = black hole)</td></tr>
+<tr><td><code>cmd &lt; f</code></td><td>stdin from file</td></tr>
+<tr><td><code>cmd1 | cmd2</code></td><td>pipe: stdout of cmd1 becomes stdin of cmd2</td></tr>
+<tr><td><code>cmd | tee f</code></td><td>show on screen <b>and</b> write to file</td></tr>
+<tr><td><code>cmd1 ; cmd2</code></td><td>run sequentially regardless of result</td></tr>
+<tr><td><code>cmd1 &amp;&amp; cmd2</code></td><td>run cmd2 only if cmd1 <b>succeeds</b> (exit 0)</td></tr>
+<tr><td><code>cmd1 || cmd2</code></td><td>run cmd2 only if cmd1 <b>fails</b></td></tr>
+<tr><td><code>cmd &amp;</code></td><td>run in background</td></tr>
+</table></div>
+<div class="trap"><code>ls -ltr &gt; /dev/null 2&gt;1</code> → stderr to a file named <b>1</b>. <code>ls -ltr &gt; /dev/null 2&gt;&amp;1</code> → both discarded. The test asks both versions back to back.</div>
+
+<h3 id="linux-text">Searching &amp; text processing</h3>
+<h4>grep — search file <i>contents</i> for a pattern</h4>
+<div class="tw"><table>
+<tr><th>Flag</th><th>Meaning</th><th>Flag</th><th>Meaning</th></tr>
+<tr><td><code>-i</code></td><td>ignore case</td><td><code>-v</code></td><td>invert: lines <b>not</b> matching</td></tr>
+<tr><td><code>-c</code></td><td>count matching lines</td><td><code>-n</code></td><td>show line numbers</td></tr>
+<tr><td><code>-r</code> / <code>-R</code></td><td>recursive in directories</td><td><code>-l</code></td><td>print only <b>file names</b> with matches</td></tr>
+<tr><td><code>-w</code></td><td>whole word</td><td><code>-E</code></td><td>extended regex (<code>a|b</code>, <code>+</code>, <code>?</code>) = egrep</td></tr>
+<tr><td><code>-A 3</code> / <code>-B 3</code> / <code>-C 3</code></td><td>3 lines after / before / around</td><td><code>-o</code></td><td>only the matching part</td></tr>
+</table></div>
+<pre>grep -i "error" app.log            <span class="c"># lines with error/ERROR</span>
+grep -c "ORA-" db.log               <span class="c"># how many Oracle errors</span>
+grep -rn "startGrid" /opt/murex/    <span class="c"># where is it used</span>
+ps -ef | grep java                  <span class="c"># find java processes</span>
+ls -l | grep -c .                   <span class="c"># count lines with ≥1 character (. = any char)</span></pre>
+<p>Regex basics: <code>.</code> any char · <code>*</code> 0+ of previous · <code>^</code> start of line · <code>$</code> end of line · <code>[abc]</code> one of · <code>[0-9]</code> digit · <code>\</code> escape.</p>
+<h4>find — search for <i>files</i> by name/attributes</h4>
+<pre>find /var/log -name "*.log"            <span class="c"># by name (-iname = case-insensitive)</span>
+find . -type f                         <span class="c"># files only (d = directories, l = links)</span>
+find . -size +100M                     <span class="c"># bigger than 100 MB</span>
+find . -mtime -1                       <span class="c"># modified less than 1 day ago (+7 = more than 7 days ago)</span>
+find . -mmin -30                       <span class="c"># modified in last 30 minutes</span>
+find . -user mohamad -perm 777
+find /tmp -name "*.tmp" -delete
+find . -name "*.log" -exec rm {} \;    <span class="c"># run rm once per file; {} = the file</span>
+find /var/log -type f -exec du -h {} + | sort -rh | head -n 10
+<span class="c">#  → the 10 largest FILES in human-readable format ({} + passes many files at once)</span></pre>
+<div class="tw"><table>
+<tr><th>Command</th><th>What it does</th></tr>
+<tr><td><code>sort</code></td><td>sort lines. <code>-n</code> numeric · <code>-r</code> reverse · <code>-h</code> human sizes (2K &lt; 1M) · <code>-k2</code> by column 2 · <code>-u</code> unique · <code>-t,</code> delimiter</td></tr>
+<tr><td><code>uniq</code></td><td>remove <b>adjacent</b> duplicates (so <code>sort | uniq</code>). <code>-c</code> count, <code>-d</code> only duplicates</td></tr>
+<tr><td><code>cut -d',' -f2</code></td><td>2nd field of comma-separated lines (<code>-c1-5</code> chars 1–5)</td></tr>
+<tr><td><code>awk '{print $3}'</code></td><td>3rd whitespace-separated field. <code>-F,</code> sets separator. <code>$0</code> whole line, <code>NR</code> line number, <code>NF</code> number of fields. <code>awk '$3 &gt; 100' f</code> filters. <code>awk '{s+=$2} END {print s}'</code> sums column 2.</td></tr>
+<tr><td><code>sed 's/old/new/g' f</code></td><td>stream editor: replace all occurrences (<code>-i</code> edit in place). <code>sed -n '5,10p'</code> print lines 5–10. <code>sed '/^#/d'</code> delete comment lines.</td></tr>
+<tr><td><code>tr 'a-z' 'A-Z'</code></td><td>translate/convert characters (<code>-d</code> delete)</td></tr>
+<tr><td><code>xargs</code></td><td>turn stdin into arguments: <code>find . -name "*.tmp" | xargs rm</code></td></tr>
+<tr><td><code>paste</code>, <code>join</code>, <code>comm</code></td><td>merge files side by side / on a key / compare sorted files</td></tr>
+</table></div>
+<pre><span class="c"># top 5 most frequent IPs in an access log</span>
+awk '{print $1}' access.log | sort | uniq -c | sort -rn | head -5</pre>
+
+<h3 id="linux-proc">Processes &amp; jobs</h3>
+<div class="tw"><table>
+<tr><th>Command</th><th>Meaning</th></tr>
+<tr><td><code>ps</code> · <code>ps -ef</code> · <code>ps aux</code></td><td>processes of current shell · <b>all processes</b> full format (UID, PID, PPID, CMD) · BSD style with %CPU %MEM</td></tr>
+<tr><td><code>top</code> / <code>htop</code></td><td>live view: load average, CPU, memory, processes (press <code>M</code> sort by memory, <code>P</code> by CPU)</td></tr>
+<tr><td><code>pgrep java</code> · <code>pidof java</code></td><td>PIDs by name</td></tr>
+<tr><td><code>kill PID</code></td><td>sends <b>SIGTERM (15)</b> — polite, process can clean up/ignore</td></tr>
+<tr><td><code>kill -9 PID</code></td><td><b>SIGKILL</b> — immediate, cannot be caught (last resort)</td></tr>
+<tr><td><code>kill -1</code> / <code>-HUP</code>; <code>kill -2</code> / <code>-INT</code>; <code>-STOP</code>/<code>-CONT</code></td><td>reload config; same as Ctrl+C; pause/resume</td></tr>
+<tr><td><code>pkill name</code> · <code>killall name</code></td><td>kill by name</td></tr>
+<tr><td><code>cmd &amp;</code> · <code>jobs</code> · <code>fg %1</code> · <code>bg %1</code> · Ctrl+Z</td><td>background · list jobs · bring to foreground · resume in background · suspend</td></tr>
+<tr><td><code>nohup cmd &amp;</code></td><td>keep running after you log out (output → nohup.out)</td></tr>
+<tr><td><code>nice -n 10 cmd</code> · <code>renice</code></td><td>lower/raise priority (−20 highest, 19 lowest)</td></tr>
+<tr><td><code>pstack PID</code> · <code>jstack PID</code></td><td>print the stack of a running native process · Java thread dump — see where it’s stuck</td></tr>
+<tr><td><code>strace -p PID</code> · <code>ltrace</code></td><td>trace system calls / library calls live</td></tr>
+<tr><td><code>lsof -p PID</code> · <code>lsof -i :8080</code> · <code>lsof +L1</code></td><td>files opened by a process · who uses port 8080 · deleted-but-open files (disk not freed)</td></tr>
+</table></div>
+<p><b>Process states</b> (in <code>ps</code>/<code>top</code>): R running · S sleeping · D uninterruptible (waiting on I/O) · T stopped · Z <b>zombie</b> (finished, parent hasn’t collected it). PID 1 = init/systemd. Every process has a parent (PPID). An <b>orphan</b> is adopted by PID 1.</p>
+<p><b>Load average</b> (in <code>top</code>/<code>uptime</code>): three numbers = average runnable processes over 1, 5, 15 min. Above the number of CPU cores = overloaded.</p>
+
+<h3 id="linux-sys">System, disk &amp; memory</h3>
+<div class="tw"><table>
+<tr><th>Command</th><th>Shows</th></tr>
+<tr><td><code>uname -a</code> · <code>uname -r</code></td><td>OS/kernel name, version, architecture · kernel release (<b>“which UNIX version?”</b>)</td></tr>
+<tr><td><code>cat /etc/os-release</code> · <code>hostname</code></td><td>distribution name/version · machine name</td></tr>
+<tr><td><code>uptime</code></td><td>time since boot, users, load average</td></tr>
+<tr><td><code>df -h</code></td><td>free/used space <b>per filesystem</b> (mounted disk). <code>df -i</code> = inodes</td></tr>
+<tr><td><code>du -h dir</code> · <code>du -sh dir</code> · <code>du -sh *</code></td><td>usage of each subdirectory/file · one <b>summary</b> total · size of each item here</td></tr>
+<tr><td><code>free -h</code> / <code>free -m</code></td><td>RAM and swap usage</td></tr>
+<tr><td><code>vmstat 1</code></td><td>CPU, memory, swap, I/O every second</td></tr>
+<tr><td><code>iostat -x 1</code></td><td>disk I/O utilisation, wait times</td></tr>
+<tr><td><code>lscpu</code> · <code>nproc</code> · <code>/proc/cpuinfo</code></td><td>CPU info · number of cores</td></tr>
+<tr><td><code>lsblk</code> · <code>fdisk -l</code> · <code>mount</code> · <code>/etc/fstab</code></td><td>block devices · partitions · mounted filesystems · mounts at boot</td></tr>
+<tr><td><code>dmesg</code></td><td>kernel messages (hardware, OOM killer)</td></tr>
+<tr><td><code>journalctl -u svc -f</code></td><td>systemd logs for a service, following</td></tr>
+<tr><td><code>systemctl status|start|stop|restart|enable svc</code></td><td>manage services (enable = start on boot)</td></tr>
+<tr><td><code>logger -p user.info "msg"</code></td><td>write a message to the <b>system log</b> (syslog: <code>/var/log/messages</code> or <code>/var/log/syslog</code>). <code>-p facility.priority</code>; priorities: emerg, alert, crit, err, warning, notice, info, debug</td></tr>
+<tr><td><code>history</code> · <code>!!</code> · <code>!n</code></td><td>command history · repeat last · repeat number n</td></tr>
+<tr><td><code>which cmd</code> · <code>whereis</code> · <code>type</code></td><td>where a command lives</td></tr>
+<tr><td><code>man cmd</code> · <code>cmd --help</code></td><td>manual</td></tr>
+<tr><td><code>env</code> · <code>export VAR=x</code> · <code>echo $PATH</code></td><td>environment variables · set for child processes · executable search path</td></tr>
+<tr><td><code>apt</code>/<code>yum</code>/<code>dnf install pkg</code> · <code>rpm -qa</code></td><td>package managers (Debian/Ubuntu · RHEL/CentOS)</td></tr>
+<tr><td><code>date</code> · <code>cal</code> · <code>w</code> · <code>who</code> · <code>last</code></td><td>date · calendar · logged-in users · login history</td></tr>
+</table></div>
+<div class="trap">“Disk usage by directories and files” → <code>du -h</code>. <code>du -sh</code> gives only one total; <code>df -h</code> is per filesystem, not per directory.</div>
+
+<h3 id="linux-arch">Archives &amp; compression</h3>
+<div class="tw"><table>
+<tr><th>Command</th><th>Meaning</th></tr>
+<tr><td><code>tar -cvf a.tar dir</code></td><td><b>c</b>reate, <b>v</b>erbose, <b>f</b>ile name follows</td></tr>
+<tr><td><code>tar -czvf a.tar.gz dir</code></td><td>create + g<b>z</b>ip compress</td></tr>
+<tr><td><code>tar -cjvf a.tar.bz2 dir</code></td><td>create + bzip2 (<code>-J</code> = xz)</td></tr>
+<tr><td><code>tar -xzvf a.tar.gz</code> · <code>-C /dest</code></td><td>e<b>x</b>tract · into a directory</td></tr>
+<tr><td><code>tar -tzvf a.tar.gz</code></td><td>lis<b>t</b> contents</td></tr>
+<tr><td><code>gzip f</code> / <code>gunzip f.gz</code> · <code>zcat</code>, <code>zgrep</code></td><td>compress/decompress single file · read/search compressed logs</td></tr>
+<tr><td><code>zip -r a.zip dir</code> / <code>unzip a.zip</code></td><td>zip format</td></tr>
+</table></div>
+
+<h3 id="linux-net">Network commands</h3>
+<div class="tw"><table>
+<tr><th>Command</th><th>Use</th></tr>
+<tr><td><code>ping host</code> (<code>-c 4</code>)</td><td>reachability + round-trip time (ICMP). Loss % and latency</td></tr>
+<tr><td><code>traceroute host</code> / <code>tracert</code> (Windows) / <code>mtr</code></td><td>path of routers (hops) and where delay/loss happens</td></tr>
+<tr><td><code>ip a</code> / <code>ifconfig</code></td><td>interfaces, IP addresses, MAC</td></tr>
+<tr><td><code>ip route</code> / <code>route -n</code></td><td>routing table, default gateway</td></tr>
+<tr><td><code>ss -tulnp</code> / <code>netstat -tulnp</code></td><td>listening ports: <b>t</b>cp <b>u</b>dp <b>l</b>istening <b>n</b>umeric <b>p</b>rocess</td></tr>
+<tr><td><code>nslookup host</code> · <code>dig host</code> · <code>host host</code></td><td>DNS lookups</td></tr>
+<tr><td><code>curl -v url</code> · <code>curl -I url</code> · <code>curl -w "%{time_total}"</code></td><td>HTTP request with details · headers only · measure response time</td></tr>
+<tr><td><code>wget url</code></td><td>download</td></tr>
+<tr><td><code>telnet host port</code> · <code>nc -zv host port</code></td><td>test if a TCP port is open</td></tr>
+<tr><td><code>ssh user@host</code> · <code>scp f user@host:/path</code> · <code>rsync -av</code></td><td>remote shell · copy over SSH · efficient sync</td></tr>
+<tr><td><code>cat /etc/hosts</code> · <code>/etc/resolv.conf</code></td><td>static name→IP · DNS servers used</td></tr>
+<tr><td><code>tcpdump -i eth0 port 443</code></td><td>capture packets</td></tr>
+<tr><td><code>iptables -L</code> / <code>firewall-cmd</code> / <code>ufw</code></td><td>firewall rules</td></tr>
+</table></div>
+<div class="key">Ping output with 0% loss but times &gt; 1000 ms = <b>slow network / high latency</b> (not a wrong URL — the name resolved; not unresponsive — replies came back).</div>
+
+<h3 id="linux-cron">Cron scheduling</h3>
+<pre>┌───────── minute (0–59)
+│ ┌─────── hour (0–23)
+│ │ ┌───── day of month (1–31)
+│ │ │ ┌─── month (1–12)
+│ │ │ │ ┌─ day of week (0–7, 0 and 7 = Sunday)
+│ │ │ │ │
+* * * * *  command</pre>
+<div class="tw"><table>
+<tr><th>Entry</th><th>Runs</th></tr>
+<tr><td><code>30 * 15 * *</code></td><td>at minute 30 of every hour, on the 15th of each month</td></tr>
+<tr><td><code>*/30 * * * *</code></td><td>every 30 minutes (:00 and :30)</td></tr>
+<tr><td><code>0 2 * * 1-5</code></td><td>02:00 Monday–Friday</td></tr>
+<tr><td><code>0 0 1 * *</code></td><td>midnight on the 1st of every month</td></tr>
+<tr><td><code>0 9,17 * * *</code></td><td>09:00 and 17:00 daily</td></tr>
+<tr><td><code>@reboot</code>, <code>@daily</code>, <code>@hourly</code></td><td>shortcuts</td></tr>
+</table></div>
+<p><code>crontab -e</code> edit · <code>crontab -l</code> list · <code>crontab -r</code> remove. One-off jobs: <code>at</code>.</p>
+
+<h3 id="linux-docker">Docker CLI (asked in the UNIX section)</h3>
+<div class="tw"><table>
+<tr><th>Command</th><th>Meaning</th></tr>
+<tr><td><code>docker ps</code> · <code>docker ps -a</code></td><td><b>running</b> containers · all including stopped</td></tr>
+<tr><td><code>docker images</code></td><td>local images</td></tr>
+<tr><td><code>docker build -t name .</code></td><td>build an image from the Dockerfile here</td></tr>
+<tr><td><code>docker run -d -p 8080:80 --name web nginx</code></td><td>run detached, host port 8080 → container port 80</td></tr>
+<tr><td><code>docker logs -f c</code> · <code>docker exec -it c bash</code></td><td>logs · shell inside a running container</td></tr>
+<tr><td><code>docker stop c</code> · <code>docker rm c</code> · <code>docker rmi img</code></td><td>stop · remove container · remove image</td></tr>
+<tr><td><code>docker pull/push</code> · <code>docker info</code> · <code>docker compose up -d</code></td><td>registry · daemon info · multi-container app</td></tr>
+</table></div>
+</section>
+
+<section class="topic" id="bash">
+<h2><span class="num">2</span>Bash scripting</h2>
+<p class="lead">The crash-analysis section shows short scripts and asks what happens. Know the variable rules and the “errors don’t stop the script” trap.</p>
+
+<h3 id="bash-basics">Script basics &amp; variables</h3>
+<pre>#!/bin/bash                 <span class="c"># shebang: which interpreter runs the script</span>
+name="Murex"                <span class="c"># NO spaces around = (name = "x" is an error: runs command "name")</span>
+echo "Hello $name"          <span class="c"># double quotes expand variables → Hello Murex</span>
+echo 'Hello $name'          <span class="c"># single quotes are literal → Hello $name</span>
+echo "${name}_2026"         <span class="c"># braces separate the name → Murex_2026</span>
+today=$(date +%F)           <span class="c"># command substitution (old form: `date`)</span>
+n=$((3 + 4 * 2))            <span class="c"># arithmetic → 11</span>
+readonly PI=3.14; unset name</pre>
+<p>Run a script: <code>chmod +x s.sh &amp;&amp; ./s.sh arg1</code> or <code>bash s.sh arg1</code>. Debug: <code>bash -x s.sh</code> prints each command.</p>
+<div class="tw"><table>
+<tr><th>Special variable</th><th>Meaning</th></tr>
+<tr><td><code>$0</code></td><td>script name</td></tr>
+<tr><td><code>$1 … $9</code>, <code>${10}</code></td><td>positional arguments</td></tr>
+<tr><td><code>$#</code></td><td>number of arguments</td></tr>
+<tr><td><code>$@</code> / <code>$*</code></td><td>all arguments (<code>"$@"</code> keeps each as separate word)</td></tr>
+<tr><td><code>$?</code></td><td><b>exit status</b> of the last command (0 = success, non-zero = failure; 127 = command not found, 126 = not executable)</td></tr>
+<tr><td><code>$$</code></td><td>PID of the current shell</td></tr>
+<tr><td><code>$!</code></td><td>PID of the last background job</td></tr>
+<tr><td><code>$RANDOM</code></td><td>random integer 0–32767 (new value each time it’s expanded)</td></tr>
+<tr><td><code>$HOME $USER $PATH $PWD</code></td><td>environment</td></tr>
+<tr><td><code>${var:-default}</code></td><td>use default if var is unset/empty</td></tr>
+<tr><td><code>${#var}</code></td><td>length of string</td></tr>
+</table></div>
+
+<h3 id="bash-cond">Conditions &amp; tests</h3>
+<pre>if [[ $param == true ]]; then
+  ext=.java
+elif [ "$x" -gt 10 ]; then
+  echo big
+else
+  echo other
+fi</pre>
+<div class="grid2"><div class="tw"><table>
+<tr><th>Numbers</th><th></th></tr>
+<tr><td><code>-eq</code> <code>-ne</code></td><td>equal / not equal</td></tr>
+<tr><td><code>-gt</code> <code>-ge</code></td><td>greater / greater-or-equal</td></tr>
+<tr><td><code>-lt</code> <code>-le</code></td><td>less / less-or-equal</td></tr>
+<tr><td><code>(( a &gt; b ))</code></td><td>arithmetic comparison</td></tr>
+</table></div><div class="tw"><table>
+<tr><th>Strings &amp; files</th><th></th></tr>
+<tr><td><code>=</code> / <code>==</code> / <code>!=</code></td><td>string equal / not equal</td></tr>
+<tr><td><code>-z "$s"</code> / <code>-n "$s"</code></td><td>empty / not empty</td></tr>
+<tr><td><code>-f</code> <code>-d</code> <code>-e</code></td><td>is file / is directory / exists</td></tr>
+<tr><td><code>-r</code> <code>-w</code> <code>-x</code> <code>-s</code></td><td>readable / writable / executable / size &gt; 0</td></tr>
+</table></div></div>
+<p><code>[ ]</code> is the POSIX <code>test</code> command (quote your variables). <code>[[ ]]</code> is the bash keyword: safer with empty variables, supports <code>&amp;&amp;</code>, <code>||</code>, pattern <code>==*.log</code> and regex <code>=~</code>. Spaces inside brackets are mandatory: <code>[ $x -gt 3 ]</code>.</p>
+<pre>case "$1" in
+  start) echo "starting" ;;
+  stop|halt) echo "stopping" ;;
+  *) echo "usage: $0 start|stop" ;;
+esac</pre>
+
+<h3 id="bash-loops">Loops, functions, input</h3>
+<pre>for f in *.log; do gzip "$f"; done
+for i in {1..5}; do echo $i; done
+for ((i=0; i&lt;5; i++)); do echo $i; done
+while read -r line; do echo "$line"; done &lt; file.txt
+count=0; while [ $count -lt 3 ]; do count=$((count+1)); done
+until ping -c1 host &gt;/dev/null; do sleep 5; done
+
+greet() {                 <span class="c"># function</span>
+  local who=$1            <span class="c"># local variable</span>
+  echo "Hi $who"
+  return 0                <span class="c"># return = exit status only (0–255); output via echo</span>
+}
+greet Mohamad
+read -p "Name? " name     <span class="c"># read user input</span>
+exit 1                    <span class="c"># end script with status 1</span></pre>
+<p><code>break</code> leaves a loop, <code>continue</code> jumps to the next iteration. Arrays: <code>arr=(a b c); echo ${arr[0]} ${arr[@]} ${#arr[@]}</code>.</p>
+
+<h3 id="bash-traps">Error behaviour — the classic traps</h3>
+<div class="trap">By default bash <b>does not stop</b> when a command fails. <code>not a command</code> prints “command not found” (exit 127) and the next line still runs.</div>
+<pre>#!/bin/bash                    <span class="c"># called as: script.sh false</span>
+param=$1
+if [[ $param == true ]]; then ext=.java; fi    <span class="c"># false → ext never set (empty)</span>
+not a command                  <span class="c"># error, but script continues</span>
+rm *$ext                       <span class="c"># becomes rm *  → deletes EVERY file in the directory</span></pre>
+<pre>cd /opt/missing                <span class="c"># fails, you stay where you are</span>
+rm -rf *                       <span class="c"># runs in the WRONG directory</span>
+<span class="c"># safe: cd /opt/missing || exit 1</span></pre>
+<div class="key">Defensive header: <code>set -euo pipefail</code> → <code>-e</code> exit on any error · <code>-u</code> error on unset variables (would have caught <code>$ext</code>) · <code>-o pipefail</code> a pipeline fails if any part fails. Always quote variables: <code>"$file"</code>.</div>
+<pre>#!/bin/bash
+RND="Random number is:$RANDOM"
+echo "$RND"                    <span class="c"># prints ONE random number on the console</span>
+logger -p user.info "$RND"     <span class="c"># writes it to the SYSTEM log, facility user, priority info</span></pre>
+<pre>x=5; [ $x -gt 3 ] &amp;&amp; echo big || echo small     <span class="c"># → big</span>
+false &amp;&amp; echo A || echo B                       <span class="c"># → B</span>
+echo $(( 7 / 2 ))   <span class="c"># → 3  (bash arithmetic is integer only)</span></pre>
+</section>
+<section class="topic" id="git">
+<h2><span class="num">3</span>Git</h2>
+<p class="lead">Expect command-meaning MCQs (reset, rebase, squash) and a “trace these commands” question.</p>
+
+<h3 id="git-model">The model: four places your code lives</h3>
+<pre>Working directory ──git add──▶ Staging area (index) ──git commit──▶ Local repository ──git push──▶ Remote (origin)
+        ◀──────────── git checkout / restore ────────────          ◀── git fetch / pull ──</pre>
+<ul>
+<li><b>Commit</b> = snapshot of the staged files + message + author + pointer to parent commit(s). Identified by a SHA hash.</li>
+<li><b>Branch</b> = a movable pointer to a commit. <b>HEAD</b> = pointer to the current branch/commit. “Detached HEAD” = HEAD points to a commit, not a branch.</li>
+<li><b>Untracked</b> files are not in git at all until <code>git add</code>. Uncommitted changes in the working directory <b>follow you</b> when you switch branches (if no conflict).</li>
+<li><code>HEAD~1</code> = first parent of HEAD (one commit back), <code>HEAD~3</code> = three back. <code>HEAD^2</code> = second parent (of a merge commit).</li>
+</ul>
+
+<h3 id="git-basic">Everyday commands</h3>
+<div class="tw"><table>
+<tr><th>Command</th><th>Meaning</th></tr>
+<tr><td><code>git init</code> · <code>git clone url</code></td><td>new repo · copy a remote repo</td></tr>
+<tr><td><code>git status</code></td><td>what’s modified / staged / untracked</td></tr>
+<tr><td><code>git add f</code> · <code>git add .</code> · <code>git add -p</code></td><td>stage a file · all changes · interactively by hunk</td></tr>
+<tr><td><code>git commit -m "msg"</code> · <code>-am</code></td><td>commit staged changes · stage tracked modified files + commit</td></tr>
+<tr><td><code>git commit --amend</code></td><td>replace the <b>last</b> commit (fix message or add forgotten files)</td></tr>
+<tr><td><code>git log</code> · <code>--oneline --graph --all</code></td><td>history · compact tree of all branches</td></tr>
+<tr><td><code>git diff</code></td><td>working dir vs staging (unstaged changes)</td></tr>
+<tr><td><code>git diff --staged</code> (<code>--cached</code>)</td><td>staging vs last commit</td></tr>
+<tr><td><code>git diff branchA branchB</code></td><td>differences between two branches’ <b>commits</b></td></tr>
+<tr><td><code>git show &lt;sha&gt;</code> · <code>git blame f</code></td><td>details of a commit · who changed each line</td></tr>
+<tr><td><code>git rm f</code> · <code>git mv a b</code></td><td>delete/rename and stage it</td></tr>
+<tr><td><code>git restore f</code> · <code>git restore --staged f</code></td><td>discard working changes · unstage (old: <code>git checkout -- f</code>, <code>git reset f</code>)</td></tr>
+<tr><td><code>.gitignore</code></td><td>file patterns git ignores (<code>*.log</code>, <code>target/</code>, <code>node_modules/</code>)</td></tr>
+<tr><td><code>git tag v1.0</code></td><td>name a commit (releases)</td></tr>
+<tr><td><code>git config --global user.name "…"</code></td><td>identity</td></tr>
+</table></div>
+
+<h3 id="git-branch">Branches</h3>
+<div class="tw"><table>
+<tr><th>Command</th><th>Meaning</th></tr>
+<tr><td><code>git branch</code> · <code>-a</code> · <code>-r</code></td><td>list local · all · remote branches (current marked with *)</td></tr>
+<tr><td><code>git branch name</code></td><td><b>create</b> branch at current commit (does NOT switch)</td></tr>
+<tr><td><code>git checkout name</code> / <code>git switch name</code></td><td>switch branch</td></tr>
+<tr><td><code>git checkout -b name</code> / <code>git switch -c name</code></td><td>create <b>and</b> switch</td></tr>
+<tr><td><code>git branch -d name</code></td><td>delete (only if merged)</td></tr>
+<tr><td><code>git branch -D name</code></td><td>force delete (even if unmerged). Non-existent name → error “branch not found”</td></tr>
+<tr><td><code>git branch -m old new</code></td><td>rename</td></tr>
+<tr><td><code>git push origin --delete name</code></td><td>delete remote branch</td></tr>
+</table></div>
+<h4>Trace example (from the paper)</h4>
+<pre>git checkout -b murex                 <span class="c"># new branch murex from master, switch to it</span>
+touch mymurexfile
+echo "MUREX ROCKS" &gt;&gt; mymurexfile
+git add mymurexfile
+git commit -m "Murex file changes"    <span class="c"># committed on murex ONLY</span>
+echo "MUREX ALWAYS ROCKS" &gt;&gt; mymurexfile   <span class="c"># working dir only, not committed</span>
+git branch                            <span class="c"># just lists</span>
+git diff murex master                 <span class="c"># just shows differences</span>
+git branch mures                      <span class="c"># creates another branch, no switch</span>
+git push origin master                <span class="c"># pushes master (unchanged)</span>
+git branch -D murer                   <span class="c"># typo → error</span>
+<span class="c"># murex: committed content "MUREX ROCKS" (2nd line uncommitted in working dir)</span>
+<span class="c"># master: file does not exist</span></pre>
+
+<h3 id="git-merge">Merge vs rebase vs squash</h3>
+<div class="tw"><table>
+<tr><th>Command</th><th>What happens</th><th>History</th></tr>
+<tr><td><code>git merge feature</code></td><td>Integrates feature into current branch. If current hasn’t moved: <b>fast-forward</b> (pointer just moves). Otherwise: <b>three-way merge</b> creating a merge commit with 2 parents.</td><td>Keeps true history, non-linear</td></tr>
+<tr><td><code>git merge --no-ff</code></td><td>always create a merge commit</td><td></td></tr>
+<tr><td><code>git rebase main</code> (on feature)</td><td><b>Moves/replays</b> your commits on top of main → new commits, new hashes.</td><td>Linear, rewritten</td></tr>
+<tr><td><code>git rebase -i HEAD~3</code></td><td>interactive: <code>pick</code>, <code>reword</code>, <code>edit</code>, <b><code>squash</code></b> (combine with previous, keep message), <code>fixup</code> (combine, drop message), <code>drop</code>. → <b>the</b> way to squash commits before merging.</td><td>Rewritten</td></tr>
+<tr><td><code>git merge --squash feature</code></td><td>stages all of feature’s changes as one change; you then commit once (squashes <i>at</i> merge time)</td><td>One commit</td></tr>
+<tr><td><code>git cherry-pick &lt;sha&gt;</code></td><td>apply one specific commit onto the current branch as a new commit (e.g. hotfix to release branch)</td><td></td></tr>
+</table></div>
+<div class="trap">Golden rule: <b>never rebase / reset / amend commits already pushed to a shared branch</b> — it rewrites history others have. Use <code>git revert</code> instead.</div>
+<p><b>Merge conflicts</b>: same lines changed in both branches. Git marks the file:</p>
+<pre>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+your version
+=======
+their version
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; feature</pre>
+<p>Edit to the final content, remove markers, <code>git add</code>, then <code>git commit</code> (or <code>git rebase --continue</code>). <code>git merge --abort</code> / <code>git rebase --abort</code> to cancel. <code>git mergetool</code> opens a visual tool for resolving conflicts (it does not merge by itself).</p>
+
+<h3 id="git-undo">Undoing: reset, revert, stash, reflog</h3>
+<div class="tw"><table>
+<tr><th>Command</th><th>HEAD/branch</th><th>Staging (index)</th><th>Working dir</th></tr>
+<tr><td><code>git reset --soft HEAD~1</code></td><td>moves back</td><td>kept (changes stay staged)</td><td>kept</td></tr>
+<tr><td><code>git reset --mixed HEAD~1</code> (default)</td><td>moves back</td><td>reset (changes unstaged)</td><td>kept</td></tr>
+<tr><td><code>git reset --hard HEAD~1</code></td><td>moves back</td><td>reset</td><td><b>reset — changes destroyed</b></td></tr>
+</table></div>
+<ul>
+<li><code>git reset --hard HEAD~1</code> = <b>removes the last commit and its changes from the working directory and staging area</b>.</li>
+<li><code>git reset --soft HEAD~N</code> + one new commit = another way to squash the last N commits.</li>
+<li><code>git revert &lt;sha&gt;</code> = creates a <b>new commit that undoes</b> that commit. Safe on shared branches.</li>
+<li><code>git stash</code> saves uncommitted changes and cleans the working dir · <code>git stash pop</code> re-applies and removes from stash · <code>git stash apply</code> re-applies and keeps · <code>git stash list</code> · <code>git stash drop</code>.</li>
+<li><code>git reflog</code> = log of everywhere HEAD has been — recover “lost” commits after a bad reset.</li>
+<li><code>git clean -fd</code> = delete untracked files/dirs.</li>
+</ul>
+
+<h3 id="git-remote">Remotes</h3>
+<div class="tw"><table>
+<tr><th>Command</th><th>Meaning</th></tr>
+<tr><td><code>git remote -v</code> · <code>git remote add origin url</code></td><td>list · add a remote</td></tr>
+<tr><td><code>git fetch</code></td><td>download remote commits, <b>don’t</b> change your branches</td></tr>
+<tr><td><code>git pull</code></td><td><code>fetch</code> + <code>merge</code> (or <code>--rebase</code>: fetch + rebase)</td></tr>
+<tr><td><code>git push origin branch</code> · <code>-u</code></td><td>upload commits · set upstream tracking</td></tr>
+<tr><td><code>git push --force-with-lease</code></td><td>safer force push (fails if someone else pushed)</td></tr>
+<tr><td>Pull/Merge request</td><td>code review on GitHub/GitLab/Bitbucket before merging</td></tr>
+</table></div>
+<p><b>Branching strategies</b>: GitFlow (main, develop, feature/*, release/*, hotfix/*) · trunk-based (short-lived branches into main) · feature branches + PRs.</p>
+</section>
+
+<section class="topic" id="net">
+<h2><span class="num">4</span>Networking</h2>
+<p class="lead">IP addressing and subnet math, the layers, protocols and ports, HTTP status codes, and how to read connection errors.</p>
+
+<h3 id="net-osi">OSI and TCP/IP models</h3>
+<div class="tw"><table>
+<tr><th>#</th><th>OSI layer</th><th>Unit</th><th>Examples</th><th>TCP/IP layer</th></tr>
+<tr><td>7</td><td>Application</td><td rowspan="3">Data</td><td>HTTP, HTTPS, FTP, SMTP, DNS, SSH</td><td rowspan="3">Application</td></tr>
+<tr><td>6</td><td>Presentation</td><td>encoding, encryption (TLS), compression, JSON/XML</td></tr>
+<tr><td>5</td><td>Session</td><td>sessions, RPC</td></tr>
+<tr><td>4</td><td>Transport</td><td>Segment</td><td>TCP, UDP, ports</td><td>Transport</td></tr>
+<tr><td>3</td><td>Network</td><td>Packet</td><td>IP, ICMP (ping), routers</td><td>Internet</td></tr>
+<tr><td>2</td><td>Data link</td><td>Frame</td><td>Ethernet, MAC addresses, switches, ARP</td><td rowspan="2">Network access</td></tr>
+<tr><td>1</td><td>Physical</td><td>Bits</td><td>cables, Wi-Fi radio, hubs</td></tr>
+</table></div>
+<p>Mnemonic (7→1): <i>All People Seem To Need Data Processing</i>. Devices: <b>hub</b> (L1, repeats to all) · <b>switch</b> (L2, forwards by MAC within a LAN) · <b>router</b> (L3, forwards by IP between networks) · <b>load balancer</b> (L4 or L7).</p>
+
+<h3 id="net-ip">IPv4 addressing</h3>
+<ul>
+<li>IPv4 = 32 bits, written as 4 octets (0–255): <code>192.168.1.10</code>. IPv6 = 128 bits, hex: <code>2001:db8::1</code>.</li>
+<li>An address has a <b>network part</b> and a <b>host part</b>, split by the <b>subnet mask</b> (e.g. <code>255.255.255.0</code> = <code>/24</code>, CIDR notation = number of network bits).</li>
+<li><b>Network address</b> = first address, host bits all 0 — identifies the network, not assignable. <b>Broadcast address</b> = last address, host bits all 1. Everything between = usable hosts.</li>
+<li><b>Default gateway</b> = router that forwards traffic leaving your subnet. <b>MAC address</b> = 48-bit hardware address (L2). <b>ARP</b> maps IP → MAC on the local network.</li>
+<li><code>127.0.0.1</code> = <b>loopback / localhost</b> (this machine). <code>0.0.0.0</code> = “all interfaces” when a server listens. <code>169.254.x.x</code> = APIPA (DHCP failed).</li>
+</ul>
+<div class="tw"><table>
+<tr><th>Class</th><th>First octet</th><th>Default mask</th><th>Private range (RFC 1918)</th></tr>
+<tr><td>A</td><td>1–126</td><td><code>255.0.0.0</code> (/8)</td><td><code>10.0.0.0 – 10.255.255.255</code> (10.0.0.0/8)</td></tr>
+<tr><td>B</td><td>128–191</td><td><code>255.255.0.0</code> (/16)</td><td><code>172.16.0.0 – 172.31.255.255</code> (172.16.0.0/12)</td></tr>
+<tr><td>C</td><td>192–223</td><td><code>255.255.255.0</code> (/24)</td><td><code>192.168.0.0 – 192.168.255.255</code> (192.168.0.0/16)</td></tr>
+<tr><td>D</td><td>224–239</td><td>—</td><td>multicast</td></tr>
+<tr><td>E</td><td>240–255</td><td>—</td><td>experimental</td></tr>
+</table></div>
+<p>127.x.x.x is reserved for loopback (that’s why class A stops at 126). Private addresses are not routable on the internet; <b>NAT</b> translates them to a public IP.</p>
+
+<h3 id="net-subnet">Subnet math (do these by hand)</h3>
+<div class="key">Addresses in a block = <b>2<sup>(32 − prefix)</sup></b>. Usable hosts = that − 2 (network + broadcast).</div>
+<div class="tw"><table>
+<tr><th>CIDR</th><th>Mask</th><th>Addresses</th><th>Usable hosts</th></tr>
+<tr><td>/8</td><td>255.0.0.0</td><td>16,777,216</td><td>16,777,214</td></tr>
+<tr><td>/16</td><td>255.255.0.0</td><td>65,536</td><td>65,534</td></tr>
+<tr><td>/20</td><td>255.255.240.0</td><td>4,096</td><td>4,094</td></tr>
+<tr><td>/22</td><td>255.255.252.0</td><td>1,024</td><td>1,022</td></tr>
+<tr><td>/24</td><td>255.255.255.0</td><td>256</td><td>254</td></tr>
+<tr><td>/25</td><td>255.255.255.128</td><td>128</td><td>126</td></tr>
+<tr><td>/26</td><td>255.255.255.192</td><td>64</td><td>62</td></tr>
+<tr><td>/27</td><td>255.255.255.224</td><td>32</td><td>30</td></tr>
+<tr><td>/28</td><td>255.255.255.240</td><td>16</td><td>14</td></tr>
+<tr><td>/30</td><td>255.255.255.252</td><td>4</td><td>2</td></tr>
+<tr><td>/32</td><td>255.255.255.255</td><td>1</td><td>single host</td></tr>
+</table></div>
+<p>Mask octet values: 128, 192, 224, 240, 248, 252, 254, 255 (adding bits 128+64+32+16+8+4+2+1).</p>
+<h4>Worked example: <code>10.25.0.0/16</code></h4>
+<ul>
+<li>Host bits = 32 − 16 = 16 → 2<sup>16</sup> = <b>65,536</b> addresses (65,534 usable).</li>
+<li>Network address <code>10.25.0.0</code>, broadcast <code>10.25.255.255</code>, hosts <code>10.25.0.1 – 10.25.255.254</code>.</li>
+<li>First octet 10 → <b>Class A</b>, default mask <b>255.0.0.0</b>; the /16 mask here is 255.255.0.0. Private range.</li>
+</ul>
+<h4>Worked example: <code>192.168.1.77/26</code></h4>
+<p>/26 → block size 64 → subnets start at .0, .64, .128, .192. 77 falls in <b>.64</b> → network <code>192.168.1.64</code>, broadcast <code>192.168.1.127</code>, hosts .65–.126.</p>
+
+<h3 id="net-proto">Protocols: TCP, UDP, DNS, DHCP, ICMP</h3>
+<div class="tw"><table>
+<tr><th>TCP</th><th>UDP</th></tr>
+<tr><td>Connection-oriented (3-way handshake: <b>SYN → SYN-ACK → ACK</b>; close with FIN)</td><td>Connectionless, no handshake</td></tr>
+<tr><td>Reliable: acknowledgements, retransmission, ordering, flow &amp; congestion control</td><td>No delivery/order guarantee, no retransmission</td></tr>
+<tr><td>Slower, more overhead</td><td>Faster, lightweight</td></tr>
+<tr><td>HTTP/HTTPS, SSH, FTP, SMTP, DB connections</td><td>DNS queries, DHCP, video/voice streaming, gaming, SNMP</td></tr>
+</table></div>
+<ul>
+<li><b>DNS</b> translates names to IPs. Records: <b>A</b> (name→IPv4), <b>AAAA</b> (→IPv6), <b>CNAME</b> (alias), <b>MX</b> (mail server), <b>NS</b> (name server), <b>PTR</b> (reverse IP→name), <b>TXT</b>. Resolution order: local cache → <code>/etc/hosts</code> → DNS resolver. A host can be reached by <b>domain name or IP</b>.</li>
+<li><b>DHCP</b> automatically gives a machine its IP, mask, gateway, DNS (DORA: Discover, Offer, Request, Ack).</li>
+<li><b>ICMP</b>: control messages — ping (echo request/reply), “destination unreachable”, TTL exceeded (used by traceroute).</li>
+<li><b>NAT</b>: many private IPs share one public IP. <b>Port forwarding</b> maps public port → internal host.</li>
+<li><b>Firewall</b>: allows/blocks traffic by IP/port/protocol. <b>Proxy</b>: intermediary for client requests (forward) or in front of servers (reverse proxy, e.g. Nginx). <b>VPN</b>: encrypted tunnel into a private network.</li>
+<li><b>Latency</b> = delay (ms) · <b>bandwidth</b> = max throughput (Mbps) · <b>throughput</b> = actual rate · <b>packet loss</b> = % packets lost · <b>jitter</b> = latency variation.</li>
+</ul>
+
+<h3 id="net-ports">Well-known ports</h3>
+<div class="tw"><table>
+<tr><th>Port</th><th>Service</th><th>Port</th><th>Service</th></tr>
+<tr><td>20/21</td><td>FTP (data/control)</td><td>443</td><td>HTTPS</td></tr>
+<tr><td>22</td><td>SSH, SCP, SFTP</td><td>445</td><td>SMB (Windows file sharing)</td></tr>
+<tr><td>23</td><td>Telnet (unencrypted)</td><td>1433</td><td>Microsoft SQL Server</td></tr>
+<tr><td>25</td><td>SMTP (send mail)</td><td>1521</td><td>Oracle DB</td></tr>
+<tr><td>53</td><td>DNS</td><td>3306</td><td>MySQL</td></tr>
+<tr><td>67/68</td><td>DHCP</td><td>3389</td><td>RDP (Windows remote desktop)</td></tr>
+<tr><td>80</td><td>HTTP</td><td>5432</td><td>PostgreSQL</td></tr>
+<tr><td>110 / 143</td><td>POP3 / IMAP</td><td>6379 / 27017</td><td>Redis / MongoDB</td></tr>
+<tr><td>123</td><td>NTP (time)</td><td>8080 / 8443</td><td>alternative HTTP / HTTPS (Tomcat, Spring Boot)</td></tr>
+<tr><td>161</td><td>SNMP</td><td>0–1023</td><td>“well-known” ports need root to bind</td></tr>
+</table></div>
+
+<h3 id="net-http">HTTP, REST &amp; status codes</h3>
+<p><b>HTTP methods</b>: GET (read, no body, idempotent) · POST (create/submit) · PUT (replace, idempotent) · PATCH (partial update) · DELETE · HEAD (headers only) · OPTIONS. <b>HTTPS</b> = HTTP over TLS (encryption + server certificate). <b>REST</b> = resources at URLs, stateless requests, JSON responses. Cookies/sessions/tokens (JWT) carry identity.</p>
+<div class="tw"><table>
+<tr><th>Code</th><th>Meaning</th><th>Typical cause</th></tr>
+<tr><td>200 OK · 201 Created · 204 No Content</td><td>success</td><td></td></tr>
+<tr><td>301 / 302 / 304</td><td>moved permanently / found (temp redirect) / not modified (cache)</td><td></td></tr>
+<tr><td><b>400</b> Bad Request</td><td>malformed request</td><td>invalid JSON, missing parameter</td></tr>
+<tr><td><b>401</b> Unauthorized</td><td><b>not authenticated</b></td><td>no/invalid login, missing token</td></tr>
+<tr><td><b>403</b> Forbidden</td><td>authenticated (or not) but <b>not allowed</b></td><td>insufficient role/permission, expired token, IP not whitelisted, CSRF, wrong service account</td></tr>
+<tr><td><b>404</b> Not Found</td><td>resource doesn’t exist</td><td>wrong URL/path, not deployed</td></tr>
+<tr><td>405 Method Not Allowed</td><td>wrong verb</td><td>POST on a GET-only endpoint</td></tr>
+<tr><td>408 / 429</td><td>request timeout / too many requests</td><td>rate limiting</td></tr>
+<tr><td><b>500</b> Internal Server Error</td><td>bug/crash on the server</td><td>unhandled exception — check server logs</td></tr>
+<tr><td><b>502</b> Bad Gateway</td><td>proxy got an invalid response from upstream</td><td>backend app down behind Nginx/LB</td></tr>
+<tr><td><b>503</b> Service Unavailable</td><td>server overloaded or in maintenance</td><td></td></tr>
+<tr><td><b>504</b> Gateway Timeout</td><td>upstream too slow</td><td>slow DB query behind the proxy</td></tr>
+</table></div>
+<div class="key">Families: <b>1xx</b> info · <b>2xx</b> success · <b>3xx</b> redirect · <b>4xx</b> client’s fault · <b>5xx</b> server’s fault.</div>
+
+<h3 id="net-errors">Reading connection errors</h3>
+<div class="tw"><table>
+<tr><th>Error</th><th>Means</th><th>Check</th></tr>
+<tr><td><b>Connection refused</b> (<code>java.net.ConnectException</code>)</td><td>host reachable, but nothing listening on that port (RST)</td><td>service down/crashed · wrong host/port in config · listening on 127.0.0.1 only · firewall REJECT · backlog full · proxy settings. Use <code>telnet/nc host port</code>, <code>ss -tlnp</code>, service logs</td></tr>
+<tr><td><b>Connection timed out</b></td><td>no answer at all</td><td>firewall DROP, host down, wrong IP, routing issue</td></tr>
+<tr><td><b>Unknown host</b> (<code>UnknownHostException</code>)</td><td>DNS can’t resolve the name</td><td><code>nslookup</code>, <code>/etc/hosts</code>, typo</td></tr>
+<tr><td><b>No route to host</b></td><td>network unreachable</td><td>routing, gateway, firewall</td></tr>
+<tr><td>SSL handshake / certificate errors</td><td>TLS problem</td><td>expired/self-signed cert, missing CA in truststore, wrong hostname</td></tr>
+<tr><td><code>SocketTimeoutException: Read timed out</code></td><td>connected, but response too slow</td><td>slow server/DB, timeout too low</td></tr>
+</table></div>
+</section>
+<section class="topic" id="sql">
+<h2><span class="num">5</span>SQL &amp; databases</h2>
+<p class="lead">Written queries (joins + GROUP BY + HAVING + ORDER BY), CREATE TABLE with constraints, and MCQs on indexes, triggers, joins and DBMS theory.</p>
+
+<h3 id="sql-cat">Command categories &amp; data types</h3>
+<div class="tw"><table>
+<tr><th>Category</th><th>Commands</th></tr>
+<tr><td><b>DDL</b> – Data Definition</td><td><code>CREATE</code>, <code>ALTER</code>, <code>DROP</code>, <code>TRUNCATE</code>, <code>RENAME</code> (structure; auto-commit in Oracle/MySQL)</td></tr>
+<tr><td><b>DML</b> – Data Manipulation</td><td><code>INSERT</code>, <code>UPDATE</code>, <code>DELETE</code>, <code>MERGE</code> (and <code>SELECT</code>, sometimes called DQL)</td></tr>
+<tr><td><b>DCL</b> – Data Control</td><td><code>GRANT</code>, <code>REVOKE</code> (permissions)</td></tr>
+<tr><td><b>TCL</b> – Transaction Control</td><td><code>COMMIT</code>, <code>ROLLBACK</code>, <code>SAVEPOINT</code></td></tr>
+</table></div>
+<p>Types: <code>INT</code>/<code>BIGINT</code>/<code>SMALLINT</code> · <code>DECIMAL(10,2)</code>/<code>NUMERIC</code> (exact — money) · <code>REAL</code>/<code>FLOAT</code>/<code>DOUBLE</code> (approximate) · <code>CHAR(n)</code> (fixed length, padded) vs <code>VARCHAR(n)</code> (variable; Oracle <code>VARCHAR2</code>) · <code>TEXT</code>/<code>CLOB</code> · <code>DATE</code>, <code>TIMESTAMP</code>, <code>DATETIME</code> · <code>BOOLEAN</code> · <code>BLOB</code>.</p>
+
+<h3 id="sql-ddl">CREATE / ALTER / DROP &amp; constraints</h3>
+<pre>CREATE TABLE Drivers (
+  driver_id  INT PRIMARY KEY,               <span class="c">-- unique + not null, one per table</span>
+  first_name VARCHAR(50) NOT NULL,
+  last_name  VARCHAR(50) NOT NULL,
+  email      VARCHAR(100) UNIQUE,           <span class="c">-- no duplicates (NULLs allowed)</span>
+  hired_on   DATE DEFAULT CURRENT_DATE
+);
+CREATE TABLE Vehicles (
+  vehicle_id   INT PRIMARY KEY AUTO_INCREMENT,    <span class="c">-- Oracle: GENERATED AS IDENTITY; SQL Server: IDENTITY(1,1)</span>
+  vehicle_type VARCHAR(20) NOT NULL,
+  capacity     INT NOT NULL CHECK (capacity &gt; 0)  <span class="c">-- business rule</span>
+);
+CREATE TABLE Shipments (
+  shipment_id   INT PRIMARY KEY,
+  vehicle_id    INT NOT NULL,
+  driver_id     INT NOT NULL,
+  shipment_date DATE NOT NULL,
+  CONSTRAINT fk_ship_vehicle FOREIGN KEY (vehicle_id) REFERENCES Vehicles(vehicle_id),
+  CONSTRAINT fk_ship_driver  FOREIGN KEY (driver_id)  REFERENCES Drivers(driver_id)
+    ON DELETE CASCADE                       <span class="c">-- or RESTRICT / SET NULL</span>
+);
+CREATE TABLE Reservations (EID INT, BID INT, PRIMARY KEY (EID, BID));   <span class="c">-- composite key</span>
+
+ALTER TABLE Drivers ADD phone VARCHAR(20);
+ALTER TABLE Drivers MODIFY phone VARCHAR(30);        <span class="c">-- SQL Server/Postgres: ALTER COLUMN</span>
+ALTER TABLE Drivers DROP COLUMN phone;
+ALTER TABLE Drivers RENAME TO Staff;
+DROP TABLE Staff;                                     <span class="c">-- table + data gone</span></pre>
+<div class="tw"><table>
+<tr><th>Constraint</th><th>Ensures</th></tr>
+<tr><td><code>PRIMARY KEY</code></td><td>unique + not null row identifier (entity integrity). One per table, can be composite.</td></tr>
+<tr><td><code>FOREIGN KEY</code></td><td>value exists in the referenced table (<b>referential integrity</b>)</td></tr>
+<tr><td><code>UNIQUE</code></td><td>no duplicate values (many per table)</td></tr>
+<tr><td><code>NOT NULL</code></td><td>value required</td></tr>
+<tr><td><code>CHECK</code></td><td>custom condition</td></tr>
+<tr><td><code>DEFAULT</code></td><td>value when none given</td></tr>
+</table></div>
+<p><b>Keys vocabulary</b>: <b>candidate key</b> (any minimal unique set) · <b>primary key</b> (chosen candidate) · <b>alternate key</b> (other candidates) · <b>composite key</b> (several columns) · <b>surrogate key</b> (artificial id) vs <b>natural key</b> (real-world e.g. email) · <b>super key</b> (any unique set, maybe not minimal) · <b>foreign key</b>.</p>
+
+<h3 id="sql-dml">INSERT, UPDATE, DELETE, TRUNCATE</h3>
+<pre>INSERT INTO Murex_Office_Cities VALUES ('Beirut', 33.89, 35.50);                 <span class="c">-- all columns, table order</span>
+INSERT INTO Murex_Office_Cities (Latitude, Longitude, Name) VALUES (48.85, 2.35, 'Paris'); <span class="c">-- named columns</span>
+INSERT INTO Murex_Office_Cities (Name, Latitude, Longitude)
+VALUES ('Dublin', 53.35, -6.26), ('Sydney', -33.87, 151.21);                      <span class="c">-- multi-row (MySQL/Postgres)</span>
+INSERT INTO Archive (Name, Latitude, Longitude) SELECT Name, Latitude, Longitude FROM Murex_Office_Cities;
+
+UPDATE Employees SET salary = salary * 1.10 WHERE dept_id = 3;   <span class="c">-- without WHERE: every row!</span>
+DELETE FROM Employees WHERE emp_id = 7;                           <span class="c">-- without WHERE: every row</span>
+TRUNCATE TABLE Logs;                                              <span class="c">-- all rows, fast</span></pre>
+<div class="tw"><table>
+<tr><th></th><th>DELETE</th><th>TRUNCATE</th><th>DROP</th></tr>
+<tr><td>Type</td><td>DML</td><td>DDL</td><td>DDL</td></tr>
+<tr><td>Removes</td><td>rows (WHERE allowed)</td><td>all rows</td><td>table + structure + indexes</td></tr>
+<tr><td>Rollback</td><td>yes (before commit)</td><td>usually no (auto-commit)</td><td>no</td></tr>
+<tr><td>Triggers fire</td><td>yes</td><td>no</td><td>no</td></tr>
+<tr><td>Speed</td><td>slow (logged per row)</td><td>fast</td><td>fast</td></tr>
+<tr><td>Identity counter</td><td>kept</td><td>reset</td><td>—</td></tr>
+</table></div>
+
+<h3 id="sql-select">SELECT: clauses &amp; execution order</h3>
+<pre>SELECT   DISTINCT column, AGG(col) AS alias      <span class="c">-- 5</span>
+FROM     table t JOIN other o ON ...             <span class="c">-- 1</span>
+WHERE    row condition                           <span class="c">-- 2  (no aggregates here)</span>
+GROUP BY column                                  <span class="c">-- 3</span>
+HAVING   group condition (aggregates allowed)    <span class="c">-- 4</span>
+ORDER BY alias DESC                              <span class="c">-- 6  (aliases allowed here)</span>
+LIMIT 10 OFFSET 20;                              <span class="c">-- 7  (Oracle/SQL standard: FETCH FIRST 10 ROWS ONLY; SQL Server: TOP 10)</span></pre>
+<div class="key">Logical order: <b>FROM → JOIN → WHERE → GROUP BY → HAVING → SELECT → DISTINCT → ORDER BY → LIMIT</b>. That’s why you can’t use a SELECT alias in WHERE, but you can in ORDER BY.</div>
+<div class="tw"><table>
+<tr><th>Operator</th><th>Example</th></tr>
+<tr><td>Comparison</td><td><code>=</code>, <code>&lt;&gt;</code> / <code>!=</code>, <code>&gt;</code>, <code>&lt;=</code></td></tr>
+<tr><td><code>AND</code>, <code>OR</code>, <code>NOT</code></td><td>AND binds tighter than OR — use parentheses</td></tr>
+<tr><td><code>BETWEEN a AND b</code></td><td>inclusive both ends</td></tr>
+<tr><td><code>IN (…)</code> / <code>NOT IN</code></td><td><code>major IN ('CS','Math')</code></td></tr>
+<tr><td><code>LIKE</code></td><td><code>%</code> any number of chars, <code>_</code> exactly one: <code>name LIKE 'M%'</code>, <code>'_a%'</code></td></tr>
+<tr><td><code>IS NULL</code> / <code>IS NOT NULL</code></td><td><b>never</b> <code>= NULL</code> (always unknown)</td></tr>
+<tr><td>Aliases</td><td><code>SELECT name AS n FROM Students s</code></td></tr>
+<tr><td>String concat</td><td><code>CONCAT(a,' ',b)</code> (MySQL) · <code>a || ' ' || b</code> (Oracle/Postgres) · <code>a + ' ' + b</code> (SQL Server)</td></tr>
+</table></div>
+
+<h3 id="sql-agg">Aggregates, GROUP BY, HAVING</h3>
+<p><code>COUNT(*)</code> (all rows) · <code>COUNT(col)</code> (non-NULL values) · <code>COUNT(DISTINCT col)</code> · <code>SUM</code> · <code>AVG</code> · <code>MIN</code> · <code>MAX</code>. All aggregates except <code>COUNT(*)</code> <b>ignore NULLs</b>.</p>
+<pre>SELECT Major, COUNT(*) AS num_students
+FROM Students
+GROUP BY Major
+ORDER BY num_students DESC;
+
+SELECT c.course_name, MIN(g.grade), AVG(g.grade), MAX(g.grade)
+FROM Courses c JOIN Grades g ON g.course_id = c.course_id
+GROUP BY c.course_id, c.course_name;
+
+SELECT trader, SUM(notional) AS total
+FROM Trades
+WHERE trade_date &gt;= '2026-01-01'      <span class="c">-- filters ROWS before grouping</span>
+GROUP BY trader
+HAVING SUM(notional) &gt; 1000000        <span class="c">-- filters GROUPS after aggregation</span>
+ORDER BY total DESC;</pre>
+<div class="trap">Every non-aggregated column in SELECT must appear in GROUP BY (<code>SELECT name, dept_id, COUNT(*) … GROUP BY dept_id</code> is invalid). <b>WHERE</b> filters rows before aggregation and can’t use aggregates; <b>HAVING</b> filters groups and is used with aggregate functions.</div>
+
+<h3 id="sql-join">Joins</h3>
+<div class="tw"><table>
+<tr><th>Join</th><th>Returns</th></tr>
+<tr><td><b>INNER JOIN</b> (or just <code>JOIN</code>)</td><td>only rows with a match in <b>both</b> tables</td></tr>
+<tr><td><b>LEFT (OUTER) JOIN</b></td><td>all rows from the left table + matches from right (NULL if none)</td></tr>
+<tr><td><b>RIGHT (OUTER) JOIN</b></td><td>all rows from right + matches from left</td></tr>
+<tr><td><b>FULL (OUTER) JOIN</b></td><td>all rows from both, NULLs where no match (MySQL lacks it: LEFT UNION RIGHT)</td></tr>
+<tr><td><b>CROSS JOIN</b></td><td>Cartesian product: every row × every row (m × n rows)</td></tr>
+<tr><td><b>SELF JOIN</b></td><td>a table joined to itself (employee ↔ manager)</td></tr>
+<tr><td><b>NATURAL JOIN</b></td><td>inner join on all same-named columns automatically (risky)</td></tr>
+<tr><td>Equi-join / non-equi-join</td><td>condition with <code>=</code> / with <code>&lt;</code>, <code>BETWEEN</code>…</td></tr>
+</table></div>
+<pre><span class="c">-- unique colours of boats that have been reserved</span>
+SELECT DISTINCT b.Color
+FROM Boat_Details b
+JOIN Reservations r ON r.BID = b.BID;
+
+<span class="c">-- three-table join: total &amp; average treatment cost per facility</span>
+SELECT f.facility_name, SUM(t.price) AS total_cost, AVG(t.price) AS avg_cost
+FROM Facilities f
+JOIN Visits v     ON v.facility_id = f.facility_id
+JOIN Treatments t ON t.visit_id    = v.visit_id
+GROUP BY f.facility_id, f.facility_name
+ORDER BY avg_cost DESC;
+
+<span class="c">-- rows with NO match (anti-join)</span>
+SELECT d.dept_name FROM Departments d
+LEFT JOIN Employees e ON e.dept_id = d.dept_id
+WHERE e.emp_id IS NULL;
+
+<span class="c">-- self join</span>
+SELECT e.name AS employee, m.name AS manager
+FROM Employees e LEFT JOIN Employees m ON e.manager_id = m.emp_id;
+
+<span class="c">-- old comma syntax (= inner join)</span>
+SELECT * FROM A, B WHERE A.id = B.a_id;</pre>
+<div class="tip">Plan multi-table queries by asking: which table holds the output columns? which holds the filter? what’s the chain of keys between them? Ignore tables you don’t need (in the treatment question, <b>Patients</b> is a distractor).</div>
+
+<h3 id="sql-sub">Subqueries, EXISTS, set operators, CASE</h3>
+<pre><span class="c">-- scalar subquery</span>
+SELECT name FROM Employees WHERE salary &gt; (SELECT AVG(salary) FROM Employees);
+<span class="c">-- IN subquery</span>
+SELECT DISTINCT Color FROM Boat_Details WHERE BID IN (SELECT BID FROM Reservations);
+<span class="c">-- correlated subquery (runs per outer row): earns more than their dept average</span>
+SELECT e.name FROM Employees e
+WHERE e.salary &gt; (SELECT AVG(salary) FROM Employees x WHERE x.dept_id = e.dept_id);
+<span class="c">-- EXISTS / NOT EXISTS</span>
+SELECT d.dept_name FROM Departments d
+WHERE NOT EXISTS (SELECT 1 FROM Employees e WHERE e.dept_id = d.dept_id);
+<span class="c">-- derived table / CTE</span>
+WITH totals AS (SELECT trader, SUM(notional) s FROM Trades GROUP BY trader)
+SELECT * FROM totals WHERE s &gt; 1000000;</pre>
+<div class="trap"><code>NOT IN (subquery)</code> returns <b>nothing</b> if the subquery contains a NULL. Prefer <code>NOT EXISTS</code>.</div>
+<div class="tw"><table>
+<tr><th>Operator</th><th>Result</th></tr>
+<tr><td><code>UNION</code></td><td>rows from both, <b>duplicates removed</b> (sorts → slower)</td></tr>
+<tr><td><code>UNION ALL</code></td><td>rows from both, duplicates kept (faster)</td></tr>
+<tr><td><code>INTERSECT</code></td><td>rows in both</td></tr>
+<tr><td><code>EXCEPT</code> / <code>MINUS</code> (Oracle)</td><td>rows in first but not second</td></tr>
+</table></div>
+<p>Columns must match in number and compatible types. T1 = {1,2,2,3}, T2 = {2,3,4}: UNION → 4 rows; UNION ALL → 7 rows.</p>
+<pre>SELECT name,
+  CASE WHEN grade &gt;= 90 THEN 'A' WHEN grade &gt;= 80 THEN 'B' ELSE 'C' END AS letter
+FROM Students;
+SELECT COALESCE(commission, 0) FROM Deals;      <span class="c">-- first non-NULL (Oracle NVL, SQL Server ISNULL, MySQL IFNULL)</span>
+SELECT NULLIF(a, 0) ...                          <span class="c">-- NULL if a = 0 (avoid divide by zero)</span></pre>
+<p><b>NULL logic</b>: any comparison with NULL is UNKNOWN; <code>NULL + 5</code> = NULL; <code>WHERE</code> keeps only TRUE rows.</p>
+
+<h3 id="sql-win">Window functions</h3>
+<pre>SELECT name, dept_id, salary,
+  ROW_NUMBER() OVER (PARTITION BY dept_id ORDER BY salary DESC) AS rn,   <span class="c">-- 1,2,3,4 (unique)</span>
+  RANK()       OVER (ORDER BY salary DESC) AS rnk,                        <span class="c">-- 1,2,2,4 (gaps)</span>
+  DENSE_RANK() OVER (ORDER BY salary DESC) AS drnk,                       <span class="c">-- 1,2,2,3 (no gaps)</span>
+  SUM(salary)  OVER (PARTITION BY dept_id) AS dept_total,                 <span class="c">-- aggregate without collapsing rows</span>
+  LAG(salary)  OVER (ORDER BY hire_date) AS prev_salary                   <span class="c">-- previous row (LEAD = next)</span>
+FROM Employees;</pre>
+
+<h3 id="sql-patterns">Classic query patterns</h3>
+<pre><span class="c">-- Nth (2nd) highest salary</span>
+SELECT MAX(salary) FROM Employees WHERE salary &lt; (SELECT MAX(salary) FROM Employees);
+SELECT DISTINCT salary FROM Employees ORDER BY salary DESC LIMIT 1 OFFSET 1;
+SELECT salary FROM (SELECT salary, DENSE_RANK() OVER (ORDER BY salary DESC) r FROM Employees) x WHERE r = 2;
+
+<span class="c">-- find duplicates</span>
+SELECT invoice_no, COUNT(*) FROM Sales GROUP BY invoice_no HAVING COUNT(*) &gt; 1;
+
+<span class="c">-- top earner per department</span>
+SELECT * FROM (SELECT e.*, ROW_NUMBER() OVER (PARTITION BY dept_id ORDER BY salary DESC) rn FROM Employees e) x WHERE rn = 1;
+
+<span class="c">-- last N years (MySQL / Oracle / Postgres)</span>
+WHERE shipment_date &gt;= DATE_SUB(CURDATE(), INTERVAL 3 YEAR)
+WHERE shipment_date &gt;= ADD_MONTHS(SYSDATE, -36)
+WHERE shipment_date &gt;= CURRENT_DATE - INTERVAL '3 years'
+
+<span class="c">-- full logistics answer: avg capacity per driver, last 3 years, ≥ 2 shipments</span>
+SELECT CONCAT(d.first_name, ' ', d.last_name) AS full_name, AVG(v.capacity) AS avg_capacity
+FROM Shipments s
+JOIN Drivers d  ON d.driver_id  = s.driver_id
+JOIN Vehicles v ON v.vehicle_id = s.vehicle_id
+WHERE s.shipment_date &gt;= DATE_SUB(CURDATE(), INTERVAL 3 YEAR)
+GROUP BY d.driver_id, d.first_name, d.last_name
+HAVING COUNT(*) &gt;= 2
+ORDER BY avg_capacity DESC;
+
+<span class="c">-- total per category</span>
+SELECT p.category_id, SUM(s.sales_amount) FROM Products p JOIN Sales s ON s.product_id = p.product_id GROUP BY p.category_id;
+
+<span class="c">-- delete duplicates keeping lowest id (MySQL)</span>
+DELETE t1 FROM T t1 JOIN T t2 ON t1.email = t2.email AND t1.id &gt; t2.id;</pre>
+<p>Date functions: <code>NOW()</code>, <code>CURDATE()</code>, <code>SYSDATE</code> (Oracle), <code>YEAR(d)</code>, <code>EXTRACT(YEAR FROM d)</code>, <code>DATEDIFF(a,b)</code>, <code>TO_DATE('2026-11-09','YYYY-MM-DD')</code>, <code>TO_CHAR(d,'YYYY')</code>. String: <code>UPPER</code>, <code>LOWER</code>, <code>LENGTH</code>, <code>SUBSTR</code>, <code>TRIM</code>, <code>REPLACE</code>. Numbers: <code>ROUND(x,2)</code>, <code>FLOOR</code>, <code>CEIL</code>, <code>MOD</code>.</p>
+
+<h3 id="sql-index">Indexes &amp; performance</h3>
+<ul>
+<li>An <b>index</b> is a separate structure (usually a <b>B-tree</b>) that lets the DB find rows without scanning the whole table (full table scan). Speeds up WHERE, JOIN, ORDER BY on indexed columns.</li>
+<li>Cost: extra <b>storage</b>, and <b>slower INSERT/UPDATE/DELETE</b> (index must be maintained). Not useful on low-selectivity columns (gender) or tiny tables.</li>
+<li><b>Clustered</b> index: defines the physical order of the table rows; <b>only one per table</b> (usually the primary key). <b>Non-clustered</b>: separate structure with pointers to rows; many per table.</li>
+<li><b>Unique index</b>: also enforces uniqueness → solves both “slow search” and “duplicate invoice numbers”.</li>
+<li><b>Composite index</b> (a, b): helps queries filtering on <code>a</code> or <code>a AND b</code> (leftmost prefix), not <code>b</code> alone.</li>
+<li><b>Covering index</b>: contains all columns a query needs. <b>Partitioning</b>: split a huge table by range (e.g. by year) → partition pruning.</li>
+<li>Index killers: functions on the column (<code>WHERE YEAR(order_date)=2026</code>), leading wildcard (<code>LIKE '%x'</code>), implicit type conversion, <code>OR</code> on different columns.</li>
+</ul>
+<pre>CREATE INDEX idx_orders_date ON Orders(order_date);
+CREATE UNIQUE INDEX ux_invoice ON Sales(invoice_no);
+CREATE INDEX idx_c ON Orders(customer_id, order_date);
+EXPLAIN SELECT * FROM Orders WHERE order_date &gt; '2026-01-01';   <span class="c">-- see the execution plan</span></pre>
+<div class="tip">Slow query checklist: execution plan (full scan?) → add/fix index → fresh statistics → select only needed columns (no <code>SELECT *</code>) → avoid N+1 queries → rewrite correlated subqueries as joins → check locks/blocking → pagination.</div>
+
+<h3 id="sql-objects">Views, procedures, functions, triggers, sequences</h3>
+<div class="tw"><table>
+<tr><th>Object</th><th>What it is</th></tr>
+<tr><td><b>View</b></td><td>a saved SELECT, used like a virtual table (simplify, restrict columns for security). Materialized view = stores the result.</td></tr>
+<tr><td><b>Stored procedure</b></td><td>named block of SQL statements stored in the DB, <b>called explicitly</b> (<code>CALL p()</code>/<code>EXEC p</code>), may modify data, IN/OUT params</td></tr>
+<tr><td><b>Function</b></td><td>returns a value, usable inside SELECT</td></tr>
+<tr><td><b>Trigger</b></td><td>code that <b>executes automatically</b> in response to an event (INSERT/UPDATE/DELETE, BEFORE/AFTER) on a table or view — used for audit, validation, <b>maintaining integrity</b></td></tr>
+<tr><td><b>Sequence</b></td><td>generates unique numbers (Oracle <code>seq.NEXTVAL</code>)</td></tr>
+<tr><td><b>Synonym</b></td><td>alias for an object (Oracle)</td></tr>
+<tr><td><b>Cursor</b></td><td>iterate over a result row by row in procedural code</td></tr>
+</table></div>
+<pre>CREATE VIEW v_cs AS SELECT ID, First_Name FROM Students WHERE Major = 'CS';
+CREATE TRIGGER trg_audit AFTER UPDATE ON Employees
+FOR EACH ROW INSERT INTO Audit(emp_id, changed_at) VALUES (NEW.emp_id, NOW());</pre>
+
+<h3 id="sql-tx">Transactions, ACID, isolation, locks</h3>
+<div class="tw"><table>
+<tr><th>ACID</th><th>Meaning</th></tr>
+<tr><td><b>A</b>tomicity</td><td>all statements succeed or none (rollback)</td></tr>
+<tr><td><b>C</b>onsistency</td><td>DB moves from one valid state to another (constraints hold)</td></tr>
+<tr><td><b>I</b>solation</td><td>concurrent transactions don’t see each other’s partial work</td></tr>
+<tr><td><b>D</b>urability</td><td>once committed, survives crashes (redo/transaction logs)</td></tr>
+</table></div>
+<pre>START TRANSACTION;     <span class="c">-- BEGIN</span>
+UPDATE Accounts SET bal = bal - 100 WHERE id = 1;
+UPDATE Accounts SET bal = bal + 100 WHERE id = 2;
+COMMIT;                <span class="c">-- or ROLLBACK;   SAVEPOINT s1; ROLLBACK TO s1;</span></pre>
+<div class="tw"><table>
+<tr><th>Isolation level</th><th>Dirty read</th><th>Non-repeatable read</th><th>Phantom read</th></tr>
+<tr><td>Read Uncommitted</td><td>possible</td><td>possible</td><td>possible</td></tr>
+<tr><td>Read Committed (Oracle, SQL Server default)</td><td>no</td><td>possible</td><td>possible</td></tr>
+<tr><td>Repeatable Read (MySQL InnoDB default)</td><td>no</td><td>no</td><td>possible</td></tr>
+<tr><td>Serializable</td><td>no</td><td>no</td><td>no</td></tr>
+</table></div>
+<p>Dirty read = reading uncommitted data · non-repeatable = same row gives different value on re-read · phantom = new rows appear on re-query. <b>Locks</b>: shared (read) vs exclusive (write); row vs table level. <b>Deadlock</b> = two transactions each waiting for a lock the other holds (Oracle <code>ORA-00060</code>) → DB kills one. Prevent: same access order, short transactions, index foreign keys.</p>
+
+<h3 id="sql-norm">Normalization</h3>
+<div class="tw"><table>
+<tr><th>Form</th><th>Rule</th><th>Violation example</th></tr>
+<tr><td><b>1NF</b></td><td>atomic values, no repeating groups, each row unique</td><td><code>phones = "111, 222"</code></td></tr>
+<tr><td><b>2NF</b></td><td>1NF + no <b>partial</b> dependency (non-key column depends on part of a composite key)</td><td>(student_id, course_id) → student_name</td></tr>
+<tr><td><b>3NF</b></td><td>2NF + no <b>transitive</b> dependency (non-key → non-key)</td><td>emp_id → dept_id → dept_name in Employees</td></tr>
+<tr><td><b>BCNF</b></td><td>every determinant is a candidate key</td><td></td></tr>
+</table></div>
+<p>Goal: remove redundancy and update/insert/delete anomalies. <b>Denormalization</b> = deliberately adding redundancy for read speed (reporting, data warehouses). Relationships: one-to-one, one-to-many (FK on the “many” side), many-to-many (junction table, e.g. Reservations(EID, BID)).</p>
+
+<h3 id="sql-theory">DBMS theory &amp; scaling</h3>
+<ul>
+<li><b>DBMS</b> = software to store, organize, query and manage data (its primary function: let users store and <b>retrieve data through queries</b>; also handles security, integrity, concurrency, backup/recovery). <b>RDBMS</b> = relational: tables, rows, keys, SQL (Oracle, MySQL, PostgreSQL, SQL Server). <b>NoSQL</b> = document (MongoDB), key-value (Redis), column (Cassandra), graph (Neo4j) — flexible schema, horizontal scale.</li>
+<li><b>OLTP</b> (many small transactions, normalized) vs <b>OLAP</b> (analytics, aggregates, data warehouse, star schema).</li>
+<li><b>Benefits of an RDBMS on multiple servers</b>: high availability &amp; failover (no single point of failure) · scalability/load balancing (read replicas, sharding) · performance · disaster recovery (replica in another site) · maintenance without downtime.</li>
+<li><b>Replication</b>: copies of data (master–slave/primary–replica, synchronous vs asynchronous). <b>Sharding</b>: split rows across servers by key. <b>Clustering</b>: Oracle RAC — several instances, one DB.</li>
+<li><b>CAP theorem</b>: a distributed system can guarantee at most two of Consistency, Availability, Partition tolerance.</li>
+<li><b>Backup</b>: full / incremental / differential; point-in-time recovery via logs.</li>
+<li><b>SQL injection</b>: user input concatenated into SQL (<code>' OR 1=1 --</code>). Prevent with <b>prepared statements / bind variables</b>.</li>
+<li>Oracle specifics (Murex runs on Oracle/Sybase/SQL Server): <code>DUAL</code> table, <code>ROWNUM</code>, <code>NVL</code>, <code>SYSDATE</code>, <code>VARCHAR2</code>, <code>MINUS</code>, sequences, <code>v$session</code>, <code>v$sql</code>, <code>EXPLAIN PLAN</code>, AWR reports, <code>ORA-</code> error codes (ORA-00001 unique violated, ORA-00942 table doesn’t exist, ORA-01017 invalid login, ORA-00060 deadlock, ORA-01555 snapshot too old, ORA-12154 TNS can’t resolve service).</li>
+</ul>
+</section>
+<section class="topic" id="java">
+<h2><span class="num">6</span>Java — crash &amp; code analysis</h2>
+<p class="lead">“What is the output?”, “Does it compile?”, “What causes this exception?”. Decide <b>compile-time vs runtime</b> first, then trace carefully.</p>
+
+<h3 id="java-platform">Platform basics</h3>
+<ul>
+<li><code>javac A.java</code> compiles source → <b>bytecode</b> (<code>A.class</code>), <code>java A</code> runs it on the <b>JVM</b>. Bytecode is portable (“write once, run anywhere”); native C binaries are not.</li>
+<li><b>JDK</b> (compiler + tools) ⊃ <b>JRE</b> (runtime libraries) ⊃ <b>JVM</b> (executes bytecode, JIT-compiles hot code). <code>.jar</code> = zipped classes. <b>Classpath</b> = where the JVM looks for classes.</li>
+<li>Memory: <b>stack</b> (per thread: method frames, local primitives, references) · <b>heap</b> (all objects, shared; size via <code>-Xms</code>/<code>-Xmx</code>) · metaspace (class metadata). <b>Garbage collector</b> frees objects no longer referenced.</li>
+<li><code>main</code> signature: <code>public static void main(String[] args)</code> (the parameter name doesn’t matter — <code>numbers</code> is fine).</li>
+</ul>
+
+<h3 id="java-types">Types, operators &amp; arithmetic traps</h3>
+<div class="tw"><table>
+<tr><th>Primitive</th><th>Size</th><th>Range / note</th></tr>
+<tr><td><code>byte</code></td><td>8 bit</td><td>−128 … 127</td></tr>
+<tr><td><code>short</code></td><td>16 bit</td><td>−32,768 … 32,767</td></tr>
+<tr><td><code>int</code></td><td>32 bit</td><td>−2,147,483,648 … 2,147,483,647 (≈ ±2.1 × 10⁹)</td></tr>
+<tr><td><code>long</code></td><td>64 bit</td><td>≈ ±9.22 × 10¹⁸; literal needs <code>L</code>: <code>10000000000L</code></td></tr>
+<tr><td><code>float</code> / <code>double</code></td><td>32 / 64 bit</td><td>approximate; float literal needs <code>f</code>: <code>3.5f</code></td></tr>
+<tr><td><code>char</code></td><td>16 bit</td><td>Unicode, numeric value: <code>'A'</code> = 65, <code>'a'</code> = 97, <code>'0'</code> = 48</td></tr>
+<tr><td><code>boolean</code></td><td>—</td><td><code>true</code>/<code>false</code> only (not 0/1)</td></tr>
+</table></div>
+<div class="tw"><table>
+<tr><th>Expression</th><th>Result</th><th>Why</th></tr>
+<tr><td><code>7 / 2</code></td><td><code>3</code></td><td>int / int = integer division (truncates toward zero); <code>-7 / 2</code> = −3</td></tr>
+<tr><td><code>7 % 2</code> · <code>-7 % 2</code></td><td><code>1</code> · <code>-1</code></td><td>remainder takes the sign of the left operand</td></tr>
+<tr><td><code>7 / 2.0</code></td><td><code>3.5</code></td><td>one double operand → double division</td></tr>
+<tr><td><code>int z = y / 0;</code></td><td><b>ArithmeticException</b> at runtime</td><td>compiles fine; only integer division by zero throws</td></tr>
+<tr><td><code>5.0 / 0</code> · <code>0.0 / 0</code></td><td><code>Infinity</code> · <code>NaN</code></td><td>floating point never throws</td></tr>
+<tr><td><code>Integer.MAX_VALUE + 1</code></td><td><code>-2147483648</code></td><td>silent overflow (wrap-around). <code>Math.addExact</code> throws instead</td></tr>
+<tr><td><code>(byte) 130</code></td><td><code>-126</code></td><td>narrowing cast keeps low 8 bits</td></tr>
+<tr><td><code>(int) 3.99</code></td><td><code>3</code></td><td>cast truncates, doesn’t round (<code>Math.round</code> rounds)</td></tr>
+<tr><td><code>0.1 + 0.2 == 0.3</code></td><td><code>false</code></td><td>binary floating point; use <code>BigDecimal</code> for money</td></tr>
+<tr><td><code>'a' + 1</code> · <code>(char)('a' + 1)</code></td><td><code>98</code> · <code>b</code></td><td>char promotes to int in arithmetic</td></tr>
+<tr><td><code>'a' + 'b'</code></td><td><code>195</code></td><td>two chars add numerically (97 + 98)</td></tr>
+<tr><td><code>int i = 5; i = i++;</code></td><td><code>5</code></td><td>post-increment returns the old value, then assignment overwrites</td></tr>
+<tr><td><code>int a = 5; int b = a++ + ++a;</code></td><td><code>b = 12</code></td><td>5 (a→6) + 7 (a→7)</td></tr>
+<tr><td><code>x &gt; 0 &amp;&amp; y / x &gt; 1</code></td><td>safe when x = 0</td><td><code>&amp;&amp;</code> / <code>||</code> short-circuit; <code>&amp;</code> / <code>|</code> evaluate both</td></tr>
+<tr><td><code>5 &gt;&gt; 1</code> · <code>5 &lt;&lt; 1</code> · <code>5 ^ 3</code></td><td><code>2</code> · <code>10</code> · <code>6</code></td><td>shift right/left, XOR</td></tr>
+</table></div>
+
+<h3 id="java-string">Strings</h3>
+<pre>System.out.println(100 + 100 + "MUREX");        <span class="c">// 200MUREX  (left to right: int+int first)</span>
+System.out.println("Murex Company" + 100 + 100); <span class="c">// Murex Company100100 (String+int = String)</span>
+System.out.println("Sum " + (100 + 100));        <span class="c">// Sum 200</span>
+System.out.println(1 + 2 + "3" + 4 + 5);         <span class="c">// 3345</span>
+System.out.println('a' + 'b' + "c");             <span class="c">// 195c</span>
+
+String s1 = "murex";                 <span class="c">// from the string pool</span>
+String s2 = "murex";                 <span class="c">// same pooled object</span>
+String s3 = new String("murex");     <span class="c">// new object on the heap</span>
+s1 == s2        <span class="c">// true  (same reference)</span>
+s1 == s3        <span class="c">// false (different objects)</span>
+s1.equals(s3)   <span class="c">// true  (same content) → ALWAYS compare strings with equals()</span>
+
+String s = "abc";
+s.toUpperCase();                     <span class="c">// result discarded: Strings are IMMUTABLE</span>
+System.out.println(s);               <span class="c">// abc</span>
+s = s.toUpperCase();                 <span class="c">// ABC</span></pre>
+<p>Useful methods: <code>length()</code>, <code>charAt(i)</code>, <code>substring(b, e)</code> (e exclusive), <code>indexOf</code>, <code>contains</code>, <code>split(",")</code>, <code>trim()</code>, <code>equalsIgnoreCase</code>, <code>toCharArray()</code>, <code>String.valueOf()</code>, <code>Integer.parseInt()</code>. Build strings in loops with <code>StringBuilder</code> (mutable, fast). Same <code>==</code> trap for wrappers: <code>Integer a = 127, b = 127; a == b</code> true (cached −128…127) but with 128 → false.</p>
+
+<h3 id="java-oop">OOP: inheritance, overriding, hiding</h3>
+<div class="tw"><table>
+<tr><th>Member</th><th>Resolved by</th><th>Polymorphic?</th></tr>
+<tr><td>Instance method (overridden)</td><td><b>runtime</b> type of the object</td><td>yes</td></tr>
+<tr><td>Field (same name in subclass)</td><td><b>declared</b> (reference) type — field <i>hiding</i></td><td><b>no</b></td></tr>
+<tr><td>Static method (same signature)</td><td><b>declared</b> type — method <i>hiding</i></td><td><b>no</b></td></tr>
+<tr><td>Overloaded method (different params)</td><td>compile time, by argument types</td><td>no</td></tr>
+<tr><td>Private / final methods</td><td>can’t be overridden</td><td>no</td></tr>
+</table></div>
+<pre>class Math { public final double secret = 2; }
+class ComplexMath extends Math { public final double secret = 4; }
+class InfiniteMath extends ComplexMath {
+  public final double secret = 8;
+  public static void main(String[] n) {
+    Math math = new InfiniteMath();
+    System.out.print(math.secret);           <span class="c">// 2.0  → declared type Math; double prints with .0</span>
+    System.out.print(((InfiniteMath) math).secret); <span class="c">// 8.0</span>
+  }
+}
+
+class P { static String who(){return "P";} String me(){return "p";} }
+class C extends P { static String who(){return "C";} String me(){return "c";} }
+P x = new C();
+System.out.println(x.who() + x.me());        <span class="c">// Pc</span></pre>
+<ul>
+<li><b>Constructors</b>: the parent constructor runs <b>first</b> (implicit <code>super()</code> as first line). If the parent has no no-arg constructor, the child must call <code>super(args)</code> or it’s a compile error. Constructors are not inherited.</li>
+<li><b>Overriding rules</b>: same signature, same or covariant return type, access can’t be more restrictive, can’t throw broader checked exceptions. <code>@Override</code> makes the compiler verify.</li>
+<li><b>Abstract class</b>: can’t be instantiated, may have abstract and concrete methods, constructors, state. <b>Interface</b>: contract; methods public abstract by default (plus <code>default</code>/<code>static</code> since Java 8); fields are <code>public static final</code>; a class can implement many interfaces but extend one class.</li>
+<li><b>final</b>: variable can’t be reassigned · method can’t be overridden · class can’t be extended (e.g. <code>String</code>).</li>
+<li><b>static</b>: belongs to the class, shared by all instances; static methods can’t use <code>this</code> or instance fields directly.</li>
+<li>Access: <code>private</code> (class) &lt; default/package &lt; <code>protected</code> (package + subclasses) &lt; <code>public</code>.</li>
+<li>Four pillars: <b>encapsulation</b> (private fields + getters), <b>inheritance</b>, <b>polymorphism</b>, <b>abstraction</b>.</li>
+<li><code>equals()</code>/<code>hashCode()</code> contract: equal objects must have equal hash codes (needed for HashMap/HashSet).</li>
+<li>Casting: upcast implicit (<code>Animal a = new Dog()</code>); downcast explicit, wrong type → <code>ClassCastException</code>; check with <code>instanceof</code>.</li>
+</ul>
+
+<h3 id="java-compile">Compile errors (code won’t compile)</h3>
+<div class="tw"><table>
+<tr><th>Code</th><th>Error</th></tr>
+<tr><td><code>int x; System.out.println(x);</code></td><td>local variable might not have been initialized (fields get defaults: 0, null, false — locals don’t)</td></tr>
+<tr><td><code>int x = 3.5;</code></td><td>incompatible types: possible lossy conversion from double to int</td></tr>
+<tr><td><code>long l = 10000000000;</code></td><td>integer number too large (needs <code>L</code>)</td></tr>
+<tr><td><code>float f = 1.5;</code></td><td>lossy conversion (needs <code>1.5f</code>)</td></tr>
+<tr><td><code>final int a = 1; a = 2;</code></td><td>cannot assign a value to final variable</td></tr>
+<tr><td><code>return 1; System.out.println();</code></td><td><b>unreachable statement</b> (also after <code>while(true){}</code> with no break, after <code>throw</code>)</td></tr>
+<tr><td>non-void method without return on all paths</td><td>missing return statement</td></tr>
+<tr><td>calling a method that throws a checked exception without try/catch or <code>throws</code></td><td>unreported exception … must be caught or declared to be thrown</td></tr>
+<tr><td><code>new AbstractClass()</code> / <code>new Interface()</code></td><td>is abstract; cannot be instantiated</td></tr>
+<tr><td>instance field used in <code>static main</code></td><td>non-static variable cannot be referenced from a static context</td></tr>
+<tr><td>missing <code>;</code>, unmatched braces, undefined variable/method</td><td>cannot find symbol / ‘;’ expected</td></tr>
+<tr><td><code>String s = 'ab';</code> · <code>char c = "a";</code></td><td>unclosed character literal / incompatible types</td></tr>
+<tr><td><code>if (x = 5)</code></td><td>incompatible types: int cannot be converted to boolean</td></tr>
+<tr><td>two public classes in one file / file name ≠ public class name</td><td>class X is public, should be declared in a file named X.java</td></tr>
+<tr><td>catching a subclass exception after its superclass</td><td>exception has already been caught</td></tr>
+</table></div>
+
+<h3 id="java-exc">Runtime exceptions &amp; errors</h3>
+<pre>Throwable
+ ├── Error                    (serious, don't catch: OutOfMemoryError, StackOverflowError)
+ └── Exception
+      ├── checked             (must catch or declare: IOException, SQLException, ClassNotFoundException, InterruptedException)
+      └── RuntimeException    (unchecked: NullPointerException, ArithmeticException, ...)</pre>
+<div class="tw"><table>
+<tr><th>Exception</th><th>Cause</th></tr>
+<tr><td><code>NullPointerException</code></td><td>calling a method/field on a <code>null</code> reference, unboxing null, <code>array.length</code> of null array</td></tr>
+<tr><td><code>ArithmeticException: / by zero</code></td><td>integer division or modulo by zero</td></tr>
+<tr><td><code>ArrayIndexOutOfBoundsException</code></td><td>index &lt; 0 or ≥ length (classic: <code>i &lt;= arr.length</code>)</td></tr>
+<tr><td><code>StringIndexOutOfBoundsException</code></td><td><code>charAt</code>/<code>substring</code> outside the string</td></tr>
+<tr><td><code>ClassCastException</code></td><td>invalid downcast</td></tr>
+<tr><td><code>NumberFormatException</code></td><td><code>Integer.parseInt("12a")</code></td></tr>
+<tr><td><code>IllegalArgumentException</code> / <code>IllegalStateException</code></td><td>bad argument / object not in the right state</td></tr>
+<tr><td><code>ConcurrentModificationException</code></td><td>modifying a collection while iterating it with for-each (use <code>Iterator.remove()</code>)</td></tr>
+<tr><td><code>UnsupportedOperationException</code></td><td>modifying an immutable list (<code>List.of</code>, <code>Arrays.asList(...).add</code>)</td></tr>
+<tr><td><code>StackOverflowError</code></td><td>infinite/too-deep recursion (no base case)</td></tr>
+<tr><td><code>OutOfMemoryError: Java heap space</code></td><td>heap too small for data, loading everything in memory, memory leak (static collections, caches). Also “GC overhead limit exceeded”, “Metaspace”, “unable to create new native thread”</td></tr>
+<tr><td><code>ClassNotFoundException</code> (checked)</td><td>class loaded by name at runtime (<code>Class.forName</code>, JDBC driver) not on classpath</td></tr>
+<tr><td><code>NoClassDefFoundError</code></td><td>class existed at compile time but missing at runtime (missing jar)</td></tr>
+<tr><td><code>NoSuchMethodError</code></td><td>jar version mismatch</td></tr>
+<tr><td><code>java.net.ConnectException: Connection refused</code></td><td>nothing listening at host:port (see Networking)</td></tr>
+<tr><td><code>SocketTimeoutException</code>, <code>UnknownHostException</code></td><td>slow server / DNS failure</td></tr>
+<tr><td><code>SQLException</code></td><td>DB error — read the vendor code (ORA-xxxxx)</td></tr>
+<tr><td><code>FileNotFoundException</code> / <code>IOException</code></td><td>missing file, permissions, disk full</td></tr>
+<tr><td><code>InterruptedException</code></td><td>thread interrupted while sleeping/waiting</td></tr>
+</table></div>
+<pre>try {
+    risky();
+} catch (IOException | SQLException e) {   <span class="c">// multi-catch; specific before general</span>
+    log.error("failed", e);
+} finally {
+    close();                               <span class="c">// ALWAYS runs (even after return), except System.exit()</span>
+}
+try (BufferedReader r = new BufferedReader(new FileReader("f"))) { }   <span class="c">// try-with-resources closes automatically</span></pre>
+<div class="trap">If both <code>try</code> and <code>finally</code> contain <code>return</code>, the <b>finally’s return wins</b>. <code>throw</code> creates an exception; <code>throws</code> declares one in a method signature.</div>
+
+<h3 id="java-trace">Reading a Java stack trace</h3>
+<pre>Exception in thread "main" java.lang.NullPointerException     <span class="c">← type + message</span>
+    at com.murex.trade.Trade.getNotional(Trade.java:42)        <span class="c">← TOP frame = where it was thrown</span>
+    at com.murex.report.Report.total(Report.java:17)           <span class="c">← caller</span>
+    at com.murex.Main.main(Main.java:8)                        <span class="c">← entry point</span>
+Caused by: ...                                                  <span class="c">← root cause (read the LAST "Caused by")</span></pre>
+<ul>
+<li>Read top-down for <i>where</i>; the first frame in <b>your</b> package is usually the bug; frames in <code>java.*</code>/<code>sun.*</code> are the library doing what you asked.</li>
+<li>“Native Method” frames = JVM calling OS code (e.g. socket connect).</li>
+<li>For hangs, not crashes: <b>thread dump</b> (<code>jstack PID</code> or <code>kill -3 PID</code>) → look for threads BLOCKED/WAITING, deadlocks are reported automatically.</li>
+</ul>
+
+<h3 id="java-coll">Collections &amp; concurrency essentials</h3>
+<div class="tw"><table>
+<tr><th>Type</th><th>Characteristics</th></tr>
+<tr><td><code>ArrayList</code></td><td>dynamic array: O(1) index access, O(n) insert in middle</td></tr>
+<tr><td><code>LinkedList</code></td><td>doubly linked: O(1) add/remove at ends, O(n) index</td></tr>
+<tr><td><code>HashSet</code> / <code>TreeSet</code> / <code>LinkedHashSet</code></td><td>no duplicates · unordered O(1) / sorted O(log n) / insertion order</td></tr>
+<tr><td><code>HashMap</code> / <code>TreeMap</code> / <code>LinkedHashMap</code></td><td>key→value · unordered, one null key / sorted keys / insertion order</td></tr>
+<tr><td><code>Hashtable</code>, <code>Vector</code></td><td>legacy synchronized; use <code>ConcurrentHashMap</code></td></tr>
+<tr><td><code>Queue</code>/<code>Deque</code>/<code>PriorityQueue</code>/<code>Stack</code></td><td>FIFO / both ends / heap ordered / LIFO</td></tr>
+</table></div>
+<p><b>Threads</b>: <code>extends Thread</code> or <code>implements Runnable</code>, start with <code>start()</code> (calling <code>run()</code> directly runs in the same thread). <b>Race condition</b> = shared data modified concurrently → use <code>synchronized</code>, locks, <code>AtomicInteger</code>. <b>Deadlock</b> = threads wait on each other’s locks forever (4 conditions: mutual exclusion, hold and wait, no preemption, circular wait). <code>volatile</code> = visibility across threads. ExecutorService = thread pools.</p>
+</section>
+
+<section class="topic" id="c">
+<h2><span class="num">7</span>C — compilation &amp; crash analysis</h2>
+
+<h3 id="c-compile">From source to executable</h3>
+<pre>prog.c ──preprocessor──▶ prog.i ──compiler──▶ prog.s ──assembler──▶ prog.o ──linker──▶ prog (executable)
+          (#include,        (C → assembly)     (machine code,       (+ libraries: libc.so,
+           #define, macros)                     object file)          resolves symbols)</pre>
+<pre>gcc prog.c -o prog          <span class="c"># full build</span>
+gcc -c prog.c               <span class="c"># compile only → prog.o</span>
+gcc -Wall -Wextra -g -O2    <span class="c"># warnings, debug symbols, optimisation</span>
+gcc a.o b.o -lm -o app      <span class="c"># link, with math library</span>
+ldd ./app                   <span class="c"># which shared libraries (.so) it needs</span></pre>
+<div class="key"><b>Output of a C compiler</b>: native <b>machine code</b> — object files (<code>.o</code>) and, after linking, an executable (ELF on Linux, PE <code>.exe</code> on Windows, Mach-O on macOS). It is <b>not portable</b>: tied to the CPU architecture (x86-64 vs ARM instruction set), the OS (executable format, system calls, ABI) and library versions. Portability is at the <b>source</b> level: recompile (or cross-compile) for each target. Java bytecode, by contrast, runs on any JVM.</div>
+<p><b>Static linking</b> (library copied into the binary, <code>.a</code>) vs <b>dynamic linking</b> (<code>.so</code>/<code>.dll</code> loaded at runtime; missing → “error while loading shared libraries”, fix <code>LD_LIBRARY_PATH</code>). Compile errors (syntax, undeclared identifier, type mismatch) vs <b>linker errors</b> (“undefined reference to `foo`” — function declared but not defined/linked).</p>
+
+<h3 id="c-mem">Pointers &amp; memory bugs</h3>
+<pre>int x = 10;
+int *p = &amp;x;        <span class="c">/* p holds the address of x */</span>
+*p = 20;            <span class="c">/* dereference: x is now 20 */</span>
+int a[5];           <span class="c">/* a decays to &amp;a[0]; a[i] == *(a + i) */</span>
+char s[] = "hi";    <span class="c">/* 3 bytes: 'h','i','\0' — strings end with a null terminator */</span>
+int *buf = malloc(10 * sizeof(int));
+if (buf == NULL) { /* allocation failed */ }
+free(buf); buf = NULL;</pre>
+<div class="tw"><table>
+<tr><th>Bug</th><th>Example</th><th>Symptom</th></tr>
+<tr><td><b>NULL pointer dereference</b></td><td><code>char *p = NULL; *p</code></td><td>Segmentation fault (SIGSEGV)</td></tr>
+<tr><td><b>Buffer overflow</b> / off-by-one</td><td><code>for(i=0;i&lt;=5;i++) a[i]=0;</code> on <code>int a[5]</code>; <code>strcpy</code> into small buffer; <code>gets()</code></td><td>memory corruption, random crashes later, security hole</td></tr>
+<tr><td><b>Memory leak</b></td><td><code>malloc</code> without <code>free</code></td><td>memory grows until OOM</td></tr>
+<tr><td><b>Dangling pointer</b> / use-after-free</td><td>using <code>p</code> after <code>free(p)</code>; returning address of a local variable</td><td>garbage data, crash</td></tr>
+<tr><td><b>Double free</b></td><td><code>free(p); free(p);</code></td><td>abort: “double free or corruption”</td></tr>
+<tr><td><b>Uninitialised variable</b></td><td><code>int x; printf("%d", x);</code></td><td>garbage value (undefined behaviour)</td></tr>
+<tr><td><b>Stack overflow</b></td><td>infinite recursion, huge local arrays</td><td>segfault</td></tr>
+<tr><td>Integer division by zero</td><td><code>x / 0</code></td><td>SIGFPE “Floating point exception”</td></tr>
+<tr><td>Wrong printf format</td><td><code>printf("%d", 3.5)</code></td><td>garbage output</td></tr>
+<tr><td><code>=</code> vs <code>==</code></td><td><code>if (x = 0)</code></td><td>always false and x overwritten (compiles!)</td></tr>
+<tr><td>Missing <code>break</code> in <code>switch</code></td><td></td><td>fall-through into next case</td></tr>
+</table></div>
+<p>Signals on crash: <b>SIGSEGV (11)</b> invalid memory access · <b>SIGABRT (6)</b> <code>abort()</code>/assert/double free · <b>SIGFPE (8)</b> arithmetic · <b>SIGBUS</b> misaligned access · <b>SIGKILL (9)</b> killed (e.g. by OOM killer). Exit code 128+N = killed by signal N (139 = segfault).</p>
+
+<h3 id="c-debug">Debugging native crashes</h3>
+<div class="tw"><table>
+<tr><th>Tool</th><th>Use</th></tr>
+<tr><td><b>Core dump</b></td><td>memory image written at crash (<code>ulimit -c unlimited</code> to enable)</td></tr>
+<tr><td><code>gdb ./prog core</code> → <code>bt</code></td><td><b>backtrace</b>: the call stack at the crash. <code>frame n</code>, <code>print var</code>, <code>info locals</code>, <code>break</code>, <code>run</code>, <code>next</code>, <code>step</code></td></tr>
+<tr><td><code>pstack PID</code> / <code>gstack</code></td><td>stack of a <b>running</b> (hung/slow) process, without stopping it for long</td></tr>
+<tr><td><code>strace -p PID</code></td><td>system calls in real time (stuck on <code>read()</code> from a socket? <code>open()</code> failing?)</td></tr>
+<tr><td><code>valgrind ./prog</code></td><td>leaks, invalid reads/writes, use of uninitialised memory</td></tr>
+<tr><td>AddressSanitizer (<code>-fsanitize=address</code>)</td><td>catches overflows at runtime</td></tr>
+<tr><td><code>nm</code>, <code>objdump</code>, <code>ldd</code>, <code>file</code></td><td>symbols, disassembly, dependencies, binary type/architecture</td></tr>
+</table></div>
+<h4>Reading a pstack (from the paper)</h4>
+<pre>kpuexec() + 0x2ca [libclntsh.so.18.1]          <span class="c">← innermost: Oracle client library, executing</span>
+OCIStmtExecute() [libclntsh.so.18.1]           <span class="c">← OCI = Oracle Call Interface</span>
+OCI_RequestExecuteWithParameters(...) [librdb_oci.so]
+SQLPrepareAndExecute(..., "USERS_TABLE", ...) [librdbms_dll.so]   <span class="c">← the SQL being run</span>
+RDB_Read(...) / RDBPosition(...) / DBX_Position(...)              <span class="c">← application asked to read data</span></pre>
+<p>Bottom = outermost caller, top = where it is <b>now</b>. The process is waiting inside the Oracle client for the <b>database to finish a query on USERS_TABLE</b> → the problem is on the DB side. Next: find the session (<code>v$session</code>), check for <b>locks/blocking</b>, get the <b>execution plan</b>, add indexes, refresh statistics, check DB load and network latency, add a query timeout. Take several pstacks a few seconds apart: same frame every time = genuinely stuck there.</p>
+</section>
+
+<section class="topic" id="trouble">
+<h2><span class="num">8</span>Troubleshooting &amp; log analysis</h2>
+<p class="lead">Open questions like “the app is slow”, “checkout crashes”, “status 403 in logs”. Answer with a structured method and real commands.</p>
+
+<h3 id="tr-method">The method</h3>
+<ol>
+<li><b>Scope</b>: who is affected (all users / one), what (all features / one page), since when, reproducible? Any recent <b>change</b> (deployment, config, patch, data volume)?</li>
+<li><b>Gather evidence</b>: error messages, timestamps, logs, screenshots, exact steps, environment/version.</li>
+<li><b>Isolate the layer</b>: client → network → load balancer/proxy → app server → database → external services. Measure time at each hop.</li>
+<li><b>Hypothesise &amp; test</b> one thing at a time; compare with a working environment.</li>
+<li><b>Fix, verify, document</b>; add monitoring so it’s caught earlier next time.</li>
+</ol>
+
+<h3 id="tr-slow">Slow application (app VM + separate DB VM)</h3>
+<div class="tw"><table>
+<tr><th>Layer</th><th>Check</th><th>Commands / tools</th></tr>
+<tr><td>App server CPU</td><td>a process at 100%? load average &gt; cores?</td><td><code>top</code>, <code>htop</code>, <code>uptime</code>, <code>ps aux --sort=-%cpu</code></td></tr>
+<tr><td>Memory</td><td>RAM full, swapping, long GC pauses</td><td><code>free -m</code>, <code>vmstat 1</code>, GC logs, <code>jstat</code></td></tr>
+<tr><td>Disk</td><td>full disk, high I/O wait</td><td><code>df -h</code>, <code>du -sh</code>, <code>iostat -x</code></td></tr>
+<tr><td>Application</td><td>errors, timeouts, thread pool / connection pool exhausted</td><td><code>tail -f</code>, <code>grep -i error</code>, <code>jstack</code>, APM traces</td></tr>
+<tr><td>Network</td><td>latency/packet loss user↔app and app↔DB</td><td><code>ping</code>, <code>traceroute</code>, <code>mtr</code>, <code>curl -w</code></td></tr>
+<tr><td>Database</td><td>slow queries, locks, missing indexes, stale stats, DB VM resources</td><td>slow-query log, <code>EXPLAIN</code>, <code>v$session</code>, AWR, <code>SHOW PROCESSLIST</code></td></tr>
+<tr><td>External</td><td>third-party API, DNS slow</td><td>logs, <code>dig</code></td></tr>
+</table></div>
+<h4>Alerting before users complain</h4>
+<p>Monitoring + thresholds + notifications: collect metrics (CPU, memory, disk, response time p95/p99, error rate, DB latency, queue size) with <b>CloudWatch / Prometheus + Grafana / Datadog / Nagios / Zabbix / ELK</b>; <b>synthetic checks</b> (probe key URLs every minute); <b>health-check endpoints</b>; <b>log-based alerts</b> (e.g. &gt; 10 ERROR/min); alert on trends (disk at 80%, latency rising) via email/Slack/PagerDuty/SMS, with on-call rotation and runbooks. Define SLAs/SLOs.</p>
+
+<h3 id="tr-crash">Crash diagnostics checklist</h3>
+<ul>
+<li>Exact steps to reproduce + frequency (always / intermittent) + test data (item, user, payment, coupon).</li>
+<li>Error message, screenshot/recording, timestamp.</li>
+<li>Application &amp; server logs, <b>stack trace</b>, core dump.</li>
+<li>Browser console + network tab (which request failed, HTTP status, response body).</li>
+<li>Environment: build/version, browser/OS/device, test environment, configuration.</li>
+<li>Expected vs actual result; does it happen in other environments? what changed recently?</li>
+</ul>
+
+<h3 id="tr-cases">Symptom → likely cause</h3>
+<div class="tw"><table>
+<tr><th>Symptom</th><th>Think about</th></tr>
+<tr><td>“No space left on device”</td><td><code>df -h</code> / <code>df -i</code>; clean logs/tmp, logrotate; deleted-but-open files (<code>lsof +L1</code>); environment issue, not a product bug — clean up or move to another machine</td></tr>
+<tr><td>“Permission denied”</td><td><code>ls -l</code>, owner/group, execute bit, running as wrong user, SELinux</td></tr>
+<tr><td>“Command not found”</td><td>typo, not installed, not in <code>$PATH</code></td></tr>
+<tr><td>Process killed suddenly</td><td>OOM killer (<code>dmesg | grep -i kill</code>), <code>ulimit</code></td></tr>
+<tr><td>“Too many open files”</td><td><code>ulimit -n</code>, file/socket leak (<code>lsof -p</code>)</td></tr>
+<tr><td>HTTP 401 / 403</td><td>authentication / authorization: credentials, token expiry, roles, whitelist, service account permissions</td></tr>
+<tr><td>HTTP 500 / 502 / 504</td><td>server exception in logs / backend down behind proxy / backend too slow</td></tr>
+<tr><td>Works on my machine only</td><td>environment differences: config, versions, data, network, permissions</td></tr>
+<tr><td>Intermittent failures</td><td>race conditions, resource exhaustion, timeouts, load balancer to one bad node, flaky test</td></tr>
+<tr><td>Process hung</td><td><code>pstack</code>/<code>jstack</code> several times, <code>strace</code>; waiting on DB lock, network, deadlock</td></tr>
+<tr><td>Slow after release</td><td>new query without index, N+1 queries, logging level DEBUG, config change</td></tr>
+</table></div>
+<p><b>Log levels</b>: TRACE &lt; DEBUG &lt; INFO &lt; WARN &lt; ERROR &lt; FATAL. Logs live in <code>/var/log/</code>, app dirs, or <code>journalctl</code>. Correlate by timestamp and request/trade ID across components.</p>
+</section>
+<section class="topic" id="test">
+<h2><span class="num">9</span>Software testing</h2>
+<p class="lead">One of the five official test areas — and core to Murex’s QA and Technical Analyst roles. Definitions, techniques, coverage math, bug handling.</p>
+
+<h3 id="t-life">Lifecycle &amp; fundamentals</h3>
+<ul>
+<li><b>SDLC</b>: requirements → design → implementation → testing → deployment → maintenance. Models: <b>Waterfall</b> (sequential), <b>V-model</b> (each dev phase paired with a test level), <b>Agile/Scrum</b> (sprints, continuous testing), <b>DevOps</b> (CI/CD).</li>
+<li><b>STLC</b>: requirement analysis → test planning → test case design → environment setup → execution → closure/report.</li>
+<li><b>Error</b> (human mistake) → <b>defect/bug</b> (in code) → <b>failure</b> (observed wrong behaviour).</li>
+<li><b>Verification</b> = “are we building the product <b>right</b>?” — checks against specifications, often static (reviews, walkthroughs, inspections). <b>Validation</b> = “are we building the <b>right product</b>?” — checks it meets user needs, dynamic (executing the software, UAT).</li>
+<li><b>Static testing</b> (no execution: reviews, static analysis/linters) vs <b>dynamic testing</b> (running the code).</li>
+<li><b>QA</b> (process-oriented, prevent defects) vs <b>QC</b> (product-oriented, find defects) vs testing.</li>
+<li>Seven principles: testing shows presence of defects not absence · exhaustive testing is impossible · test early (shift left) · defects cluster · pesticide paradox (update tests) · context dependent · absence-of-errors fallacy.</li>
+</ul>
+<div class="key"><b>Cost of a bug rises the later it’s found</b>: developer testing own code (cheapest) → tester working with the developer right after development → internal system-test campaign → client/production (most expensive). Order: <b>(2, 4, 3, 1)</b>.</div>
+
+<h3 id="t-levels">Test levels &amp; approaches</h3>
+<div class="tw"><table>
+<tr><th>Level</th><th>What</th><th>Who</th></tr>
+<tr><td><b>Unit</b></td><td>individual components (function/class) in isolation, with mocks/stubs; finds bugs early, enables refactoring, documents behaviour</td><td>developers (JUnit, TestNG, pytest)</td></tr>
+<tr><td><b>Integration</b></td><td>interfaces between modules/services (big-bang, top-down with stubs, bottom-up with drivers)</td><td>dev/QA</td></tr>
+<tr><td><b>System</b></td><td>complete integrated system against requirements (end-to-end)</td><td>QA team</td></tr>
+<tr><td><b>Acceptance (UAT)</b></td><td>meets business needs; alpha (in-house) / beta (real users)</td><td>client/users</td></tr>
+</table></div>
+<div class="tw"><table>
+<tr><th>Approach</th><th>Meaning</th></tr>
+<tr><td><b>Black-box</b></td><td>based on inputs/outputs and specs, no knowledge of code (EP, BVA, decision tables)</td></tr>
+<tr><td><b>White-box</b> (glass/structural)</td><td>based on internal code (statement/branch/path coverage)</td></tr>
+<tr><td><b>Grey-box</b></td><td>partial knowledge (DB schema, architecture)</td></tr>
+<tr><td><b>Manual vs automated</b></td><td>automation for repetitive, regression, data-heavy tests; manual for exploratory, usability, one-off</td></tr>
+</table></div>
+
+<h3 id="t-types">Test types</h3>
+<div class="tw"><table>
+<tr><th>Type</th><th>Definition</th></tr>
+<tr><td><b>Functional</b></td><td>does it do what it should (features, business rules)</td></tr>
+<tr><td><b>Non-functional</b></td><td>how well: performance, security, usability, reliability, compatibility</td></tr>
+<tr><td><b>Smoke</b></td><td>quick, broad check that a new build’s critical functions work (“build verification”) — decides whether deeper testing can start</td></tr>
+<tr><td><b>Sanity</b></td><td>narrow, focused check that a specific fix/change works</td></tr>
+<tr><td><b>Regression</b></td><td>re-run existing tests after a change to make sure nothing that worked is broken (usually automated, run in CI)</td></tr>
+<tr><td><b>Re-testing / confirmation</b></td><td>re-run the failed test to confirm the bug is fixed</td></tr>
+<tr><td><b>Exploratory</b></td><td>simultaneous learning, design and execution based on the <b>tester’s intuition and experience, without predefined test cases</b> (time-boxed sessions, charters)</td></tr>
+<tr><td><b>Ad-hoc / monkey</b></td><td>unplanned, random inputs</td></tr>
+<tr><td><b>Performance</b></td><td>response time and throughput under expected load</td></tr>
+<tr><td><b>Load</b> / <b>Stress</b> / <b>Spike</b> / <b>Soak (endurance)</b></td><td>expected load / beyond limits to find breaking point / sudden surge / long duration (memory leaks)</td></tr>
+<tr><td><b>Security</b> / penetration</td><td>vulnerabilities: injection, auth, XSS, access control</td></tr>
+<tr><td><b>Usability</b>, <b>Accessibility</b>, <b>Compatibility</b></td><td>ease of use / users with disabilities / browsers, OS, devices</td></tr>
+<tr><td><b>Happy path</b> (positive)</td><td>valid inputs, normal flow, expected success</td></tr>
+<tr><td><b>Negative</b></td><td>invalid inputs, errors handled gracefully</td></tr>
+<tr><td><b>End-to-end</b></td><td>a full business flow across systems (trade capture → risk → settlement)</td></tr>
+<tr><td><b>Non-regression on data / golden copy</b></td><td>compare outputs (reports, JSON/XML files) to a validated reference — common at Murex</td></tr>
+</table></div>
+
+<h3 id="t-tech">Test design techniques</h3>
+<h4>Equivalence partitioning (EP)</h4>
+<p>Split inputs into classes the system should treat the same; test one value per class. Age valid 18–60 → 3 partitions: &lt;18 (invalid), 18–60 (valid), &gt;60 (invalid) (+ non-numeric/empty).</p>
+<h4>Boundary value analysis (BVA)</h4>
+<p>Bugs hide at edges. For a boundary B test <b>B−1, B, B+1</b> (3-value) or B−1, B (2-value). Range 18–60 → 17, 18, 19, 59, 60, 61.</p>
+<p>Book offer at multiples of 5 up to 20 (5→$25, 10→$40, 15→$50, 20→$60): each price point is a boundary → 4,5,6 · 9,10,11 · 14,15,16 · 19,20,21, plus the lower edge of the domain 0,1 → <b>0, 1, 4, 5, 6, 9, 10, 11, 14, 15, 16, 19, 20, 21</b> (the most complete option).</p>
+<h4>Decision table</h4>
+<p>Conditions × actions; <b>n binary conditions → 2ⁿ rules</b>. Member (Y/N) × order &gt; $100 (Y/N) → 4 rules.</p>
+<h4>Others</h4>
+<ul>
+<li><b>State transition</b>: states + events (e.g. order: New → Paid → Shipped → Delivered; account locked after 3 failures).</li>
+<li><b>Use case / scenario</b> testing: main flow + alternate flows.</li>
+<li><b>Error guessing</b>: experience-based (empty, null, special characters, very long strings, 0, negative, leap year 29 Feb, time zones).</li>
+<li><b>Pairwise</b>: cover every pair of parameter values with few tests.</li>
+</ul>
+
+<h3 id="t-cov">Code coverage &amp; minimum test cases</h3>
+<div class="tw"><table>
+<tr><th>Coverage</th><th>Goal</th></tr>
+<tr><td><b>Statement (line)</b></td><td>every line executed at least once</td></tr>
+<tr><td><b>Branch / decision</b></td><td>every if/else outcome (true and false) taken</td></tr>
+<tr><td><b>Condition</b></td><td>every boolean sub-condition true and false</td></tr>
+<tr><td><b>Path</b></td><td>every possible route through the code (grows exponentially)</td></tr>
+</table></div>
+<p>Strength: path ⊃ branch ⊃ statement. 100% branch implies 100% statement, not the reverse. <b>Cyclomatic complexity</b> = decisions + 1 = number of independent paths (upper bound for basis path tests).</p>
+<div class="tip">To count minimum tests for statement coverage: find the <b>leaf blocks that are mutually exclusive</b> (each run can reach only one). One test per leaf. Nested if/else with OUT1…OUT6 in six separate leaves → <b>6 tests</b>. A line that crashes (e.g. <code>c / 0</code>) still counts as executed.</div>
+<pre>if (x &gt; 0) A();      <span class="c">// two independent ifs:</span>
+if (y &gt; 0) B();      <span class="c">// statement coverage: 1 test (x&gt;0, y&gt;0)</span>
+                     <span class="c">// branch coverage:    2 tests (both true, both false)</span>
+                     <span class="c">// path coverage:      4 tests (TT, TF, FT, FF)</span></pre>
+
+<h3 id="t-case">Test cases, plans &amp; bug reports</h3>
+<p><b>Test case fields</b>: ID · title · preconditions · test data · steps · expected result · actual result · status (pass/fail/blocked) · priority · requirement link (traceability matrix).</p>
+<pre>TC-01  Search returns matching products (happy path)
+Pre:   site up, catalogue contains "wireless mouse" items
+Steps: 1. open home page  2. type "wireless mouse"  3. press Enter
+Expected: results page in &lt; 2 s; all results relevant; name/price/image shown;
+          result count displayed; clicking a result opens its product page</pre>
+<p><b>Test plan</b>: scope, objectives, approach, resources, schedule, environments, entry/exit criteria, risks, deliverables. <b>Test suite</b> = group of test cases. <b>Test scenario</b> = high-level “what to test”. <b>Test script</b> = automated or detailed steps.</p>
+<p><b>Bug report</b>: ID, title, steps to reproduce, expected vs actual, environment/build, severity, priority, logs/screenshots, test data, assignee. <b>Bug lifecycle</b>: New → Assigned → Open → Fixed → Retest → Verified → Closed (or Reopened / Rejected / Deferred / Duplicate).</p>
+<div class="tw"><table>
+<tr><th></th><th>High priority</th><th>Low priority</th></tr>
+<tr><td><b>High severity</b></td><td>checkout crashes for all users</td><td>crash in a rarely used legacy report</td></tr>
+<tr><td><b>Low severity</b></td><td>company name/logo misspelled on homepage</td><td>typo in a help page</td></tr>
+</table></div>
+<p><b>Severity</b> = technical impact (set by tester). <b>Priority</b> = urgency to fix (set by business/PM).</p>
+
+<h3 id="t-auto">Automation, frameworks, CI</h3>
+<ul>
+<li><b>Test automation framework</b> = a set of guidelines, libraries and tools for <b>creating and running automated tests</b> (structure, reusable components, data handling, reporting) → <b>efficiency, reusability, maintainability</b>. It does not auto-generate tests.</li>
+<li>Framework types: linear (record/playback) · modular · <b>data-driven</b> (same script, data from CSV/Excel/DB) · <b>keyword-driven</b> (actions as keywords) · hybrid · <b>BDD</b> (Gherkin: Given/When/Then — Cucumber).</li>
+<li>Tools: Selenium/Playwright/Cypress (web UI), JUnit/TestNG/pytest (unit), Postman/RestAssured (API), JMeter/Gatling (load), Appium (mobile), SonarQube (static analysis).</li>
+<li><b>TDD</b>: write a failing test → write code to pass → refactor (red/green/refactor). <b>BDD</b>: behaviour specs in business language.</li>
+<li><b>Mock</b> (verifies interactions) / <b>stub</b> (canned answers) / <b>fake</b> / <b>driver</b> (calls the unit under test).</li>
+<li>Tests run in <b>CI</b> on every commit; <b>flaky test</b> = passes/fails without code change (timing, environment, order dependency).</li>
+<li>Environment failures (disk full, machine down, network) are <b>not product defects</b>: fix the environment or move to a healthy machine, then re-run. Don’t descope a valid test or blindly re-run on the same broken machine.</li>
+</ul>
+</section>
+
+<section class="topic" id="pa">
+<h2><span class="num">10</span>Problem analysis: pseudo-code, decision trees, algorithms</h2>
+
+<h3 id="pa-trace">Tracing pseudo-code &amp; decision trees</h3>
+<div class="tip">Make a table with one column per variable and one row per step/iteration. Never trace in your head. Watch for: loop bounds (<code>to 5</code> inclusive? <code>&lt; n</code> or <code>&lt;= n</code>?), integer division, <code>%</code>, operator precedence, variables updated before/after use.</div>
+<pre>x = 0
+for i = 1 to 5:
+    if i % 2 == 0: x = x + i
+    else:          x = x - 1
+print x</pre>
+<div class="tw"><table><tr><th>i</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></tr><tr><td>x after</td><td>−1</td><td>1</td><td>0</td><td>4</td><td><b>3</b></td></tr></table></div>
+<p><b>Decision tree</b>: each internal node = a condition, branches = outcomes, leaves = actions/results. Order checks from the most fundamental blocker to the least; every path ends in a clear result. A <b>flowchart</b> uses ovals (start/end), rectangles (process), diamonds (decision), parallelograms (input/output).</p>
+<pre>if not allTestsPassed:          print "Blocked: failing tests"
+else if criticalBugs &gt; 0:       print "Blocked: critical bugs"
+else if day == FRIDAY and not approved: print "Blocked: needs approval"
+else:                           deploy()</pre>
+
+<h3 id="pa-bigo">Complexity (Big-O)</h3>
+<div class="tw"><table>
+<tr><th>Big-O</th><th>Name</th><th>Example</th></tr>
+<tr><td>O(1)</td><td>constant</td><td>array index, hash map get</td></tr>
+<tr><td>O(log n)</td><td>logarithmic</td><td>binary search, balanced BST lookup</td></tr>
+<tr><td>O(n)</td><td>linear</td><td>one loop over the data</td></tr>
+<tr><td>O(n log n)</td><td>linearithmic</td><td>merge sort, quick sort (avg), heap sort</td></tr>
+<tr><td>O(n²)</td><td>quadratic</td><td>nested loops: brute-force duplicates, bubble sort</td></tr>
+<tr><td>O(2ⁿ)</td><td>exponential</td><td>naive recursive Fibonacci, all subsets</td></tr>
+<tr><td>O(n!)</td><td>factorial</td><td>all permutations (travelling salesman brute force)</td></tr>
+</table></div>
+
+<h3 id="pa-ds">Data structures</h3>
+<div class="tw"><table>
+<tr><th>Structure</th><th>Key property</th><th>Access / search / insert</th></tr>
+<tr><td>Array</td><td>contiguous, fixed size, index</td><td>O(1) / O(n) / O(n)</td></tr>
+<tr><td>Linked list</td><td>nodes with next pointers</td><td>O(n) / O(n) / O(1) at head</td></tr>
+<tr><td><b>Stack</b></td><td><b>LIFO</b> — push/pop/peek (undo, call stack, bracket matching, DFS)</td><td>O(1) push/pop</td></tr>
+<tr><td><b>Queue</b></td><td><b>FIFO</b> — enqueue/dequeue (BFS, job scheduling)</td><td>O(1)</td></tr>
+<tr><td>Hash table / map</td><td>key → value via hash function; collisions (chaining)</td><td>O(1) average</td></tr>
+<tr><td>Binary search tree</td><td>left &lt; node &lt; right; in-order traversal gives sorted order</td><td>O(log n) balanced, O(n) worst</td></tr>
+<tr><td>Heap / priority queue</td><td>min or max at the root</td><td>O(1) peek, O(log n) insert/remove</td></tr>
+<tr><td>Graph</td><td>vertices + edges (directed/undirected, weighted); adjacency list or matrix</td><td></td></tr>
+<tr><td>Trie</td><td>prefix tree for strings</td><td>O(length)</td></tr>
+</table></div>
+<p>Tree traversals: pre-order (root, left, right) · in-order (left, root, right) · post-order (left, right, root) · level-order (BFS).</p>
+
+<h3 id="pa-algo">Searching, sorting, graphs</h3>
+<div class="tw"><table>
+<tr><th>Algorithm</th><th>Best</th><th>Average</th><th>Worst</th><th>Space</th><th>Stable</th></tr>
+<tr><td>Bubble sort</td><td>O(n)</td><td>O(n²)</td><td>O(n²)</td><td>O(1)</td><td>yes</td></tr>
+<tr><td>Selection sort</td><td>O(n²)</td><td>O(n²)</td><td>O(n²)</td><td>O(1)</td><td>no</td></tr>
+<tr><td>Insertion sort</td><td>O(n)</td><td>O(n²)</td><td>O(n²)</td><td>O(1)</td><td>yes</td></tr>
+<tr><td>Merge sort</td><td>O(n log n)</td><td>O(n log n)</td><td>O(n log n)</td><td>O(n)</td><td>yes</td></tr>
+<tr><td>Quick sort</td><td>O(n log n)</td><td>O(n log n)</td><td>O(n²)</td><td>O(log n)</td><td>no</td></tr>
+<tr><td>Heap sort</td><td>O(n log n)</td><td>O(n log n)</td><td>O(n log n)</td><td>O(1)</td><td>no</td></tr>
+</table></div>
+<p><b>Linear search</b> O(n), any list. <b>Binary search</b> O(log n), <b>sorted</b> list only: compare with the middle, discard half.</p>
+<div class="tw"><table>
+<tr><th>Graph algorithm</th><th>Purpose</th><th>Notes</th></tr>
+<tr><td><b>BFS</b></td><td>level by level (queue); shortest path in <b>unweighted</b> graphs</td><td>O(V+E)</td></tr>
+<tr><td><b>DFS</b></td><td>go deep first (stack/recursion); cycle detection, topological sort</td><td>O(V+E)</td></tr>
+<tr><td><b>Dijkstra</b></td><td>shortest paths from one source, <b>non-negative</b> weights (greedy + priority queue)</td><td>O((V+E) log V). With a negative edge it is not guaranteed — it <b>might</b> still work on some graphs. With a negative <b>cycle</b> it does <b>not</b> work (shortest path undefined).</td></tr>
+<tr><td><b>Bellman-Ford</b></td><td>shortest paths with negative weights; <b>detects negative cycles</b></td><td>O(V·E)</td></tr>
+<tr><td>Floyd-Warshall</td><td>all pairs shortest paths</td><td>O(V³)</td></tr>
+<tr><td>Prim / Kruskal</td><td>minimum spanning tree</td><td></td></tr>
+<tr><td>Topological sort</td><td>order tasks with dependencies (DAG)</td><td></td></tr>
+</table></div>
+<p>Paradigms: <b>brute force</b> (try everything), <b>divide &amp; conquer</b> (merge sort), <b>greedy</b> (best local choice: Dijkstra), <b>dynamic programming</b> (store sub-results: Fibonacci memo, knapsack), <b>recursion</b> (base case + recursive case; no base case → StackOverflowError), <b>backtracking</b>.</p>
+
+<h3 id="pa-snip">Classic snippets to write from memory</h3>
+<pre><span class="c">// 1. duplicates — brute force O(n²)</span>
+static boolean hasDuplicates(String[] a) {
+    for (int i = 0; i &lt; a.length; i++)
+        for (int j = i + 1; j &lt; a.length; j++)
+            if (a[i].equals(a[j])) return true;     <span class="c">// equals, not ==</span>
+    return false;
+}
+<span class="c">// optimal O(n): Set&lt;String&gt; seen = new HashSet&lt;&gt;(); if (!seen.add(s)) return true;</span>
+
+<span class="c">// 2. swap without temp</span>
+a = a + b;  b = a - b;  a = a - b;         <span class="c">// may overflow for big ints</span>
+a = a ^ b;  b = a ^ b;  a = a ^ b;         <span class="c">// XOR, no overflow</span>
+
+<span class="c">// 3. first 100 Fibonacci numbers — F(100) ≈ 3.5e20 overflows long (max ≈ 9.2e18, after F(92))</span>
+BigInteger a = BigInteger.ONE, b = BigInteger.ONE;
+for (int i = 0; i &lt; 100; i++) {
+    System.out.println(a);
+    BigInteger t = a.add(b); a = b; b = t;
+}
+
+<span class="c">// 4. reverse a string</span>
+String rev = new StringBuilder(s).reverse().toString();     <span class="c">// or loop from the end</span>
+
+<span class="c">// 5. palindrome</span>
+boolean pal = true;
+for (int i = 0, j = s.length() - 1; i &lt; j; i++, j--) if (s.charAt(i) != s.charAt(j)) { pal = false; break; }
+
+<span class="c">// 6. prime check</span>
+static boolean isPrime(int n) { if (n &lt; 2) return false;
+    for (int i = 2; (long) i * i &lt;= n; i++) if (n % i == 0) return false; return true; }
+
+<span class="c">// 7. factorial (iterative) / GCD (Euclid)</span>
+long f = 1; for (int i = 2; i &lt;= n; i++) f *= i;           <span class="c">// 21! overflows long</span>
+static int gcd(int a, int b) { return b == 0 ? a : gcd(b, a % b); }
+
+<span class="c">// 8. max and second max in one pass</span>
+int first = Integer.MIN_VALUE, second = Integer.MIN_VALUE;
+for (int x : arr) { if (x &gt; first) { second = first; first = x; } else if (x &gt; second &amp;&amp; x != first) second = x; }
+
+<span class="c">// 9. FizzBuzz</span>
+for (int i = 1; i &lt;= 100; i++)
+    System.out.println(i % 15 == 0 ? "FizzBuzz" : i % 3 == 0 ? "Fizz" : i % 5 == 0 ? "Buzz" : String.valueOf(i));
+
+<span class="c">// 10. count character frequency / first non-repeating char</span>
+Map&lt;Character,Integer&gt; m = new LinkedHashMap&lt;&gt;();
+for (char c : s.toCharArray()) m.merge(c, 1, Integer::sum);
+for (var e : m.entrySet()) if (e.getValue() == 1) return e.getKey();
+
+<span class="c">// 11. anagram: sort both char arrays and compare, or count letters with int[26]</span>
+<span class="c">// 12. binary search</span>
+int lo = 0, hi = a.length - 1;
+while (lo &lt;= hi) { int mid = lo + (hi - lo) / 2;   <span class="c">// avoids overflow of (lo+hi)</span>
+    if (a[mid] == key) return mid; else if (a[mid] &lt; key) lo = mid + 1; else hi = mid - 1; }
+return -1;</pre>
+<div class="tip">For coding answers: state the approach in one line, write clean code, mention complexity and edge cases (empty input, one element, duplicates, negatives, overflow, null).</div>
+</section>
+
+<section class="topic" id="hw">
+<h2><span class="num">11</span>Hardware, OS, virtualization, cloud &amp; DevOps</h2>
+
+<h3 id="hw-hw">Hardware basics</h3>
+<ul>
+<li><b>CPU</b>: few powerful cores, general-purpose, sequential logic. Clock speed (GHz), cores, threads (hyper-threading), cache L1/L2/L3. 32-bit (max 4 GB addressable) vs 64-bit.</li>
+<li><b>GPU</b> (Graphics Processing Unit): thousands of small cores for <b>massively parallel</b> work (same operation on lots of data). Uses: 3D rendering/gaming, video encoding, <b>machine learning / AI training</b>, scientific simulation, <b>financial risk &amp; Monte Carlo pricing</b>, image processing, crypto mining.</li>
+<li><b>RAM</b>: volatile, fast working memory. <b>Storage</b>: non-volatile — <b>HDD</b> (spinning disk, cheap, slow) vs <b>SSD</b> (flash, fast, no moving parts) vs NVMe (SSD on PCIe, fastest). <b>ROM/BIOS/UEFI</b>: firmware that boots the machine.</li>
+<li>Storage types: <b>DAS</b> (direct attached) · <b>NAS</b> (file-level over network: NFS, SMB) · <b>SAN</b> (block-level storage network). Units: bit, byte = 8 bits, KB, MB, GB, TB (1024 or 1000).</li>
+</ul>
+<div class="tw"><table>
+<tr><th>RAID</th><th>Technique</th><th>Min disks</th><th>Usable capacity</th><th>Survives</th><th>Use</th></tr>
+<tr><td><b>0</b></td><td>striping</td><td>2</td><td><b>100%</b> (0% loss)</td><td>no failure</td><td>speed, temp data</td></tr>
+<tr><td><b>1</b></td><td>mirroring</td><td>2</td><td>50%</td><td>1 disk (n−1)</td><td>OS disks, safety</td></tr>
+<tr><td><b>5</b></td><td>striping + distributed parity</td><td>3</td><td>(n−1)/n</td><td>1 disk</td><td>balance; slow writes, long rebuild</td></tr>
+<tr><td><b>6</b></td><td>striping + double parity</td><td>4</td><td>(n−2)/n</td><td>2 disks</td><td>large arrays</td></tr>
+<tr><td><b>10</b> (1+0)</td><td>mirrors, then striped</td><td>4</td><td>50%</td><td>1 per mirror pair</td><td>databases: speed + redundancy</td></tr>
+</table></div>
+<div class="key">RAID is <b>not a backup</b> — it protects against disk failure, not deletion, corruption or ransomware.</div>
+
+<h3 id="hw-os">Operating system concepts</h3>
+<ul>
+<li><b>Kernel</b>: core of the OS — manages CPU scheduling, memory, devices, system calls. <b>User space</b> vs <b>kernel space</b>. Shell = command interpreter (bash).</li>
+<li><b>Process</b> = running program with its own memory space. <b>Thread</b> = unit of execution inside a process, shares its memory (lighter, but needs synchronization). Context switch = CPU switching between them.</li>
+<li><b>Virtual memory</b>: each process sees its own address space; pages mapped to RAM or <b>swap</b> on disk. Heavy swapping = “thrashing” = slow. <b>Page fault</b> = page not in RAM.</li>
+<li><b>Scheduling</b>: FCFS, round robin (time slices), priority, shortest job first.</li>
+<li><b>Deadlock</b> conditions (all four needed): mutual exclusion, hold and wait, no preemption, circular wait. <b>Race condition</b>: result depends on timing. Synchronization: mutex, semaphore, monitor.</li>
+<li><b>IPC</b>: pipes, sockets, shared memory, message queues, signals.</li>
+<li>File systems: ext4, XFS (Linux), NTFS (Windows). <b>Inode</b> = file metadata. Windows vs Linux: <code>\</code> vs <code>/</code>, CRLF vs LF line endings, case-insensitive vs case-sensitive names.</li>
+</ul>
+
+<h3 id="hw-virt">Virtualization &amp; containers</h3>
+<div class="tw"><table>
+<tr><th></th><th>Virtual machine</th><th>Container</th></tr>
+<tr><td>Isolation</td><td>full guest OS with <b>its own kernel</b>, on a hypervisor</td><td><b>shares the host kernel</b>; isolated process (namespaces + cgroups)</td></tr>
+<tr><td>Size / boot</td><td>GBs, minutes</td><td>MBs, seconds</td></tr>
+<tr><td>Examples</td><td>VMware, Hyper-V, KVM, VirtualBox, EC2</td><td>Docker, Podman, containerd</td></tr>
+<tr><td>Best for</td><td>different OSes, strong isolation</td><td>microservices, consistent deployments, density</td></tr>
+</table></div>
+<p><b>Hypervisor type 1</b> (bare-metal: ESXi, Hyper-V, KVM) vs <b>type 2</b> (hosted on an OS: VirtualBox, VMware Workstation). <b>Docker</b>: <i>Dockerfile</i> (recipe) → <i>image</i> (read-only template, layers) → <i>container</i> (running instance); <i>registry</i> (Docker Hub, ECR); volumes for persistent data.</p>
+<pre>FROM eclipse-temurin:17-jre
+WORKDIR /app
+COPY target/app.jar app.jar
+EXPOSE 8080
+CMD ["java", "-jar", "app.jar"]</pre>
+<p><b>Kubernetes</b> (K8s) <b>orchestrates</b> containers: <b>Pod</b> (smallest unit, 1+ containers sharing network/storage) · <b>Deployment</b> (desired replicas, rolling updates) · <b>ReplicaSet</b> · <b>Service</b> (stable network endpoint/load balancing) · <b>Ingress</b> (HTTP routing) · <b>Namespace</b> · <b>ConfigMap/Secret</b> · <b>Node</b> (worker machine) · control plane. Self-healing, auto-scaling. <code>kubectl get pods</code>, <code>kubectl logs</code>, <code>kubectl describe</code>, <code>kubectl apply -f</code>. <b>Docker + Kubernetes</b> = containerize + orchestrate.</p>
+
+<h3 id="hw-cloud">Cloud computing</h3>
+<div class="tw"><table>
+<tr><th>Model</th><th>You manage</th><th>Examples</th></tr>
+<tr><td><b>IaaS</b></td><td>OS, runtime, apps, data</td><td>AWS EC2, Azure VMs, Google Compute Engine</td></tr>
+<tr><td><b>PaaS</b></td><td>apps, data</td><td>AWS Elastic Beanstalk, Azure App Service, Google App Engine, Heroku</td></tr>
+<tr><td><b>SaaS</b></td><td>just use it</td><td>Gmail, Office 365, Salesforce</td></tr>
+<tr><td><b>FaaS / serverless</b></td><td>functions only</td><td>AWS Lambda, Azure Functions, Cloud Functions</td></tr>
+</table></div>
+<p>Deployment models: <b>public</b>, <b>private</b>, <b>hybrid</b>, multi-cloud. Benefits: pay-as-you-go, elasticity, global reach, managed services, no hardware purchase. Concepts: <b>regions</b> and <b>availability zones</b>, <b>auto-scaling</b>, <b>load balancer</b>, <b>VPC</b> (private network), security groups (firewall), IAM (permissions), shared responsibility model.</p>
+<div class="tw"><table>
+<tr><th>Need</th><th>AWS</th><th>Azure</th><th>Google Cloud</th></tr>
+<tr><td>Virtual machines</td><td>EC2</td><td>Virtual Machines</td><td>Compute Engine</td></tr>
+<tr><td>Serverless</td><td>Lambda</td><td>Functions</td><td>Cloud Functions / Cloud Run</td></tr>
+<tr><td>Kubernetes</td><td>EKS</td><td>AKS</td><td>GKE</td></tr>
+<tr><td>Object storage</td><td>S3</td><td>Blob Storage</td><td>Cloud Storage</td></tr>
+<tr><td>Block storage</td><td>EBS</td><td>Managed Disks</td><td>Persistent Disk</td></tr>
+<tr><td>Managed SQL</td><td>RDS, Aurora</td><td>Azure SQL Database</td><td>Cloud SQL, Spanner</td></tr>
+<tr><td>NoSQL</td><td>DynamoDB</td><td>Cosmos DB</td><td>Firestore, Bigtable</td></tr>
+<tr><td>Data warehouse</td><td>Redshift</td><td>Synapse</td><td>BigQuery</td></tr>
+<tr><td>CI/CD</td><td>CodePipeline, CodeBuild, CodeDeploy</td><td>Azure DevOps Pipelines</td><td>Cloud Build, Cloud Deploy</td></tr>
+<tr><td>Monitoring</td><td>CloudWatch</td><td>Azure Monitor</td><td>Cloud Monitoring</td></tr>
+<tr><td>Identity</td><td>IAM</td><td>Entra ID (Azure AD)</td><td>Cloud IAM</td></tr>
+<tr><td>DNS / CDN</td><td>Route 53 / CloudFront</td><td>Azure DNS / Front Door</td><td>Cloud DNS / Cloud CDN</td></tr>
+<tr><td>Queue / messaging</td><td>SQS, SNS</td><td>Service Bus</td><td>Pub/Sub</td></tr>
+</table></div>
+<p><b>Scaling</b>: <b>vertical</b> (scale up: bigger machine — simple, but limited and a single point of failure) vs <b>horizontal</b> (scale out: more machines behind a load balancer — near-unlimited and fault tolerant, needs stateless apps). <b>High availability</b> = redundancy across zones, failover. <b>Disaster recovery</b>: RPO (max data loss) and RTO (max downtime).</p>
+
+<h3 id="hw-devops">DevOps &amp; CI/CD</h3>
+<ul>
+<li><b>CI</b> (continuous integration): every commit is built and tested automatically. <b>CD</b>: continuous <b>delivery</b> (always deployable, manual release) / continuous <b>deployment</b> (auto to production).</li>
+<li>Pipeline: commit → build → unit tests → static analysis → package (jar / Docker image) → deploy to test → integration/regression tests → deploy to production → monitor.</li>
+<li>Tools: <b>Jenkins</b> (CI server, Jenkinsfile), GitLab CI, GitHub Actions, Azure DevOps, TeamCity · build: <b>Maven</b>/<b>Gradle</b> (Java), npm · artifacts: Nexus, Artifactory · config management: <b>Ansible</b> (agentless, YAML playbooks), Puppet, Chef · <b>Infrastructure as Code</b>: <b>Terraform</b>, CloudFormation · monitoring: Prometheus, Grafana, ELK (Elasticsearch, Logstash, Kibana), Datadog, Splunk.</li>
+<li>Deployment strategies: rolling, <b>blue-green</b> (switch traffic between two environments), <b>canary</b> (small % of users first), feature flags.</li>
+<li><b>Agile/Scrum</b>: sprints (1–4 weeks), product backlog, sprint planning, daily stand-up, review, retrospective; roles: product owner, scrum master, dev team. Kanban: visual board, limit work in progress.</li>
+</ul>
+
+<h3 id="hw-formats">Data formats &amp; APIs</h3>
+<div class="tw"><table>
+<tr><th></th><th>JSON</th><th>XML</th><th>YAML</th></tr>
+<tr><td>Syntax</td><td><code>{"id": 1, "tags": ["a","b"]}</code></td><td><code>&lt;trade id="1"&gt;&lt;tag&gt;a&lt;/tag&gt;&lt;/trade&gt;</code></td><td><code>id: 1</code> (indentation)</td></tr>
+<tr><td>Size / speed</td><td>lighter, faster to parse</td><td>verbose (closing tags), slower</td><td>human-friendly</td></tr>
+<tr><td>Types</td><td>string, number, boolean, null, object, array — <b>no typed/custom object types</b></td><td>everything is text; types via schema (XSD); attributes, namespaces, comments</td><td>like JSON + comments</td></tr>
+<tr><td>Validation</td><td>JSON Schema</td><td>DTD / XSD; query with XPath, transform with XSLT</td><td></td></tr>
+<tr><td>Parsing</td><td>still needs parsing (<code>JSON.parse</code>, Jackson), simpler parser</td><td>XML parser (DOM, SAX)</td><td></td></tr>
+<tr><td>Used in</td><td>REST APIs, config</td><td>SOAP, legacy and finance messages (FpML!), config</td><td>Kubernetes, Ansible, CI files</td></tr>
+</table></div>
+<p>JSON rules: double quotes for keys and strings, no trailing commas, no comments. Comparing two JSON files: key order doesn’t matter semantically — use a JSON-aware diff (<code>jq</code>). <b>REST</b> (HTTP + JSON, stateless, resources) vs <b>SOAP</b> (XML envelope, WSDL contract, stricter). <b>CSV</b> for tabular exchange. Encoding: <b>UTF-8</b>.</p>
+</section>
+
+<section class="topic" id="paper2">
+<h2><span class="num">12</span>Extra concepts from the 2026 Assessment paper</h2>
+<p class="lead">Topics the second paper asks about that the first one didn’t: web storage, Python, JVM internals, security, hypervisors, ISTQB test theory, more SQL syntax, and algorithmic pseudo-code.</p>
+
+<h3 id="p2-web">Web: localStorage, sessionStorage, cookies, JSON</h3>
+<div class="tw"><table>
+<tr><th></th><th>localStorage</th><th>sessionStorage</th><th>Cookies</th></tr>
+<tr><td>Lifetime</td><td><b>Persistent</b>: survives closing the window or browser, until cleared</td><td>Until the <b>tab</b> closes (one session)</td><td>Until expiry date (or session cookie)</td></tr>
+<tr><td>Scope</td><td><b>Shared across all tabs/windows</b> of the same origin</td><td>Only that tab</td><td>Domain/path</td></tr>
+<tr><td>Size</td><td>~5–10 MB</td><td>~5 MB</td><td>~4 KB</td></tr>
+<tr><td>Sent to server?</td><td>No</td><td>No</td><td><b>Yes</b>, with every request</td></tr>
+<tr><td>API</td><td colspan="2"><code>setItem(k, v)</code>, <code>getItem(k)</code>, <code>removeItem</code>, <code>clear()</code>. Strings only, so store objects with <code>JSON.stringify</code></td><td><code>document.cookie</code>, <code>HttpOnly</code>, <code>Secure</code>, <code>SameSite</code></td></tr>
+</table></div>
+<p><code>JSON.parse(text)</code> → object · <code>JSON.stringify(obj)</code> → text. <code>eval</code> also runs code, so never use it for parsing (security risk).</p>
+
+<h3 id="p2-python">Python traps</h3>
+<pre>def f(x, y=[]):         <span class="c"># default evaluated ONCE at definition → shared mutable list</span>
+    y.append(x); return y
+f(1) → [1]   f(2) → [1, 2]   f(3, []) → [3]   f(4) → [1, 2, 4]
+<span class="c"># fix: def f(x, y=None): y = [] if y is None else y</span>
+
+b = a            <span class="c"># same list object (alias); a.copy() / a[:] / list(a) = shallow copy</span>
+7 // 2 = 3   -7 // 2 = -4 (floor)   7 / 2 = 3.5 (always float)   2 ** 10 = 1024
+"ab" * 3 = "ababab"     [0] * 3 = [0, 0, 0]
+is  → same object         ==  → equal value
+s[::-1] reverses   len(), range(0, 5) → 0..4   for i, v in enumerate(lst)
+None, 0, "", [], {} are falsy     int is unbounded (no overflow)
+try / except ValueError as e / finally     with open("f") as fh:  (auto-close)</pre>
+
+<h3 id="p2-jvm">JVM: bytecode, GC, thread vs heap dumps</h3>
+<ul>
+<li><code>javac A.java</code> → <code>A.class</code> = <b>bytecode</b>, which is <b>portable</b> because every OS/CPU has its own JVM that interprets and JIT-compiles it. (C → native binary, not portable.)</li>
+<li><b>Heap generations</b>: Young (Eden + Survivor; frequent <b>minor GC</b>) → Old/Tenured (long-lived objects). A <b>full GC</b> runs when the old generation/heap has no space left for allocation; it is slow and can pause the application (“stop the world”). <code>System.gc()</code> is only a <i>request</i>. An object becomes eligible for GC when nothing references it.</li>
+<li>Collectors: Serial, Parallel, <b>G1</b> (default), ZGC/Shenandoah (low pause). Flags: <code>-Xms</code>, <code>-Xmx</code>, <code>-Xlog:gc</code>.</li>
+<li><b>Thread dump</b> (<code>jstack PID</code>, <code>kill -3 PID</code>, <code>jcmd PID Thread.print</code>): the state and stack of every thread (RUNNABLE, BLOCKED, WAITING, TIMED_WAITING). Use it for <b>hangs, deadlocks, high CPU</b>. Several threads BLOCKED on the same monitor → <b>deadlock</b>/contention.</li>
+<li><b>Heap dump</b> (<code>jmap -dump:format=b,file=h.hprof PID</code>, <code>-XX:+HeapDumpOnOutOfMemoryError</code>): every object in memory and its references. Use it for <b>memory leaks / OutOfMemoryError</b>, analysed with Eclipse MAT or VisualVM.</li>
+</ul>
+
+<h3 id="p2-sec">Security concepts</h3>
+<ul>
+<li><b>Zero trust</b>: “never trust, always verify”, regardless of network location. Authenticate and authorise every request, least privilege, MFA, micro-segmentation, encrypt everything. The opposite of perimeter security (“inside the firewall = trusted”).</li>
+<li><b>IAM</b>: Identity and Access Management controls <b>authentication</b> (who you are) and <b>authorization</b> (what you may do): users, groups, roles, policies.</li>
+<li><b>Authentication vs authorization</b> → HTTP 401 vs 403. <b>MFA</b> combines different factor types: something you know, have, or are.</li>
+<li><b>Least privilege</b>, separation of duties, encryption at rest and in transit (TLS), hashing passwords (bcrypt), the <b>CIA triad</b> (Confidentiality, Integrity, Availability).</li>
+<li>Common attacks: SQL injection, XSS, CSRF, phishing, brute force, DDoS, man-in-the-middle.</li>
+</ul>
+
+<h3 id="p2-hw">Memory types &amp; hypervisor products</h3>
+<div class="tw"><table>
+<tr><th>Memory</th><th>Volatile?</th><th>Notes</th></tr>
+<tr><td>Registers / cache</td><td>yes</td><td>fastest, inside the CPU</td></tr>
+<tr><td>RAM</td><td>yes</td><td>working memory, lost at power off</td></tr>
+<tr><td><b>ROM</b></td><td><b>no</b></td><td>read-only, <b>permanent instructions such as BIOS/firmware</b>; slower than RAM, not modified during normal operation (EEPROM/flash can be re-flashed)</td></tr>
+<tr><td>SSD / HDD</td><td>no</td><td>storage. <b>SSD advantages</b>: much faster (no seek time, fast random I/O), no moving parts (shock resistant, silent), less power and heat. HDD: cheaper per GB, good for bulk storage</td></tr>
+</table></div>
+<div class="tw"><table>
+<tr><th></th><th>VMware</th><th>VirtualBox</th><th>Hyper-V</th></tr>
+<tr><td>Type</td><td>ESXi = type 1; Workstation/Fusion = type 2</td><td>type 2</td><td>type 1</td></tr>
+<tr><td>Cost</td><td>commercial (enterprise)</td><td>free, open source (Oracle)</td><td>included with Windows Server/Pro</td></tr>
+<tr><td>Strengths</td><td>vSphere/vCenter, vMotion live migration, HA, DRS, top performance</td><td>cross-platform, simple, snapshots, Vagrant</td><td>Windows/Azure integration, PowerShell, live migration</td></tr>
+<tr><td>Use</td><td>data-centre production</td><td>developers/students, local labs</td><td>Microsoft environments, hybrid cloud</td></tr>
+</table></div>
+<p>A <b>hypervisor</b> creates and manages VMs on a host. One host can run both VMs and containers (and containers inside VMs).</p>
+
+<h3 id="p2-test">ISTQB-style testing theory</h3>
+<ul>
+<li><b>Main goal of a test team</b>: provide information and build <b>enough confidence to decide whether to release</b>. You can never prove the absence of faults.</li>
+<li><b>Risk-based prioritisation</b>: when time is short, run the high-impact/high-probability tests first. Setup and teardown steps (open/close DB) are needed by the others; changes that alter nothing (replace a value with the same value) and cosmetic edits come last.</li>
+<li><b>Tester skills in agile</b>: product/domain knowledge, being a good team player (collaboration, communication), critical thinking. The <b>Product Owner</b> owns the vision and backlog; the Scrum Master facilitates; the team plans its own work.</li>
+<li>Agile testing: whole-team quality, testing inside the sprint, test automation pyramid (many unit tests, fewer API tests, fewest UI tests), definition of done, test-first (TDD/BDD/ATDD).</li>
+<li><b>Field validation recipe</b> (e.g. alphanumeric username, max 16): valid classes (letters, digits, mix, case), boundaries (0, 1, 15, 16, 17), invalid characters (special, spaces, Unicode, emoji), empty, duplicates/case-sensitivity, injection (SQL, XSS), client- and server-side validation, error messages, copy/paste, browsers/mobile.</li>
+<li><b>Test timeout</b> (a scenario exceeds its time limit): performance regression, slow or overloaded environment, hang/deadlock/waiting on a resource, larger data, an unrealistic limit.</li>
+</ul>
+
+<h3 id="p2-unix">Extra UNIX details</h3>
+<ul>
+<li><code>touch f</code> creates an empty file (<code>mkdir</code> = directory; <code>vim f</code> only creates it when you save). <code>pwd</code> = current directory. <code>id</code> = user + group info. <code>top</code> = live processes and resource usage.</li>
+<li><code>rm -r *</code> = delete all files <b>and subdirectories</b> here (dot-files excepted). <code>rm -r</code> alone has no target; <code>rm -f *</code> doesn’t remove directories.</li>
+<li><code>chmod a+rw f</code> → adds read and write for user, group and others; execute unchanged.</li>
+<li><code>ls data &gt; data/files</code>: the shell creates <code>data/files</code> <b>before</b> ls runs, so it appears in its own listing.</li>
+<li><code>find -mtime</code> (content modified, days) · <code>-ctime</code> (inode/status changed) · <code>-atime</code> (accessed) · <code>-mmin</code> (minutes).</li>
+<li>Viewers: <code>cat</code>, <code>less</code>, <code>more</code>, <code>head</code>, <code>tail</code>. Editors: <code>vi</code>/<code>vim</code>, <code>nano</code>.</li>
+<li>Open ports: <code>ss -tuln</code>, <code>netstat -tuln</code>, <code>netstat -plnt</code>, <code>lsof -i</code>. Ping tests reachability and latency, <b>not</b> ports.</li>
+<li>Git staging area = where <code>git add</code> puts changes for the <b>next commit</b>. <code>git commit -a</code> auto-stages <b>tracked</b> files only; new files need <code>git add</code> first. You can’t delete the branch you’re on.</li>
+</ul>
+
+<h3 id="p2-sql">Extra SQL syntax</h3>
+<pre>SELECT SUBSTR(First_Name, 1, 3) FROM Students;          <span class="c">-- first 3 chars (SUBSTRING / LEFT in MySQL, SQL Server); 1-indexed</span>
+ALTER TABLE t MODIFY col NUMBER(10) DEFAULT 0;          <span class="c">-- Oracle/MySQL: change type + default</span>
+ALTER TABLE t ALTER COLUMN col TYPE INT;                <span class="c">-- PostgreSQL</span>
+ALTER TABLE t ALTER COLUMN col SET DEFAULT 0;
+ALTER TABLE t CHANGE old_name new_name INT;             <span class="c">-- MySQL rename + type</span>
+UPDATE t SET c = v WHERE c IN ('A','B');                <span class="c">-- = WHERE c = 'A' OR c = 'B'</span>
+                                                        <span class="c">-- WHERE c = 'A' OR 'B'  → wrong;  c = 'A' AND c = 'B' → never true</span>
+SELECT name, CASE WHEN yrs &lt; 3 THEN 'Junior'
+                  WHEN yrs BETWEEN 3 AND 7 THEN 'Mid-Level'
+                  ELSE 'Senior' END AS level FROM Employees;
+<span class="c">-- top 3 per group</span>
+SELECT * FROM (SELECT e.*, DENSE_RANK() OVER (PARTITION BY dept_id ORDER BY salary DESC) r FROM Employees e) x WHERE r &lt;= 3;
+<span class="c">-- HAVING COUNT(project_id) = 1 → exactly one project</span></pre>
+<div class="tw"><table>
+<tr><th>Oracle error</th><th>Meaning</th></tr>
+<tr><td>ORA-00001</td><td>unique constraint violated (duplicate key)</td></tr>
+<tr><td>ORA-02291</td><td>parent key not found: inserting a child with no parent</td></tr>
+<tr><td><b>ORA-02292</b></td><td>child record found: <b>deleting a parent still referenced by a foreign key</b> (ON DELETE RESTRICT). Fix: delete the children first, or use CASCADE / SET NULL</td></tr>
+<tr><td>ORA-01400</td><td>cannot insert NULL into a NOT NULL column</td></tr>
+<tr><td>ORA-00904 / 00942</td><td>invalid identifier (column) / table or view does not exist</td></tr>
+</table></div>
+
+<h3 id="p2-algo">Algorithmic pseudo-code patterns</h3>
+<h4>Clock angle</h4>
+<pre>minuteAngle = 6 * m                    <span class="c"># 360° / 60 min</span>
+hourAngle   = 30 * (h % 12) + 0.5 * m  <span class="c"># 360° / 12 h, plus 0.5° per minute</span>
+diff = |hourAngle − minuteAngle|
+answer = min(diff, 360 − diff)         <span class="c"># 3:00 → 90,  3:30 → |105 − 180| = 75</span></pre>
+<h4>Traffic light (two-state machine)</h4>
+<pre>A = GREEN; B = RED
+loop forever:
+    show(A, B); wait(60 s)
+    swap: if A == GREEN then (A, B) = (RED, GREEN) else (A, B) = (GREEN, RED)
+<span class="c"># invariant: never both green; optional all-red/yellow interval</span></pre>
+<h4>Reverse an array in place (no library)</h4>
+<pre>i = 0; j = n − 1
+while i &lt; j: swap(a[i], a[j]); i++; j--      <span class="c"># O(n) time, O(1) space</span></pre>
+<p>Common relatives: rotate an array (reverse whole, then both parts), palindrome check (two pointers), find min/max in one pass, merge two sorted arrays, count occurrences with a hash map.</p>
+
+<h3 id="p2-misc">Misc definitions</h3>
+<ul>
+<li><b>Module</b>: a reusable unit of code/functionality with a clear interface (package, library, Python module, Java module).</li>
+<li><b>DHCP</b> assigns IP addresses automatically; <b>DNS</b> resolves names. Class C default mask = <code>255.255.255.0</code>.</li>
+<li><b>SaaS advantages</b> over on-premises: no upfront hardware/licence cost (subscription), the provider handles maintenance/updates/security, fast deployment, access from anywhere, elastic scaling, SLAs.</li>
+<li><b>CI/CD</b> = Continuous Integration / Continuous Delivery <i>and</i> Continuous Deployment.</li>
+</ul>
+</section>
+
+<section class="topic" id="cheat">
+<h2><span class="num">13</span>Last-hour cheat sheet</h2>
+<div class="grid2">
+<div>
+<h4>Linux one-liners</h4>
+<pre>chmod 700 f   rwx------  owner only
+chmod 755 f   rwxr-xr-x
+chmod 744 f   rwxr--r--
+chmod 600 f   rw-------
+chmod go-rwx  strip group+others
+2&gt;1    → file named "1"
+2&gt;&amp;1   → where stdout points
+&gt;/dev/null 2&gt;&amp;1 → discard all
+du -h  per dir   du -sh total
+df -h  per filesystem
+ps -ef / top     kill -9 = SIGKILL
+head / tail -f   grep -v -c -i -r
+uname -a         docker ps (-a)
+tar -czvf create gz  -xzvf extract
+cron: min hour dom mon dow
+30 * 15 * *  → :30 hourly on 15th</pre>
+</div>
+<div>
+<h4>SQL skeleton</h4>
+<pre>SELECT col, AGG(x) AS a
+FROM t JOIN u ON t.k = u.k
+WHERE row_filter
+GROUP BY col
+HAVING AGG(x) &gt; n
+ORDER BY a DESC;
+-- no-match: LEFT JOIN … WHERE u.k IS NULL
+-- unique values: DISTINCT
+-- NULL: IS NULL, COUNT(col) skips NULL
+-- UNION dedups, UNION ALL keeps
+-- unique index = fast + no duplicates
+-- trigger = auto on event, integrity
+-- INNER = match in both tables</pre>
+</div>
+<div>
+<h4>Git</h4>
+<pre>checkout -b x   create + switch
+branch x        create only
+reset --soft    keep staged
+reset (mixed)   keep working dir
+reset --hard    destroy changes
+revert          new undo commit
+rebase          replay on new base
+rebase -i       squash commits
+merge --squash  one commit at merge
+cherry-pick     copy one commit
+stash / pop     shelve changes
+fetch ≠ pull (fetch + merge)</pre>
+</div>
+<div>
+<h4>Java</h4>
+<pre>fields &amp; static methods: declared type
+instance methods: runtime type
+"a"+1+2 = a12    1+2+"a" = 3a
+== reference   equals() content
+int/0 → ArithmeticException (runtime)
+double/0 → Infinity
+MAX_VALUE+1 → MIN_VALUE
+double prints 2.0
+finally always runs; its return wins
+unreachable code = compile error
+checked must be caught/declared</pre>
+</div>
+<div>
+<h4>Networking</h4>
+<pre>/n → 2^(32−n) addrs, −2 usable
+/16 = 65,536   /24 = 256 (254)
+A 1–126 /8  B 128–191 /16  C 192–223 /24
+private 10/8 172.16/12 192.168/16
+TCP reliable  UDP fast
+22 SSH 53 DNS 80 HTTP 443 HTTPS
+1521 Oracle 3306 MySQL
+401 not logged in  403 not allowed
+404 not found  500 server bug
+502 bad gateway  504 gw timeout
+refused = nothing listening
+timeout = firewall drop / down</pre>
+</div>
+<div>
+<h4>Testing</h4>
+<pre>Verification = built right (spec)
+Validation  = right product (users)
+Exploratory = intuition, no scripts
+Smoke = broad shallow  Sanity = narrow
+Regression = nothing else broke
+BVA: B−1, B, B+1
+EP: 1 value per class
+Decision table: 2^n rules
+Statement ⊂ Branch ⊂ Path coverage
+Severity = impact  Priority = urgency
+Bug cost: dev &lt; tester &lt; campaign &lt; client
+Env failure ≠ product bug</pre>
+</div>
+</div>
+<div class="tip">On the day: read every word (“exclusively”, “running”, “minimum”, “NOT”), watch for missing <code>&amp;</code> or <code>$</code>, decide compile-time vs runtime, and for “pick one or more” check each option on its own. You can’t revisit a section — answer everything before submitting.</div>
+</section>
+</main>
+</div>
+<script>
+(function(){
+  var main=document.getElementById('main'), toc=document.getElementById('toc');
+  var KEY='murexGuideDone', done={};
+  try{ done=JSON.parse(localStorage.getItem(KEY)||'{}'); }catch(e){}
+  var secs=[].slice.call(document.querySelectorAll('section.topic'));
+  var html='';
+  secs.forEach(function(s){
+    var h2=s.querySelector('h2'), title=h2.textContent.replace(/^\d+/,'').trim();
+    var lab=document.createElement('label'); lab.innerHTML='<input type="checkbox"> Reviewed';
+    var cb=lab.querySelector('input'); cb.checked=!!done[s.id];
+    s.classList.toggle('done',cb.checked);
+    cb.onchange=function(){ done[s.id]=cb.checked; s.classList.toggle('done',cb.checked); try{localStorage.setItem(KEY,JSON.stringify(done));}catch(e){} build(); };
+    h2.appendChild(lab);
+    s._title=h2.querySelector('.num').textContent+'. '+title;
+  });
+  function build(){
+    var h='', n=0;
+    secs.forEach(function(s){
+      if(done[s.id]) n++;
+      h+='<a class="h2" href="#'+s.id+'">'+s._title+(done[s.id]?' <span class="ck">✓</span>':'')+'</a>';
+      [].slice.call(s.querySelectorAll('h3[id]')).forEach(function(h3){ h+='<a class="h3" href="#'+h3.id+'">'+h3.textContent+'</a>'; });
+    });
+    toc.innerHTML=h;
+    document.getElementById('prog').textContent=n+' / '+secs.length+' sections reviewed';
+  }
+  build();
+  // active link on scroll
+  var heads=[].slice.call(document.querySelectorAll('section.topic, h3[id]'));
+  var obs=new IntersectionObserver(function(es){
+    es.forEach(function(e){ if(e.isIntersecting){ var id=e.target.id; [].slice.call(toc.querySelectorAll('a')).forEach(function(a){ a.classList.toggle('act', a.getAttribute('href')==='#'+id); }); } });
+  },{rootMargin:'-70px 0px -75% 0px'});
+  heads.forEach(function(h){ obs.observe(h); });
+  // search: filter blocks within sections
+  var blocks=[];
+  secs.forEach(function(s){ [].slice.call(s.children).forEach(function(el){ if(el.tagName!=='H2') blocks.push({el:el,sec:s,text:el.textContent.toLowerCase()}); }); });
+  var q=document.getElementById('search'), t;
+  q.addEventListener('input',function(){ clearTimeout(t); t=setTimeout(run,150); });
+  function run(){
+    var v=q.value.trim().toLowerCase();
+    var vis={};
+    blocks.forEach(function(b){
+      var show=!v||b.text.indexOf(v)>-1;
+      // keep a heading visible if the block right after it matches
+      b.el.classList.toggle('hide',!show);
+      if(show) vis[b.sec.id]=true;
+    });
+    if(v){ blocks.forEach(function(b,i){ if(b.el.tagName==='H3'||b.el.tagName==='H4'){ var nx=blocks[i+1]; if(nx&&nx.sec===b.sec&&!nx.el.classList.contains('hide')) b.el.classList.remove('hide'); } }); }
+    secs.forEach(function(s){ s.classList.toggle('hide', !!v && !vis[s.id]); });
+    document.querySelector('.intro').classList.toggle('hide',!!v);
+  }
+})();
+</script>
+</body>
+</html>
