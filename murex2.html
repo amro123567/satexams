@@ -72,6 +72,7 @@ mark{background:#ffe58a;padding:0 1px;border-radius:2px}
 <div class="intro">
 <h2>Everything to know before the test</h2>
 <p class="lead">This covers the five areas in Murex’s invitation email (General tech knowledge, Crash analysis, SQL, Problem analysis, Testing) plus everything both shared papers (Technical Analyst EMEA and Assessment 2026) touched: Linux, Bash, Git, networking, SQL, Java &amp; C errors, troubleshooting, testing, algorithms, hardware, cloud and DevOps.</p>
+<p class="lead">Deep-dive sections: <b>Linux command reference</b> (every flag), <b>systemd &amp; system information</b>, and the <b>Git deep dive</b> (flags, 23 scenarios, 10 trace drills). Read the core section first, then its deep dive.</p>
 <p class="lead">Red <b>Exam trap</b> boxes mark the patterns the test likes to catch you on. Tick <b>Reviewed</b> on each section when you’re done. Search filters the whole page.</p>
 </div>
 <section class="topic" id="linux">
@@ -326,8 +327,637 @@ awk '{print $1}' access.log | sort | uniq -c | sort -rn | head -5</pre>
 </table></div>
 </section>
 
+<section class="topic" id="ref">
+<h2><span class="num">2</span>Linux command reference: every flag explained</h2>
+<p class="lead">Deep reference for each command the test can ask about: what every common flag does, what the output means, and the traps. Read it once fully, then use search (top bar) to drill specific flags.</p>
+<div class="key">Flag syntax: short flags use one dash and can be combined (<code>ls -l -a -h</code> = <code>ls -lah</code>). Long flags use two dashes (<code>--all</code>). Some flags take a value (<code>head -n 5</code>, <code>tar -f file</code>). <code>--</code> means “end of options”, so <code>rm -- -weird-file</code> deletes a file whose name starts with a dash.</div>
+
+<h3 id="ref-ls">ls — list directory contents</h3>
+<div class="tw"><table>
+<tr><th>Flag</th><th>What it does</th><th>Example / note</th></tr>
+<tr><td><code>-l</code></td><td>long format: type+permissions, link count, owner, group, size, modification time, name</td><td><code>ls -l /var/log</code></td></tr>
+<tr><td><code>-a</code></td><td>all files, including hidden dot-files and <code>.</code> and <code>..</code></td><td><code>ls -a ~</code> shows <code>.bashrc</code></td></tr>
+<tr><td><code>-A</code></td><td>almost all: hidden files but not <code>.</code> and <code>..</code></td><td></td></tr>
+<tr><td><code>-h</code></td><td>human-readable sizes (K, M, G); only meaningful with <code>-l</code> or <code>-s</code></td><td><code>ls -lh</code> → <code>4.0K</code>, <code>12M</code></td></tr>
+<tr><td><code>-t</code></td><td>sort by modification time, newest first</td><td><code>ls -lt | head</code> = latest files</td></tr>
+<tr><td><code>-r</code></td><td>reverse the sort order</td><td><code>ls -ltr</code> = oldest first, newest at the bottom (handy for logs)</td></tr>
+<tr><td><code>-S</code></td><td>sort by size, largest first</td><td><code>ls -lS</code></td></tr>
+<tr><td><code>-R</code></td><td>recursive: list subdirectories too</td><td></td></tr>
+<tr><td><code>-d</code></td><td>list the directory itself, not its contents</td><td><code>ls -ld /tmp</code> → <code>drwxrwxrwt</code></td></tr>
+<tr><td><code>-i</code></td><td>show inode numbers (hard links share one)</td><td></td></tr>
+<tr><td><code>-1</code></td><td>one name per line</td><td>good for piping: <code>ls -1 | wc -l</code></td></tr>
+<tr><td><code>-F</code></td><td>add a type marker: <code>/</code> dir, <code>*</code> executable, <code>@</code> link</td><td></td></tr>
+<tr><td><code>-n</code></td><td>like -l but numeric UID/GID</td><td></td></tr>
+</table></div>
+<pre>-rwxr-x--- 1 mohamad dev 4096 Nov 11 09:30 run.sh
+│└┬┘└┬┘└┬┘ │ └──┬──┘ └┬┘ └┬─┘ └─────┬────┘ └─name
+│ │  │  │  │    │      │    │        └─ last modification time
+│ │  │  │  │    │      │    └─ size in bytes
+│ │  │  │  │    │      └─ group      └─ owner
+│ │  │  │  └─ hard-link count
+│ │  │  └─ others: ---     group: r-x     owner: rwx
+└─ type: - file, d directory, l symlink, c char device, b block device, s socket, p pipe</pre>
+<div class="trap"><code>ls -l | wc -l</code> counts one line too many, because <code>ls -l</code> prints a <code>total</code> line first. It is still the expected answer for “count files”. <code>ls | wc -l</code> is exact (but ignores hidden files).</div>
+
+<h3 id="ref-files">cp · mv · rm · mkdir · rmdir · touch</h3>
+<div class="tw"><table>
+<tr><th>Command + flag</th><th>Meaning</th></tr>
+<tr><td><code>cp src dst</code></td><td>copy a file. If <code>dst</code> is an existing directory, the file is copied <i>into</i> it</td></tr>
+<tr><td><code>cp -r</code> / <code>-R</code></td><td>recursive: required to copy directories (otherwise: “omitting directory”)</td></tr>
+<tr><td><code>cp -i</code></td><td>interactive: ask before overwriting</td></tr>
+<tr><td><code>cp -f</code></td><td>force: overwrite without asking</td></tr>
+<tr><td><code>cp -n</code></td><td>no-clobber: never overwrite an existing file</td></tr>
+<tr><td><code>cp -u</code></td><td>update: copy only if the source is newer or the destination is missing</td></tr>
+<tr><td><code>cp -p</code></td><td>preserve mode, ownership and timestamps</td></tr>
+<tr><td><code>cp -a</code></td><td>archive = <code>-dR --preserve=all</code>: exact copy including links and attributes (backups)</td></tr>
+<tr><td><code>cp -v</code></td><td>verbose: print each file copied</td></tr>
+<tr><td><code>mv a b</code></td><td>move <b>or rename</b>. Same flags <code>-i -f -n -u -v</code>. Within one filesystem it’s instant (just renames); across filesystems it copies then deletes</td></tr>
+<tr><td><code>rm f</code></td><td>delete a file (no recycle bin)</td></tr>
+<tr><td><code>rm -r</code></td><td>recursive: delete directories and their contents</td></tr>
+<tr><td><code>rm -f</code></td><td>force: no prompts, no error if the file doesn’t exist</td></tr>
+<tr><td><code>rm -i</code> / <code>-I</code></td><td>ask for each file / ask once if deleting more than 3 files or recursive</td></tr>
+<tr><td><code>rm -d</code></td><td>remove empty directories</td></tr>
+<tr><td><code>rm -v</code></td><td>print each deletion</td></tr>
+<tr><td><code>mkdir -p a/b/c</code></td><td>create parents as needed; no error if it already exists</td></tr>
+<tr><td><code>mkdir -m 700 d</code></td><td>create with specific permissions</td></tr>
+<tr><td><code>rmdir d</code></td><td>remove an <b>empty</b> directory only (<code>-p</code> also removes empty parents)</td></tr>
+<tr><td><code>touch f</code></td><td>create an empty file, or update the timestamps of an existing one</td></tr>
+<tr><td><code>touch -c</code></td><td>don’t create the file if it doesn’t exist</td></tr>
+<tr><td><code>touch -t 202611110930 f</code> / <code>-d "yesterday"</code></td><td>set a specific timestamp</td></tr>
+<tr><td><code>touch -a</code> / <code>-m</code></td><td>change only the access / modification time</td></tr>
+</table></div>
+<div class="trap"><code>rm *</code> doesn’t delete directories or hidden files. <code>rm -r *</code> deletes files <b>and</b> subdirectories (except hidden). <code>rm -r</code> with no target is an error. <code>rm -rf "$DIR/"*</code> with an empty <code>$DIR</code> becomes <code>rm -rf /*</code>: always quote and check variables.</div>
+
+<h3 id="ref-view">cat · head · tail · less · wc</h3>
+<div class="tw"><table>
+<tr><th>Command + flag</th><th>Meaning</th></tr>
+<tr><td><code>cat f</code></td><td>print the whole file. <code>cat a b &gt; c</code> concatenates</td></tr>
+<tr><td><code>cat -n</code> / <code>-b</code></td><td>number all lines / number non-empty lines</td></tr>
+<tr><td><code>cat -A</code></td><td>show invisible characters: <code>$</code> at line end, <code>^I</code> tab, <code>^M</code> Windows CR (finds CRLF problems in scripts)</td></tr>
+<tr><td><code>cat -s</code></td><td>squeeze repeated blank lines</td></tr>
+<tr><td><code>tac</code></td><td>print the file reversed (last line first)</td></tr>
+<tr><td><code>head f</code></td><td>first 10 lines</td></tr>
+<tr><td><code>head -n 20</code> / <code>head -20</code></td><td>first 20 lines</td></tr>
+<tr><td><code>head -n -5</code></td><td>everything <b>except</b> the last 5 lines</td></tr>
+<tr><td><code>head -c 100</code></td><td>first 100 bytes</td></tr>
+<tr><td><code>tail f</code></td><td>last 10 lines</td></tr>
+<tr><td><code>tail -n 50</code></td><td>last 50 lines</td></tr>
+<tr><td><code>tail -n +5</code></td><td>from line 5 to the end (skip a header: <code>tail -n +2 data.csv</code>)</td></tr>
+<tr><td><code>tail -f</code></td><td>follow: keep printing new lines as they are written (Ctrl+C to stop)</td></tr>
+<tr><td><code>tail -F</code></td><td>follow by <b>name</b> and retry: keeps working when the log is rotated (renamed and recreated)</td></tr>
+<tr><td><code>tail -f a.log b.log</code></td><td>follow several files with headers</td></tr>
+<tr><td><code>tail -f app.log | grep ERROR</code></td><td>live-filter a log</td></tr>
+<tr><td><code>sed -n '100,120p' f</code></td><td>lines 100–120 (combining head and tail: <code>head -120 f | tail -21</code>)</td></tr>
+<tr><td><code>less f</code></td><td>pager. Keys: Space/b = page down/up · <code>/word</code> search forward · <code>?word</code> backward · <code>n</code>/<code>N</code> next/previous match · <code>g</code>/<code>G</code> start/end · <code>F</code> follow like tail -f · <code>q</code> quit. <code>less -N</code> line numbers, <code>-S</code> don’t wrap</td></tr>
+<tr><td><code>more f</code></td><td>older, simpler pager (forward only)</td></tr>
+<tr><td><code>wc f</code></td><td>prints lines, words, bytes</td></tr>
+<tr><td><code>wc -l</code> / <code>-w</code> / <code>-c</code> / <code>-m</code> / <code>-L</code></td><td>lines / words / bytes / characters / length of the longest line</td></tr>
+</table></div>
+
+<h3 id="ref-grep">grep — every flag</h3>
+<div class="tw"><table>
+<tr><th>Flag</th><th>Meaning</th><th>Example</th></tr>
+<tr><td><code>-i</code></td><td>ignore case</td><td><code>grep -i error app.log</code> matches Error, ERROR</td></tr>
+<tr><td><code>-v</code></td><td>invert: lines that do <b>not</b> match</td><td><code>grep -v DEBUG app.log</code></td></tr>
+<tr><td><code>-c</code></td><td>count matching <b>lines</b> (not occurrences)</td><td><code>grep -c ORA- db.log</code></td></tr>
+<tr><td><code>-n</code></td><td>prefix each match with its line number</td><td></td></tr>
+<tr><td><code>-l</code></td><td>list only the <b>names of files</b> that contain a match</td><td><code>grep -l startGrid *.log</code></td></tr>
+<tr><td><code>-L</code></td><td>names of files with <b>no</b> match</td><td></td></tr>
+<tr><td><code>-r</code> / <code>-R</code></td><td>recursive through directories (-R also follows symlinks)</td><td><code>grep -rn "TODO" src/</code></td></tr>
+<tr><td><code>-w</code></td><td>whole word only</td><td><code>grep -w err</code> won’t match “error”</td></tr>
+<tr><td><code>-x</code></td><td>whole line must match</td><td></td></tr>
+<tr><td><code>-o</code></td><td>print only the matched part</td><td><code>grep -o "ORA-[0-9]*" db.log | sort | uniq -c</code></td></tr>
+<tr><td><code>-E</code></td><td>extended regex: <code>|</code> <code>+</code> <code>?</code> <code>{n}</code> <code>()</code> without backslashes (= <code>egrep</code>)</td><td><code>grep -E "ERROR|FATAL"</code></td></tr>
+<tr><td><code>-F</code></td><td>fixed string, no regex (= <code>fgrep</code>); fast, safe for dots and brackets</td><td><code>grep -F "a.b[1]"</code></td></tr>
+<tr><td><code>-P</code></td><td>Perl regex (<code>\d</code>, lookahead)</td><td></td></tr>
+<tr><td><code>-A n</code> / <code>-B n</code> / <code>-C n</code></td><td>n lines After / Before / around each match (context)</td><td><code>grep -A 20 Exception app.log</code> shows the stack trace</td></tr>
+<tr><td><code>-h</code> / <code>-H</code></td><td>hide / show file names in output</td><td></td></tr>
+<tr><td><code>-m n</code></td><td>stop after n matches</td><td><code>grep -m 1</code></td></tr>
+<tr><td><code>-q</code></td><td>quiet: no output, only the exit status (for scripts)</td><td><code>if grep -q ok f; then …</code></td></tr>
+<tr><td><code>-s</code></td><td>suppress “file not found” errors</td><td></td></tr>
+<tr><td><code>-e pat</code></td><td>specify a pattern (several allowed, or one starting with <code>-</code>)</td><td><code>grep -e foo -e bar</code></td></tr>
+<tr><td><code>--include=*.java</code> / <code>--exclude</code></td><td>limit a recursive search to some files</td><td></td></tr>
+<tr><td><code>--color</code></td><td>highlight matches</td><td></td></tr>
+</table></div>
+<p><b>Exit status</b>: 0 = found, 1 = not found, 2 = error. <b>Regex</b>: <code>.</code> any one char · <code>*</code> zero or more of the previous · <code>+</code> one or more (-E) · <code>?</code> optional (-E) · <code>^</code> line start · <code>$</code> line end · <code>[abc]</code> one of · <code>[^abc]</code> none of · <code>[0-9]</code>, <code>[[:digit:]]</code>, <code>[[:space:]]</code> · <code>\.</code> literal dot · <code>{3}</code> exactly 3 (-E). <code>grep -c .</code> counts lines with at least one character (the dot is a regex for “any char”). <code>grep "^$"</code> matches empty lines.</p>
+
+<h3 id="ref-find">find — tests, actions, operators</h3>
+<p>Syntax: <code>find [where] [tests] [action]</code>. Default action is <code>-print</code>. Tests are combined with AND unless you say otherwise.</p>
+<div class="tw"><table>
+<tr><th>Test / action</th><th>Meaning</th></tr>
+<tr><td><code>-name "*.log"</code></td><td>by name pattern, case-sensitive. <b>Quote</b> the pattern so the shell doesn’t expand it</td></tr>
+<tr><td><code>-iname</code></td><td>name, case-insensitive</td></tr>
+<tr><td><code>-path "*/logs/*"</code></td><td>match the whole path</td></tr>
+<tr><td><code>-type f</code> / <code>d</code> / <code>l</code></td><td>regular file / directory / symbolic link</td></tr>
+<tr><td><code>-size +100M</code> / <code>-1k</code> / <code>50c</code></td><td>bigger than 100 MiB / smaller than 1 KiB / exactly 50 bytes. Units: <code>c</code> bytes, <code>k</code>, <code>M</code>, <code>G</code></td></tr>
+<tr><td><code>-mtime -3</code></td><td>content <b>modified</b> less than 3 days ago (<code>+3</code> = more than 3 days, <code>3</code> = exactly the 3rd day)</td></tr>
+<tr><td><code>-mmin -30</code></td><td>modified less than 30 <b>minutes</b> ago</td></tr>
+<tr><td><code>-atime</code> / <code>-amin</code></td><td>last <b>accessed</b> (read)</td></tr>
+<tr><td><code>-ctime</code> / <code>-cmin</code></td><td>inode/status <b>changed</b> (permissions, owner, rename, or content). Not “creation time”</td></tr>
+<tr><td><code>-newer ref</code></td><td>modified more recently than file <code>ref</code></td></tr>
+<tr><td><code>-user u</code> / <code>-group g</code> / <code>-nouser</code></td><td>by owner / group / owner no longer exists</td></tr>
+<tr><td><code>-perm 644</code></td><td>exactly these permissions</td></tr>
+<tr><td><code>-perm -u+x</code> / <code>-perm -111</code></td><td>at least these bits set</td></tr>
+<tr><td><code>-perm /222</code></td><td>any of these bits set (writable by someone)</td></tr>
+<tr><td><code>-empty</code></td><td>empty files or directories</td></tr>
+<tr><td><code>-maxdepth 1</code> / <code>-mindepth 2</code></td><td>limit how deep to descend (put it first)</td></tr>
+<tr><td><code>!</code> / <code>-not</code></td><td>negate: <code>find . ! -name "*.java"</code></td></tr>
+<tr><td><code>-o</code> / <code>-a</code> / <code>\( \)</code></td><td>OR / AND / grouping: <code>find . \( -name "*.log" -o -name "*.tmp" \)</code></td></tr>
+<tr><td><code>-print</code> / <code>-print0</code></td><td>print paths / print them NUL-separated (for names with spaces, with <code>xargs -0</code>)</td></tr>
+<tr><td><code>-delete</code></td><td>delete matches (put it last!)</td></tr>
+<tr><td><code>-exec cmd {} \;</code></td><td>run cmd <b>once per file</b>; <code>{}</code> is replaced by the path; <code>\;</code> ends the command</td></tr>
+<tr><td><code>-exec cmd {} +</code></td><td>run cmd <b>once with many files</b> as arguments (faster)</td></tr>
+<tr><td><code>-ok cmd {} \;</code></td><td>like -exec but asks for confirmation</td></tr>
+<tr><td><code>-prune</code></td><td>don’t descend into a directory: <code>find . -path ./node_modules -prune -o -name "*.js" -print</code></td></tr>
+<tr><td><code>-ls</code></td><td>print in ls -l style</td></tr>
+</table></div>
+<pre>find /var/log -name "*.log" -mtime +30 -delete              <span class="c"># clean logs older than 30 days</span>
+find . -type f -size +500M -exec ls -lh {} \;               <span class="c"># big files with sizes</span>
+find /var/log -type f -exec du -h {} + | sort -rh | head -n 10   <span class="c"># 10 largest files</span>
+find . -type d -empty                                       <span class="c"># empty directories</span>
+find /opt -user murex -perm -o+w                            <span class="c"># world-writable files of murex user</span>
+find . -name "*.tmp" -print0 | xargs -0 rm -f              <span class="c"># safe with spaces</span></pre>
+<div class="trap"><code>-mtime</code> = modified content, <code>-ctime</code> = changed status (often mistaken for “created”), <code>-atime</code> = accessed. <code>-3</code> = within 3 days, <code>+3</code> = older than 3 days. <code>find</code> searches <b>names and attributes</b>; <code>grep</code> searches <b>contents</b>.</div>
+
+<h3 id="ref-text">sort · uniq · cut · tr · awk · sed · xargs · tee · diff</h3>
+<div class="tw"><table>
+<tr><th>Command + flag</th><th>Meaning</th></tr>
+<tr><td><code>sort</code></td><td>sort lines alphabetically (character by character)</td></tr>
+<tr><td><code>sort -n</code></td><td>numeric (otherwise 10 sorts before 9)</td></tr>
+<tr><td><code>sort -h</code></td><td>human sizes: 512K &lt; 2M &lt; 1G (use with <code>du -h</code>)</td></tr>
+<tr><td><code>sort -r</code></td><td>reverse</td></tr>
+<tr><td><code>sort -k2,2</code> / <code>-k3n</code></td><td>sort by field 2 only / field 3 numerically</td></tr>
+<tr><td><code>sort -t','</code></td><td>field separator (CSV)</td></tr>
+<tr><td><code>sort -u</code></td><td>remove duplicates after sorting</td></tr>
+<tr><td><code>sort -f</code> / <code>-M</code> / <code>-V</code></td><td>ignore case / month names / version numbers (1.10 after 1.9)</td></tr>
+<tr><td><code>sort -o out</code> / <code>-c</code></td><td>write to file (can be the same file) / check if already sorted</td></tr>
+<tr><td><code>uniq</code></td><td>collapse <b>adjacent</b> duplicate lines, so always <code>sort | uniq</code></td></tr>
+<tr><td><code>uniq -c</code> / <code>-d</code> / <code>-u</code> / <code>-i</code></td><td>prefix counts / only duplicated lines / only unique lines / ignore case</td></tr>
+<tr><td><code>cut -d',' -f2</code></td><td>field 2, comma-delimited (default delimiter: TAB)</td></tr>
+<tr><td><code>cut -f1,3</code> / <code>-f2-</code></td><td>fields 1 and 3 / field 2 to the end</td></tr>
+<tr><td><code>cut -c1-5</code></td><td>characters 1 to 5</td></tr>
+<tr><td><code>tr 'a-z' 'A-Z'</code></td><td>translate characters (uppercase). <code>tr '[:lower:]' '[:upper:]'</code></td></tr>
+<tr><td><code>tr -d '\r'</code> / <code>-s ' '</code> / <code>-c</code></td><td>delete characters (fix Windows line endings) / squeeze repeats / complement the set</td></tr>
+<tr><td><code>awk '{print $1, $3}'</code></td><td>print fields 1 and 3 (split on whitespace)</td></tr>
+<tr><td><code>awk -F',' …</code> / <code>-F:</code></td><td>set the field separator</td></tr>
+<tr><td><code>awk -v t=100 '$2 &gt; t'</code></td><td>pass a variable; a condition alone prints matching lines</td></tr>
+<tr><td><code>$0</code> <code>$NF</code> <code>NR</code> <code>NF</code> <code>FS</code> <code>OFS</code></td><td>whole line / last field / line number / number of fields / input separator / output separator</td></tr>
+<tr><td><code>BEGIN{} … END{}</code></td><td>run before the first / after the last line</td></tr>
+<tr><td><code>sed 's/old/new/'</code></td><td>replace the <b>first</b> match on each line</td></tr>
+<tr><td><code>sed 's/old/new/g'</code> / <code>gI</code></td><td>every match / case-insensitive</td></tr>
+<tr><td><code>sed -i</code> / <code>-i.bak</code></td><td>edit the file in place / keeping a backup</td></tr>
+<tr><td><code>sed -n '5,10p'</code></td><td><code>-n</code> silences default output; <code>p</code> prints the selected lines</td></tr>
+<tr><td><code>sed '3d'</code> / <code>'/^#/d'</code> / <code>'$d'</code></td><td>delete line 3 / comment lines / the last line</td></tr>
+<tr><td><code>sed -E</code></td><td>extended regex; <code>&amp;</code> = the matched text; any delimiter: <code>s|/old|/new|</code></td></tr>
+<tr><td><code>xargs</code></td><td>build arguments from stdin: <code>cat files.txt | xargs rm</code></td></tr>
+<tr><td><code>xargs -n 1</code> / <code>-I{}</code> / <code>-0</code> / <code>-P 4</code> / <code>-t</code></td><td>one argument per command / placeholder (<code>xargs -I{} cp {} /bak</code>) / NUL-separated input / 4 in parallel / print each command</td></tr>
+<tr><td><code>tee file</code> / <code>tee -a</code></td><td>copy stdin to the screen <b>and</b> a file / append. <code>echo x | sudo tee /etc/f</code> (because <code>sudo echo x &gt; f</code> fails: the redirect isn’t run as root)</td></tr>
+<tr><td><code>diff a b</code></td><td>line differences (<code>&lt;</code> lines from a, <code>&gt;</code> from b)</td></tr>
+<tr><td><code>diff -u</code> / <code>-y</code> / <code>-q</code> / <code>-r</code> / <code>-i</code> / <code>-w</code></td><td>unified format (like git) / side by side / only say whether they differ / recursive dirs / ignore case / ignore whitespace</td></tr>
+<tr><td><code>cmp</code> / <code>comm -12 a b</code></td><td>byte compare / lines common to two sorted files</td></tr>
+</table></div>
+<pre><span class="c"># count errors per type in a log</span>
+grep -o "ERROR [A-Z_]*" app.log | sort | uniq -c | sort -rn
+<span class="c"># sum column 3 of a CSV (skip header)</span>
+tail -n +2 trades.csv | awk -F, '{s += $3} END {print s}'
+<span class="c"># lines longer than 120 chars</span>
+awk 'length($0) &gt; 120' Code.java
+<span class="c"># replace a hostname in all config files, keeping backups</span>
+sed -i.bak 's/db-old/db-new/g' /opt/app/conf/*.properties</pre>
+
+<h3 id="ref-links">ln · tar · gzip · zip</h3>
+<div class="tw"><table>
+<tr><th>Command + flag</th><th>Meaning</th></tr>
+<tr><td><code>ln -s target linkname</code></td><td>symbolic link (shortcut storing a path). Breaks if the target moves; can point to directories and other filesystems</td></tr>
+<tr><td><code>ln target linkname</code></td><td>hard link: a second name for the same inode/data. Deleting one name keeps the data; same filesystem only; not for directories</td></tr>
+<tr><td><code>ln -sf</code></td><td>replace an existing link</td></tr>
+<tr><td><code>readlink -f link</code></td><td>show the final real path</td></tr>
+<tr><td><code>tar</code> modes (pick one)</td><td><code>-c</code> create · <code>-x</code> extract · <code>-t</code> list · <code>-r</code> append · <code>-u</code> update</td></tr>
+<tr><td><code>-f name</code></td><td>archive file name. Must be followed directly by the name, so <code>-czvf a.tgz</code> works but <code>-cfzv a.tgz</code> doesn’t</td></tr>
+<tr><td><code>-z</code> / <code>-j</code> / <code>-J</code></td><td>gzip (.tar.gz/.tgz) / bzip2 (.tar.bz2) / xz (.tar.xz). Modern tar auto-detects when extracting</td></tr>
+<tr><td><code>-v</code></td><td>verbose (list files as processed)</td></tr>
+<tr><td><code>-C dir</code></td><td>change to dir first (extract somewhere else): <code>tar -xzf a.tgz -C /opt</code></td></tr>
+<tr><td><code>-p</code></td><td>preserve permissions</td></tr>
+<tr><td><code>--exclude='*.log'</code></td><td>skip matching files</td></tr>
+<tr><td><code>tar -xzf a.tgz path/in/archive</code></td><td>extract a single file</td></tr>
+<tr><td><code>gzip f</code></td><td>compress to <code>f.gz</code> and <b>remove</b> the original. <code>-k</code> keep it · <code>-d</code> decompress · <code>-9</code> best/slowest · <code>-1</code> fastest · <code>-r</code> recursive · <code>-l</code> show ratio</td></tr>
+<tr><td><code>gunzip</code>, <code>zcat</code>, <code>zless</code>, <code>zgrep</code></td><td>decompress / read / page / search compressed files without extracting</td></tr>
+<tr><td><code>zip -r a.zip dir</code> · <code>unzip a.zip</code> · <code>unzip -l</code> · <code>unzip -d dest</code></td><td>zip format: create / extract / list / extract into a directory</td></tr>
+</table></div>
+
+<h3 id="ref-perm">chmod · chown · umask: every form</h3>
+<div class="tw"><table>
+<tr><th>Form</th><th>Meaning</th></tr>
+<tr><td><code>chmod 750 f</code></td><td>numeric (absolute): owner 7 = rwx, group 5 = r-x, others 0 = ---</td></tr>
+<tr><td><code>chmod 4755 f</code></td><td>4th leading digit = special bits: 4 = SUID, 2 = SGID, 1 = sticky</td></tr>
+<tr><td><code>chmod u+x</code></td><td>add execute for the owner. Who: <code>u</code> owner, <code>g</code> group, <code>o</code> others, <code>a</code> all (empty = all, respecting umask)</td></tr>
+<tr><td><code>chmod g-w</code></td><td>remove write from the group</td></tr>
+<tr><td><code>chmod o=r</code></td><td><b>set exactly</b> others = read (removes anything else)</td></tr>
+<tr><td><code>chmod u=rwx,g=rx,o=</code></td><td>several clauses separated by commas → 750</td></tr>
+<tr><td><code>chmod a+rw</code></td><td>add read+write for everyone; execute bits untouched</td></tr>
+<tr><td><code>chmod go-rwx</code></td><td>strip everything from group and others; the owner is unchanged</td></tr>
+<tr><td><code>chmod -R u+rwX dir</code></td><td>capital <code>X</code> = execute only for directories (and files already executable): fixes trees safely</td></tr>
+<tr><td><code>chmod -R</code> / <code>-v</code> / <code>-c</code> / <code>--reference=f2</code></td><td>recursive / verbose / report only changes / copy the permissions of another file</td></tr>
+<tr><td><code>chown user f</code> / <code>user:group</code> / <code>:group</code></td><td>change owner / owner and group / group only (needs root to give files away)</td></tr>
+<tr><td><code>chown -R</code> / <code>-h</code></td><td>recursive / change the symlink itself, not the target</td></tr>
+<tr><td><code>umask</code> / <code>umask 027</code> / <code>umask -S</code></td><td>show / set the default mask / show symbolically. New files = 666 − mask, new dirs = 777 − mask. 022 → 644/755; 027 → 640/750; 077 → 600/700</td></tr>
+</table></div>
+<p>To <b>read</b> a file you need <code>r</code> on it and <code>x</code> on every directory in its path. To <b>delete or rename</b> a file you need <code>w</code> + <code>x</code> on the <b>directory</b> (not on the file). Root bypasses permission checks. <code>stat -c '%a %n' f</code> prints the numeric mode.</p>
+
+<h3 id="ref-proc">ps · top · kill · jobs: flags and output columns</h3>
+<div class="tw"><table>
+<tr><th>Command</th><th>Meaning</th></tr>
+<tr><td><code>ps</code></td><td>processes of the current terminal only</td></tr>
+<tr><td><code>ps -e</code> / <code>-A</code></td><td>every process</td></tr>
+<tr><td><code>ps -f</code></td><td>full format (UID, PPID, start time, full command)</td></tr>
+<tr><td><code>ps -ef</code></td><td>every process, full format (System V style)</td></tr>
+<tr><td><code>ps aux</code></td><td>every process with CPU/memory columns (BSD style, no dash). <code>a</code> = all users, <code>u</code> = user-oriented, <code>x</code> = include processes without a terminal (daemons)</td></tr>
+<tr><td><code>ps -u murex</code></td><td>processes of a user</td></tr>
+<tr><td><code>ps -p 1234 -o pid,ppid,%cpu,%mem,etime,cmd</code></td><td>choose columns for one PID (<code>etime</code> = elapsed running time)</td></tr>
+<tr><td><code>ps aux --sort=-%mem | head</code></td><td>top memory consumers (<code>-%cpu</code> for CPU)</td></tr>
+<tr><td><code>ps -ejH</code> / <code>ps auxf</code> / <code>pstree -p</code></td><td>process tree (parents and children)</td></tr>
+<tr><td><code>ps -ef | grep [j]ava</code></td><td>the <code>[j]</code> trick stops grep from matching its own process</td></tr>
+</table></div>
+<div class="tw"><table>
+<tr><th>ps aux column</th><th>Meaning</th><th>ps aux column</th><th>Meaning</th></tr>
+<tr><td>USER</td><td>owner</td><td>RSS</td><td>resident memory actually in RAM (KB)</td></tr>
+<tr><td>PID</td><td>process ID</td><td>VSZ</td><td>virtual memory size (KB): includes mapped but unused memory</td></tr>
+<tr><td>%CPU / %MEM</td><td>CPU share / RAM share</td><td>TTY</td><td>terminal (<code>?</code> = daemon, no terminal)</td></tr>
+<tr><td>STAT</td><td>state (below)</td><td>START / TIME</td><td>start time / total CPU time used</td></tr>
+</table></div>
+<p><b>STAT codes</b>: <code>R</code> running/runnable · <code>S</code> sleeping (waiting for an event) · <code>D</code> uninterruptible sleep (usually disk/NFS I/O; can’t be killed) · <code>T</code> stopped · <code>Z</code> zombie (exited, parent hasn’t read its status) · extra letters: <code>&lt;</code> high priority, <code>N</code> low priority, <code>s</code> session leader, <code>l</code> multi-threaded, <code>+</code> foreground.</p>
+<div class="tw"><table>
+<tr><th>top</th><th>Meaning</th></tr>
+<tr><td>Header line 1</td><td>time, uptime, users, <b>load average</b> (1, 5, 15 min)</td></tr>
+<tr><td>Tasks</td><td>total, running, sleeping, stopped, zombie</td></tr>
+<tr><td>%Cpu(s)</td><td><code>us</code> user code · <code>sy</code> kernel · <code>ni</code> niced · <code>id</code> idle · <b><code>wa</code> waiting for I/O</b> (high = disk bottleneck) · <code>hi</code>/<code>si</code> interrupts · <code>st</code> stolen by the hypervisor (VM starved)</td></tr>
+<tr><td>MiB Mem / Swap</td><td>total, free, used, buff/cache; <b>avail Mem</b> = what is really available. Swap used + rising = memory pressure</td></tr>
+<tr><td>Columns</td><td>PID USER PR NI VIRT RES SHR S %CPU %MEM TIME+ COMMAND</td></tr>
+<tr><td>Keys</td><td><code>P</code> sort by CPU · <code>M</code> by memory · <code>T</code> by time · <code>1</code> per-core view · <code>c</code> full command · <code>u</code> filter user · <code>k</code> kill · <code>r</code> renice · <code>H</code> show threads · <code>q</code> quit</td></tr>
+<tr><td>Flags</td><td><code>top -p 1234</code> one process · <code>-u murex</code> · <code>-d 2</code> refresh every 2 s · <code>-b -n 1</code> batch, one snapshot (for scripts/logs) · <code>-H</code> threads</td></tr>
+</table></div>
+<div class="tw"><table>
+<tr><th>Signal</th><th>Number</th><th>Sent by</th><th>Effect</th></tr>
+<tr><td>SIGHUP</td><td>1</td><td><code>kill -1</code>, terminal closed</td><td>hang up; many daemons reload their config</td></tr>
+<tr><td>SIGINT</td><td>2</td><td>Ctrl+C</td><td>interrupt (can be caught)</td></tr>
+<tr><td>SIGQUIT</td><td>3</td><td>Ctrl+\, <code>kill -3</code></td><td>quit with core dump; a <b>JVM prints a thread dump</b> and keeps running</td></tr>
+<tr><td>SIGKILL</td><td>9</td><td><code>kill -9</code></td><td>immediate kill; can’t be caught, blocked or cleaned up</td></tr>
+<tr><td>SIGSEGV</td><td>11</td><td>kernel</td><td>invalid memory access</td></tr>
+<tr><td>SIGTERM</td><td>15</td><td><code>kill</code> (default)</td><td>polite termination; the process can clean up</td></tr>
+<tr><td>SIGSTOP / SIGCONT</td><td>19 / 18</td><td>Ctrl+Z (SIGTSTP), <code>kill -STOP</code></td><td>pause / resume</td></tr>
+</table></div>
+<p><code>kill -l</code> lists signals · <code>kill -0 PID</code> checks whether a process exists (no signal sent) · <code>pkill -f "java.*murex"</code> matches the full command line · <code>pgrep -fl java</code> lists PIDs with names · <code>killall name</code> by exact name. <b>Jobs</b>: <code>cmd &amp;</code> background · Ctrl+Z suspend · <code>jobs -l</code> · <code>fg %1</code> · <code>bg %1</code> · <code>disown</code> detach from the shell · <code>nohup cmd &gt; out.log 2&gt;&amp;1 &amp;</code> survive logout · Ctrl+D = end of input / log out.</p>
+
+<h3 id="ref-disk">df · du · free · lsof: flags and reading output</h3>
+<div class="tw"><table>
+<tr><th>Command + flag</th><th>Meaning</th></tr>
+<tr><td><code>df</code></td><td>space per mounted filesystem, in 1K blocks</td></tr>
+<tr><td><code>df -h</code> / <code>-H</code></td><td>human-readable, powers of 1024 / of 1000</td></tr>
+<tr><td><code>df -T</code></td><td>add filesystem type (ext4, xfs, tmpfs, nfs)</td></tr>
+<tr><td><code>df -i</code></td><td>inode usage. 100% inodes = “No space left on device” even with free GBs (millions of tiny files)</td></tr>
+<tr><td><code>df -h /var/log</code></td><td>the filesystem holding that path</td></tr>
+<tr><td><code>du dir</code></td><td>disk usage of every subdirectory, recursively</td></tr>
+<tr><td><code>du -h</code></td><td>human-readable</td></tr>
+<tr><td><code>du -s</code></td><td>summary: one total per argument</td></tr>
+<tr><td><code>du -a</code></td><td>include files, not just directories</td></tr>
+<tr><td><code>du -c</code></td><td>add a grand total</td></tr>
+<tr><td><code>du -d 1</code> / <code>--max-depth=1</code></td><td>only one level deep</td></tr>
+<tr><td><code>du -x</code></td><td>stay on one filesystem</td></tr>
+<tr><td><code>du -sh * | sort -rh | head</code></td><td>the biggest items in the current directory</td></tr>
+<tr><td><code>free -h</code> / <code>-m</code> / <code>-s 2</code></td><td>memory: human / MB / refresh every 2 s</td></tr>
+<tr><td><code>lsof -p PID</code></td><td>files and sockets opened by a process</td></tr>
+<tr><td><code>lsof -i :8080</code> / <code>lsof -i</code></td><td>who uses port 8080 / all network connections</td></tr>
+<tr><td><code>lsof +L1</code></td><td>deleted files still held open (space not freed until the process restarts)</td></tr>
+<tr><td><code>lsof /var/log/app.log</code></td><td>which process has this file open</td></tr>
+</table></div>
+<pre>$ free -h
+              total   used   free  shared  buff/cache  available
+Mem:           15Gi   6.1Gi  0.8Gi  0.2Gi     8.6Gi       8.9Gi
+Swap:         2.0Gi   0.0Gi  2.0Gi</pre>
+<p>Low “free” is <b>normal</b>: Linux uses spare RAM as disk cache (buff/cache) and gives it back on demand. Look at <b>available</b> and at swap activity.</p>
+<div class="trap"><code>df</code> and <code>du</code> disagree? A deleted log file is still held open by a running process: <code>du</code> no longer sees it, <code>df</code> still counts it. Find it with <code>lsof +L1</code> and restart that process.</div>
+
+<h3 id="ref-net">ss · netstat · ping · traceroute · curl · ssh · scp · dig</h3>
+<div class="tw"><table>
+<tr><th>Command + flag</th><th>Meaning</th></tr>
+<tr><td><code>ss -t</code> / <code>-u</code></td><td>TCP / UDP sockets</td></tr>
+<tr><td><code>ss -l</code> / <code>-a</code></td><td>listening only / all (listening + established)</td></tr>
+<tr><td><code>ss -n</code></td><td>numeric: don’t resolve port names or hosts (faster, shows 8080 not “http-alt”)</td></tr>
+<tr><td><code>ss -p</code></td><td>show the process using each socket (needs root for others’ processes)</td></tr>
+<tr><td><code>ss -s</code> / <code>-4</code> / <code>-6</code></td><td>summary counts / IPv4 / IPv6 only</td></tr>
+<tr><td><code>ss -tulnp</code></td><td>all listening TCP and UDP ports with processes: the classic “what is listening?”</td></tr>
+<tr><td><code>ss -tn state established '( dport = :1521 )'</code></td><td>open connections to Oracle</td></tr>
+<tr><td><code>netstat -tulnp</code> / <code>-plnt</code> / <code>-r</code> / <code>-i</code></td><td>same as ss (older tool) / routing table / interface stats</td></tr>
+<tr><td><code>ping host</code></td><td>ICMP echo until Ctrl+C (Linux); Windows sends 4</td></tr>
+<tr><td><code>ping -c 4</code> / <code>-i 0.5</code> / <code>-W 2</code> / <code>-s 1400</code> / <code>-t 64</code></td><td>count / interval / timeout per reply / packet size / TTL</td></tr>
+<tr><td>ping output</td><td><code>64 bytes from 1.2.3.4: icmp_seq=1 ttl=56 time=114 ms</code>; summary: transmitted, received, <b>% packet loss</b>, rtt min/avg/max/mdev (mdev = jitter)</td></tr>
+<tr><td><code>traceroute host</code> / <code>-n</code> / <code>-I</code> / <code>-T -p 443</code></td><td>hops to the destination / no DNS / use ICMP / use TCP to a port (passes firewalls). <code>* * *</code> = that hop didn’t answer (often just filtered)</td></tr>
+<tr><td><code>curl url</code></td><td>HTTP request, prints the body</td></tr>
+<tr><td><code>curl -v</code></td><td>verbose: DNS, TCP connect, TLS handshake, request and response headers (best for debugging)</td></tr>
+<tr><td><code>curl -I</code> / <code>-i</code></td><td>HEAD request (headers only) / include response headers with the body</td></tr>
+<tr><td><code>curl -o file</code> / <code>-O</code></td><td>save to file / save with the remote file name</td></tr>
+<tr><td><code>curl -L</code></td><td>follow redirects (3xx)</td></tr>
+<tr><td><code>curl -s</code> / <code>-S</code></td><td>silent / but still show errors</td></tr>
+<tr><td><code>curl -X POST -H "Content-Type: application/json" -d '{"a":1}'</code></td><td>method, header, body</td></tr>
+<tr><td><code>curl -u user:pass</code> / <code>-H "Authorization: Bearer TOKEN"</code></td><td>basic auth / token auth</td></tr>
+<tr><td><code>curl -k</code></td><td>skip TLS certificate verification (testing only)</td></tr>
+<tr><td><code>curl --connect-timeout 5 -m 30</code></td><td>connection timeout / total timeout</td></tr>
+<tr><td><code>curl -s -o /dev/null -w "%{http_code} %{time_total}\n" url</code></td><td>print only the status code and response time: a perfect health check</td></tr>
+<tr><td><code>wget url</code> / <code>-O f</code> / <code>-c</code> / <code>-q</code></td><td>download / to file / resume / quiet</td></tr>
+<tr><td><code>ssh user@host</code></td><td>remote shell (port 22)</td></tr>
+<tr><td><code>ssh -p 2222</code> / <code>-i key.pem</code> / <code>-v</code></td><td>port (lowercase p) / identity key / verbose (debug auth problems)</td></tr>
+<tr><td><code>ssh -L 9000:db:1521 jump</code></td><td>local port forwarding: localhost:9000 → db:1521 through the jump host</td></tr>
+<tr><td><code>ssh host "df -h"</code></td><td>run one command remotely</td></tr>
+<tr><td><code>ssh-keygen -t ed25519</code> · <code>ssh-copy-id user@host</code></td><td>create a key pair · install the public key on the server (<code>~/.ssh/authorized_keys</code>; <code>~/.ssh</code> must be 700, keys 600)</td></tr>
+<tr><td><code>scp f user@host:/tmp/</code> / <code>scp user@host:/tmp/f .</code></td><td>copy to / from a remote host</td></tr>
+<tr><td><code>scp -r</code> / <code>-P 2222</code> / <code>-i key</code></td><td>recursive / port (<b>capital P</b> in scp!) / key</td></tr>
+<tr><td><code>rsync -avz src/ host:/dst/</code></td><td>sync: archive, verbose, compress; only sends differences. <code>--delete</code> mirror deletions · <code>-n</code> dry run · <code>--progress</code>. A trailing slash on src = copy the contents, not the folder</td></tr>
+<tr><td><code>dig host</code> / <code>+short</code> / <code>MX</code> / <code>@8.8.8.8</code> / <code>-x IP</code></td><td>DNS query / answer only / mail records / ask a specific server / reverse lookup</td></tr>
+<tr><td><code>nslookup host [server]</code> · <code>host host</code></td><td>simpler DNS lookups</td></tr>
+<tr><td><code>ip a</code> · <code>ip r</code> · <code>ip -s link</code> · <code>ip link set eth0 up</code> · <code>hostname -I</code></td><td>addresses · routes/default gateway · interface error counters · bring an interface up · this host’s IPs</td></tr>
+<tr><td><code>nc -zv host 443</code> / <code>telnet host 443</code></td><td>test whether a TCP port is open (succeeded / connection refused / timed out)</td></tr>
+</table></div>
+
+<h3 id="ref-cron">crontab in depth</h3>
+<div class="tw"><table>
+<tr><th>Item</th><th>Meaning</th></tr>
+<tr><td><code>crontab -e</code> / <code>-l</code> / <code>-r</code> / <code>-u user -l</code></td><td>edit / list / <b>remove all</b> (careful: next to -e on the keyboard) / another user’s</td></tr>
+<tr><td>Field values</td><td><code>*</code> any · <code>5</code> exact · <code>1,15</code> list · <code>1-5</code> range · <code>*/10</code> every 10 · <code>0-30/10</code> 0,10,20,30</td></tr>
+<tr><td><code>/etc/crontab</code>, <code>/etc/cron.d/*</code></td><td>system crontabs: have an extra <b>user</b> field after the 5 time fields</td></tr>
+<tr><td><code>/etc/cron.hourly|daily|weekly|monthly/</code></td><td>drop executable scripts here</td></tr>
+<tr><td>Environment</td><td>cron runs with a <b>minimal PATH</b> and no profile: use absolute paths (<code>/usr/bin/python3</code>), set variables at the top</td></tr>
+<tr><td>Output</td><td>stdout/stderr are mailed to the user unless redirected: <code>… &gt;&gt; /var/log/job.log 2&gt;&amp;1</code></td></tr>
+<tr><td><code>%</code></td><td>means newline in crontab; escape it: <code>date +\%F</code></td></tr>
+<tr><td>Day-of-month AND day-of-week</td><td>if both are set (not <code>*</code>), the job runs when <b>either</b> matches</td></tr>
+<tr><td>Logs</td><td><code>grep CRON /var/log/syslog</code> or <code>journalctl -u cron</code> (crond on RHEL)</td></tr>
+</table></div>
+<pre>*/15 * * * *    every 15 minutes
+0 */2 * * *     every 2 hours on the hour
+30 * 15 * *     minute 30 of every hour on the 15th
+0 2 * * 1-5     02:00 Monday–Friday
+0 0 1 1 *       midnight on 1 January
+0 18 * * 5      Friday 18:00
+5 4 * * 0       Sunday 04:05 (0 or 7 = Sunday)</pre>
+
+<h3 id="ref-shell">Shell, environment &amp; Bash details</h3>
+<div class="tw"><table>
+<tr><th>Item</th><th>Meaning</th></tr>
+<tr><td><code>echo $PATH</code></td><td>colon-separated directories searched for commands. <code>export PATH=$PATH:/opt/bin</code> adds one</td></tr>
+<tr><td><code>VAR=x</code> vs <code>export VAR=x</code></td><td>shell-only variable vs passed to child processes (environment variable)</td></tr>
+<tr><td><code>env</code> / <code>printenv HOME</code> / <code>set</code> / <code>unset VAR</code></td><td>environment / one variable / all shell variables and functions / delete</td></tr>
+<tr><td><code>./script.sh</code> vs <code>source script.sh</code> (<code>. script.sh</code>)</td><td>runs in a <b>new</b> process (its variables vanish) vs runs in the <b>current</b> shell (variables and <code>cd</code> stay)</td></tr>
+<tr><td><code>~/.bashrc</code> / <code>~/.bash_profile</code> / <code>/etc/profile</code></td><td>interactive non-login shells / login shells / system-wide</td></tr>
+<tr><td><code>alias ll='ls -lah'</code> · <code>type ll</code> · <code>which java</code> · <code>whereis</code></td><td>alias · what a name is (alias, builtin, file) · path of an executable</td></tr>
+<tr><td><code>history</code> · <code>!!</code> · <code>!42</code> · <code>!grep</code> · Ctrl+R</td><td>history · repeat the last command (<code>sudo !!</code>) · run number 42 · last command starting with grep · reverse search</td></tr>
+<tr><td><code>sudo cmd</code> / <code>sudo -u murex cmd</code> / <code>sudo -i</code> / <code>sudo -l</code></td><td>as root / as another user / root login shell / list what you may run</td></tr>
+<tr><td><code>su -</code> vs <code>su</code></td><td>switch to root with root’s environment (login) vs keeping yours</td></tr>
+<tr><td><code>bash -n s.sh</code> / <code>bash -x s.sh</code></td><td>syntax check without running / trace every command</td></tr>
+<tr><td><code>set -e</code> / <code>-u</code> / <code>-x</code> / <code>-o pipefail</code></td><td>exit on error / error on unset variable / trace / a pipeline fails if any command fails</td></tr>
+<tr><td><code>"$var"</code> vs <code>$var</code> vs <code>'$var'</code></td><td>expanded, kept as one word / expanded and split on spaces (breaks file names) / literal text</td></tr>
+<tr><td><code>$(cmd)</code> · <code>$((a+b))</code> · <code>${v:-def}</code> · <code>${#v}</code> · <code>${v%.log}</code> · <code>${v#*/}</code></td><td>command output · arithmetic · default value · length · strip a suffix · strip a prefix</td></tr>
+<tr><td>Exit codes</td><td><code>0</code> success · <code>1</code> general error · <code>2</code> misuse · <code>126</code> not executable · <code>127</code> command not found · <code>130</code> Ctrl+C · <code>137</code> killed by -9 (often the OOM killer) · <code>139</code> segfault</td></tr>
+<tr><td>Wildcards (globbing)</td><td><code>*</code> any chars · <code>?</code> one char · <code>[abc]</code> one of · <code>{a,b}</code> expands to both (<code>cp f{,.bak}</code> = <code>cp f f.bak</code>). Globs don’t match hidden files</td></tr>
+<tr><td>Shortcuts</td><td>Ctrl+C interrupt · Ctrl+Z suspend · Ctrl+D EOF/logout · Ctrl+L clear · Ctrl+A/E line start/end · Ctrl+U delete to start · Tab autocomplete</td></tr>
+</table></div>
+</section>
+<section class="topic" id="systemd">
+<h2><span class="num">3</span>systemd, services &amp; system information</h2>
+<p class="lead">How Linux starts and manages services (systemd/systemctl), how to read service logs (journalctl), and every command for “tell me about this machine”, with what each output field means.</p>
+
+<h3 id="sd-what">What systemd is</h3>
+<ul>
+<li><b>systemd</b> is the <b>init system</b> on almost every modern Linux (RHEL/CentOS/Rocky, Ubuntu, Debian, SUSE). It is <b>PID 1</b>: the first process the kernel starts, and the parent/adopter of all others.</li>
+<li>It starts services at boot (in parallel, respecting dependencies), supervises them (restarts on crash), collects their logs (journald), and handles timers, mounts, sockets, hostname, time and logins.</li>
+<li>Everything it manages is a <b>unit</b>, described by a <b>unit file</b>. You control it with <code>systemctl</code> and read its logs with <code>journalctl</code>.</li>
+<li>Older systems used <b>SysV init</b> (<code>/etc/init.d/</code> scripts, <code>service</code>, <code>chkconfig</code>, runlevels). You may still see those commands; on systemd they are redirected to systemctl.</li>
+</ul>
+<div class="tw"><table>
+<tr><th>Unit type</th><th>Extension</th><th>Represents</th></tr>
+<tr><td>Service</td><td><code>.service</code></td><td>a daemon/process: <code>sshd.service</code>, <code>nginx.service</code>, <code>mysqld.service</code>, a Java app</td></tr>
+<tr><td>Target</td><td><code>.target</code></td><td>a group of units = a system state (like runlevels): <code>multi-user.target</code></td></tr>
+<tr><td>Timer</td><td><code>.timer</code></td><td>schedule that triggers a service (modern cron)</td></tr>
+<tr><td>Socket</td><td><code>.socket</code></td><td>starts a service when a connection arrives</td></tr>
+<tr><td>Mount / Automount</td><td><code>.mount</code></td><td>filesystem mount points</td></tr>
+<tr><td>Path</td><td><code>.path</code></td><td>triggers a service when a file/dir changes</td></tr>
+<tr><td>Device / Swap / Slice</td><td></td><td>hardware, swap space, cgroup resource groups</td></tr>
+</table></div>
+<p><b>Unit file locations</b> (highest priority first): <code>/etc/systemd/system/</code> (yours, admin overrides) → <code>/run/systemd/system/</code> (runtime) → <code>/usr/lib/systemd/system/</code> or <code>/lib/systemd/system/</code> (installed by packages; don’t edit these).</p>
+
+<h3 id="sd-ctl">systemctl: every command you need</h3>
+<div class="tw"><table>
+<tr><th>Command</th><th>What it does</th></tr>
+<tr><td><code>systemctl start nginx</code></td><td>start <b>now</b> (doesn’t survive a reboot)</td></tr>
+<tr><td><code>systemctl stop nginx</code></td><td>stop now (sends SIGTERM, then SIGKILL after a timeout, 90 s by default)</td></tr>
+<tr><td><code>systemctl restart nginx</code></td><td>stop + start (new process, brief downtime)</td></tr>
+<tr><td><code>systemctl reload nginx</code></td><td>tell the running process to <b>re-read its config</b> without stopping (only if the service supports it, usually via SIGHUP)</td></tr>
+<tr><td><code>systemctl reload-or-restart nginx</code></td><td>reload if supported, otherwise restart</td></tr>
+<tr><td><code>systemctl try-restart nginx</code></td><td>restart only if it is already running</td></tr>
+<tr><td><code>systemctl status nginx</code></td><td>state, PID, memory, cgroup, and the last log lines (see below)</td></tr>
+<tr><td><code>systemctl enable nginx</code></td><td>start automatically <b>at boot</b> (creates a symlink in <code>multi-user.target.wants/</code>). Does <b>not</b> start it now</td></tr>
+<tr><td><code>systemctl enable --now nginx</code></td><td>enable at boot <b>and</b> start now</td></tr>
+<tr><td><code>systemctl disable nginx</code> / <code>--now</code></td><td>don’t start at boot (removes the symlink) / and stop now</td></tr>
+<tr><td><code>systemctl is-active nginx</code></td><td>prints active/inactive/failed; exit code 0 if active (for scripts)</td></tr>
+<tr><td><code>systemctl is-enabled nginx</code></td><td>enabled / disabled / static / masked</td></tr>
+<tr><td><code>systemctl is-failed nginx</code></td><td>is it in the failed state?</td></tr>
+<tr><td><code>systemctl mask nginx</code> / <code>unmask</code></td><td>make it impossible to start, even manually or as a dependency (links the unit to <code>/dev/null</code>) / undo</td></tr>
+<tr><td><code>systemctl daemon-reload</code></td><td>re-read all unit files. <b>Required after creating or editing a unit file</b>, otherwise systemd keeps using the old version</td></tr>
+<tr><td><code>systemctl list-units --type=service</code></td><td>loaded and active services. <code>--all</code> includes inactive ones; <code>--state=running</code> / <code>--state=failed</code> filter</td></tr>
+<tr><td><code>systemctl --failed</code></td><td>all failed units: the first command after a bad boot</td></tr>
+<tr><td><code>systemctl list-unit-files --type=service</code></td><td>every installed unit file with its enable state</td></tr>
+<tr><td><code>systemctl cat nginx</code></td><td>print the unit file actually in use, including overrides</td></tr>
+<tr><td><code>systemctl show nginx -p MainPID,ActiveState,Restart</code></td><td>machine-readable properties</td></tr>
+<tr><td><code>systemctl edit nginx</code></td><td>create a <b>drop-in override</b> (<code>/etc/systemd/system/nginx.service.d/override.conf</code>) instead of editing the package file. <code>--full</code> edits a full copy</td></tr>
+<tr><td><code>systemctl list-dependencies nginx</code></td><td>dependency tree</td></tr>
+<tr><td><code>systemctl kill -s SIGKILL nginx</code></td><td>send a signal to all the service’s processes</td></tr>
+<tr><td><code>systemctl reset-failed</code></td><td>clear the failed state (after fixing)</td></tr>
+<tr><td><code>systemctl get-default</code> / <code>set-default multi-user.target</code></td><td>boot target (graphical vs text)</td></tr>
+<tr><td><code>systemctl isolate rescue.target</code></td><td>switch to another target now</td></tr>
+<tr><td><code>systemctl reboot</code> / <code>poweroff</code> / <code>suspend</code></td><td>power management</td></tr>
+<tr><td><code>systemctl list-timers</code></td><td>scheduled timers with next and last run times</td></tr>
+<tr><td><code>systemctl --user …</code></td><td>per-user services (no root)</td></tr>
+<tr><td><code>systemctl -H user@host status x</code></td><td>run on a remote host over SSH</td></tr>
+</table></div>
+<div class="key"><b>start vs enable</b>: start = now; enable = at next boot. <b>restart vs reload</b>: restart = new process; reload = same process re-reads its config. <b>disable vs mask</b>: disable = not at boot but still startable; mask = can’t be started at all. Edited a unit file → <b>daemon-reload</b>, then restart.</div>
+
+<h3 id="sd-status">Reading <code>systemctl status</code></h3>
+<pre>● murex-api.service - Murex pricing API
+     Loaded: loaded (/etc/systemd/system/murex-api.service; enabled; vendor preset: disabled)
+     Active: failed (Result: exit-code) since Wed 2026-11-11 09:12:04 EET; 3min ago
+    Process: 4211 ExecStart=/usr/bin/java -jar /opt/murex/api.jar (code=exited, status=1/FAILURE)
+   Main PID: 4211 (code=exited, status=1/FAILURE)
+        CPU: 2.104s
+
+Nov 11 09:12:03 srv01 java[4211]: Caused by: java.net.BindException: Address already in use
+Nov 11 09:12:04 srv01 systemd[1]: murex-api.service: Main process exited, code=exited, status=1/FAILURE
+Nov 11 09:12:04 srv01 systemd[1]: murex-api.service: Failed with result 'exit-code'.</pre>
+<div class="tw"><table>
+<tr><th>Line</th><th>How to read it</th></tr>
+<tr><td>● colour</td><td>green = active, white = inactive, red = failed</td></tr>
+<tr><td><b>Loaded</b></td><td>unit file path; <b>enabled/disabled</b> = starts at boot or not; vendor preset = the package’s default. “not-found” = typo in the name or missing file; “masked” = blocked</td></tr>
+<tr><td><b>Active</b></td><td><code>active (running)</code> OK · <code>active (exited)</code> a one-shot that finished fine · <code>activating (auto-restart)</code> crash loop · <code>inactive (dead)</code> stopped · <code>failed</code> with a <b>Result</b>: <code>exit-code</code> (non-zero exit), <code>signal</code> (killed, e.g. SIGKILL by the OOM killer), <code>timeout</code> (didn’t start/stop in time), <code>core-dump</code>, <code>start-limit-hit</code> (restarted too often)</td></tr>
+<tr><td>Main PID</td><td>the PID of the service process; <code>status=1/FAILURE</code> = its exit code</td></tr>
+<tr><td>Tasks / Memory / CPU</td><td>resource usage of the whole cgroup</td></tr>
+<tr><td>CGroup</td><td>tree of all processes belonging to the service</td></tr>
+<tr><td>Log lines</td><td>the last ~10 journal entries. Here the <b>root cause</b> is visible: <code>BindException: Address already in use</code> = another process holds the port → <code>ss -tlnp | grep 8080</code></td></tr>
+</table></div>
+
+<h3 id="sd-unit">Writing a unit file</h3>
+<pre># /etc/systemd/system/murex-api.service
+[Unit]
+Description=Murex pricing API
+Documentation=https://intranet/docs/api
+After=network-online.target oracle.service      <span class="c"># start ordering only</span>
+Wants=network-online.target                     <span class="c"># soft dependency (start it, don't fail if it fails)</span>
+Requires=oracle.service                         <span class="c"># hard dependency (if it fails/stops, we stop)</span>
+
+[Service]
+Type=simple                                     <span class="c"># main process = ExecStart, stays in foreground</span>
+User=murex
+Group=murex
+WorkingDirectory=/opt/murex
+Environment="JAVA_OPTS=-Xms512m -Xmx2g"
+EnvironmentFile=-/etc/murex/api.env             <span class="c"># "-" = OK if the file is missing</span>
+ExecStartPre=/opt/murex/bin/check-config.sh
+ExecStart=/usr/bin/java $JAVA_OPTS -jar /opt/murex/api.jar
+ExecReload=/bin/kill -HUP $MAINPID
+ExecStop=/opt/murex/bin/stop.sh
+Restart=on-failure                              <span class="c"># no | always | on-failure | on-abnormal</span>
+RestartSec=5
+TimeoutStartSec=120
+LimitNOFILE=65536                               <span class="c"># max open files (fixes "Too many open files")</span>
+StandardOutput=journal
+
+[Install]
+WantedBy=multi-user.target                      <span class="c"># "enable" hooks it into this target</span></pre>
+<div class="tw"><table>
+<tr><th>Directive</th><th>Meaning</th></tr>
+<tr><td><code>After=</code> / <code>Before=</code></td><td><b>ordering</b> only: start after X. Doesn’t pull X in</td></tr>
+<tr><td><code>Wants=</code></td><td>also start X; keep going if X fails</td></tr>
+<tr><td><code>Requires=</code></td><td>also start X; if X fails or stops, this unit stops too. Usually combined with <code>After=</code></td></tr>
+<tr><td><code>Type=simple</code></td><td>default: the ExecStart process <i>is</i> the service</td></tr>
+<tr><td><code>Type=forking</code></td><td>old-style daemon that forks into the background and exits (use <code>PIDFile=</code>)</td></tr>
+<tr><td><code>Type=oneshot</code></td><td>runs and finishes (scripts); often with <code>RemainAfterExit=yes</code></td></tr>
+<tr><td><code>Type=notify</code></td><td>the service tells systemd when it’s ready</td></tr>
+<tr><td><code>Restart=</code></td><td>when to restart automatically; <code>StartLimitBurst</code>/<code>StartLimitIntervalSec</code> stop endless crash loops</td></tr>
+<tr><td><code>User=</code></td><td>run as a non-root user (least privilege)</td></tr>
+<tr><td><code>WantedBy=</code></td><td>the target that should include it when enabled</td></tr>
+</table></div>
+<pre>sudo vi /etc/systemd/system/murex-api.service
+sudo systemctl daemon-reload
+sudo systemctl enable --now murex-api
+systemctl status murex-api
+journalctl -u murex-api -f</pre>
+
+<h3 id="sd-targets">Targets vs runlevels, and the boot process</h3>
+<div class="tw"><table>
+<tr><th>SysV runlevel</th><th>systemd target</th><th>State</th></tr>
+<tr><td>0</td><td><code>poweroff.target</code></td><td>shut down</td></tr>
+<tr><td>1 / S</td><td><code>rescue.target</code></td><td>single user, maintenance (root shell, minimal services)</td></tr>
+<tr><td>2, 3, 4</td><td><code>multi-user.target</code></td><td>multi-user, networking, <b>no GUI</b> (normal for servers)</td></tr>
+<tr><td>5</td><td><code>graphical.target</code></td><td>multi-user + GUI</td></tr>
+<tr><td>6</td><td><code>reboot.target</code></td><td>reboot</td></tr>
+<tr><td>—</td><td><code>emergency.target</code></td><td>even more minimal than rescue (root filesystem read-only)</td></tr>
+</table></div>
+<p><b>Boot sequence</b>: firmware (BIOS/UEFI, in ROM) → bootloader (GRUB) → kernel + initramfs → <b>systemd (PID 1)</b> → default target → services. <code>systemd-analyze</code> shows boot time; <code>systemd-analyze blame</code> lists the slowest units; <code>systemd-analyze critical-chain</code> shows the critical path.</p>
+
+<h3 id="sd-timer">Timers (systemd’s cron)</h3>
+<pre># /etc/systemd/system/backup.timer                # pairs with backup.service
+[Unit]
+Description=Nightly backup
+[Timer]
+OnCalendar=*-*-* 02:00:00        <span class="c"># every day 02:00   (Mon..Fri *-*-* 02:00 = weekdays)</span>
+Persistent=true                  <span class="c"># run at next boot if the machine was off at 02:00</span>
+[Install]
+WantedBy=timers.target</pre>
+<p><code>systemctl enable --now backup.timer</code> · <code>systemctl list-timers</code>. Other forms: <code>OnCalendar=hourly</code>, <code>daily</code>, <code>weekly</code>, <code>*-*-15 *:30:00</code> (minute 30 of every hour on the 15th) · <code>OnBootSec=5min</code> · <code>OnUnitActiveSec=1h</code>. Check syntax with <code>systemd-analyze calendar "Mon..Fri 02:00"</code>. Advantages over cron: logs in the journal, dependencies, catch-up after downtime, resource limits.</p>
+
+<h3 id="sd-journal">journalctl: reading logs</h3>
+<div class="tw"><table>
+<tr><th>Flag</th><th>Meaning</th></tr>
+<tr><td><code>journalctl</code></td><td>the whole journal, oldest first, in a pager</td></tr>
+<tr><td><code>-u nginx</code></td><td>logs of one unit (repeatable: <code>-u a -u b</code>)</td></tr>
+<tr><td><code>-f</code></td><td>follow live (like <code>tail -f</code>)</td></tr>
+<tr><td><code>-n 100</code></td><td>last 100 lines</td></tr>
+<tr><td><code>-e</code></td><td>jump to the end of the pager</td></tr>
+<tr><td><code>-r</code></td><td>reverse: newest first</td></tr>
+<tr><td><code>-b</code> / <code>-b -1</code> / <code>--list-boots</code></td><td>since the current boot / the previous boot (why did it crash before the reboot?) / list boots</td></tr>
+<tr><td><code>-p err</code></td><td>priority err and more severe. Levels: 0 emerg, 1 alert, 2 crit, <b>3 err</b>, 4 warning, 5 notice, 6 info, 7 debug. Range: <code>-p warning..err</code></td></tr>
+<tr><td><code>--since "2026-11-11 09:00" --until "2026-11-11 10:00"</code></td><td>time window; also <code>--since "1 hour ago"</code>, <code>--since today</code>, <code>yesterday</code></td></tr>
+<tr><td><code>-k</code> / <code>--dmesg</code></td><td>kernel messages only (hardware, OOM killer, disk errors)</td></tr>
+<tr><td><code>-x</code></td><td>add explanations from the message catalog</td></tr>
+<tr><td><code>-xe</code></td><td>explanations + jump to the end: the classic after a failed start (<code>journalctl -xeu nginx</code>)</td></tr>
+<tr><td><code>-o short-iso</code> / <code>json-pretty</code> / <code>cat</code> / <code>verbose</code></td><td>output format: ISO timestamps / JSON / message only / all fields</td></tr>
+<tr><td><code>--no-pager</code></td><td>print straight to stdout (pipe into grep)</td></tr>
+<tr><td><code>_PID=1234</code> · <code>_UID=1001</code> · <code>_COMM=java</code> · <code>SYSLOG_IDENTIFIER=x</code></td><td>filter by field</td></tr>
+<tr><td><code>-g "Exception"</code></td><td>grep inside messages (recent versions)</td></tr>
+<tr><td><code>--disk-usage</code> · <code>--vacuum-time=7d</code> · <code>--vacuum-size=500M</code></td><td>how much space logs use · delete entries older than 7 days / beyond 500 MB</td></tr>
+</table></div>
+<pre>journalctl -u murex-api --since "30 min ago" -p err --no-pager
+journalctl -k | grep -i "out of memory"       <span class="c"># was it killed by the OOM killer?</span>
+journalctl -b -1 -e                            <span class="c"># end of the previous boot</span>
+logger -p user.err "batch failed"              <span class="c"># write your own entry (shows in journalctl and /var/log/messages|syslog)</span></pre>
+<p>Persistent logs live in <code>/var/log/journal/</code> (otherwise in memory under <code>/run/log/journal</code>, lost at reboot). Classic text logs still exist: <code>/var/log/messages</code> (RHEL) or <code>/var/log/syslog</code> (Ubuntu), <code>/var/log/secure</code> / <code>auth.log</code> (logins, sudo), <code>/var/log/dmesg</code>, plus app logs in <code>/var/log/&lt;app&gt;/</code>. <b>logrotate</b> (<code>/etc/logrotate.d/</code>) rotates, compresses and deletes old logs.</p>
+
+<h3 id="sd-debug">Troubleshooting a service that won’t start</h3>
+<ol>
+<li><code>systemctl status app</code>: read Loaded (right file? enabled?) and Active (Result: exit-code / signal / timeout).</li>
+<li><code>journalctl -xeu app</code>: find the real error (stack trace, “permission denied”, “address already in use”, “no such file”).</li>
+<li>Check the usual causes:
+<ul>
+<li>Port in use: <code>ss -tlnp | grep :8080</code>.</li>
+<li>Wrong path or not executable: <code>ls -l</code> on the ExecStart binary, <code>chmod +x</code>.</li>
+<li>Permissions for the <code>User=</code>: <code>sudo -u murex ls /opt/murex</code>.</li>
+<li>Bad config syntax (<code>nginx -t</code>, <code>sshd -t</code>).</li>
+<li>Missing environment variables (systemd doesn’t read your <code>.bashrc</code>).</li>
+<li>A dependency down.</li>
+<li>Disk full: <code>df -h</code>.</li>
+<li>SELinux: <code>ausearch -m avc</code>.</li>
+</ul></li>
+<li>Run the ExecStart command by hand as that user to see the error directly.</li>
+<li>After fixing the unit file: <code>daemon-reload</code> → <code>reset-failed</code> → <code>restart</code> → <code>status</code>.</li>
+</ol>
+<div class="tw"><table>
+<tr><th>SysV (old)</th><th>systemd (new)</th></tr>
+<tr><td><code>service nginx start</code></td><td><code>systemctl start nginx</code></td></tr>
+<tr><td><code>service nginx status</code></td><td><code>systemctl status nginx</code></td></tr>
+<tr><td><code>chkconfig nginx on</code> / <code>update-rc.d nginx enable</code></td><td><code>systemctl enable nginx</code></td></tr>
+<tr><td><code>chkconfig --list</code></td><td><code>systemctl list-unit-files</code></td></tr>
+<tr><td><code>/etc/init.d/nginx restart</code></td><td><code>systemctl restart nginx</code></td></tr>
+<tr><td><code>init 3</code> / <code>runlevel</code></td><td><code>systemctl isolate multi-user.target</code> / <code>systemctl get-default</code></td></tr>
+<tr><td><code>tail -f /var/log/messages</code></td><td><code>journalctl -f</code></td></tr>
+</table></div>
+<p>Other systemd tools: <code>hostnamectl</code> (hostname, OS, kernel, virtualization), <code>timedatectl</code> (time zone, NTP sync), <code>localectl</code> (language, keyboard), <code>loginctl</code> (sessions), <code>systemd-cgtop</code> (resources per service).</p>
+
+<h3 id="sd-info">System information commands, with their output explained</h3>
+<div class="tw"><table>
+<tr><th>Command</th><th>Shows</th></tr>
+<tr><td><code>uname -a</code></td><td>all: kernel name, hostname, kernel release, kernel version/build date, architecture, OS. “Which UNIX/kernel version?” → <code>uname</code></td></tr>
+<tr><td><code>uname -s</code> · <code>-n</code> · <code>-r</code> · <code>-v</code> · <code>-m</code> · <code>-o</code></td><td>kernel name (Linux) · hostname · kernel release (<code>5.14.0-362.el9.x86_64</code>) · kernel build version · machine architecture (<code>x86_64</code>, <code>aarch64</code>) · operating system (GNU/Linux)</td></tr>
+<tr><td><code>cat /etc/os-release</code> · <code>hostnamectl</code> · <code>lsb_release -a</code> · <code>cat /etc/redhat-release</code></td><td>the <b>distribution</b> name and version (Rocky 9.3, Ubuntu 22.04). uname gives the kernel, not the distro</td></tr>
+<tr><td><code>hostname</code> · <code>hostname -f</code> · <code>hostname -I</code></td><td>short name · fully qualified domain name · IP addresses</td></tr>
+<tr><td><code>uptime</code></td><td><code>10:05:01 up 12 days, 3:14, 2 users, load average: 0.52, 0.71, 0.80</code> → current time, time since boot, logged-in users, load over 1/5/15 min. Compare the load with the CPU count (<code>nproc</code>): load 8 on 4 cores = overloaded</td></tr>
+<tr><td><code>cat /proc/loadavg</code></td><td>the same load numbers + running/total processes + last PID</td></tr>
+<tr><td><code>w</code> · <code>who</code> · <code>last</code> · <code>lastb</code> · <code>id</code> · <code>whoami</code></td><td>who is logged in and what they run · logged-in users · login history and reboots · failed logins · uid/gid/groups · username</td></tr>
+<tr><td><code>lscpu</code> · <code>nproc</code> · <code>cat /proc/cpuinfo</code></td><td>CPU model, cores, threads, sockets, caches, virtualization · number of usable CPUs · raw per-core details</td></tr>
+<tr><td><code>free -h</code> · <code>cat /proc/meminfo</code></td><td>RAM/swap summary · detailed memory counters</td></tr>
+<tr><td><code>vmstat 1 5</code></td><td>5 samples, 1 s apart. Columns: <code>r</code> runnable processes (&gt; CPUs = CPU-bound) · <code>b</code> blocked on I/O · <code>swpd</code> swap used · <code>free buff cache</code> memory · <b><code>si so</code></b> swap in/out (non-zero = memory pressure) · <code>bi bo</code> blocks in/out (disk I/O) · <code>in cs</code> interrupts, context switches · <code>us sy id wa st</code> CPU split (wa = I/O wait)</td></tr>
+<tr><td><code>iostat -x 1</code></td><td>per-disk stats: <code>r/s w/s</code> operations per second · <code>await</code> average ms per I/O (high = slow disk) · <b><code>%util</code></b> how busy the disk is (~100% = saturated)</td></tr>
+<tr><td><code>sar -u</code> / <code>-r</code> / <code>-d</code></td><td>historical CPU / memory / disk stats (sysstat), to see what happened at 3 a.m.</td></tr>
+<tr><td><code>lsblk</code> · <code>blkid</code> · <code>fdisk -l</code></td><td>disks and partitions as a tree · UUIDs and filesystem types · partition tables</td></tr>
+<tr><td><code>mount</code> · <code>findmnt</code> · <code>cat /etc/fstab</code></td><td>what is mounted where · the same as a tree · mounts done at boot</td></tr>
+<tr><td><code>lspci</code> · <code>lsusb</code> · <code>dmidecode</code> · <code>lshw</code></td><td>PCI devices (network cards, GPUs) · USB devices · BIOS/hardware info (serial number, RAM slots) · full hardware list</td></tr>
+<tr><td><code>dmesg -T</code> / <code>dmesg -w</code></td><td>kernel ring buffer with readable timestamps / follow. Look for disk errors, network link down, “Out of memory: Killed process”</td></tr>
+<tr><td><code>ulimit -a</code> · <code>ulimit -n</code></td><td>per-process limits · max open files (often 1024, too low for servers → “Too many open files”)</td></tr>
+<tr><td><code>sysctl -a</code> · <code>sysctl vm.swappiness</code></td><td>kernel parameters</td></tr>
+<tr><td><code>getconf LONG_BIT</code> · <code>arch</code></td><td>32- or 64-bit · architecture</td></tr>
+<tr><td><code>date</code> · <code>timedatectl</code></td><td>current time · time zone and NTP sync (wrong time breaks TLS, Kerberos and log correlation)</td></tr>
+<tr><td><code>/proc/&lt;PID&gt;/</code></td><td>per-process info: <code>cmdline</code>, <code>environ</code>, <code>status</code> (memory, threads), <code>fd/</code> (open files), <code>limits</code></td></tr>
+<tr><td><code>java -version</code> · <code>which java</code> · <code>echo $JAVA_HOME</code></td><td>Java runtime in use (version mismatches cause <code>UnsupportedClassVersionError</code>)</td></tr>
+</table></div>
+<div class="tip">“Give me a quick health check of this server” → <code>uptime</code> (load) · <code>free -h</code> (memory) · <code>df -h</code> (disk) · <code>top</code> (top processes) · <code>systemctl --failed</code> (broken services) · <code>journalctl -p err -b</code> (errors since boot) · <code>dmesg -T | tail</code> (kernel issues) · <code>ss -tulnp</code> (what is listening).</div>
+</section>
 <section class="topic" id="bash">
-<h2><span class="num">2</span>Bash scripting</h2>
+<h2><span class="num">4</span>Bash scripting</h2>
 <p class="lead">The crash-analysis section shows short scripts and asks what happens. Know the variable rules and the “errors don’t stop the script” trap.</p>
 
 <h3 id="bash-basics">Script basics &amp; variables</h3>
@@ -421,7 +1051,7 @@ false &amp;&amp; echo A || echo B                       <span class="c"># → B<
 echo $(( 7 / 2 ))   <span class="c"># → 3  (bash arithmetic is integer only)</span></pre>
 </section>
 <section class="topic" id="git">
-<h2><span class="num">3</span>Git</h2>
+<h2><span class="num">5</span>Git</h2>
 <p class="lead">Expect command-meaning MCQs (reset, rebase, squash) and a “trace these commands” question.</p>
 
 <h3 id="git-model">The model: four places your code lives</h3>
@@ -529,8 +1159,358 @@ their version
 <p><b>Branching strategies</b>: GitFlow (main, develop, feature/*, release/*, hotfix/*) · trunk-based (short-lived branches into main) · feature branches + PRs.</p>
 </section>
 
+<section class="topic" id="gitdeep">
+<h2><span class="num">6</span>Git deep dive: flags, scenarios, traces &amp; tricks</h2>
+<p class="lead">Everything needed to trace any sequence of Git commands in your head: how Git stores things, what every common flag does, the revision syntax, 23 real-world scenarios with the exact fix, 10 exam-style trace drills, and pro tricks.</p>
+
+<h3 id="gd-internals">How Git actually stores your work</h3>
+<ul>
+<li><code>.git/</code> holds the whole repository. Delete it and the folder is no longer a repo; the files stay.</li>
+<li>Four object types, each named by a SHA-1 hash of its content: <b>blob</b> (file content), <b>tree</b> (a directory: names → blobs/trees), <b>commit</b> (a tree snapshot + parent commit(s) + author + message), <b>tag</b> (annotated tag). Same content = same hash, so Git stores each version once.</li>
+<li>A <b>commit is a full snapshot</b>, not a diff. Diffs are computed when you ask.</li>
+<li>A <b>branch</b> is just a file (<code>.git/refs/heads/main</code>) containing one commit hash. Creating a branch is instant and costs 41 bytes. Committing moves the current branch forward.</li>
+<li><b>HEAD</b> (<code>.git/HEAD</code>) normally contains <code>ref: refs/heads/main</code>, i.e. which branch you’re on. <b>Detached HEAD</b> = HEAD contains a commit hash directly (after <code>git checkout &lt;sha&gt;</code> or a tag).</li>
+<li><b>Remote-tracking branches</b> (<code>origin/main</code>) are your local memory of where the remote’s branches were at the last <code>fetch</code>. You can’t commit on them.</li>
+</ul>
+<div class="tw"><table>
+<tr><th>The three trees</th><th>What it is</th><th>Changed by</th></tr>
+<tr><td><b>Working directory</b></td><td>the actual files you edit</td><td>your editor, <code>checkout</code>/<code>restore</code>, <code>reset --hard</code>, <code>stash</code></td></tr>
+<tr><td><b>Index / staging area</b></td><td>the proposed next commit (<code>.git/index</code>)</td><td><code>add</code>, <code>rm</code>, <code>restore --staged</code>, <code>reset</code> (mixed/hard)</td></tr>
+<tr><td><b>HEAD</b></td><td>the last commit on the current branch</td><td><code>commit</code>, <code>reset</code> (all modes), <code>checkout</code>/<code>switch</code>, <code>merge</code>, <code>rebase</code></td></tr>
+</table></div>
+<p><b>File life cycle</b>: <i>untracked</i> → (<code>add</code>) → <i>staged</i> → (<code>commit</code>) → <i>unmodified</i> → (edit) → <i>modified</i> → (<code>add</code>) → <i>staged</i> … ; <code>git rm --cached</code> returns a file to untracked.</p>
+<h4>Reading <code>git status -s</code> (short format)</h4>
+<div class="tw"><table>
+<tr><th>Code</th><th>Meaning</th></tr>
+<tr><td><code>??</code></td><td>untracked</td></tr>
+<tr><td><code>A&nbsp;</code></td><td>new file, staged</td></tr>
+<tr><td><code>M&nbsp;</code> (left column)</td><td>modified and <b>staged</b></td></tr>
+<tr><td><code>&nbsp;M</code> (right column)</td><td>modified, <b>not staged</b></td></tr>
+<tr><td><code>MM</code></td><td>staged, then modified again (the index and working dir differ)</td></tr>
+<tr><td><code>D&nbsp;</code> / <code>&nbsp;D</code></td><td>deleted, staged / unstaged</td></tr>
+<tr><td><code>R&nbsp;</code></td><td>renamed (staged)</td></tr>
+<tr><td><code>UU</code></td><td>conflict: both sides modified (unmerged)</td></tr>
+<tr><td><code>!!</code></td><td>ignored (with <code>--ignored</code>)</td></tr>
+</table></div>
+<p>Left column = index vs HEAD; right column = working dir vs index. <code>git status -sb</code> adds the branch and ahead/behind counts: <code>## main...origin/main [ahead 2, behind 1]</code>.</p>
+
+<h3 id="gd-setup">Setup, staging &amp; committing: every flag</h3>
+<div class="tw"><table>
+<tr><th>Command + flag</th><th>What it does</th></tr>
+<tr><td><code>git init</code> / <code>git init dir</code></td><td>create a repo here / in a new folder <code>dir</code> (you are <b>not</b> moved into it; you still need <code>cd dir</code>)</td></tr>
+<tr><td><code>git init -b main</code> / <code>--bare</code></td><td>name the first branch / a repo with no working dir (used as a server/remote)</td></tr>
+<tr><td><code>git clone url [dir]</code></td><td>copy a repo, set up <code>origin</code>, and check out the default branch</td></tr>
+<tr><td><code>clone --depth 1</code> / <code>-b dev</code> / <code>--single-branch</code></td><td>shallow (latest snapshot only) / check out branch dev / fetch only that branch</td></tr>
+<tr><td><code>git config --global user.name "…"</code> / <code>user.email</code></td><td>identity stamped on commits. Scopes: <code>--system</code> (all users) &lt; <code>--global</code> (you, <code>~/.gitconfig</code>) &lt; <code>--local</code> (this repo, <code>.git/config</code>, wins)</td></tr>
+<tr><td><code>git config --list --show-origin</code></td><td>all settings and which file sets them</td></tr>
+<tr><td><code>git config --global alias.st "status -sb"</code></td><td>create <code>git st</code></td></tr>
+<tr><td><code>git config --global pull.rebase true</code> / <code>core.editor vim</code> / <code>init.defaultBranch main</code> / <code>core.autocrlf input</code></td><td>pull with rebase / editor for messages / default branch name / line-ending conversion (Windows CRLF vs Linux LF)</td></tr>
+<tr><td><code>git add file</code></td><td>stage that file’s current content (a snapshot: later edits need another add)</td></tr>
+<tr><td><code>git add .</code></td><td>stage new, modified and deleted files <b>in this directory and below</b></td></tr>
+<tr><td><code>git add -A</code></td><td>stage everything in the whole repo (new + modified + deleted)</td></tr>
+<tr><td><code>git add -u</code></td><td>stage modified and deleted <b>tracked</b> files only (no new files)</td></tr>
+<tr><td><code>git add -p</code></td><td>interactively choose hunks (y/n/s split/e edit): commit part of a file</td></tr>
+<tr><td><code>git add -n</code> / <code>-f</code></td><td>dry run / force-add an ignored file</td></tr>
+<tr><td><code>git commit</code></td><td>record the <b>index</b> as a new commit (opens the editor for a message)</td></tr>
+<tr><td><code>git commit -m "msg"</code></td><td>message inline (several <code>-m</code> = several paragraphs)</td></tr>
+<tr><td><code>git commit -a</code> / <code>-am "msg"</code></td><td>automatically stage <b>modified and deleted tracked files</b>, then commit. <b>New untracked files are NOT included</b></td></tr>
+<tr><td><code>git commit --amend</code></td><td>replace the last commit with a new one (new hash) including what’s staged now; edit the message</td></tr>
+<tr><td><code>--amend --no-edit</code></td><td>amend, keeping the message (add a forgotten file)</td></tr>
+<tr><td><code>--amend --author="Name &lt;mail&gt;"</code></td><td>fix the author</td></tr>
+<tr><td><code>git commit -v</code> / <code>--allow-empty</code> / <code>-s</code> / <code>--fixup=&lt;sha&gt;</code></td><td>show the diff in the editor / commit with no changes (trigger CI) / add Signed-off-by / mark as a fix for an older commit (squashed later with <code>rebase -i --autosquash</code>)</td></tr>
+<tr><td><code>git rm file</code> / <code>-r dir</code></td><td>delete from the working dir <b>and</b> stage the deletion</td></tr>
+<tr><td><code>git rm --cached file</code></td><td>stop tracking (remove from the index) but <b>keep the file on disk</b>. Used for committed secrets and build output</td></tr>
+<tr><td><code>git mv old new</code></td><td>rename and stage (= mv + git rm + git add)</td></tr>
+<tr><td><code>git restore file</code></td><td>discard unstaged changes (working dir ← index). <b>Irreversible</b></td></tr>
+<tr><td><code>git restore --staged file</code></td><td>unstage (index ← HEAD); your edits stay in the working dir</td></tr>
+<tr><td><code>git restore --source=HEAD~2 file</code></td><td>bring back a file’s content from 2 commits ago</td></tr>
+<tr><td><code>git checkout -- file</code></td><td>old syntax for <code>git restore file</code></td></tr>
+<tr><td><code>git clean -n</code> / <code>-f</code> / <code>-fd</code> / <code>-fdx</code> / <code>-i</code></td><td>preview / delete untracked files / and untracked dirs / and ignored files too / interactive. Irreversible</td></tr>
+</table></div>
+<h4>.gitignore patterns</h4>
+<pre>*.log            <span class="c"># any .log file anywhere</span>
+!keep.log        <span class="c"># exception: track this one</span>
+/build           <span class="c"># only build at the repo root</span>
+target/          <span class="c"># any directory named target</span>
+**/tmp           <span class="c"># tmp directory at any depth</span>
+.env             <span class="c"># secrets</span>
+*.class          <span class="c"># compiled Java</span></pre>
+<div class="trap">.gitignore only affects <b>untracked</b> files. A file already committed stays tracked even if added to .gitignore. Fix: <code>git rm --cached file</code> + commit. <code>git check-ignore -v file</code> tells you which rule ignores it.</div>
+
+<h3 id="gd-inspect">Inspecting: log, show, diff, blame, grep</h3>
+<div class="tw"><table>
+<tr><th>Command + flag</th><th>What it does</th></tr>
+<tr><td><code>git log</code></td><td>commits of the current branch, newest first (hash, author, date, message)</td></tr>
+<tr><td><code>--oneline</code></td><td>one line per commit (short hash + subject)</td></tr>
+<tr><td><code>--graph --all --decorate</code></td><td>ASCII branch graph, all branches, branch/tag labels. <code>git log --oneline --graph --all</code> is the best way to “see” a repo</td></tr>
+<tr><td><code>-n 5</code> / <code>-5</code></td><td>last 5 commits</td></tr>
+<tr><td><code>-p</code> / <code>--stat</code> / <code>--name-only</code></td><td>with the full diff / with files changed and +/- counts / file names only</td></tr>
+<tr><td><code>--author="Mohamad"</code> / <code>--since="2 weeks ago"</code> / <code>--until</code></td><td>filter by author / date</td></tr>
+<tr><td><code>--grep="JIRA-123"</code></td><td>filter by commit message</td></tr>
+<tr><td><code>-S "functionName"</code></td><td>“pickaxe”: commits that added or removed this string (find when code appeared/vanished)</td></tr>
+<tr><td><code>-- path/file</code> / <code>--follow file</code></td><td>only commits touching that file / follow it across renames</td></tr>
+<tr><td><code>--merges</code> / <code>--no-merges</code> / <code>--first-parent</code></td><td>only merge commits / exclude them / follow only the main line</td></tr>
+<tr><td><code>main..feature</code></td><td>commits in feature that aren’t in main (“what will this merge bring?”)</td></tr>
+<tr><td><code>origin/main..HEAD</code></td><td>local commits not pushed yet</td></tr>
+<tr><td><code>--pretty=format:"%h %an %ar %s"</code></td><td>custom format: short hash, author, relative date, subject</td></tr>
+<tr><td><code>git shortlog -sn</code></td><td>commit count per author</td></tr>
+<tr><td><code>git show &lt;sha&gt;</code></td><td>one commit’s metadata + diff. <code>git show HEAD~1:src/App.java</code> = that file as it was then. <code>--stat</code> summary only</td></tr>
+<tr><td><code>git diff</code></td><td>working dir vs <b>index</b> (unstaged changes only)</td></tr>
+<tr><td><code>git diff --staged</code> / <code>--cached</code></td><td>index vs HEAD: exactly what <code>commit</code> will record</td></tr>
+<tr><td><code>git diff HEAD</code></td><td>working dir vs last commit (staged + unstaged)</td></tr>
+<tr><td><code>git diff A B</code> / <code>A..B</code></td><td>snapshot A vs snapshot B (branches or commits)</td></tr>
+<tr><td><code>git diff A...B</code></td><td>changes on B since it diverged from A (what a PR shows)</td></tr>
+<tr><td><code>--name-only</code> / <code>--name-status</code> / <code>--stat</code> / <code>--word-diff</code> / <code>-- file</code></td><td>file names / with A/M/D status / summary / inline word changes / limit to a file</td></tr>
+<tr><td><code>git blame file</code> / <code>-L 40,60</code></td><td>who last changed each line, in which commit / only lines 40–60</td></tr>
+<tr><td><code>git grep "pattern"</code></td><td>search tracked files (faster than grep -r, respects the repo)</td></tr>
+<tr><td><code>git reflog</code></td><td>local history of where HEAD pointed: every commit, checkout, reset, rebase. Kept ~90 days. Your safety net</td></tr>
+</table></div>
+
+<h3 id="gd-branch">Branching &amp; switching: every flag</h3>
+<div class="tw"><table>
+<tr><th>Command + flag</th><th>What it does</th></tr>
+<tr><td><code>git branch</code></td><td>list local branches (<code>*</code> = current)</td></tr>
+<tr><td><code>-a</code> / <code>-r</code> / <code>-v</code> / <code>-vv</code></td><td>local + remote / remote only / with last commit / plus upstream and ahead/behind</td></tr>
+<tr><td><code>git branch name</code></td><td>create a branch at HEAD. <b>You stay on the current branch</b></td></tr>
+<tr><td><code>git branch name &lt;sha&gt;</code></td><td>create a branch at a specific commit</td></tr>
+<tr><td><code>git branch -d name</code></td><td>delete if fully merged (safe); error “not fully merged” otherwise</td></tr>
+<tr><td><code>git branch -D name</code></td><td>force delete. Fails for the branch you are on, and for a name that doesn’t exist (“branch not found”)</td></tr>
+<tr><td><code>git branch -m new</code> / <code>-m old new</code> / <code>-M</code></td><td>rename current / rename another / force rename</td></tr>
+<tr><td><code>git branch --merged</code> / <code>--no-merged</code></td><td>branches already merged into HEAD (safe to delete) / not merged</td></tr>
+<tr><td><code>git branch -u origin/dev</code></td><td>set the upstream (tracking) branch</td></tr>
+<tr><td><code>git branch -f main &lt;sha&gt;</code></td><td>move a branch pointer (not the current one)</td></tr>
+<tr><td><code>git switch name</code> / <code>git checkout name</code></td><td>move HEAD to the branch and update the index and working dir to its snapshot</td></tr>
+<tr><td><code>git switch -c name</code> / <code>git checkout -b name</code></td><td>create <b>and</b> switch</td></tr>
+<tr><td><code>git switch -c name origin/name</code></td><td>create a local branch tracking a remote one (just <code>git switch name</code> does it automatically if it exists on origin)</td></tr>
+<tr><td><code>git switch -C name</code> / <code>checkout -B</code></td><td>create or reset a branch to here, then switch</td></tr>
+<tr><td><code>git switch -</code> / <code>git checkout -</code></td><td>go back to the previous branch</td></tr>
+<tr><td><code>git checkout &lt;sha&gt;</code> / <code>git switch --detach &lt;sha&gt;</code></td><td>detached HEAD: look at an old version. Commits made here belong to no branch</td></tr>
+</table></div>
+<div class="key">When switching, <b>uncommitted changes travel with you</b> if the files are identical in both branches. If the switch would overwrite your uncommitted changes, Git <b>refuses</b> (“Your local changes would be overwritten by checkout… Please commit or stash them”). <b>Untracked</b> files are left alone (unless the target branch tracks a file with the same name). Files tracked in the old branch but absent from the new one are removed from disk, and come back when you switch back.</div>
+
+<h3 id="gd-integrate">Merge, rebase, cherry-pick: flags and pictures</h3>
+<pre><span class="c">Before:       main:    A---B                 feature branched at B, main moved on? (two cases)</span>
+                              \
+                   feature:    C---D
+
+<span class="c">1) main did NOT move → git switch main; git merge feature = FAST-FORWARD (pointer moves, no new commit)</span>
+   main, feature:  A---B---C---D
+
+<span class="c">2) main has E → git merge feature = THREE-WAY MERGE (new merge commit M with two parents)</span>
+   main:     A---B---E-------M
+                  \         /
+   feature:        C-------D
+
+<span class="c">3) git switch feature; git rebase main = REPLAY C and D on top of E as new commits C' D'</span>
+   main:     A---B---E
+                      \
+   feature:            C'---D'        <span class="c">(then merging into main is a fast-forward → linear history)</span>
+
+<span class="c">4) git switch main; git merge --squash feature; git commit = one new commit S with all of C+D</span>
+   main:     A---B---E---S             <span class="c">(feature's commits are not in main's history)</span></pre>
+<div class="tw"><table>
+<tr><th>Command + flag</th><th>What it does</th></tr>
+<tr><td><code>git merge feature</code></td><td>integrate feature into the <b>current</b> branch (fast-forward if possible, otherwise a merge commit)</td></tr>
+<tr><td><code>--no-ff</code></td><td>always create a merge commit (keeps the feature visible as a group)</td></tr>
+<tr><td><code>--ff-only</code></td><td>merge only if a fast-forward is possible, otherwise fail</td></tr>
+<tr><td><code>--squash</code></td><td>apply all of feature’s changes to the index as one change, no commit, no merge link; you then <code>git commit</code></td></tr>
+<tr><td><code>-m "msg"</code> / <code>--no-commit</code></td><td>merge commit message / stop before committing</td></tr>
+<tr><td><code>--abort</code> / <code>--continue</code></td><td>cancel a conflicted merge (back to before) / finish after resolving</td></tr>
+<tr><td><code>-X ours</code> / <code>-X theirs</code></td><td>on conflicting hunks, automatically prefer our / their side</td></tr>
+<tr><td><code>git rebase main</code></td><td>replay the current branch’s unique commits on top of main (new hashes)</td></tr>
+<tr><td><code>git rebase -i HEAD~3</code></td><td>interactive: edit the last 3 commits. In the editor, per line: <code>pick</code> keep · <code>reword</code> change message · <code>edit</code> stop to amend · <b><code>squash</code></b> meld into previous, combining messages · <code>fixup</code> meld, discarding this message · <code>drop</code> delete · reorder lines to reorder commits</td></tr>
+<tr><td><code>--continue</code> / <code>--skip</code> / <code>--abort</code></td><td>after fixing a conflict / skip this commit / return to the original state</td></tr>
+<tr><td><code>--autosquash</code></td><td>automatically place <code>fixup!</code> commits next to their target</td></tr>
+<tr><td><code>git rebase --onto main old-base feature</code></td><td>move a branch from one base to another</td></tr>
+<tr><td><code>git pull --rebase</code></td><td>fetch, then rebase your local commits on top (no merge bubbles)</td></tr>
+<tr><td><code>git cherry-pick &lt;sha&gt;</code></td><td>copy one commit’s changes onto the current branch as a new commit</td></tr>
+<tr><td><code>cherry-pick A..B</code> / <code>-x</code> / <code>-n</code> / <code>--continue</code> / <code>--abort</code></td><td>a range (excluding A) / append “cherry picked from” to the message / apply without committing / after a conflict / cancel</td></tr>
+</table></div>
+<div class="tw"><table>
+<tr><th></th><th>merge</th><th>rebase</th><th>merge --squash</th></tr>
+<tr><td>History</td><td>true, non-linear, merge commits</td><td>linear, rewritten (new hashes)</td><td>one commit, the feature’s individual commits are lost from main</td></tr>
+<tr><td>Safe on shared/pushed branches?</td><td><b>yes</b></td><td><b>no</b> (rewrites published commits)</td><td>yes (on the target)</td></tr>
+<tr><td>Conflicts</td><td>resolved once</td><td>possibly once per replayed commit</td><td>once</td></tr>
+<tr><td>Use</td><td>integrating shared branches</td><td>updating your private feature branch, cleaning history before a PR</td><td>clean one-commit-per-feature main</td></tr>
+</table></div>
+<h4>Conflicts in detail</h4>
+<pre>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD                  <span class="c"># "ours"</span>
+timeout = 30
+=======
+timeout = 60
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; feature               <span class="c"># "theirs"</span></pre>
+<ol><li><code>git status</code> lists conflicted files (<code>UU</code>).</li><li>Edit each file to the final content and delete the markers (or <code>git checkout --ours file</code> / <code>--theirs file</code> to take one side entirely).</li><li><code>git add file</code> marks it resolved.</li><li><code>git commit</code> (merge) or <code>git rebase --continue</code> / <code>git cherry-pick --continue</code>. To give up: <code>--abort</code>.</li></ol>
+<div class="trap">During a <b>rebase</b>, “ours” and “theirs” are <b>swapped</b>: “ours” is the branch you’re rebasing <i>onto</i> (main) and “theirs” is your own commit being replayed. During a merge, “ours” = your current branch.</div>
+
+<h3 id="gd-undo">Undoing: reset, revert, restore, stash, reflog</h3>
+<div class="tw"><table>
+<tr><th>Command</th><th>Moves branch/HEAD</th><th>Index</th><th>Working dir</th><th>Typical use</th></tr>
+<tr><td><code>git reset --soft HEAD~1</code></td><td>back 1</td><td>unchanged: changes stay <b>staged</b></td><td>unchanged</td><td>redo the last commit (new message, squash)</td></tr>
+<tr><td><code>git reset HEAD~1</code> (<code>--mixed</code>)</td><td>back 1</td><td>reset: changes become <b>unstaged</b></td><td>unchanged</td><td>undo the commit and re-pick what to stage</td></tr>
+<tr><td><code>git reset --hard HEAD~1</code></td><td>back 1</td><td>reset</td><td><b>reset: changes destroyed</b></td><td>throw away the last commit completely</td></tr>
+<tr><td><code>git reset --hard</code></td><td>stays</td><td>reset</td><td>reset</td><td>discard all uncommitted changes to tracked files</td></tr>
+<tr><td><code>git reset --hard origin/main</code></td><td>to the remote</td><td>reset</td><td>reset</td><td>make local exactly match the remote</td></tr>
+<tr><td><code>git reset file</code></td><td>—</td><td>file unstaged</td><td>unchanged</td><td>old way to unstage (= <code>restore --staged</code>)</td></tr>
+<tr><td><code>git reset --keep HEAD~1</code></td><td>back 1</td><td>reset</td><td>keeps your uncommitted changes, aborts if they conflict</td><td>safer hard reset</td></tr>
+</table></div>
+<ul>
+<li><b><code>git revert &lt;sha&gt;</code></b> creates a <b>new</b> commit that applies the inverse of that commit. History is preserved, so it’s <b>safe on pushed/shared branches</b>. <code>-n</code> = don’t commit yet; <code>git revert HEAD~3..HEAD</code> = revert several; <b><code>git revert -m 1 &lt;merge-sha&gt;</code></b> = revert a merge commit, keeping parent 1 (the main line).</li>
+<li><b>reset</b> rewrites history (moves the branch pointer back): fine for local commits, dangerous for pushed ones. <b>revert</b> adds history.</li>
+<li><b><code>git stash</code></b> (= <code>stash push</code>) saves tracked modifications (staged + unstaged) and cleans the working dir.
+  <code>-u</code> also untracked files · <code>-a</code> also ignored · <code>-m "msg"</code> label · <code>-p</code> pick hunks · <code>git stash push file</code> only that file.
+  <code>list</code> (stash@{0} = newest) · <code>show -p stash@{1}</code> view · <code>apply</code> re-apply and <b>keep</b> in the list · <code>pop</code> re-apply and <b>remove</b> (kept if it conflicts) · <code>drop</code> delete one · <code>clear</code> delete all · <code>git stash branch newb</code> create a branch from a stash.</li>
+<li><b><code>git reflog</code></b>: <code>HEAD@{0}</code> now, <code>HEAD@{1}</code> before the last move… Recover anything committed: <code>git reset --hard HEAD@{1}</code> or <code>git branch rescue &lt;sha&gt;</code>. Uncommitted changes destroyed by <code>reset --hard</code> or <code>restore</code> are <b>not</b> recoverable.</li>
+</ul>
+
+<h3 id="gd-remote">Remotes, fetch, pull, push, tags: every flag</h3>
+<div class="tw"><table>
+<tr><th>Command + flag</th><th>What it does</th></tr>
+<tr><td><code>git remote -v</code></td><td>list remotes with fetch/push URLs</td></tr>
+<tr><td><code>git remote add origin url</code> / <code>remove</code> / <code>rename</code> / <code>set-url origin newurl</code></td><td>manage remotes</td></tr>
+<tr><td><code>git remote show origin</code></td><td>remote branches, tracking setup, stale branches</td></tr>
+<tr><td><code>git fetch</code> / <code>origin</code> / <code>--all</code></td><td>download new commits and update <code>origin/*</code>. <b>Never changes your branches or files</b></td></tr>
+<tr><td><code>git fetch --prune</code></td><td>also delete <code>origin/x</code> refs for branches deleted on the server</td></tr>
+<tr><td><code>git pull</code></td><td><code>fetch</code> + <code>merge</code> of the upstream into the current branch</td></tr>
+<tr><td><code>git pull --rebase</code> / <code>--ff-only</code></td><td>fetch + rebase your local commits on top / only if a fast-forward is possible</td></tr>
+<tr><td><code>git push</code></td><td>upload the current branch to its upstream</td></tr>
+<tr><td><code>git push -u origin feature</code></td><td>push and set the upstream, so later plain <code>git push</code>/<code>pull</code> work</td></tr>
+<tr><td><code>git push origin local:remote</code></td><td>push a local branch to a differently named remote branch</td></tr>
+<tr><td><code>git push origin --delete feature</code> (= <code>origin :feature</code>)</td><td>delete a remote branch</td></tr>
+<tr><td><code>git push --force</code> / <code>-f</code></td><td>overwrite the remote branch even if it has commits you don’t have (destroys others’ work)</td></tr>
+<tr><td><code>git push --force-with-lease</code></td><td>force only if the remote is still where you last saw it; refuses if someone pushed in the meantime</td></tr>
+<tr><td><code>git push --tags</code> / <code>origin v1.2</code></td><td>push all tags / one tag (tags are not pushed by default)</td></tr>
+<tr><td><code>git tag</code> / <code>-l "v1.*"</code></td><td>list tags</td></tr>
+<tr><td><code>git tag v1.0</code></td><td>lightweight tag (just a pointer)</td></tr>
+<tr><td><code>git tag -a v1.0 -m "Release 1.0"</code></td><td>annotated tag (its own object: tagger, date, message). Use for releases</td></tr>
+<tr><td><code>git tag -d v1.0</code> · <code>git push origin --delete v1.0</code></td><td>delete locally · remotely</td></tr>
+<tr><td><code>git describe --tags</code></td><td>nearest tag + commits since (<code>v1.0-5-g3a1b2c</code>)</td></tr>
+</table></div>
+<p><b>“Rejected: non-fast-forward / fetch first”</b> means the remote has commits you don’t. Fix: <code>git pull --rebase</code> (or pull), resolve conflicts, then push. Don’t force-push a shared branch.</p>
+
+<h3 id="gd-rev">Revision syntax</h3>
+<div class="tw"><table>
+<tr><th>Syntax</th><th>Meaning</th></tr>
+<tr><td><code>HEAD</code></td><td>the current commit</td></tr>
+<tr><td><code>HEAD~1</code> / <code>HEAD~</code> / <code>HEAD~3</code></td><td>1st parent / same / 3 generations back along first parents</td></tr>
+<tr><td><code>HEAD^</code> / <code>HEAD^2</code></td><td>first parent / <b>second</b> parent (only for merge commits: the branch that was merged in)</td></tr>
+<tr><td><code>main~2</code>, <code>v1.0^</code>, <code>a1b2c3d</code></td><td>works on any branch, tag or (abbreviated, ≥ 4 chars) hash</td></tr>
+<tr><td><code>HEAD@{1}</code> / <code>main@{yesterday}</code></td><td>reflog: where HEAD was 1 move ago / where main was yesterday</td></tr>
+<tr><td><code>@{u}</code> / <code>@{upstream}</code></td><td>the upstream of the current branch (<code>git log @{u}..</code> = unpushed commits)</td></tr>
+<tr><td><code>A..B</code></td><td>commits reachable from B but not from A</td></tr>
+<tr><td><code>A...B</code></td><td>log: commits in either but not both · diff: changes on B since the common ancestor</td></tr>
+<tr><td><code>sha:path</code></td><td>a file at a commit: <code>git show HEAD~2:pom.xml</code></td></tr>
+</table></div>
+
+<h3 id="gd-scen">23 real scenarios: situation → exact fix</h3>
+<div class="tw"><table>
+<tr><th>#</th><th>Situation</th><th>Fix</th></tr>
+<tr><td>1</td><td>Typo in the last commit message (not pushed)</td><td><code>git commit --amend -m "correct message"</code></td></tr>
+<tr><td>2</td><td>Forgot to include a file in the last commit</td><td><code>git add forgotten.java</code> → <code>git commit --amend --no-edit</code></td></tr>
+<tr><td>3</td><td>Undo the last commit but keep the changes staged</td><td><code>git reset --soft HEAD~1</code></td></tr>
+<tr><td>4</td><td>Undo the last commit, keep the changes unstaged</td><td><code>git reset HEAD~1</code></td></tr>
+<tr><td>5</td><td>Throw away the last commit and its changes entirely</td><td><code>git reset --hard HEAD~1</code></td></tr>
+<tr><td>6</td><td>Discard all uncommitted changes (and new files)</td><td><code>git restore .</code> (or <code>git reset --hard</code>) + <code>git clean -fd</code> (preview with <code>-n</code> first)</td></tr>
+<tr><td>7</td><td>Discard changes in one file</td><td><code>git restore file</code></td></tr>
+<tr><td>8</td><td>Staged a file by mistake</td><td><code>git restore --staged file</code></td></tr>
+<tr><td>9</td><td>A bad commit is already pushed to a shared branch</td><td><code>git revert &lt;sha&gt;</code> → <code>git push</code> (no history rewrite)</td></tr>
+<tr><td>10</td><td>Did <code>reset --hard</code> and lost commits</td><td><code>git reflog</code> → find the hash → <code>git reset --hard HEAD@{n}</code> or <code>git branch rescue &lt;sha&gt;</code></td></tr>
+<tr><td>11</td><td>Committed to main instead of a feature branch (not pushed)</td><td><code>git branch feature</code> (keeps the commit there) → <code>git reset --hard HEAD~1</code> (main back) → <code>git switch feature</code></td></tr>
+<tr><td>12</td><td>Need to switch branches but have half-done work</td><td><code>git stash -u</code> → <code>git switch other</code> … → <code>git switch -</code> → <code>git stash pop</code> (or commit “WIP” and amend later)</td></tr>
+<tr><td>13</td><td>Committed a secret (<code>.env</code>)</td><td><code>git rm --cached .env</code>, add <code>.env</code> to .gitignore, commit. It is <b>still in history</b>: rotate the secret; purge with <code>git filter-repo</code>/BFG + force push if needed</td></tr>
+<tr><td>14</td><td>.gitignore doesn’t ignore a file</td><td>It was already tracked: <code>git rm --cached file</code> + commit</td></tr>
+<tr><td>15</td><td>Squash my last 3 commits before a PR</td><td><code>git rebase -i HEAD~3</code> (mark 2nd and 3rd as <code>squash</code>/<code>fixup</code>) or <code>git reset --soft HEAD~3 &amp;&amp; git commit -m "feature X"</code></td></tr>
+<tr><td>16</td><td>Push rejected (remote has new commits)</td><td><code>git pull --rebase</code> → resolve conflicts → <code>git push</code></td></tr>
+<tr><td>17</td><td>Need one hotfix commit from main in the release branch</td><td><code>git switch release-2.1</code> → <code>git cherry-pick -x &lt;sha&gt;</code></td></tr>
+<tr><td>18</td><td>Update my feature branch with the latest main</td><td>Private branch: <code>git fetch</code> → <code>git rebase origin/main</code>. Shared branch: <code>git merge origin/main</code></td></tr>
+<tr><td>19</td><td>Merge conflict, I want to stop</td><td><code>git merge --abort</code> (or <code>rebase --abort</code>)</td></tr>
+<tr><td>20</td><td>Made commits in detached HEAD</td><td><code>git switch -c save-work</code> before leaving (or find them later with reflog)</td></tr>
+<tr><td>21</td><td>Find which commit introduced a bug</td><td><code>git bisect start</code> → <code>git bisect bad</code> → <code>git bisect good v1.0</code> → test each checkout and answer good/bad (or <code>git bisect run ./test.sh</code>) → <code>git bisect reset</code>. A binary search over commits</td></tr>
+<tr><td>22</td><td>Delete a branch locally and remotely; rename a branch</td><td><code>git branch -d f</code> + <code>git push origin --delete f</code> · rename: <code>git branch -m old new</code> → <code>git push origin -u new</code> → <code>git push origin --delete old</code></td></tr>
+<tr><td>23</td><td>Revert a merge commit that broke main</td><td><code>git revert -m 1 &lt;merge-sha&gt;</code> (keep parent 1 = main’s side)</td></tr>
+</table></div>
+
+<h3 id="gd-trace">Trace drills (exam style), with answers</h3>
+<p>Method: keep a small table of <b>branch → commit → file content</b>, plus <b>index</b> and <b>working dir</b>. Update it after each command. Ask: is the file tracked? staged? committed? on which branch?</p>
+<h4>Drill 1: branch without switching</h4>
+<pre>git init; echo A &gt; f; git add f; git commit -m c1     <span class="c"># master: c1 (f=A)</span>
+git branch dev                                         <span class="c"># dev → c1, still on master</span>
+echo B &gt;&gt; f; git commit -am c2                         <span class="c"># master: c2 (f=A,B); dev still c1</span>
+git switch dev; cat f</pre>
+<p><b>Answer</b>: <code>A</code>. dev was created at c1, and c2 was committed on master.</p>
+<h4>Drill 2: <code>commit -a</code> and new files</h4>
+<pre>echo x &gt; new.txt            <span class="c"># untracked</span>
+echo y &gt;&gt; f                 <span class="c"># tracked, modified</span>
+git commit -am "update"</pre>
+<p><b>Answer</b>: only <code>f</code> is committed; <code>new.txt</code> stays untracked (<code>??</code>). <code>-a</code> stages tracked files only. If <code>new.txt</code> were the <i>only</i> change: “nothing added to commit but untracked files present”.</p>
+<h4>Drill 3: uncommitted changes travel across branches</h4>
+<pre><span class="c"># master and dev both at c1 (f=A), working dir clean</span>
+echo B &gt;&gt; f                 <span class="c"># modify, don't commit</span>
+git switch dev; cat f</pre>
+<p><b>Answer</b>: <code>A B</code>. f is identical in both branch snapshots, so Git keeps your modification in the working dir. If f differed between master and dev, the switch would be <b>refused</b> (“local changes would be overwritten”).</p>
+<h4>Drill 4: a file committed only on one branch</h4>
+<pre>git switch -c feat
+echo hi &gt; feat.txt; git add feat.txt; git commit -m feat
+git switch master; ls</pre>
+<p><b>Answer</b>: <code>feat.txt</code> is <b>gone</b> from the working dir (master’s snapshot doesn’t have it). Switching back to feat brings it back.</p>
+<h4>Drill 5: the three resets</h4>
+<pre><span class="c"># commits: c1 (f=1) → c2 (f=2) → c3 (f=3), HEAD at c3, clean</span>
+git reset --soft  HEAD~2   <span class="c"># HEAD=c1 · index f=3 · working f=3 · status: f staged (modified)</span>
+git reset --mixed HEAD~2   <span class="c"># HEAD=c1 · index f=1 · working f=3 · status: f modified, not staged</span>
+git reset --hard  HEAD~2   <span class="c"># HEAD=c1 · index f=1 · working f=1 · status: clean; c2, c3 only in reflog</span></pre>
+<h4>Drill 6: revert vs reset</h4>
+<pre><span class="c"># c1 (f=1) → c2 (f=2)</span>
+git revert HEAD</pre>
+<p><b>Answer</b>: a new commit c3 is created with f=1. <code>git log --oneline</code> shows 3 commits (c3 “Revert …”, c2, c1). With <code>reset --hard HEAD~1</code> instead, the log would show only c1.</p>
+<h4>Drill 7: fast-forward or not?</h4>
+<pre><span class="c"># main at c1; feature has c2, c3 on top of c1</span>
+git switch main; git merge feature        <span class="c"># → "Fast-forward": main = c3, no merge commit</span>
+<span class="c"># if main had its own commit c4 first → merge commit M(c4, c3); log --graph shows a diamond</span></pre>
+<h4>Drill 8: stash round-trip</h4>
+<pre>echo change &gt;&gt; f; git stash; cat f       <span class="c"># original content (working dir clean)</span>
+git stash list                            <span class="c"># stash@{0}: WIP on main: …</span>
+git stash pop; cat f                      <span class="c"># "change" is back; stash list empty</span></pre>
+<h4>Drill 9: delete an unmerged branch</h4>
+<pre>git switch -c exp; echo t &gt; t; git add t; git commit -m t
+git switch main
+git branch -d exp      <span class="c"># error: The branch 'exp' is not fully merged</span>
+git branch -D exp      <span class="c"># deleted (commit only reachable via reflog now)</span>
+git branch -D main     <span class="c"># error if you're on main: cannot delete the branch you are on</span></pre>
+<h4>Drill 10: the 2026 paper’s trap</h4>
+<pre>mkdir murex_test
+git init murex_test               <span class="c"># repo created INSIDE murex_test, you're still outside it</span>
+git checkout -b murex             <span class="c"># as written → "not a git repository" (assume cd murex_test for the rest)</span>
+echo "MUREX ROCKS" &gt; mymurexfile   <span class="c"># untracked</span>
+touch mymurexfile                 <span class="c"># only updates the timestamp</span>
+git commit -am "..."              <span class="c"># nothing committed: the file is untracked; no commits exist yet</span>
+git add mymurexfile               <span class="c"># staged (line 1)</span>
+echo "MUREX ALWAYS ROCKS" &gt;&gt; mymurexfile   <span class="c"># working dir has 2 lines, index has 1</span>
+git branch                        <span class="c"># prints nothing (unborn branch)</span>
+git diff murex master             <span class="c"># error: unknown revision</span>
+git push origin master            <span class="c"># error: no remote / src refspec master does not match any</span>
+git branch -D murex               <span class="c"># error: branch 'murex' not found</span></pre>
+<p><b>Answer</b>: the file is in <b>neither</b> branch (no commit was ever made). It exists only in the working dir; only the first line is staged.</p>
+
+<h3 id="gd-tricks">Tricks &amp; good practice</h3>
+<ul>
+<li><code>git log --oneline --graph --all --decorate</code>: alias it (<code>git config --global alias.lg "log --oneline --graph --all --decorate"</code>).</li>
+<li>Always run <code>git diff --staged</code> before committing, and <code>git status</code> before and after anything risky.</li>
+<li><code>git add -p</code> to make small, focused commits; <code>git commit --fixup=&lt;sha&gt;</code> + <code>git rebase -i --autosquash</code> to fix older commits cleanly.</li>
+<li><code>git switch -</code> toggles between the last two branches.</li>
+<li><code>git stash -u</code> when untracked files must be saved too; name your stashes with <code>-m</code>.</li>
+<li><code>git push --force-with-lease</code>, never plain <code>--force</code>, and never on main/shared branches.</li>
+<li><code>git pull --rebase</code> (or <code>pull.rebase=true</code>) avoids pointless merge commits.</li>
+<li><code>git restore --source=&lt;sha&gt; file</code> recovers an old version of one file without moving branches.</li>
+<li><code>git reflog</code> before panicking: committed work is almost never truly lost.</li>
+<li><code>git clean -n</code> before <code>-f</code>; <code>git reset --hard</code> and <code>git restore</code> destroy uncommitted work for good.</li>
+<li>Good commit messages: imperative subject ≤ 50 chars (“Fix NPE in trade pricing”), a blank line, then why. Reference the ticket (JIRA-123).</li>
+<li><b>Workflows</b>: feature branches + pull requests with code review and CI checks · <b>GitFlow</b> (main = production, develop = integration, feature/*, release/*, hotfix/* merged into both main and develop) · <b>trunk-based</b> (short-lived branches, feature flags).</li>
+<li><code>git worktree add ../hotfix release-2.1</code>: a second working directory on another branch, without stashing.</li>
+<li><code>git rerere</code> (<code>rerere.enabled=true</code>) remembers how you resolved a conflict and reapplies it.</li>
+<li>Submodules (<code>git submodule update --init --recursive</code>) embed another repo at a fixed commit.</li>
+</ul>
+</section>
 <section class="topic" id="net">
-<h2><span class="num">4</span>Networking</h2>
+<h2><span class="num">7</span>Networking</h2>
 <p class="lead">IP addressing and subnet math, the layers, protocols and ports, HTTP status codes, and how to read connection errors.</p>
 
 <h3 id="net-osi">OSI and TCP/IP models</h3>
@@ -653,7 +1633,7 @@ their version
 </table></div>
 </section>
 <section class="topic" id="sql">
-<h2><span class="num">5</span>SQL &amp; databases</h2>
+<h2><span class="num">8</span>SQL &amp; databases</h2>
 <p class="lead">Written queries (joins + GROUP BY + HAVING + ORDER BY), CREATE TABLE with constraints, and MCQs on indexes, triggers, joins and DBMS theory.</p>
 
 <h3 id="sql-cat">Command categories &amp; data types</h3>
@@ -952,7 +1932,7 @@ COMMIT;                <span class="c">-- or ROLLBACK;   SAVEPOINT s1; ROLLBACK 
 </ul>
 </section>
 <section class="topic" id="java">
-<h2><span class="num">6</span>Java — crash &amp; code analysis</h2>
+<h2><span class="num">9</span>Java — crash &amp; code analysis</h2>
 <p class="lead">“What is the output?”, “Does it compile?”, “What causes this exception?”. Decide <b>compile-time vs runtime</b> first, then trace carefully.</p>
 
 <h3 id="java-platform">Platform basics</h3>
@@ -1133,7 +2113,7 @@ Caused by: ...                                                  <span class="c">
 </section>
 
 <section class="topic" id="c">
-<h2><span class="num">7</span>C — compilation &amp; crash analysis</h2>
+<h2><span class="num">10</span>C — compilation &amp; crash analysis</h2>
 
 <h3 id="c-compile">From source to executable</h3>
 <pre>prog.c ──preprocessor──▶ prog.i ──compiler──▶ prog.s ──assembler──▶ prog.o ──linker──▶ prog (executable)
@@ -1193,7 +2173,7 @@ RDB_Read(...) / RDBPosition(...) / DBX_Position(...)              <span class="c
 </section>
 
 <section class="topic" id="trouble">
-<h2><span class="num">8</span>Troubleshooting &amp; log analysis</h2>
+<h2><span class="num">11</span>Troubleshooting &amp; log analysis</h2>
 <p class="lead">Open questions like “the app is slow”, “checkout crashes”, “status 403 in logs”. Answer with a structured method and real commands.</p>
 
 <h3 id="tr-method">The method</h3>
@@ -1247,7 +2227,7 @@ RDB_Read(...) / RDBPosition(...) / DBX_Position(...)              <span class="c
 <p><b>Log levels</b>: TRACE &lt; DEBUG &lt; INFO &lt; WARN &lt; ERROR &lt; FATAL. Logs live in <code>/var/log/</code>, app dirs, or <code>journalctl</code>. Correlate by timestamp and request/trade ID across components.</p>
 </section>
 <section class="topic" id="test">
-<h2><span class="num">9</span>Software testing</h2>
+<h2><span class="num">12</span>Software testing</h2>
 <p class="lead">One of the five official test areas — and core to Murex’s QA and Technical Analyst roles. Definitions, techniques, coverage math, bug handling.</p>
 
 <h3 id="t-life">Lifecycle &amp; fundamentals</h3>
@@ -1359,7 +2339,7 @@ Expected: results page in &lt; 2 s; all results relevant; name/price/image shown
 </section>
 
 <section class="topic" id="pa">
-<h2><span class="num">10</span>Problem analysis: pseudo-code, decision trees, algorithms</h2>
+<h2><span class="num">13</span>Problem analysis: pseudo-code, decision trees, algorithms</h2>
 
 <h3 id="pa-trace">Tracing pseudo-code &amp; decision trees</h3>
 <div class="tip">Make a table with one column per variable and one row per step/iteration. Never trace in your head. Watch for: loop bounds (<code>to 5</code> inclusive? <code>&lt; n</code> or <code>&lt;= n</code>?), integer division, <code>%</code>, operator precedence, variables updated before/after use.</div>
@@ -1484,7 +2464,7 @@ return -1;</pre>
 </section>
 
 <section class="topic" id="hw">
-<h2><span class="num">11</span>Hardware, OS, virtualization, cloud &amp; DevOps</h2>
+<h2><span class="num">14</span>Hardware, OS, virtualization, cloud &amp; DevOps</h2>
 
 <h3 id="hw-hw">Hardware basics</h3>
 <ul>
@@ -1580,7 +2560,7 @@ CMD ["java", "-jar", "app.jar"]</pre>
 </section>
 
 <section class="topic" id="paper2">
-<h2><span class="num">12</span>Extra concepts from the 2026 Assessment paper</h2>
+<h2><span class="num">15</span>Extra concepts from the 2026 Assessment paper</h2>
 <p class="lead">Topics the second paper asks about that the first one didn’t: web storage, Python, JVM internals, security, hypervisors, ISTQB test theory, more SQL syntax, and algorithmic pseudo-code.</p>
 
 <h3 id="p2-web">Web: localStorage, sessionStorage, cookies, JSON</h3>
@@ -1715,7 +2695,7 @@ while i &lt; j: swap(a[i], a[j]); i++; j--      <span class="c"># O(n) time, O(1
 </section>
 
 <section class="topic" id="cheat">
-<h2><span class="num">13</span>Last-hour cheat sheet</h2>
+<h2><span class="num">16</span>Last-hour cheat sheet</h2>
 <div class="grid2">
 <div>
 <h4>Linux one-liners</h4>
