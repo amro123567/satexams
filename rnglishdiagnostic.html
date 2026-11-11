@@ -1,0 +1,2283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Amro Academy – SAT Reading &amp; Writing Diagnostic</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<style>
+/* =========================================================
+   THEME
+   ========================================================= */
+:root{
+  --sky:#87CEEB; --sky-light:#e8f6fc; --sky-soft:#cdebf7; --sky-dark:#3a9fd1; --sky-deep:#1d6a96;
+  --ink:#1b1b1b; --muted:#5f6b75; --line:#d5dde3; --bg:#ffffff;
+  --green:#1e8e3e; --green-bg:#e6f4ea; --red:#c5221f; --red-bg:#fce8e6; --amber:#b06000;
+  --radius:10px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{font-family:"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;color:var(--ink);background:var(--bg);display:flex;flex-direction:column;min-height:100vh}
+button{font-family:inherit;cursor:pointer}
+button:disabled{cursor:not-allowed;opacity:.55}
+
+/* ---------- Top bar ---------- */
+.topbar{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:12px;padding:10px 20px;background:var(--sky-light);border-bottom:1px solid var(--sky-soft)}
+.tb-left{display:flex;align-items:center;gap:12px;min-width:0}
+.tb-left img{height:44px;width:auto;border-radius:6px}
+.brand{font-weight:700;font-size:15px;color:var(--sky-deep);white-space:nowrap}
+.sec-label{font-size:14px;color:var(--ink);margin-top:2px}
+.tb-center{display:flex;flex-direction:column;align-items:center}
+.timer{font-size:22px;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:.5px}
+.timer.low{color:var(--red)}
+.link-btn{background:none;border:1px solid var(--line);border-radius:14px;font-size:12px;padding:2px 12px;margin-top:3px;color:var(--ink)}
+.link-btn:hover{border-color:var(--sky-dark)}
+.tb-right{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end}
+.tool-btn{background:#fff;border:1px solid var(--line);border-radius:8px;padding:7px 12px;font-size:13px;font-weight:600;color:var(--ink)}
+.tool-btn:hover:not(:disabled){border-color:var(--sky-dark);background:var(--sky-light)}
+.tool-btn.primary{background:var(--sky-dark);border-color:var(--sky-dark);color:#fff}
+.tool-btn.primary:hover:not(:disabled){background:var(--sky-deep)}
+.tool-btn.danger{color:var(--red)}
+.tool-btn.success{background:var(--green);border-color:var(--green);color:#fff}
+
+/* ---------- Module tabs ---------- */
+.module-tabs{display:flex;align-items:center;gap:6px;padding:8px 20px 0}
+.module-tabs .tab{border:1px solid var(--line);border-bottom:none;background:#f6f8fa;padding:8px 18px;border-radius:8px 8px 0 0;font-weight:600;font-size:14px;color:var(--muted)}
+.module-tabs .tab.active{background:var(--sky);color:#0c3a52;border-color:var(--sky)}
+.status-pill{margin-left:auto;font-size:12px;font-weight:600;padding:4px 10px;border-radius:12px;background:#f1f3f4;color:var(--muted)}
+.status-pill.ok{background:var(--green-bg);color:var(--green)}
+.dash-line{height:0;border-top:3px dashed var(--sky);margin:0 0 0}
+
+/* ---------- Main ---------- */
+main{flex:1;overflow:auto;padding:0 0 24px}
+.wrap{max-width:1180px;margin:0 auto;padding:0 20px}
+.q-wrap{display:grid;grid-template-columns:1fr;gap:0;margin-top:20px}
+.q-wrap.spr{grid-template-columns:minmax(260px,1fr) 1.3fr}
+.spr-dir{padding:4px 28px 20px 4px;border-right:3px solid var(--sky-soft);font-size:14.5px;line-height:1.6}
+.spr-dir h3{margin:4px 0 10px;font-size:16px}
+.spr-dir ul{padding-left:18px;margin:0 0 12px}
+.spr-dir li{margin-bottom:6px}
+.ex-table{border-collapse:collapse;width:100%;font-size:13.5px;margin-top:6px}
+.ex-table th,.ex-table td{border:1px solid var(--line);padding:6px 8px;text-align:left}
+.ex-table th{background:var(--sky-light)}
+.q-main{max-width:760px;width:100%;margin:0 auto;padding:0 4px}
+.q-wrap.spr .q-main{padding-left:28px;margin:0}
+.q-head{display:flex;align-items:center;gap:10px;background:#eef1f4;border-bottom:2px dashed #9aa5ad;padding:0 8px 0 0;margin-bottom:18px;min-height:40px}
+.q-num{background:#111;color:#fff;font-weight:700;min-width:40px;height:40px;display:flex;align-items:center;justify-content:center;font-size:17px}
+.flag-btn,.hint-btn{background:none;border:none;font-size:14px;font-weight:600;display:flex;align-items:center;gap:6px;padding:6px 8px;border-radius:6px;color:var(--ink)}
+.flag-btn:hover,.hint-btn:hover{background:#e1e6ea}
+.flag-btn.on{color:#b3261e}
+.flag-icon{display:inline-block;width:14px;height:16px}
+.hint-btn{color:var(--sky-deep);border:1px solid var(--sky);background:#fff}
+.hint-btn:hover{background:var(--sky-light)}
+.hint-btn.on{background:var(--sky);color:#0c3a52}
+.spacer{flex:1}
+.abc-btn{border:1px solid #444;background:#fff;border-radius:5px;padding:3px 6px;font-size:13px;font-weight:700;text-decoration:line-through}
+.abc-btn.on{background:var(--sky-deep);color:#fff;border-color:var(--sky-deep)}
+.q-text{font-size:17px;line-height:1.7;margin-bottom:20px}
+.q-text .katex-display{margin:.6em 0}
+.data-table{border-collapse:collapse;margin:12px auto;font-size:15px}
+.data-table th,.data-table td{border:1px solid #8b959c;padding:6px 14px;text-align:center}
+.data-table thead th{background:var(--sky-light)}
+
+/* ---------- Choices ---------- */
+.choices{display:flex;flex-direction:column;gap:12px}
+.choice-row{display:flex;align-items:center;gap:10px}
+.choice{flex:1;display:flex;align-items:center;gap:14px;text-align:left;background:#fff;border:1.5px solid #5f6b75;border-radius:var(--radius);padding:12px 14px;font-size:16px;color:var(--ink);transition:background .12s,border-color .12s;position:relative}
+.choice:hover:not(:disabled){border-color:var(--sky-dark);background:var(--sky-light)}
+.choice .letter{flex:none;width:28px;height:28px;border:1.5px solid #333;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px}
+.choice.selected{border:3px solid var(--sky-dark);background:var(--sky-light);padding:10.5px 12.5px}
+.choice.selected .letter{background:var(--sky-dark);border-color:var(--sky-dark);color:#fff}
+.choice:disabled{opacity:1;cursor:default}
+.choice.eliminated,.choice.eliminated:disabled{opacity:.45}
+.choice.eliminated::after{content:"";position:absolute;left:-6px;right:-6px;top:50%;border-top:2px solid #222}
+.choice.correct{border:3px solid var(--green);background:var(--green-bg);padding:10.5px 12.5px}
+.choice.correct .letter{background:var(--green);border-color:var(--green);color:#fff}
+.choice.wrong{border:3px solid var(--red);background:var(--red-bg);padding:10.5px 12.5px}
+.choice.wrong .letter{background:var(--red);border-color:var(--red);color:#fff}
+.tag{margin-left:auto;font-size:12px;font-weight:700;padding:2px 8px;border-radius:10px;white-space:nowrap}
+.tag.g{background:var(--green);color:#fff}.tag.r{background:var(--red);color:#fff}
+.elim-btn{flex:none;width:30px;height:30px;border-radius:50%;border:1.5px solid #333;background:#fff;font-weight:700;font-size:13px;text-decoration:line-through;position:relative}
+.elim-btn:hover{background:#f1f1f1}
+.elim-undo{flex:none;background:none;border:none;text-decoration:underline;font-weight:700;font-size:13px;width:44px}
+
+/* ---------- SPR ---------- */
+.spr-input{width:200px;font-size:20px;padding:10px 12px;border:1.5px solid #5f6b75;border-radius:8px;border-bottom:3px solid #222;font-family:inherit}
+.spr-input:focus{outline:none;border-color:var(--sky-dark);box-shadow:0 0 0 3px var(--sky-soft)}
+.spr-input:disabled{background:#f6f8fa}
+.spr-input.correct{border-color:var(--green);background:var(--green-bg)}
+.spr-input.wrong{border-color:var(--red);background:var(--red-bg)}
+.preview{margin-top:12px;font-size:15px;color:var(--muted);min-height:34px}
+.preview b{color:var(--ink)}
+.preview .pv{font-size:20px;color:var(--ink);margin-left:6px}
+
+/* ---------- Tools under question ---------- */
+.q-tools{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-top:24px;padding-top:14px;border-top:1px solid var(--line)}
+.timer-btn{background:#fff;border:1.5px solid var(--sky-dark);color:var(--sky-deep);border-radius:20px;padding:6px 16px;font-weight:600;font-size:14px}
+.timer-btn.running{background:var(--sky-dark);color:#fff}
+.q-clock{font-variant-numeric:tabular-nums;font-weight:700;font-size:16px}
+.q-clock-label{font-size:13px;color:var(--muted)}
+.hint-box{margin-top:16px;background:var(--sky-light);border:1px solid var(--sky);border-left:5px solid var(--sky-dark);border-radius:8px;padding:12px 16px;font-size:15px;line-height:1.6}
+.hint-box .hint{margin-bottom:8px}
+.hint-box .hint b{color:var(--sky-deep)}
+.small-btn{background:#fff;border:1px solid var(--sky-dark);color:var(--sky-deep);border-radius:6px;padding:4px 10px;font-size:13px;font-weight:600}
+.review-box{margin-top:16px;border-radius:8px;padding:12px 16px;font-size:15px;line-height:1.6;border:1px solid var(--line);background:#fafbfc}
+.status-badge{display:inline-block;font-weight:700;padding:4px 12px;border-radius:14px;margin-bottom:8px}
+.status-badge.correct{background:var(--green-bg);color:var(--green)}
+.status-badge.wrong{background:var(--red-bg);color:var(--red)}
+.status-badge.unanswered{background:#fef7e0;color:var(--amber)}
+.ans-g{color:var(--green);font-weight:700}.ans-r{color:var(--red);font-weight:700}
+
+/* ---------- Results panel ---------- */
+.results{margin-top:18px;border:1px solid var(--sky);border-radius:12px;background:linear-gradient(180deg,var(--sky-light),#fff 120px);padding:16px 20px}
+.results-head{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.results-head h2{margin:0;font-size:20px;color:var(--sky-deep)}
+.big-score{font-size:30px;font-weight:800}
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin:14px 0}
+.stat{background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.stat .k{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px}
+.stat .v{font-size:20px;font-weight:700;margin-top:2px}
+.rtable{width:100%;border-collapse:collapse;font-size:13.5px;background:#fff}
+.rtable th,.rtable td{border:1px solid var(--line);padding:6px 8px;text-align:left}
+.rtable th{background:var(--sky-light)}
+.rtable tr.clickable{cursor:pointer}
+.rtable tr.clickable:hover td{background:var(--sky-light)}
+.res-correct{color:var(--green);font-weight:700}.res-wrong{color:var(--red);font-weight:700}.res-unanswered{color:var(--amber);font-weight:700}
+details summary{cursor:pointer;font-weight:600;margin:10px 0 8px;color:var(--sky-deep)}
+.table-scroll{overflow-x:auto}
+
+/* ---------- Bottom bar ---------- */
+.bottombar{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px;padding:10px 20px;border-top:3px dashed var(--sky);background:var(--sky-light)}
+.student{font-weight:600;font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.nav-pill{background:#111;color:#fff;border:none;border-radius:8px;padding:9px 18px;font-weight:700;font-size:14px}
+.nav-pill:hover{background:#333}
+.bb-right{display:flex;gap:10px;justify-content:flex-end}
+.nav-btn{background:var(--sky-dark);color:#fff;border:none;border-radius:22px;padding:10px 26px;font-weight:700;font-size:15px}
+.nav-btn:hover:not(:disabled){background:var(--sky-deep)}
+
+/* ---------- Modals ---------- */
+.overlay{position:fixed;inset:0;background:rgba(10,30,45,.45);display:none;align-items:center;justify-content:center;z-index:50;padding:16px}
+.overlay.open{display:flex}
+.modal{background:#fff;border-radius:14px;max-width:640px;width:100%;max-height:88vh;overflow:auto;box-shadow:0 20px 50px rgba(0,0,0,.25)}
+.modal.wide{max-width:820px}
+.modal-head{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px solid var(--line);background:var(--sky-light);position:sticky;top:0}
+.modal-head h3{margin:0;font-size:18px}
+.x-btn{background:none;border:none;font-size:24px;line-height:1;color:var(--muted)}
+.modal-body{padding:18px 20px;font-size:15px;line-height:1.6}
+.modal-foot{display:flex;gap:10px;justify-content:flex-end;padding:12px 20px;border-top:1px solid var(--line)}
+.name-input{width:100%;font-size:17px;padding:10px 12px;border:1.5px solid var(--line);border-radius:8px;margin-top:8px}
+.name-input:focus{outline:none;border-color:var(--sky-dark)}
+.nav-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(44px,1fr));gap:10px;margin:14px 0}
+.nav-cell{position:relative;height:44px;border:2px dashed #555;background:#fff;font-weight:700;font-size:15px;border-radius:4px;color:var(--sky-deep)}
+.nav-cell.answered{border:2px solid var(--sky-dark);background:var(--sky-dark);color:#fff}
+.nav-cell.current{outline:3px solid #111;outline-offset:2px}
+.nav-cell.flagged::after{content:"";position:absolute;top:-7px;right:-7px;width:14px;height:14px;background:#b3261e;clip-path:polygon(0 0,100% 30%,0 60%)}
+.nav-cell.c{background:var(--green);border:2px solid var(--green);color:#fff}
+.nav-cell.w{background:var(--red);border:2px solid var(--red);color:#fff}
+.nav-cell.u{background:#fef7e0;border:2px solid var(--amber);color:var(--amber)}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:13px;color:var(--muted)}
+.legend span{display:flex;align-items:center;gap:6px}
+.lg{width:16px;height:16px;border-radius:3px;display:inline-block}
+.ref-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.ref-item{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:#fbfdfe}
+.ref-item b{display:block;margin-bottom:4px;color:var(--sky-deep)}
+.list-q{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 14px}
+.chip{border:1px solid var(--sky-dark);background:#fff;color:var(--sky-deep);border-radius:14px;padding:3px 10px;font-size:13px;font-weight:600}
+.msg{padding:10px 12px;border-radius:8px;margin-top:10px;font-weight:600}
+.msg.ok{background:var(--green-bg);color:var(--green)}
+.msg.err{background:var(--red-bg);color:var(--red)}
+.msg.info{background:var(--sky-light);color:var(--sky-deep)}
+.toast{position:fixed;top:84px;left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:12px 20px;border-radius:10px;z-index:60;font-weight:600;display:none;max-width:90vw;text-align:center}
+.toast.show{display:block}
+
+/* ---------- Question timer (top bar) ---------- */
+.q-head{flex-wrap:wrap;row-gap:6px}
+.qtimer{display:inline-flex;align-items:center;gap:7px;border:1.5px solid var(--sky-dark);background:#fff;color:var(--sky-deep);border-radius:18px;padding:5px 12px;font-weight:700;font-size:13.5px;line-height:1}
+.qtimer:hover:not(:disabled){background:var(--sky-light)}
+.qtimer .qt-clock{font-variant-numeric:tabular-nums;font-size:14px;padding-left:7px;border-left:1.5px solid currentColor;opacity:.9}
+.qtimer.running{background:var(--sky-dark);color:#fff}
+.qtimer.running:hover{background:var(--sky-deep)}
+.qtimer.running .qt-dot{width:8px;height:8px;border-radius:50%;background:#fff;animation:qtblink 1s steps(2) infinite}
+.qtimer.idle{animation:qtpulse 1.8s ease-in-out infinite}
+@keyframes qtpulse{0%,100%{box-shadow:0 0 0 0 rgba(58,159,209,.5)}50%{box-shadow:0 0 0 7px rgba(58,159,209,0)}}
+@keyframes qtblink{50%{opacity:.2}}
+.qtimer kbd{font:600 11px inherit;border:1px solid currentColor;border-radius:4px;padding:1px 4px;opacity:.7}
+.qtimer.running kbd{display:none}
+
+/* ---------- Reading and Writing passages ---------- */
+.passage{font-size:16.5px;line-height:1.75}
+.passage p{margin:0 0 12px}
+.passage ul{margin:6px 0 0;padding-left:20px}
+.passage li{margin-bottom:6px}
+.passage .data-table{margin:4px 0 12px}
+.passage caption{font-weight:700;font-size:14px;margin-bottom:6px;text-align:left}
+.blank{letter-spacing:1px;font-weight:600}
+.overlay.lock{background:var(--sky-light)}
+
+/* ---------- Freeze / overtime / review navigation ---------- */
+.tool-btn.frozen{background:#dff3fb;border-color:var(--sky-dark);color:var(--sky-deep)}
+.timer.frozen{color:var(--sky-dark)}
+.timer.over{color:var(--red)}
+.timer-sub{font-size:11px;font-weight:700;color:var(--sky-deep);letter-spacing:.4px;text-transform:uppercase;min-height:14px}
+.late-badge{font-size:12px;font-weight:700;color:var(--amber);background:#fef7e0;border:1px solid #f3d27a;border-radius:12px;padding:2px 9px;white-space:nowrap}
+.late-badge[hidden]{display:none}
+.nav-cell.late::before{content:"⏰";position:absolute;bottom:-10px;left:-8px;font-size:12px}
+.review-nav{position:sticky;top:0;z-index:5;background:#fff;border:1px solid var(--sky);border-radius:12px;padding:10px 12px;margin-top:16px;box-shadow:0 4px 14px rgba(29,106,150,.10)}
+.rv-row{display:flex;align-items:center;gap:5px;flex-wrap:wrap;margin-bottom:6px}
+.rv-m{font-size:12px;font-weight:700;color:var(--muted);width:26px}
+.rv-chip{width:30px;height:28px;border-radius:6px;border:none;font-size:12px;font-weight:700;color:#fff;position:relative;padding:0}
+.rv-chip.c{background:var(--green)}.rv-chip.w{background:var(--red)}
+.rv-chip.u{background:#fef7e0;color:var(--amber);box-shadow:inset 0 0 0 1.5px var(--amber)}
+.rv-chip.cur{outline:3px solid #111;outline-offset:1px}
+.rv-chip.late::after{content:"";position:absolute;top:2px;right:2px;width:7px;height:7px;border-radius:50%;background:#ffd166;box-shadow:0 0 0 1px #8a5a00}
+.rv-chip:hover{filter:brightness(1.1)}
+.rv-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:4px;font-size:14px}
+.rv-actions label{display:flex;align-items:center;gap:6px;margin-left:auto;font-size:13px;color:var(--muted);cursor:pointer}
+.rv-tip{font-size:12px;color:var(--muted);margin-top:4px}
+.q-wrap{animation:qfade .18s ease}
+@keyframes qfade{from{opacity:.3;transform:translateY(4px)}to{opacity:1;transform:none}}
+
+/* ---------- Responsive ---------- */
+@media (max-width:900px){
+  .topbar{grid-template-columns:1fr auto;grid-template-areas:"l c" "r r"}
+  .tb-left{grid-area:l}.tb-center{grid-area:c}.tb-right{grid-area:r;justify-content:flex-start}
+  .q-wrap.spr{grid-template-columns:1fr}
+  .spr-dir{order:2;border-right:none;border-top:3px solid var(--sky-soft);padding:14px 0 0;margin-top:20px;font-size:13.5px}
+  .q-wrap.spr .q-main{padding-left:4px}
+}
+@media (max-width:560px){
+  .topbar,.bottombar,.module-tabs{padding-left:12px;padding-right:12px}
+  .wrap{padding:0 12px}
+  .brand{font-size:13px;white-space:normal}
+  .tb-left img{height:36px}
+  .timer{font-size:18px}
+  .tool-btn{padding:6px 9px;font-size:12px}
+  .bottombar{grid-template-columns:1fr 1fr;grid-template-areas:"n n" "s r"}
+  .student{grid-area:s}.nav-pill{grid-area:n;justify-self:center}.bb-right{grid-area:r}
+  .nav-btn{padding:8px 18px}
+  .q-text{font-size:16px}
+  .choice{font-size:15px}
+}
+</style>
+</head>
+<body>
+
+<!-- ============================ TOP BAR ============================ -->
+<header class="topbar">
+  <div class="tb-left">
+    <img src="image.png" alt="Amro Academy logo" onerror="this.style.display='none'">
+    <div>
+      <div class="brand">Amro Academy – SAT Reading &amp; Writing Diagnostic</div>
+      <div class="sec-label" id="secLabel">Section 2, Module 1: Math</div>
+    </div>
+  </div>
+  <div class="tb-center">
+    <div class="timer" id="moduleTimer">35:00</div>
+    <div class="timer-sub" id="timerSub"></div>
+    <button class="link-btn" id="hideTimerBtn">Hide</button>
+  </div>
+  <div class="tb-right">
+    <button class="tool-btn" id="directionsBtn">Directions</button>
+    <button class="tool-btn" id="freezeBtn">❄ Freeze Time</button>
+    <button class="tool-btn" id="correctBtn">Correct Exam</button>
+    <button class="tool-btn primary" id="submitBtn">Submit Exam</button>
+    <button class="tool-btn danger" id="resetBtn">Reset Exam</button>
+  </div>
+</header>
+
+<nav class="module-tabs">
+  <button class="tab" data-module="1">Module 1</button>
+  <button class="tab" data-module="2">Module 2</button>
+  <span class="status-pill" id="statusPill">In progress</span>
+</nav>
+<div class="dash-line"></div>
+
+<!-- ============================ MAIN ============================ -->
+<main id="main">
+  <div class="wrap">
+    <div id="results"></div>
+    <div id="questionArea"></div>
+  </div>
+</main>
+
+<!-- ============================ BOTTOM BAR ============================ -->
+<footer class="bottombar">
+  <div class="student" id="studentLabel"></div>
+  <button class="nav-pill" id="navBtn">Question 1 of 22 ▲</button>
+  <div class="bb-right">
+    <button class="nav-btn" id="backBtn">Back</button>
+    <button class="nav-btn" id="nextBtn">Next</button>
+  </div>
+</footer>
+
+<div class="overlay" id="overlay"><div class="modal" id="modal"></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* =========================================================
+   1. DATA — question bank
+   ========================================================= */
+const QUESTIONS = [
+ {
+  "id": "rwd1q1",
+  "module": 1,
+  "number": 1,
+  "domain": "Craft and Structure",
+  "skill": "Words in context",
+  "type": "mcq",
+  "passage": "<p>Biologist Amara Okeke's initial hypothesis about coral bleaching proved remarkably <span class=\"blank\">______<\/span>: two decades of later research confirmed nearly every prediction it made.<\/p>",
+  "question": "Which choice completes the text with the most logical and precise word or phrase?",
+  "choices": [
+   "speculative",
+   "controversial",
+   "durable",
+   "fragile"
+  ],
+  "correctAnswer": "C",
+  "hints": [],
+  "solution": "The colon explains the blank: the hypothesis lasted, because twenty years of research kept confirming it. “Durable” means long-lasting. “Speculative” and “fragile” mean the opposite."
+ },
+ {
+  "id": "rwd1q2",
+  "module": 1,
+  "number": 2,
+  "domain": "Craft and Structure",
+  "skill": "Words in context",
+  "type": "mcq",
+  "passage": "<p>Although the city council described the new parking rules as a modest adjustment, critics argued that the changes were anything but <span class=\"blank\">______<\/span>, since they eliminated nearly half of the downtown parking spaces.<\/p>",
+  "question": "Which choice completes the text with the most logical and precise word or phrase?",
+  "choices": [
+   "drastic",
+   "permanent",
+   "minor",
+   "popular"
+  ],
+  "correctAnswer": "C",
+  "hints": [],
+  "solution": "“Anything but” reverses the blank. The critics thought the changes were big (half the spaces gone), so the blank must mean small, matching “modest”: minor. “Drastic” is the critics' actual view, the opposite of what the blank needs."
+ },
+ {
+  "id": "rwd1q3",
+  "module": 1,
+  "number": 3,
+  "domain": "Craft and Structure",
+  "skill": "Words in context",
+  "type": "mcq",
+  "passage": "<p>The following text is from a novel. Although Clara had promised to keep the news to herself, the secret <u>pressed<\/u> on her all afternoon, until by evening she could think of nothing else.<\/p>",
+  "question": "As used in the text, what does the word “pressed” most nearly mean?",
+  "choices": [
+   "urged",
+   "flattened",
+   "weighed heavily",
+   "ironed"
+  ],
+  "correctAnswer": "C",
+  "hints": [],
+  "solution": "The secret troubled Clara until she could think of nothing else, so it weighed heavily on her mind. The other choices are literal meanings of “press” that don't fit a secret."
+ },
+ {
+  "id": "rwd1q4",
+  "module": 1,
+  "number": 4,
+  "domain": "Craft and Structure",
+  "skill": "Words in context",
+  "type": "mcq",
+  "passage": "<p>Historian Farid Nasser argues that the treaty's importance has been <span class=\"blank\">______<\/span> by later scholars: rather than ending the conflict, as is often claimed, it merely paused the fighting for a decade.<\/p>",
+  "question": "Which choice completes the text with the most logical and precise word or phrase?",
+  "choices": [
+   "corroborated",
+   "underestimated",
+   "overstated",
+   "documented"
+  ],
+  "correctAnswer": "C",
+  "hints": [],
+  "solution": "Scholars claim the treaty ended the conflict, but Nasser says it only paused it, so scholars made it seem more important than it was. “Underestimated” is the reverse."
+ },
+ {
+  "id": "rwd1q5",
+  "module": 1,
+  "number": 5,
+  "domain": "Craft and Structure",
+  "skill": "Text structure and purpose",
+  "type": "mcq",
+  "passage": "<p>Cities are often several degrees warmer than the surrounding countryside, a pattern known as the urban heat island effect. Dark surfaces such as asphalt absorb sunlight during the day and release the heat slowly at night. <u>In one desert city studied by researchers, nighttime temperatures downtown were more than 5°C higher than in the surrounding desert.<\/u> Planners there are now testing reflective pavements designed to stay cooler.<\/p>",
+  "question": "Which choice best describes the function of the underlined sentence in the text as a whole?",
+  "choices": [
+   "It explains why reflective pavements are cooler than asphalt.",
+   "It introduces a solution to the problem described in the first sentence.",
+   "It challenges the explanation of the effect given in the previous sentence.",
+   "It provides a specific example of the effect described earlier in the text."
+  ],
+  "correctAnswer": "D",
+  "hints": [],
+  "solution": "The sentence gives a measured case (one city, more than 5°C warmer at night) of the urban heat island effect introduced at the start. It neither challenges the explanation nor offers a solution."
+ },
+ {
+  "id": "rwd1q6",
+  "module": 1,
+  "number": 6,
+  "domain": "Craft and Structure",
+  "skill": "Text structure and purpose",
+  "type": "mcq",
+  "passage": "<p>The following text is from a short story. The train was late again, and the platform filled with people checking their watches and muttering. Only Mr. Iyer seemed unbothered. He unfolded his newspaper, smoothed each page against his knee, and read the weather report as carefully as if he had never seen one before.<\/p>",
+  "question": "Which choice best states the main purpose of the text?",
+  "choices": [
+   "To describe Mr. Iyer's interest in becoming a weather forecaster",
+   "To contrast one character's calm with the impatience of the people around him",
+   "To suggest that Mr. Iyer does not know the train is late",
+   "To explain why the train was late"
+  ],
+  "correctAnswer": "B",
+  "hints": [],
+  "solution": "The crowd checks watches and mutters; “only Mr. Iyer seemed unbothered.” The text sets his calm against their impatience. Nothing says he's unaware of the delay or wants to forecast weather."
+ },
+ {
+  "id": "rwd1q7",
+  "module": 1,
+  "number": 7,
+  "domain": "Craft and Structure",
+  "skill": "Cross-text connections",
+  "type": "mcq",
+  "passage": "<p><b>Text 1<\/b><br>Many teachers believe that taking notes by hand leads to better learning than typing them. Writing by hand is slower, they argue, so students are forced to summarize ideas in their own words instead of copying a lecture word for word.<\/p><p><b>Text 2<\/b><br>In a study by psychologist Dana Kim, one group of students typed notes freely, a second group wrote notes by hand, and a third group typed but was instructed to summarize each idea in their own words. The third group learned as much as the handwriting group, and both outperformed the first group.<\/p>",
+  "question": "Based on the texts, how would Kim (Text 2) most likely respond to the teachers' view in Text 1?",
+  "choices": [
+   "By suggesting that the benefit comes from summarizing rather than from handwriting itself",
+   "By agreeing that handwriting itself is what causes better learning",
+   "By arguing that typing notes is always more effective than writing them by hand",
+   "By claiming that the method of note-taking has no effect on learning"
+  ],
+  "correctAnswer": "A",
+  "hints": [],
+  "solution": "Typing students who summarized learned as much as handwriting students, so summarizing, not the pen, explains the benefit. Kim would agree that the teachers' mechanism matters but locate it in summarizing."
+ },
+ {
+  "id": "rwd1q8",
+  "module": 1,
+  "number": 8,
+  "domain": "Information and Ideas",
+  "skill": "Central ideas and details",
+  "type": "mcq",
+  "passage": "<p>Sea otters eat large numbers of sea urchins, which graze on kelp. Where otters were hunted to near extinction in the 1800s and early 1900s, urchin populations exploded and many kelp forests disappeared. In areas where otters have since returned, kelp forests have regrown, once again providing habitat for many species of fish.<\/p>",
+  "question": "Which choice best states the main idea of the text?",
+  "choices": [
+   "Kelp forests disappeared in the 1800s because the climate became warmer.",
+   "Sea otters indirectly help kelp forests by keeping sea urchin populations in check.",
+   "Sea otters eat kelp, which is why kelp forests shrink when otters are present.",
+   "Sea urchins are the main source of food for most fish that live in kelp forests."
+  ],
+  "correctAnswer": "B",
+  "hints": [],
+  "solution": "The chain is: otters eat urchins, urchins eat kelp. Without otters, kelp vanished; with otters back, kelp regrew. So otters protect kelp indirectly."
+ },
+ {
+  "id": "rwd1q9",
+  "module": 1,
+  "number": 9,
+  "domain": "Information and Ideas",
+  "skill": "Central ideas and details",
+  "type": "mcq",
+  "passage": "<p>A team led by economist Rosa Lindgren studied a city that eliminated late fees at its public libraries. In the following year, the number of active borrowers rose by 14 percent, while the share of books returned within a week of their due date remained nearly unchanged.<\/p>",
+  "question": "According to the text, what happened after the city eliminated library late fees?",
+  "choices": [
+   "More people borrowed books, but many books were returned late.",
+   "Fewer people borrowed books, but books were returned faster.",
+   "The number of borrowers stayed the same, and return times improved.",
+   "More people borrowed books, and return times stayed about the same."
+  ],
+  "correctAnswer": "D",
+  "hints": [],
+  "solution": "The text states both facts: active borrowers rose 14 percent, and on-time returns were “nearly unchanged.” Only the first choice matches both."
+ },
+ {
+  "id": "rwd1q10",
+  "module": 1,
+  "number": 10,
+  "domain": "Information and Ideas",
+  "skill": "Command of evidence (textual)",
+  "type": "mcq",
+  "passage": "<p>Botanist Theo Marsh has observed that a species of desert plant folds its leaves at night. He hypothesizes that the plant does this mainly to reduce water loss, rather than to protect its leaves from insects that feed at night.<\/p>",
+  "question": "Which finding, if true, would most directly support Marsh's hypothesis?",
+  "choices": [
+   "Plants kept in humid air at night folded their leaves less often than plants kept in dry air, while the presence of insects made no difference.",
+   "Insects that feed on the plant are more active at night than during the day.",
+   "The plants fold their leaves every night, regardless of the season.",
+   "The plant grows in several deserts on different continents."
+  ],
+  "correctAnswer": "A",
+  "hints": [],
+  "solution": "Support must favor water loss and rule out insects. Choice A does both: humidity changed the behavior and insects didn't. Choice B fits either explanation, and choice C supports the insect explanation."
+ },
+ {
+  "id": "rwd1q11",
+  "module": 1,
+  "number": 11,
+  "domain": "Information and Ideas",
+  "skill": "Command of evidence (textual)",
+  "type": "mcq",
+  "passage": "<p>In a poem, the speaker describes leaving her childhood home for the last time. A student claims that the speaker feels both sadness and relief as she leaves.<\/p>",
+  "question": "Which quotation from the poem most effectively illustrates the student's claim?",
+  "choices": [
+   "“Each window holds a summer sky,”",
+   "“The garden gate swings in the wind.”",
+   "“The stairs still creak beneath my feet,”",
+   "“I closed the door with aching hands, / and breathed, at last, the open air.”"
+  ],
+  "correctAnswer": "D",
+  "hints": [],
+  "solution": "“Aching hands” shows sadness; “breathed, at last, the open air” shows relief. The other quotations only describe the house and show neither feeling."
+ },
+ {
+  "id": "rwd1q12",
+  "module": 1,
+  "number": 12,
+  "domain": "Information and Ideas",
+  "skill": "Command of evidence (quantitative)",
+  "type": "mcq",
+  "passage": "<p><table class=\"data-table\"><caption>Average Hours of Sleep per School Night<\/caption><thead><tr><th>Grade<\/th><th>Hours<\/th><\/tr><\/thead><tbody><tr><td>9<\/td><td>8.1<\/td><\/tr><tr><td>10<\/td><td>7.6<\/td><\/tr><tr><td>11<\/td><td>7.0<\/td><\/tr><tr><td>12<\/td><td>6.8<\/td><\/tr><\/tbody><\/table><\/p><p>A health researcher reports that students' average sleep declined in each grade, with the largest decline occurring between grades 10 and 11.<\/p>",
+  "question": "Which choice most effectively uses data from the table to support the researcher's report?",
+  "choices": [
+   "Average sleep fell from 7.6 to 7.0 hours between grades 10 and 11, a larger drop than between any other two consecutive grades.",
+   "Average sleep fell from 8.1 to 7.6 hours between grades 9 and 10.",
+   "Students in grade 12 averaged 6.8 hours of sleep per school night.",
+   "Students in grade 9 slept more on average than students in any other grade."
+  ],
+  "correctAnswer": "A",
+  "hints": [],
+  "solution": "The drops are 0.5 hours (9 to 10), 0.6 (10 to 11) and 0.2 (11 to 12). Only choice A shows the largest drop, which is the specific part of the claim."
+ },
+ {
+  "id": "rwd1q13",
+  "module": 1,
+  "number": 13,
+  "domain": "Information and Ideas",
+  "skill": "Command of evidence (quantitative)",
+  "type": "mcq",
+  "passage": "<p><table class=\"data-table\"><caption>Average Corn Yield by Fertilizer (bushels per acre)<\/caption><thead><tr><th>Fertilizer<\/th><th>Wet years<\/th><th>Dry years<\/th><\/tr><\/thead><tbody><tr><td>A<\/td><td>52<\/td><td>31<\/td><\/tr><tr><td>B<\/td><td>47<\/td><td>40<\/td><\/tr><\/tbody><\/table><\/p><p>An agronomist recommends Fertilizer B for regions with frequent droughts, even though Fertilizer A produces higher yields in wet years.<\/p>",
+  "question": "Which choice best describes data from the table that support the agronomist's recommendation?",
+  "choices": [
+   "Both fertilizers produced lower yields in dry years than in wet years.",
+   "In dry years, Fertilizer B produced 40 bushels per acre compared with 31 for A, while in wet years A produced 52 compared with 47 for B.",
+   "In wet years, Fertilizer A produced 52 bushels per acre, the highest yield in the table.",
+   "In dry years, Fertilizer A produced 31 bushels per acre."
+  ],
+  "correctAnswer": "B",
+  "hints": [],
+  "solution": "The claim has two parts: B is better in droughts, and A is better in wet years. Choice A gives the numbers for both parts. The other choices support at most one part."
+ },
+ {
+  "id": "rwd1q14",
+  "module": 1,
+  "number": 14,
+  "domain": "Information and Ideas",
+  "skill": "Inferences",
+  "type": "mcq",
+  "passage": "<p>After researchers removed invasive rats from a small island, populations of ground-nesting seabirds there increased sharply within five years. On a nearby island of similar size where the rats remained, seabird populations did not change. These results suggest that <span class=\"blank\">______<\/span><\/p>",
+  "question": "Which choice most logically completes the text?",
+  "choices": [
+   "seabirds moved from the second island to the first island after the rats were removed.",
+   "rats are unable to survive on islands without seabirds.",
+   "seabirds on the second island had learned to defend their nests from rats.",
+   "the rats had been limiting the growth of seabird populations on the first island."
+  ],
+  "correctAnswer": "D",
+  "hints": [],
+  "solution": "The only difference between the islands was the rats, and seabirds grew only where rats were removed. So the rats were holding the seabirds back. Nothing in the text supports birds moving or learning."
+ },
+ {
+  "id": "rwd1q15",
+  "module": 1,
+  "number": 15,
+  "domain": "Information and Ideas",
+  "skill": "Inferences",
+  "type": "mcq",
+  "passage": "<p>Linguists studying a language spoken in a mountainous region found that speakers in coastal villages used one word for snow, while speakers in high mountain villages used five words for different kinds of snow. One researcher proposes that a community develops more words for a phenomenon when its members regularly need to tell different forms of it apart. If this proposal is correct, it is most likely that <span class=\"blank\">______<\/span><\/p>",
+  "question": "Which choice most logically completes the text?",
+  "choices": [
+   "mountain villagers need to distinguish among types of snow more often than coastal villagers do.",
+   "coastal villagers have never seen snow.",
+   "mountain villagers speak a completely different language from coastal villagers.",
+   "the language has more words for snow than any other language in the world."
+  ],
+  "correctAnswer": "A",
+  "hints": [],
+  "solution": "Apply the proposal: five words means a frequent need to tell kinds of snow apart. Choice B is too strong, since coastal villagers do have a word for snow. C and D aren't supported."
+ },
+ {
+  "id": "rwd1q16",
+  "module": 1,
+  "number": 16,
+  "domain": "Standard English Conventions",
+  "skill": "Boundaries",
+  "type": "mcq",
+  "passage": "<p>The novelist spent ten years researching her <span class=\"blank\">______<\/span> the resulting book, a sweeping history of a single river, won three major literary prizes.<\/p>",
+  "question": "Which choice completes the text so that it conforms to the conventions of Standard English?",
+  "choices": [
+   "subject,",
+   "subject",
+   "subject, which",
+   "subject;"
+  ],
+  "correctAnswer": "D",
+  "hints": [],
+  "solution": "Both parts are complete sentences, so they need a semicolon (or a period). A comma alone makes a comma splice, and no punctuation makes a run-on. “Which” makes the sentence ungrammatical."
+ },
+ {
+  "id": "rwd1q17",
+  "module": 1,
+  "number": 17,
+  "domain": "Standard English Conventions",
+  "skill": "Form, structure, and sense",
+  "type": "mcq",
+  "passage": "<p>The results of the long-term study on sleep and memory, which followed more than two thousand participants for a decade, <span class=\"blank\">______<\/span> published last month.<\/p>",
+  "question": "Which choice completes the text so that it conforms to the conventions of Standard English?",
+  "choices": [
+   "has been",
+   "were",
+   "was",
+   "is"
+  ],
+  "correctAnswer": "B",
+  "hints": [],
+  "solution": "The subject is “results” (plural); “study,” “memory” and “participants” are inside modifiers. “Last month” requires past tense, so the answer is “were.”"
+ },
+ {
+  "id": "rwd1q18",
+  "module": 1,
+  "number": 18,
+  "domain": "Standard English Conventions",
+  "skill": "Form, structure, and sense",
+  "type": "mcq",
+  "passage": "<p>The museum's new wing displays the <span class=\"blank\">______<\/span> most valuable paintings, including several that have never before been shown in public.<\/p>",
+  "question": "Which choice completes the text so that it conforms to the conventions of Standard English?",
+  "choices": [
+   "collections",
+   "collection's",
+   "collection",
+   "collections'"
+  ],
+  "correctAnswer": "B",
+  "hints": [],
+  "solution": "The paintings belong to the collection (one collection), so it needs the singular possessive: collection's. “Collections” is a plural without possession."
+ },
+ {
+  "id": "rwd1q19",
+  "module": 1,
+  "number": 19,
+  "domain": "Standard English Conventions",
+  "skill": "Boundaries",
+  "type": "mcq",
+  "passage": "<p>After weeks of testing, the scientist made a surprising <span class=\"blank\">______<\/span> the samples had been contaminated before they ever reached the laboratory.<\/p>",
+  "question": "Which choice completes the text so that it conforms to the conventions of Standard English?",
+  "choices": [
+   "discovery",
+   "discovery,",
+   "discovery:",
+   "discovery, that"
+  ],
+  "correctAnswer": "C",
+  "hints": [],
+  "solution": "What follows explains what the discovery was, and a colon introduces that kind of explanation after a complete sentence. A comma alone creates a comma splice."
+ },
+ {
+  "id": "rwd1q20",
+  "module": 1,
+  "number": 20,
+  "domain": "Standard English Conventions",
+  "skill": "Form, structure, and sense",
+  "type": "mcq",
+  "passage": "<p>By the time the rescue boat arrived, the fishermen <span class=\"blank\">______<\/span> to the overturned hull for nearly six hours.<\/p>",
+  "question": "Which choice completes the text so that it conforms to the conventions of Standard English?",
+  "choices": [
+   "are clinging",
+   "cling",
+   "will cling",
+   "had been clinging"
+  ],
+  "correctAnswer": "D",
+  "hints": [],
+  "solution": "The clinging happened before another past event (the boat arrived) and lasted six hours, so it needs the past perfect progressive: had been clinging."
+ },
+ {
+  "id": "rwd1q21",
+  "module": 1,
+  "number": 21,
+  "domain": "Standard English Conventions",
+  "skill": "Form, structure, and sense",
+  "type": "mcq",
+  "passage": "<p>Built in the twelfth century, <span class=\"blank\">______<\/span><\/p>",
+  "question": "Which choice completes the text so that it conforms to the conventions of Standard English?",
+  "choices": [
+   "it is remarkable that the cathedral has survived fires, wars, and earthquakes.",
+   "fires, wars, and earthquakes have all been survived by the cathedral.",
+   "the cathedral has survived fires, wars, and earthquakes.",
+   "the cathedral's survival of fires, wars, and earthquakes is remarkable."
+  ],
+  "correctAnswer": "C",
+  "hints": [],
+  "solution": "The opening phrase describes what was built, so the cathedral must come right after the comma. In the other choices, “fires,” “survival” or “it” would be what was built."
+ },
+ {
+  "id": "rwd1q22",
+  "module": 1,
+  "number": 22,
+  "domain": "Expression of Ideas",
+  "skill": "Transitions",
+  "type": "mcq",
+  "passage": "<p>Early telescopes produced blurry images because their glass lenses bent different colors of light by slightly different amounts. <span class=\"blank\">______<\/span> Isaac Newton designed a telescope that used a curved mirror instead of a lens, avoiding the problem.<\/p>",
+  "question": "Which choice completes the text with the most logical transition?",
+  "choices": [
+   "For example,",
+   "In contrast,",
+   "Similarly,",
+   "To address this problem,"
+  ],
+  "correctAnswer": "D",
+  "hints": [],
+  "solution": "Newton's mirror design was a response to the blurry-lens problem, so the transition must show a solution to it."
+ },
+ {
+  "id": "rwd1q23",
+  "module": 1,
+  "number": 23,
+  "domain": "Expression of Ideas",
+  "skill": "Transitions",
+  "type": "mcq",
+  "passage": "<p>The documentary was widely praised for its stunning underwater photography. <span class=\"blank\">______<\/span> several critics complained that its narration oversimplified the science it described.<\/p>",
+  "question": "Which choice completes the text with the most logical transition?",
+  "choices": [
+   "However,",
+   "Therefore,",
+   "Indeed,",
+   "Likewise,"
+  ],
+  "correctAnswer": "A",
+  "hints": [],
+  "solution": "Praise followed by complaints is a contrast, so “However.”"
+ },
+ {
+  "id": "rwd1q24",
+  "module": 1,
+  "number": 24,
+  "domain": "Expression of Ideas",
+  "skill": "Transitions",
+  "type": "mcq",
+  "passage": "<p>Volunteers planted 4,000 young trees along the riverbank in the spring, in soil that experts had warned was too poor to support them. <span class=\"blank\">______<\/span> by autumn, nearly 90 percent of the saplings had survived.<\/p>",
+  "question": "Which choice completes the text with the most logical transition?",
+  "choices": [
+   "Nevertheless,",
+   "Remarkably,",
+   "For instance,",
+   "Instead,"
+  ],
+  "correctAnswer": "B",
+  "hints": [],
+  "solution": "The experts expected failure, but 90 percent survived, which is surprising. “Remarkably” signals that surprise. “Nevertheless” would need a contrast inside the sentence it introduces."
+ },
+ {
+  "id": "rwd1q25",
+  "module": 1,
+  "number": 25,
+  "domain": "Expression of Ideas",
+  "skill": "Rhetorical synthesis",
+  "type": "mcq",
+  "passage": "<p>While researching a topic, a student has taken the following notes:<\/p><ul><li>Jupiter is a gas giant made mostly of hydrogen and helium.<\/li><li>Jupiter's diameter is about 140,000 kilometers.<\/li><li>Earth is a rocky planet.<\/li><li>Earth's diameter is about 12,700 kilometers.<\/li><\/ul>",
+  "question": "The student wants to emphasize the difference in size between Jupiter and Earth. Which choice most effectively uses relevant information from the notes to accomplish this goal?",
+  "choices": [
+   "Jupiter's diameter, about 140,000 kilometers, is more than ten times Earth's diameter of about 12,700 kilometers.",
+   "Jupiter is a gas giant, while Earth is a rocky planet.",
+   "Earth's diameter is about 12,700 kilometers.",
+   "Jupiter is made mostly of hydrogen and helium."
+  ],
+  "correctAnswer": "A",
+  "hints": [],
+  "solution": "The goal is size, so the answer must compare the two diameters. Choice B compares composition, not size."
+ },
+ {
+  "id": "rwd1q26",
+  "module": 1,
+  "number": 26,
+  "domain": "Expression of Ideas",
+  "skill": "Rhetorical synthesis",
+  "type": "mcq",
+  "passage": "<p>While researching a topic, a student has taken the following notes:<\/p><ul><li>Researchers studied 500 high school students preparing for a history exam.<\/li><li>Some studied in one long session; others studied in several short sessions spread over a week.<\/li><li>Students who spread out their study sessions remembered more.<\/li><li>The researchers concluded that spacing out study sessions improves long-term memory.<\/li><\/ul>",
+  "question": "The student wants to present the study's conclusion. Which choice most effectively uses relevant information from the notes to accomplish this goal?",
+  "choices": [
+   "After studying 500 students, researchers concluded that spacing out study sessions improves long-term memory.",
+   "The students in the study were preparing for a history exam.",
+   "Researchers studied 500 high school students preparing for a history exam.",
+   "Some students studied in one long session, while others studied in several short sessions."
+  ],
+  "correctAnswer": "A",
+  "hints": [],
+  "solution": "Only choice A states the conclusion. The others describe the setup."
+ },
+ {
+  "id": "rwd1q27",
+  "module": 1,
+  "number": 27,
+  "domain": "Expression of Ideas",
+  "skill": "Rhetorical synthesis",
+  "type": "mcq",
+  "passage": "<p>While researching a topic, a student has taken the following notes:<\/p><ul><li>Chinua Achebe (1930–2013) was a Nigerian novelist.<\/li><li>His best-known novel is <i>Things Fall Apart<\/i> (1958).<\/li><li>The novel depicts the effects of colonialism on Igbo society.<\/li><li>It has been translated into dozens of languages.<\/li><\/ul>",
+  "question": "The student wants to introduce Achebe and his best-known novel to an audience unfamiliar with them. Which choice most effectively uses relevant information from the notes to accomplish this goal?",
+  "choices": [
+   "<i>Things Fall Apart<\/i> has been translated into dozens of languages.",
+   "Achebe's novel depicts the effects of colonialism.",
+   "Nigerian novelist Chinua Achebe (1930–2013) is best known for <i>Things Fall Apart<\/i> (1958), a novel about the effects of colonialism on Igbo society.",
+   "Chinua Achebe wrote <i>Things Fall Apart<\/i>."
+  ],
+  "correctAnswer": "C",
+  "hints": [],
+  "solution": "An unfamiliar audience needs who Achebe was and what the novel is about. Choice A gives both; the others assume the reader already knows him."
+ },
+ {
+  "id": "rwd2q1",
+  "module": 2,
+  "number": 1,
+  "domain": "Craft and Structure",
+  "skill": "Words in context",
+  "type": "mcq",
+  "passage": "<p>Sculptor Imani Cole's later works are strikingly <span class=\"blank\">______<\/span>: each one pairs materials, such as rusted steel and polished glass, that no other artist of her generation thought to combine.<\/p>",
+  "question": "Which choice completes the text with the most logical and precise word or phrase?",
+  "choices": [
+   "idiosyncratic",
+   "conventional",
+   "derivative",
+   "rudimentary"
+  ],
+  "correctAnswer": "A",
+  "hints": [],
+  "solution": "Combinations no one else used make the works highly individual and unusual: idiosyncratic. “Derivative” (copied) and “conventional” mean the opposite."
+ },
+ {
+  "id": "rwd2q2",
+  "module": 2,
+  "number": 2,
+  "domain": "Craft and Structure",
+  "skill": "Words in context",
+  "type": "mcq",
+  "passage": "<p>Many archaeologists were initially <span class=\"blank\">______<\/span> about the claim that the site was 9,000 years old, but radiocarbon dating of seeds found there confirmed the age.<\/p>",
+  "question": "Which choice completes the text with the most logical and precise word or phrase?",
+  "choices": [
+   "skeptical",
+   "enthusiastic",
+   "certain",
+   "indifferent"
+  ],
+  "correctAnswer": "A",
+  "hints": [],
+  "solution": "“But … confirmed” signals that the archaeologists first doubted the claim: skeptical. If they had been “certain,” there would be no contrast."
+ },
+ {
+  "id": "rwd2q3",
+  "module": 2,
+  "number": 3,
+  "domain": "Craft and Structure",
+  "skill": "Words in context",
+  "type": "mcq",
+  "passage": "<p>The essay's argument is <span class=\"blank\">______<\/span>: rather than stating its thesis outright, the author builds toward it slowly through a series of seemingly unrelated stories.<\/p>",
+  "question": "Which choice completes the text with the most logical and precise word or phrase?",
+  "choices": [
+   "blunt",
+   "oblique",
+   "inflammatory",
+   "redundant"
+  ],
+  "correctAnswer": "B",
+  "hints": [],
+  "solution": "An argument that never states its thesis directly is indirect: oblique. “Blunt” means the opposite."
+ },
+ {
+  "id": "rwd2q4",
+  "module": 2,
+  "number": 4,
+  "domain": "Craft and Structure",
+  "skill": "Words in context",
+  "type": "mcq",
+  "passage": "<p>Because the foundation's grant decisions had long seemed <span class=\"blank\">______<\/span> to applicants, its board voted to publish detailed explanations of how every award is chosen.<\/p>",
+  "question": "Which choice completes the text with the most logical and precise word or phrase?",
+  "choices": [
+   "lucrative",
+   "transparent",
+   "generous",
+   "opaque"
+  ],
+  "correctAnswer": "D",
+  "hints": [],
+  "solution": "Publishing explanations fixes decisions that were hard to understand. “Opaque” means unclear; “transparent” is the opposite."
+ },
+ {
+  "id": "rwd2q5",
+  "module": 2,
+  "number": 5,
+  "domain": "Craft and Structure",
+  "skill": "Words in context",
+  "type": "mcq",
+  "passage": "<p>The following text is from a novel. When the storm finally broke, the old house <u>answered<\/u> with a chorus of creaks and groans, as though every beam had been waiting years for the chance to complain.<\/p>",
+  "question": "As used in the text, what does the word “answered” most nearly mean?",
+  "choices": [
+   "obeyed",
+   "responded",
+   "replied in words",
+   "solved"
+  ],
+  "correctAnswer": "B",
+  "hints": [],
+  "solution": "The house reacted to the storm with creaks and groans, so it responded. A house can't reply in words, and “solved” and “obeyed” don't fit."
+ },
+ {
+  "id": "rwd2q6",
+  "module": 2,
+  "number": 6,
+  "domain": "Craft and Structure",
+  "skill": "Text structure and purpose",
+  "type": "mcq",
+  "passage": "<p>Economists have long assumed that people value an object more once they own it, a pattern known as the endowment effect. In a series of experiments, economist Lucia Moreno found that the effect largely disappeared when participants were told in advance that they would be trading the object later. Moreno suggests that the endowment effect may depend less on ownership itself than on the expectation of keeping an object.<\/p>",
+  "question": "Which choice best describes the overall structure of the text?",
+  "choices": [
+   "It describes an experiment and then explains why its results were unreliable.",
+   "It defines a term and then lists several examples of it in daily life.",
+   "It presents two competing theories and then rejects both of them.",
+   "It describes an established idea, presents findings that complicate it, and then offers an alternative explanation."
+  ],
+  "correctAnswer": "D",
+  "hints": [],
+  "solution": "The text gives the endowment effect (established idea), then Moreno's finding that it disappears (complication), then her new explanation (expectation of keeping)."
+ },
+ {
+  "id": "rwd2q7",
+  "module": 2,
+  "number": 7,
+  "domain": "Craft and Structure",
+  "skill": "Text structure and purpose",
+  "type": "mcq",
+  "passage": "<p>Honeybee colonies regulate the temperature of their hive with remarkable precision. When the hive overheats, worker bees spread droplets of water on the combs and fan their wings to evaporate them. <u>Individual bees, however, appear to begin fanning at different temperatures, so that more and more bees join in as the hive grows warmer.<\/u> This variation may explain how the colony's cooling response stays proportional to the problem.<\/p>",
+  "question": "Which choice best describes the function of the underlined sentence in the text as a whole?",
+  "choices": [
+   "It identifies a feature of individual behavior that the final sentence uses to explain a colony-wide pattern.",
+   "It explains why bees spread water on the combs.",
+   "It describes the method researchers used to measure hive temperature.",
+   "It contradicts the claim that bee colonies regulate temperature precisely."
+  ],
+  "correctAnswer": "A",
+  "hints": [],
+  "solution": "The underlined sentence describes individual differences, and the final sentence uses those differences to explain the colony's proportional response."
+ },
+ {
+  "id": "rwd2q8",
+  "module": 2,
+  "number": 8,
+  "domain": "Craft and Structure",
+  "skill": "Cross-text connections",
+  "type": "mcq",
+  "passage": "<p><b>Text 1<\/b><br>Some sociologists argue that heavy social media use makes teenagers lonelier, because time spent online replaces time spent with friends in person.<\/p><p><b>Text 2<\/b><br>A survey of 3,000 teenagers found that those who used social media mainly to plan in-person activities reported less loneliness than those who rarely used it at all. Teenagers who mostly scrolled through other people's posts without interacting, however, reported more loneliness.<\/p>",
+  "question": "Based on the texts, how would the author of Text 2 most likely respond to the sociologists' argument in Text 1?",
+  "choices": [
+   "By arguing that social media use always reduces loneliness among teenagers",
+   "By claiming that loneliness among teenagers cannot be measured",
+   "By suggesting that the effect of social media on loneliness depends on how it is used",
+   "By agreeing that time online always replaces time spent with friends"
+  ],
+  "correctAnswer": "C",
+  "hints": [],
+  "solution": "Text 2 found opposite effects for two kinds of use. So the author would say the effect depends on how social media is used. Choice B is too strong."
+ },
+ {
+  "id": "rwd2q9",
+  "module": 2,
+  "number": 9,
+  "domain": "Information and Ideas",
+  "skill": "Central ideas and details",
+  "type": "mcq",
+  "passage": "<p>The following text is from a short story. For weeks, Nadia had rehearsed how she would tell her father that she wanted to leave the family bakery to study architecture. But when she finally began, he simply set down his rolling pin, took a pencil from behind his ear, and started sketching the bakery on a flour sack: its crooked chimney, its narrow door. “Show me how you would fix it,” he said.<\/p>",
+  "question": "Which choice best states the main idea of the text?",
+  "choices": [
+   "Nadia decides not to study architecture after talking with her father.",
+   "Nadia's father wants her to redesign the bakery so that he can sell it.",
+   "Nadia's father refuses to discuss her plans and returns to his work.",
+   "Nadia's father responds to her plans with unexpected support, inviting her to apply her interest to the family's own building."
+  ],
+  "correctAnswer": "D",
+  "hints": [],
+  "solution": "Nadia expected resistance (she rehearsed for weeks), but her father asks her to show how she would fix the bakery, which is supportive. Nothing suggests refusal or a sale."
+ },
+ {
+  "id": "rwd2q10",
+  "module": 2,
+  "number": 10,
+  "domain": "Information and Ideas",
+  "skill": "Command of evidence (textual)",
+  "type": "mcq",
+  "passage": "<p>A school district claims that its new reading program caused a rise in students' test scores, noting that average scores increased by 8 points in the first year after the program began.<\/p>",
+  "question": "Which finding, if true, would most directly weaken the district's claim?",
+  "choices": [
+   "Teachers in the district said they enjoyed using the new program.",
+   "Students who completed more lessons in the program improved more than students who completed fewer.",
+   "The program costs less than the district's previous reading program.",
+   "Average scores in neighboring districts that did not adopt the program rose by about the same amount that year."
+  ],
+  "correctAnswer": "D",
+  "hints": [],
+  "solution": "If scores rose just as much without the program, something else likely caused the rise. Choice C would strengthen the claim."
+ },
+ {
+  "id": "rwd2q11",
+  "module": 2,
+  "number": 11,
+  "domain": "Information and Ideas",
+  "skill": "Command of evidence (textual)",
+  "type": "mcq",
+  "passage": "<p>In a memoir, the narrator describes her grandmother, who farmed land beside a river that flooded often. The narrator claims that she has always admired her grandmother's resilience.<\/p>",
+  "question": "Which quotation from the memoir most effectively illustrates the narrator's claim?",
+  "choices": [
+   "“She rarely spoke about the years before the war.”",
+   "“She lived alone in a small house at the edge of the village.”",
+   "“Every time the river took her garden, she planted it again, a little higher up the hill.”",
+   "“Her kitchen always smelled of cardamom and wood smoke.”"
+  ],
+  "correctAnswer": "C",
+  "hints": [],
+  "solution": "Resilience means recovering from setbacks. Replanting after every flood shows exactly that. The other quotations describe her without showing resilience."
+ },
+ {
+  "id": "rwd2q12",
+  "module": 2,
+  "number": 12,
+  "domain": "Information and Ideas",
+  "skill": "Command of evidence (quantitative)",
+  "type": "mcq",
+  "passage": "<p><table class=\"data-table\"><caption>Percentage of Plants That Had Flowered<\/caption><thead><tr><th>Week<\/th><th>Long-day light<\/th><th>Short-day light<\/th><\/tr><\/thead><tbody><tr><td>4<\/td><td>10%<\/td><td>35%<\/td><\/tr><tr><td>6<\/td><td>30%<\/td><td>60%<\/td><\/tr><tr><td>8<\/td><td>70%<\/td><td>65%<\/td><\/tr><\/tbody><\/table><\/p><p>A botanist concludes that plants grown under short-day light began flowering earlier, but that plants grown under long-day light eventually caught up with and surpassed them.<\/p>",
+  "question": "Which choice most effectively uses data from the table to support the botanist's conclusion?",
+  "choices": [
+   "At week 4, 35% of short-day plants had flowered compared with 10% of long-day plants, but by week 8, 70% of long-day plants had flowered compared with 65% of short-day plants.",
+   "At week 6, 60% of short-day plants had flowered compared with 30% of long-day plants.",
+   "By week 8, 70% of long-day plants had flowered.",
+   "The percentage of flowering plants increased every week under both kinds of light."
+  ],
+  "correctAnswer": "A",
+  "hints": [],
+  "solution": "The claim has two parts: short-day plants were ahead early, and long-day plants were ahead by the end. Only choice A shows both, with week 4 and week 8 data."
+ },
+ {
+  "id": "rwd2q13",
+  "module": 2,
+  "number": 13,
+  "domain": "Information and Ideas",
+  "skill": "Command of evidence (quantitative)",
+  "type": "mcq",
+  "passage": "<p><table class=\"data-table\"><caption>Museum Visitors (thousands)<\/caption><thead><tr><th>Year<\/th><th>Adults<\/th><th>Students<\/th><\/tr><\/thead><tbody><tr><td>2022<\/td><td>120<\/td><td>30<\/td><\/tr><tr><td>2024<\/td><td>126<\/td><td>54<\/td><\/tr><\/tbody><\/table><\/p><p>A museum director notes that students made up a much larger share of the museum's visitors in 2024 than in 2022.<\/p>",
+  "question": "Which choice most effectively uses data from the table to support the director's statement?",
+  "choices": [
+   "More adults than students visited the museum in both years.",
+   "The number of adult visitors increased from 120 thousand in 2022 to 126 thousand in 2024.",
+   "Students were 30 of the 150 thousand visitors (20%) in 2022 but 54 of the 180 thousand visitors (30%) in 2024.",
+   "The total number of visitors increased from 150 thousand in 2022 to 180 thousand in 2024."
+  ],
+  "correctAnswer": "C",
+  "hints": [],
+  "solution": "“Share” means a percentage of all visitors, so the answer must compare students with the total in each year: 20% then 30%. The others report counts, not shares."
+ },
+ {
+  "id": "rwd2q14",
+  "module": 2,
+  "number": 14,
+  "domain": "Information and Ideas",
+  "skill": "Inferences",
+  "type": "mcq",
+  "passage": "<p>In a study of an Arctic fox population, researchers found that foxes raised large litters in years when lemmings, their main prey, were abundant, and that many foxes did not breed at all in years when lemmings were scarce. Lemming populations in the region rise and fall in cycles of about four years. The number of fox cubs born in the region is therefore most likely to <span class=\"blank\">______<\/span><\/p>",
+  "question": "Which choice most logically completes the text?",
+  "choices": [
+   "be highest in the years when lemmings are scarce.",
+   "rise and fall in a roughly similar four-year cycle.",
+   "remain steady from year to year.",
+   "rise steadily as the foxes learn to hunt other prey."
+  ],
+  "correctAnswer": "B",
+  "hints": [],
+  "solution": "Fox births follow lemming numbers, and lemmings cycle every four years, so fox births should cycle too. Choice D reverses the relationship."
+ },
+ {
+  "id": "rwd2q15",
+  "module": 2,
+  "number": 15,
+  "domain": "Information and Ideas",
+  "skill": "Inferences",
+  "type": "mcq",
+  "passage": "<p>Archaeologists found that pottery made at a coastal settlement, from clay dug nearby, contained traces of a dye that comes only from a plant growing hundreds of kilometers inland. No evidence suggests that the settlement's residents ever traveled inland, but the settlement is known to have traded regularly with inland communities. The most reasonable conclusion is that <span class=\"blank\">______<\/span><\/p>",
+  "question": "Which choice most logically completes the text?",
+  "choices": [
+   "the plant once grew near the coast but has since disappeared there.",
+   "inland communities made the pottery and sent it to the coast.",
+   "residents of the settlement traveled inland to collect the plant.",
+   "the dye or the plant most likely reached the settlement through trade."
+  ],
+  "correctAnswer": "D",
+  "hints": [],
+  "solution": "The pottery was made locally, the dye came from inland, residents didn't travel, and they traded with inland communities. So the dye arrived by trade. Choice B contradicts the text, and choice D contradicts “made at a coastal settlement.”"
+ },
+ {
+  "id": "rwd2q16",
+  "module": 2,
+  "number": 16,
+  "domain": "Standard English Conventions",
+  "skill": "Boundaries",
+  "type": "mcq",
+  "passage": "<p>The committee reviewed the design proposals for nearly three <span class=\"blank\">______<\/span> in the end, it selected none of them.<\/p>",
+  "question": "Which choice completes the text so that it conforms to the conventions of Standard English?",
+  "choices": [
+   "months",
+   "months, that",
+   "months,",
+   "months;"
+  ],
+  "correctAnswer": "D",
+  "hints": [],
+  "solution": "Two complete sentences need a semicolon or a period between them. A comma alone makes a comma splice."
+ },
+ {
+  "id": "rwd2q17",
+  "module": 2,
+  "number": 17,
+  "domain": "Standard English Conventions",
+  "skill": "Form, structure, and sense",
+  "type": "mcq",
+  "passage": "<p>The number of applicants to the university's engineering program <span class=\"blank\">______<\/span> risen every year since 2015.<\/p>",
+  "question": "Which choice completes the text so that it conforms to the conventions of Standard English?",
+  "choices": [
+   "has",
+   "are",
+   "have",
+   "were"
+  ],
+  "correctAnswer": "A",
+  "hints": [],
+  "solution": "“The number” is singular (applicants is inside the modifier), and “risen” needs the helping verb “has.” “Have” would agree with “applicants.”"
+ },
+ {
+  "id": "rwd2q18",
+  "module": 2,
+  "number": 18,
+  "domain": "Standard English Conventions",
+  "skill": "Boundaries",
+  "type": "mcq",
+  "passage": "<p>The orchestra performed works by three composers: Clara Schumann, whose piano concerto opened the <span class=\"blank\">______<\/span> Fanny Mendelssohn; and Lili Boulanger.<\/p>",
+  "question": "Which choice completes the text so that it conforms to the conventions of Standard English?",
+  "choices": [
+   "program;",
+   "program,",
+   "program:",
+   "program"
+  ],
+  "correctAnswer": "A",
+  "hints": [],
+  "solution": "Because one list item contains a comma (“Clara Schumann, whose…”), the items must be separated by semicolons, as the semicolon after “Mendelssohn” shows."
+ },
+ {
+  "id": "rwd2q19",
+  "module": 2,
+  "number": 19,
+  "domain": "Standard English Conventions",
+  "skill": "Form, structure, and sense",
+  "type": "mcq",
+  "passage": "<p>Each of the scientists who worked on the satellite project <span class=\"blank\">______<\/span> credited by name in the agency's final report.<\/p>",
+  "question": "Which choice completes the text so that it conforms to the conventions of Standard English?",
+  "choices": [
+   "were",
+   "are",
+   "have been",
+   "was"
+  ],
+  "correctAnswer": "D",
+  "hints": [],
+  "solution": "The subject is “each,” which is singular; “scientists” belongs to the phrase “of the scientists.” The past-tense report needs “was.”"
+ },
+ {
+  "id": "rwd2q20",
+  "module": 2,
+  "number": 20,
+  "domain": "Standard English Conventions",
+  "skill": "Form, structure, and sense",
+  "type": "mcq",
+  "passage": "<p>Walking along the ridge at dawn, <span class=\"blank\">______<\/span><\/p>",
+  "question": "Which choice completes the text so that it conforms to the conventions of Standard English?",
+  "choices": [
+   "it was beautiful to see the valley fill with light.",
+   "the light slowly filled the valley.",
+   "we watched the valley slowly fill with light.",
+   "the valley slowly filled with light."
+  ],
+  "correctAnswer": "C",
+  "hints": [],
+  "solution": "The people walking must come right after the comma. In B and C the valley or the light would be walking, and in D “it” would be."
+ },
+ {
+  "id": "rwd2q21",
+  "module": 2,
+  "number": 21,
+  "domain": "Standard English Conventions",
+  "skill": "Boundaries",
+  "type": "mcq",
+  "passage": "<p>The new visitor policy, which takes effect in <span class=\"blank\">______<\/span> requires all guests to register at the front desk and wear a badge.<\/p>",
+  "question": "Which choice completes the text so that it conforms to the conventions of Standard English?",
+  "choices": [
+   "January—",
+   "January,",
+   "January;",
+   "January"
+  ],
+  "correctAnswer": "B",
+  "hints": [],
+  "solution": "The clause “which takes effect in January” opened with a comma, so it must close with a comma. A dash doesn't match the opening comma."
+ },
+ {
+  "id": "rwd2q22",
+  "module": 2,
+  "number": 22,
+  "domain": "Expression of Ideas",
+  "skill": "Transitions",
+  "type": "mcq",
+  "passage": "<p>Many desert plants store water in thick, fleshy stems. <span class=\"blank\">______<\/span> the saguaro cactus has a pleated stem that expands like an accordion after heavy rain, allowing it to absorb hundreds of liters of water.<\/p>",
+  "question": "Which choice completes the text with the most logical transition?",
+  "choices": [
+   "For example,",
+   "However,",
+   "As a result,",
+   "Similarly,"
+  ],
+  "correctAnswer": "A",
+  "hints": [],
+  "solution": "The saguaro is one specific case of a desert plant storing water in its stem, so it's an example."
+ },
+ {
+  "id": "rwd2q23",
+  "module": 2,
+  "number": 23,
+  "domain": "Expression of Ideas",
+  "skill": "Transitions",
+  "type": "mcq",
+  "passage": "<p>The first vaccines were developed in the late 1700s, when doctors noticed that exposure to a mild disease could protect people from a deadlier one. <span class=\"blank\">______<\/span> the scientific explanation of how vaccines work, the immune system's ability to remember specific threats, was not understood until more than a century later.<\/p>",
+  "question": "Which choice completes the text with the most logical transition?",
+  "choices": [
+   "Moreover,",
+   "However,",
+   "Therefore,",
+   "For instance,"
+  ],
+  "correctAnswer": "B",
+  "hints": [],
+  "solution": "Vaccines worked early, but the explanation came much later: a contrast."
+ },
+ {
+  "id": "rwd2q24",
+  "module": 2,
+  "number": 24,
+  "domain": "Expression of Ideas",
+  "skill": "Transitions",
+  "type": "mcq",
+  "passage": "<p>The bridge's original design called for steel cables. During construction, engineers tested several alternatives. <span class=\"blank\">______<\/span> they chose a lighter synthetic material that proved equally strong and more resistant to corrosion.<\/p>",
+  "question": "Which choice completes the text with the most logical transition?",
+  "choices": [
+   "For example,",
+   "Similarly,",
+   "Ultimately,",
+   "Consequently,"
+  ],
+  "correctAnswer": "C",
+  "hints": [],
+  "solution": "After testing alternatives, the engineers made a final decision, so the transition marks the end result: ultimately. “Consequently” would wrongly suggest that testing caused the choice of this particular material."
+ },
+ {
+  "id": "rwd2q25",
+  "module": 2,
+  "number": 25,
+  "domain": "Expression of Ideas",
+  "skill": "Rhetorical synthesis",
+  "type": "mcq",
+  "passage": "<p>While researching a topic, a student has taken the following notes:<\/p><ul><li>Octopuses are invertebrates, and crows are birds.<\/li><li>Their brains are organized in very different ways.<\/li><li>In laboratory tests, both animals can solve puzzles that require several steps.<\/li><li>Octopuses can also change the color of their skin.<\/li><\/ul>",
+  "question": "The student wants to emphasize a similarity between octopuses and crows despite their differences. Which choice most effectively uses relevant information from the notes to accomplish this goal?",
+  "choices": [
+   "Octopuses can change the color of their skin, unlike crows.",
+   "Although octopuses and crows have very differently organized brains, both can solve multi-step puzzles in laboratory tests.",
+   "Crows are birds whose brains are organized differently from those of octopuses.",
+   "Octopuses are invertebrates, while crows are birds."
+  ],
+  "correctAnswer": "B",
+  "hints": [],
+  "solution": "The goal asks for a similarity despite differences, so the answer must name both: different brains, but both solve puzzles. The other choices only show differences."
+ },
+ {
+  "id": "rwd2q26",
+  "module": 2,
+  "number": 26,
+  "domain": "Expression of Ideas",
+  "skill": "Rhetorical synthesis",
+  "type": "mcq",
+  "passage": "<p>While researching a topic, a student has taken the following notes:<\/p><ul><li>Researchers studied how African elephants respond to drought.<\/li><li>They fitted 40 elephants with GPS collars.<\/li><li>The collars recorded each elephant's location every 30 minutes for two years.<\/li><li>During droughts, the elephants traveled about twice as far each day.<\/li><\/ul>",
+  "question": "The student wants to describe how the researchers collected their data. Which choice most effectively uses relevant information from the notes to accomplish this goal?",
+  "choices": [
+   "African elephants respond to drought by changing how far they travel.",
+   "The researchers fitted 40 elephants with GPS collars that recorded each animal's location every 30 minutes for two years.",
+   "Researchers studied how African elephants respond to drought.",
+   "During droughts, African elephants traveled about twice as far each day."
+  ],
+  "correctAnswer": "B",
+  "hints": [],
+  "solution": "“How the data were collected” is the method: GPS collars recording locations every 30 minutes. Choices B and D are results, not method."
+ },
+ {
+  "id": "rwd2q27",
+  "module": 2,
+  "number": 27,
+  "domain": "Expression of Ideas",
+  "skill": "Rhetorical synthesis",
+  "type": "mcq",
+  "passage": "<p>While researching a topic, a student has taken the following notes:<\/p><ul><li>Penicillin is an antibiotic, a drug that kills bacteria.<\/li><li>Alexander Fleming discovered it in 1928 after noticing mold killing bacteria in a laboratory dish.<\/li><li>Penicillin became widely used in the 1940s.<\/li><li>It has saved millions of lives.<\/li><\/ul>",
+  "question": "The student wants to emphasize the importance of Fleming's discovery. Which choice most effectively uses relevant information from the notes to accomplish this goal?",
+  "choices": [
+   "Penicillin is a drug that kills bacteria.",
+   "Penicillin became widely used in the 1940s.",
+   "Penicillin, the antibiotic Alexander Fleming discovered in 1928, came into wide use in the 1940s and has since saved millions of lives.",
+   "Alexander Fleming noticed mold killing bacteria in a laboratory dish in 1928."
+  ],
+  "correctAnswer": "C",
+  "hints": [],
+  "solution": "Importance is shown by the effect: millions of lives saved. Only choice A includes it."
+ }
+];
+
+/* =========================================================
+   2. CONFIG
+   ========================================================= */
+const EMAILJS_CONFIG = {
+  publicKey: "r7tBHktw3unegDdMM",
+  serviceId: "service_6gulv0u",
+  templateId: "template_nxcnl2g"
+};
+const RECIPIENT_EMAIL = "amroacademylb@gmail.com";
+
+const STORAGE_KEY = "amroacademy_rw_diagnostic_v1";
+const MODULE_TIME_MS = 32 * 60 * 1000;
+const DOMAINS = ["Craft and Structure", "Information and Ideas", "Standard English Conventions", "Expression of Ideas"];
+const LETTERS = ["A", "B", "C", "D"];
+
+/* =========================================================
+   3. STATE & STORAGE
+   ========================================================= */
+function freshState() {
+  return {
+    studentName: "",
+    currentModule: 1,
+    currentIndex: { 1: 0, 2: 0 },
+    answers: {},        // qid -> "A".."D" or SPR string
+    eliminated: {},     // qid -> ["B", ...]
+    eliminatorOn: {},   // qid -> bool
+    marked: {},         // qid -> bool
+    qTimers: {},        // qid -> { acc: ms, start: timestamp|null }
+    hintOpen: {},       // qid -> bool
+    hintLevel: {},      // qid -> 0|1|2 (hints revealed)
+    moduleTimers: { 1: { elapsed: 0, start: null }, 2: { elapsed: 0, start: null } },
+    timeUpShown: { 1: false, 2: false },
+    timerHidden: false,
+    submitted: false, submittedAt: null, emailSent: false,
+    corrected: false, correctedAt: null,
+    resultsOpen: true,
+    frozen: false,           // Freeze Time on/off
+    lateAnswers: {},         // qid -> true when answered after the module time ran out
+    reviewOnlyMistakes: false
+  };
+}
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return freshState();
+    const s = JSON.parse(raw);
+    const base = freshState();
+    return Object.assign(base, s, {
+      currentIndex: Object.assign(base.currentIndex, s.currentIndex || {}),
+      moduleTimers: Object.assign(base.moduleTimers, s.moduleTimers || {}),
+      timeUpShown: Object.assign(base.timeUpShown, s.timeUpShown || {})
+    });
+  } catch (e) { return freshState(); }
+}
+function saveState() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) { /* storage full or blocked */ }
+}
+let state = loadState();
+let sending = false;
+
+/* =========================================================
+   4. HELPERS
+   ========================================================= */
+const $ = (id) => document.getElementById(id);
+const byModule = (m) => QUESTIONS.filter(q => q.module === m).sort((a, b) => a.number - b.number);
+const findQ = (id) => QUESTIONS.find(q => q.id === id);
+const currentQ = () => byModule(state.currentModule)[state.currentIndex[state.currentModule]];
+const isLocked = () => state.submitted || state.corrected;
+const hasAnswer = (q) => { const a = state.answers[q.id]; return a !== undefined && a !== null && String(a).trim() !== ""; };
+
+function fmt(ms) {
+  ms = Math.max(0, ms);
+  const total = Math.floor(ms / 1000);
+  const m = Math.floor(total / 60), s = total % 60;
+  return String(m).padStart(2, "0") + ":" + String(s).padStart(2, "0");
+}
+function esc(s) {
+  return String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+}
+function typeset(el) {
+  if (window.renderMathInElement && el) {
+    renderMathInElement(el, {
+      delimiters: [{ left: "\\[", right: "\\]", display: true }, { left: "\\(", right: "\\)", display: false }],
+      throwOnError: false
+    });
+  }
+}
+function toast(msg, ms = 3500) {
+  const t = $("toast"); t.textContent = msg; t.classList.add("show");
+  clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.remove("show"), ms);
+}
+
+/* =========================================================
+   5. TIMERS (module countdown + per-question stopwatch)
+   ========================================================= */
+function moduleElapsed(m) {
+  const t = state.moduleTimers[m];
+  return t.elapsed + (t.start ? Date.now() - t.start : 0);
+}
+function pauseModule(m) {
+  const t = state.moduleTimers[m];
+  if (t.start) { t.elapsed += Date.now() - t.start; t.start = null; }
+}
+function startModule(m) {
+  const t = state.moduleTimers[m];
+  if (!t.start && !isLocked() && state.studentName && !state.frozen) t.start = Date.now();
+}
+function qt(id) {
+  if (!state.qTimers[id]) state.qTimers[id] = { acc: 0, start: null };
+  return state.qTimers[id];
+}
+const qElapsed = (id) => { const t = qt(id); return t.acc + (t.start ? Date.now() - t.start : 0); };
+function stopQ(id) { const t = qt(id); if (t.start) { t.acc += Date.now() - t.start; t.start = null; } }
+function stopAllQ() { Object.keys(state.qTimers).forEach(stopQ); }
+function startQ(id) { if (state.frozen) return; stopAllQ(); qt(id).start = Date.now(); }
+const isOvertime = (m) => moduleElapsed(m) >= MODULE_TIME_MS;
+function markTiming(q) {
+  if (!hasAnswer(q)) delete state.lateAnswers[q.id];
+  else if (isOvertime(q.module)) state.lateAnswers[q.id] = true;
+}
+function stopAllTimers() { stopAllQ(); pauseModule(1); pauseModule(2); }
+
+function tick() {
+  const m = state.currentModule;
+  const remaining = MODULE_TIME_MS - moduleElapsed(m);
+  const el = $("moduleTimer");
+  const over = remaining <= 0;
+  el.textContent = state.timerHidden ? "" : (over ? "+" + fmt(-remaining) : fmt(remaining));
+  el.classList.toggle("low", !over && remaining < 5 * 60 * 1000);
+  el.classList.toggle("over", over);
+  el.classList.toggle("frozen", !!state.frozen);
+  const sub = $("timerSub");
+  if (sub) sub.textContent = state.frozen && !isLocked() ? "❄ Time frozen" : (over && !isLocked() ? "Time's up · overtime" : "");
+  if (over && !state.timeUpShown[m] && !isLocked()) {
+    state.timeUpShown[m] = true; saveState();
+    toast("Time is up for Module " + m + ". You can keep answering, but new answers will be marked as answered after time.", 8000);
+  }
+  const q = currentQ();
+  const clock = $("qClock");
+  if (q && clock) clock.textContent = fmt(qElapsed(q.id));
+}
+
+/* =========================================================
+   6. GRADING
+   ========================================================= */
+function parseNum(str) {
+  if (str === undefined || str === null) return NaN;
+  const s = String(str).trim();
+  if (/^-?(\d+\.?\d*|\.\d+)\/(\d+\.?\d*|\.\d+)$/.test(s)) {
+    const [a, b] = s.split("/").map(Number);
+    return b === 0 ? NaN : a / b;
+  }
+  if (/^-?(\d+\.?\d*|\.\d+)$/.test(s)) return Number(s);
+  return NaN;
+}
+function normalizeSpr(s) {
+  let t = String(s).trim().replace(/\s+/g, "");
+  if (/^-?0\.\d/.test(t)) t = t.replace("0.", ".");
+  return t;
+}
+function isCorrect(q, ans) {
+  if (ans === undefined || ans === null || String(ans).trim() === "") return false;
+  if (q.type === "mcq") return ans === q.correctAnswer;
+  const n = normalizeSpr(ans);
+  if (q.acceptedAnswers.some(a => normalizeSpr(a) === n)) return true;
+  const v = parseNum(ans), target = parseNum(q.correctAnswer);
+  return !isNaN(v) && !isNaN(target) && Math.abs(v - target) < 1e-9;
+}
+function statusOf(q) {
+  if (!hasAnswer(q)) return "unanswered";
+  return isCorrect(q, state.answers[q.id]) ? "correct" : "wrong";
+}
+function buildStats() {
+  const rows = QUESTIONS.map(q => ({
+    q, status: statusOf(q), time: qElapsed(q.id), hints: state.hintLevel[q.id] || 0,
+    late: hasAnswer(q) && !!state.lateAnswers[q.id],
+    answer: hasAnswer(q) ? String(state.answers[q.id]) : "—"
+  }));
+  const total = rows.filter(r => r.status === "correct").length;
+  const perModule = [1, 2].map(m => {
+    const rs = rows.filter(r => r.q.module === m);
+    return { m, correct: rs.filter(r => r.status === "correct").length, onTime: rs.filter(r => r.status === "correct" && !r.late).length, late: rs.filter(r => r.late).length, total: rs.length, time: moduleElapsed(m) };
+  });
+  const perDomain = DOMAINS.map(d => {
+    const rs = rows.filter(r => r.q.domain === d);
+    const correct = rs.filter(r => r.status === "correct").length;
+    const time = rs.reduce((s, r) => s + r.time, 0);
+    return { d, correct, total: rs.length, pct: rs.length ? Math.round(correct / rs.length * 100) : 0, avg: rs.length ? time / rs.length : 0, hints: rs.reduce((s, r) => s + r.hints, 0) };
+  });
+  const totalTime = rows.reduce((s, r) => s + r.time, 0);
+  const hintsUsed = rows.reduce((s, r) => s + r.hints, 0);
+  const correctNoHint = rows.filter(r => r.status === "correct" && r.hints === 0).length;
+  const onTime = rows.filter(r => r.status === "correct" && !r.late).length;
+  const lateCount = rows.filter(r => r.late).length;
+  return { rows, total, perModule, perDomain, totalTime, hintsUsed, correctNoHint, onTime, lateCount, count: rows.length };
+}
+const correctDisplay = (q) => q.type === "mcq" ? q.correctAnswer : q.acceptedAnswers.join(" or ");
+const statusLabel = (s) => ({ correct: "Correct", wrong: "Wrong", unanswered: "Unanswered" }[s]);
+
+/* =========================================================
+   7. RENDERING
+   ========================================================= */
+function render() {
+  renderTop();
+  renderResults();
+  renderQuestion();
+  renderBottom();
+  tick();
+}
+
+function renderTop() {
+  const m = state.currentModule;
+  $("secLabel").textContent = "Section 1, Module " + m + ": Reading and Writing";
+  $("hideTimerBtn").textContent = state.timerHidden ? "Show" : "Hide";
+  document.querySelectorAll(".module-tabs .tab").forEach(b => b.classList.toggle("active", Number(b.dataset.module) === m));
+  const pill = $("statusPill");
+  const parts = [];
+  if (state.frozen && !isLocked()) parts.push("❄ Time frozen");
+  if (state.corrected) parts.push("Corrected");
+  if (state.emailSent) parts.push("Submitted ✓");
+  else if (state.submitted) parts.push("Submitted (email not sent)");
+  pill.textContent = parts.length ? parts.join(" · ") : "In progress";
+  pill.classList.toggle("ok", parts.length > 0);
+  $("submitBtn").textContent = state.emailSent ? "Submitted ✓" : "Submit Exam";
+  $("submitBtn").className = "tool-btn " + (state.emailSent ? "success" : "primary");
+  $("submitBtn").disabled = state.emailSent;
+  $("correctBtn").textContent = state.corrected ? "View Results" : "Correct Exam";
+  const fb = $("freezeBtn");
+  fb.textContent = state.frozen ? "▶ Resume Time" : "❄ Freeze Time";
+  fb.classList.toggle("frozen", !!state.frozen);
+  fb.disabled = isLocked();
+}
+
+function renderBottom() {
+  const m = state.currentModule, i = state.currentIndex[m], n = byModule(m).length;
+  $("navBtn").textContent = "Question " + (i + 1) + " of " + n + " ▲";
+  $("studentLabel").textContent = state.studentName || "";
+  $("backBtn").disabled = (m === 1 && i === 0);
+}
+
+function sprDirections() {
+  return `<aside class="spr-dir">
+    <h3>Student-produced response directions</h3>
+    <ul>
+      <li>If you find <b>more than one correct answer</b>, enter only one answer.</li>
+      <li>You can enter up to <b>5 characters</b> for a positive answer and up to <b>6 characters</b> (including the negative sign) for a negative answer.</li>
+      <li>If your answer is a <b>fraction</b> that doesn't fit in the space, enter the decimal equivalent.</li>
+      <li>If your answer is a <b>decimal</b> that doesn't fit, enter it by truncating or rounding at the fourth digit.</li>
+      <li>If your answer is a <b>mixed number</b> (such as 3½), enter it as an improper fraction (7/2) or its decimal equivalent (3.5).</li>
+      <li>Don't enter <b>symbols</b> such as a percent sign, comma, or dollar sign.</li>
+    </ul>
+    <table class="ex-table"><thead><tr><th>Answer</th><th>Acceptable ways to enter</th><th>Unacceptable</th></tr></thead>
+    <tbody><tr><td>3.5</td><td>3.5 &nbsp; 3.50 &nbsp; 7/2</td><td>31/2 &nbsp; 3 1/2</td></tr>
+    <tr><td>2/3</td><td>2/3 &nbsp; .6666 &nbsp; .6667 &nbsp; 0.666 &nbsp; 0.667</td><td>0.66 &nbsp; .66 &nbsp; 0.67 &nbsp; .67</td></tr>
+    <tr><td>−1/3</td><td>−1/3 &nbsp; −.3333 &nbsp; −0.333</td><td>−.33 &nbsp; −0.33</td></tr></tbody></table>
+  </aside>`;
+}
+
+function flagSvg(on) {
+  return `<svg class="flag-icon" viewBox="0 0 14 16"><path d="M2 1v14" stroke="currentColor" stroke-width="1.6"/><path d="M2.5 1.5h9l-2.2 3 2.2 3h-9z" fill="${on ? "currentColor" : "none"}" stroke="currentColor" stroke-width="1.3"/></svg>`;
+}
+
+function renderQuestion() {
+  const q = currentQ();
+  const area = $("questionArea");
+  const locked = isLocked();
+  const corrected = state.corrected;
+  const ans = state.answers[q.id];
+  const elimOn = !!state.eliminatorOn[q.id] && !locked;
+  const elim = state.eliminated[q.id] || [];
+  const running = !!qt(q.id).start;
+  const hintLevel = state.hintLevel[q.id] || 0;
+  const hintOpen = !!state.hintOpen[q.id];
+
+  let body = "";
+  if (q.type === "mcq") {
+    body = `<div class="choices">` + q.choices.map((c, i) => {
+      const L = LETTERS[i];
+      const isElim = elim.includes(L);
+      let cls = "choice";
+      let tag = "";
+      if (corrected) {
+        if (L === q.correctAnswer) { cls += " correct"; tag = `<span class="tag g">Correct answer</span>`; }
+        if (ans === L && L !== q.correctAnswer) { cls += " wrong"; tag = `<span class="tag r">Your answer</span>`; }
+        if (ans === L && L === q.correctAnswer) tag = `<span class="tag g">Your answer ✓</span>`;
+      } else {
+        if (ans === L) cls += " selected";
+        if (isElim) cls += " eliminated";
+      }
+      let elimCtl = "";
+      if (elimOn) {
+        elimCtl = isElim
+          ? `<button class="elim-undo" data-undo="${L}" aria-label="Undo eliminate ${L}">Undo</button>`
+          : `<button class="elim-btn" data-elim="${L}" aria-label="Eliminate choice ${L}">${L}</button>`;
+      }
+      return `<div class="choice-row"><button class="${cls}" data-choice="${L}" ${locked || isElim ? "disabled" : ""}>
+        <span class="letter">${L}</span><span class="ctext">${c}</span>${tag}</button>${elimCtl}</div>`;
+    }).join("") + `</div>`;
+  } else {
+    const val = ans || "";
+    let cls = "spr-input";
+    if (corrected && hasAnswer(q)) cls += isCorrect(q, val) ? " correct" : " wrong";
+    body = `<input class="${cls}" id="sprInput" type="text" inputmode="decimal" autocomplete="off" spellcheck="false"
+              maxlength="${val.startsWith("-") ? 6 : 5}" value="${esc(val)}" ${locked ? "disabled" : ""} aria-label="Your answer">
+            <div class="preview" id="sprPreview"></div>`;
+  }
+
+  // hints
+  let hintHtml = "";
+  if (hintOpen) {
+    hintHtml = `<div class="hint-box">`;
+    if (hintLevel === 0) hintHtml += `<div class="hint" style="color:var(--muted)">Hints are revealed one at a time.</div>`;
+    for (let i = 0; i < hintLevel; i++) hintHtml += `<div class="hint"><b>Hint ${i + 1}:</b> ${q.hints[i]}</div>`;
+    if (hintLevel < q.hints.length) hintHtml += `<button class="small-btn" id="nextHintBtn">${hintLevel === 0 ? "Reveal Hint 1" : "Reveal Hint 2"}</button>`;
+    else hintHtml += `<div style="font-size:13px;color:var(--muted)">All hints revealed.</div>`;
+    hintHtml += `</div>`;
+  }
+
+  // review (after correction)
+  let reviewHtml = "";
+  if (corrected) {
+    const st = statusOf(q);
+    reviewHtml = `<div class="review-box"><span class="status-badge ${st}">${st === "correct" ? "✓ Correct" : st === "wrong" ? "✗ Incorrect" : "Not answered"}</span>`;
+    if (q.type === "spr") {
+      reviewHtml += `<div>Your answer: ${hasAnswer(q) ? `<span class="${st === "correct" ? "ans-g" : "ans-r"}">${esc(ans)}</span>` : "<i>none</i>"}
+        &nbsp;|&nbsp; Accepted answer(s): <span class="ans-g">${esc(q.acceptedAnswers.join(", "))}</span></div>`;
+    } else if (st === "unanswered") {
+      reviewHtml += `<div>Correct answer: <span class="ans-g">${q.correctAnswer}</span></div>`;
+    }
+    reviewHtml += `<div style="margin-top:8px"><b>Explanation:</b> ${q.solution}</div>
+      <div style="margin-top:6px;font-size:13px;color:var(--muted)">${esc(q.domain)} · ${esc(q.skill)} · Time: ${fmt(qElapsed(q.id))} · Hints used: ${hintLevel}${hasAnswer(q) && state.lateAnswers[q.id] ? " · ⏰ Answered after time" : ""}</div></div>`;
+  }
+
+  area.innerHTML = (corrected ? reviewNavHtml(q) : "") + `
+    <div class="q-wrap ${q.type === "spr" || q.passage ? "spr" : ""}">
+      ${q.passage ? `<aside class="spr-dir passage">${q.passage}</aside>` : q.type === "spr" ? sprDirections() : ""}
+      <section class="q-main">
+        <div class="q-head">
+          <span class="q-num">${q.number}</span>
+          <button class="flag-btn ${state.marked[q.id] ? "on" : ""}" id="flagBtn">${flagSvg(!!state.marked[q.id])} Mark for Review</button>
+          ${q.hints && q.hints.length ? `<button class="hint-btn ${hintOpen ? "on" : ""}" id="hintBtn">💡 ${hintOpen ? "Hide Hint" : "Show Hint"}</button>` : ""}
+          <button class="qtimer ${timerClass(q)}" id="timerBtn" ${locked || state.frozen ? "disabled" : ""}
+            title="${locked ? "Timer locked" : state.frozen ? "Time is frozen" : "Time this question (shortcut: T)"}">${timerInner(q)}</button>
+          <span class="late-badge" id="lateBadge" title="This answer was given after the module time ran out" ${hasAnswer(q) && state.lateAnswers[q.id] ? "" : "hidden"}>⏰ Answered after time</span>
+          <span class="spacer"></span>
+          ${q.type === "mcq" && !locked ? `<button class="abc-btn ${elimOn ? "on" : ""}" id="abcBtn" title="Cross out answer choices">ABC</button>` : ""}
+        </div>
+        <div class="q-text">${q.question}</div>
+        ${body}
+        ${hintHtml}
+        ${reviewHtml}
+      </section>
+    </div>`;
+
+  if (q.type === "spr") updatePreview();
+  typeset(area);
+  bindQuestionEvents(q);
+  if (corrected) bindReviewNav();
+}
+
+/* ---------- Review navigation (after correction) ---------- */
+const ORDER = () => [...byModule(1), ...byModule(2)];
+function reviewNavHtml(q) {
+  const cls = { correct: "c", wrong: "w", unanswered: "u" };
+  const row = (m) => `<div class="rv-row"><span class="rv-m">M${m}</span>${byModule(m).map(x => {
+    const st = statusOf(x), late = hasAnswer(x) && state.lateAnswers[x.id];
+    return `<button class="rv-chip ${cls[st]} ${x.id === q.id ? "cur" : ""} ${late ? "late" : ""}" data-rv="${x.id}"
+      title="Module ${m} Q${x.number}: ${statusLabel(st)}${late ? " (answered after time)" : ""}">${x.number}</button>`;
+  }).join("")}</div>`;
+  const st = statusOf(q);
+  const mistakes = ORDER().filter(x => statusOf(x) !== "correct").length;
+  return `<div class="review-nav" id="reviewNav">${row(1)}${row(2)}
+    <div class="rv-actions">
+      <button class="small-btn" id="prevMistake" ${mistakes ? "" : "disabled"}>← Previous mistake</button>
+      <span class="res-${st}">Module ${q.module} · Q${q.number} · ${statusLabel(st)}</span>
+      <button class="small-btn" id="nextMistake" ${mistakes ? "" : "disabled"}>Next mistake →</button>
+      <label><input type="checkbox" id="onlyMistakes" ${state.reviewOnlyMistakes ? "checked" : ""}> Back / Next skip correct answers</label>
+    </div>
+    <div class="rv-tip">Click any number to jump to it · use the ← → arrow keys to move · a yellow dot means answered after time</div>
+  </div>`;
+}
+function stepTo(dir, onlyMistakes) {
+  const list = ORDER(), cur = currentQ();
+  let i = list.findIndex(x => x.id === cur.id);
+  while (true) {
+    i += dir;
+    if (i < 0 || i >= list.length) break;
+    if (!onlyMistakes || statusOf(list[i]) !== "correct") { goTo(list[i].module, list[i].number - 1); return true; }
+  }
+  toast(onlyMistakes ? (dir > 0 ? "No more mistakes after this question." : "No mistakes before this question.")
+                     : (dir > 0 ? "This is the last question." : "This is the first question."), 2500);
+  return false;
+}
+function bindReviewNav() {
+  document.querySelectorAll("[data-rv]").forEach(b => b.onclick = () => { const x = findQ(b.dataset.rv); goTo(x.module, x.number - 1); });
+  const p = $("prevMistake"), n = $("nextMistake"), o = $("onlyMistakes");
+  if (p) p.onclick = () => stepTo(-1, true);
+  if (n) n.onclick = () => stepTo(1, true);
+  if (o) o.onchange = () => { state.reviewOnlyMistakes = o.checked; saveState(); };
+}
+
+function updatePreview() {
+  const inp = $("sprInput"), pv = $("sprPreview");
+  if (!inp || !pv) return;
+  const v = inp.value.trim();
+  if (!v) { pv.innerHTML = ""; return; }
+  let tex = v.replace(/-/g, "-");
+  const m = v.match(/^(-?)(.+)\/(.+)$/);
+  if (m) tex = `${m[1]}\\dfrac{${m[2]}}{${m[3]}}`;
+  let html = esc(v);
+  if (window.katex) { try { html = katex.renderToString(tex, { throwOnError: false }); } catch (e) {} }
+  const valid = !isNaN(parseNum(v));
+  pv.innerHTML = `<b>Answer Preview:</b><span class="pv">${html}</span>${valid ? "" : ` <span style="color:var(--red);font-size:13px;margin-left:8px">Not a valid number yet</span>`}`;
+}
+
+function renderResults() {
+  const box = $("results");
+  if (!state.corrected) { box.innerHTML = ""; return; }
+  const s = buildStats();
+  const pct = Math.round(s.total / s.count * 100);
+  const rowsHtml = s.rows.map(r => `<tr class="clickable" data-goto="${r.q.id}">
+      <td>M${r.q.module} Q${r.q.number}</td><td>${esc(r.q.domain)}</td><td>${r.q.type.toUpperCase()}</td>
+      <td class="res-${r.status}">${statusLabel(r.status)}</td><td>${esc(r.answer)}</td><td>${esc(correctDisplay(r.q))}</td>
+      <td>${fmt(r.time)}</td><td>${r.hints}</td><td>${r.late ? "⏰ After time" : (r.status === "unanswered" ? "—" : "On time")}</td></tr>`).join("");
+  box.innerHTML = `<div class="results">
+    <div class="results-head"><h2>Your Results</h2><span class="big-score">${s.total} / ${s.count}</span>
+      <span style="color:var(--muted)">(${pct}%)</span><span class="spacer"></span>
+      <button class="small-btn" id="toggleResults">${state.resultsOpen ? "Hide details" : "Show details"}</button></div>
+    ${state.resultsOpen ? `
+    <div class="stat-grid">
+      ${s.perModule.map(pm => `<div class="stat"><div class="k">Module ${pm.m}</div><div class="v">${pm.correct} / ${pm.total}</div><div style="font-size:12px;color:var(--muted)">Module time used: ${fmt(pm.time)}</div></div>`).join("")}
+      <div class="stat"><div class="k">Score within time</div><div class="v">${s.onTime} / ${s.count}</div><div style="font-size:12px;color:var(--muted)">Answered after time: ${s.lateCount}</div></div>
+      <div class="stat"><div class="k">Time on questions</div><div class="v">${fmt(s.totalTime)}</div></div>
+      <div class="stat"><div class="k">Hints used</div><div class="v">${s.hintsUsed}</div><div style="font-size:12px;color:var(--muted)">Correct without hints: ${s.correctNoHint}</div></div>
+    </div>
+    <div class="table-scroll"><table class="rtable"><thead><tr><th>Domain</th><th>Correct</th><th>%</th><th>Avg time / question</th><th>Hints</th></tr></thead><tbody>
+      ${s.perDomain.map(d => `<tr><td>${esc(d.d)}</td><td>${d.correct} / ${d.total}</td><td>${d.pct}%</td><td>${fmt(d.avg)}</td><td>${d.hints}</td></tr>`).join("")}
+    </tbody></table></div>
+    <details><summary>Per-question breakdown (click a row to open that question)</summary>
+      <div class="table-scroll"><table class="rtable"><thead><tr><th>Q</th><th>Domain</th><th>Type</th><th>Result</th><th>Your answer</th><th>Correct</th><th>Time</th><th>Hints</th><th>Timing</th></tr></thead>
+      <tbody>${rowsHtml}</tbody></table></div></details>` : ""}
+  </div>`;
+  const tg = $("toggleResults");
+  if (tg) tg.onclick = () => { state.resultsOpen = !state.resultsOpen; saveState(); renderResults(); };
+  box.querySelectorAll("[data-goto]").forEach(tr => tr.onclick = () => {
+    const q = findQ(tr.dataset.goto); goTo(q.module, q.number - 1);
+  });
+}
+
+/* =========================================================
+   8. QUESTION EVENTS
+   ========================================================= */
+function bindQuestionEvents(q) {
+  $("flagBtn").onclick = () => { state.marked[q.id] = !state.marked[q.id]; saveState(); renderQuestion(); };
+  if ($("hintBtn")) $("hintBtn").onclick = () => {
+    state.hintOpen[q.id] = !state.hintOpen[q.id];
+    if (state.hintOpen[q.id] && !state.hintLevel[q.id]) state.hintLevel[q.id] = 1; // first open reveals Hint 1
+    saveState(); renderQuestion();
+  };
+  const nh = $("nextHintBtn");
+  if (nh) nh.onclick = () => { state.hintLevel[q.id] = Math.min(2, (state.hintLevel[q.id] || 0) + 1); saveState(); renderQuestion(); };
+
+  const abc = $("abcBtn");
+  if (abc) abc.onclick = () => { state.eliminatorOn[q.id] = !state.eliminatorOn[q.id]; saveState(); renderQuestion(); };
+
+  $("timerBtn").onclick = () => {
+    if (isLocked()) return;
+    if (qt(q.id).start) stopQ(q.id); else startQ(q.id);
+    saveState(); renderQuestion();
+  };
+
+  document.querySelectorAll("[data-choice]").forEach(btn => btn.onclick = () => {
+    if (isLocked()) return;
+    const L = btn.dataset.choice;
+    if ((state.eliminated[q.id] || []).includes(L)) return;
+    state.answers[q.id] = L;
+    markTiming(q);               // flag answers given after the module time ran out
+    stopQ(q.id);                 // answering stops the stopwatch
+    saveState(); renderQuestion();
+  });
+  document.querySelectorAll("[data-elim]").forEach(btn => btn.onclick = () => {
+    const L = btn.dataset.elim;
+    const arr = state.eliminated[q.id] || (state.eliminated[q.id] = []);
+    if (!arr.includes(L)) arr.push(L);
+    if (state.answers[q.id] === L) { delete state.answers[q.id]; markTiming(q); } // crossing out the selected choice clears it
+    saveState(); renderQuestion();
+  });
+  document.querySelectorAll("[data-undo]").forEach(btn => btn.onclick = () => {
+    state.eliminated[q.id] = (state.eliminated[q.id] || []).filter(x => x !== btn.dataset.undo);
+    saveState(); renderQuestion();
+  });
+
+  const inp = $("sprInput");
+  if (inp) {
+    inp.oninput = () => {
+      let v = inp.value.replace(/[^0-9.\/-]/g, "");
+      v = v.replace(/(?!^)-/g, "");                 // minus only at the start
+      const parts = v.split("/"); if (parts.length > 2) v = parts[0] + "/" + parts.slice(1).join("");
+      const max = v.startsWith("-") ? 6 : 5;
+      v = v.slice(0, max);
+      inp.maxLength = max;
+      if (inp.value !== v) inp.value = v;
+      state.answers[q.id] = v;
+      markTiming(q);
+      const lb = $("lateBadge"); if (lb) lb.hidden = !(hasAnswer(q) && state.lateAnswers[q.id]);
+      if (v.length) stopQ(q.id);                    // typing an answer stops the stopwatch
+      saveState(); updatePreview(); refreshTimerUi(q);
+    };
+  }
+}
+function timerClass(q) {
+  const running = !!qt(q.id).start;
+  return running ? "running" : (qElapsed(q.id) === 0 && !isLocked() && !state.frozen && !hasAnswer(q) ? "idle" : "");
+}
+function timerInner(q) {
+  const running = !!qt(q.id).start, el = qElapsed(q.id);
+  const icon = running ? '<span class="qt-dot"></span>' : "⏱";
+  const label = running ? "Stop" : (el > 0 ? "Resume" : "Start timer");
+  return `${icon}<span>${label}</span>${running ? "" : "<kbd>T</kbd>"}<span class="qt-clock" id="qClock">${fmt(el)}</span>`;
+}
+function refreshTimerUi(q) {
+  const b = $("timerBtn"); if (!b) return;
+  b.className = "qtimer " + timerClass(q);
+  b.innerHTML = timerInner(q);
+}
+
+/* =========================================================
+   9. NAVIGATION
+   ========================================================= */
+function goTo(m, idx) {
+  const n = byModule(m).length;
+  idx = Math.max(0, Math.min(n - 1, idx));
+  stopAllQ();                                  // leaving a question pauses its stopwatch
+  if (m !== state.currentModule) { pauseModule(state.currentModule); state.currentModule = m; startModule(m); }
+  state.currentIndex[m] = idx;
+  saveState(); render();
+  const main = $("main");
+  if (state.corrected) {
+    // keep the review bar in view instead of jumping back to the results panel
+    const top = $("questionArea").getBoundingClientRect().top - main.getBoundingClientRect().top + main.scrollTop - 8;
+    main.scrollTop = Math.max(0, top);
+  } else main.scrollTop = 0;
+}
+function next() {
+  if (state.corrected) { stepTo(1, state.reviewOnlyMistakes); return; }
+  const m = state.currentModule, i = state.currentIndex[m], n = byModule(m).length;
+  if (i < n - 1) goTo(m, i + 1);
+  else if (m === 1) goTo(2, 0);
+  else openNavigator();
+}
+function back() {
+  if (state.corrected) { stepTo(-1, state.reviewOnlyMistakes); return; }
+  const m = state.currentModule, i = state.currentIndex[m];
+  if (i > 0) goTo(m, i - 1);
+  else if (m === 2) goTo(1, byModule(1).length - 1);
+}
+
+/* =========================================================
+   10. MODALS
+   ========================================================= */
+function openModal(html, wide = false, dismissable = true) {
+  $("modal").className = "modal" + (wide ? " wide" : "");
+  $("modal").innerHTML = html;
+  $("overlay").classList.add("open");
+  $("overlay").dataset.dismiss = dismissable ? "1" : "0";
+  $("modal").querySelectorAll("[data-close]").forEach(b => b.onclick = closeModal);
+  typeset($("modal"));
+}
+function closeModal() { $("overlay").classList.remove("open", "lock"); $("modal").innerHTML = ""; }
+/* ---------- Password gate (only a SHA-256 hash is stored) ---------- */
+const PASSWORD_HASH = "806d3d5697b651f31bc592e5fa0fffb8e936cbc99f13242025e383bdc0474519";
+function sha256Hex(ascii) {
+  function rr(v, a) { return (v >>> a) | (v << (32 - a)); }
+  const mp = Math.pow, maxWord = mp(2, 32); let result = "", i, j;
+  const words = [], bitLen = ascii.length * 8, k = [], isComposite = {};
+  let hash = [], primeCounter = 0;
+  for (let c = 2; primeCounter < 64; c++) {
+    if (!isComposite[c]) { for (i = 0; i < 313; i += c) isComposite[i] = c; hash[primeCounter] = (mp(c, .5) * maxWord) | 0; k[primeCounter++] = (mp(c, 1 / 3) * maxWord) | 0; }
+  }
+  hash = hash.slice(0, 8);
+  ascii += "\x80";
+  while (ascii.length % 64 - 56) ascii += "\x00";
+  for (i = 0; i < ascii.length; i++) { j = ascii.charCodeAt(i); if (j >> 8) return ""; words[i >> 2] |= j << ((3 - i) % 4) * 8; }
+  words[words.length] = (bitLen / maxWord) | 0; words[words.length] = bitLen;
+  for (j = 0; j < words.length;) {
+    const w = words.slice(j, j += 16), old = hash; hash = hash.slice(0, 8);
+    for (i = 0; i < 64; i++) {
+      const w15 = w[i - 15], w2 = w[i - 2], a = hash[0], e = hash[4];
+      const t1 = hash[7] + (rr(e, 6) ^ rr(e, 11) ^ rr(e, 25)) + ((e & hash[5]) ^ ((~e) & hash[6])) + k[i]
+        + (w[i] = (i < 16) ? w[i] : (w[i - 16] + (rr(w15, 7) ^ rr(w15, 18) ^ (w15 >>> 3)) + w[i - 7] + (rr(w2, 17) ^ rr(w2, 19) ^ (w2 >>> 10))) | 0);
+      const t2 = (rr(a, 2) ^ rr(a, 13) ^ rr(a, 22)) + ((a & hash[1]) ^ (a & hash[2]) ^ (hash[1] & hash[2]));
+      hash = [(t1 + t2) | 0].concat(hash); hash[4] = (hash[4] + t1) | 0;
+    }
+    for (i = 0; i < 8; i++) hash[i] = (hash[i] + old[i]) | 0;
+  }
+  for (i = 0; i < 8; i++) for (j = 3; j + 1; j--) { const b = (hash[i] >> (j * 8)) & 255; result += (b < 16 ? "0" : "") + b.toString(16); }
+  return result;
+}
+
+const head = (title, closable = true) => `<div class="modal-head"><h3>${title}</h3>${closable ? `<button class="x-btn" data-close aria-label="Close">×</button>` : ""}</div>`;
+
+function openPasswordModal() {
+  openModal(head("🔒 Password required", false) + `<div class="modal-body">
+    <p>This test is protected. Enter the password your teacher gave you to begin.</p>
+    <input class="name-input" id="pwInput" type="password" placeholder="Password" autocomplete="off" spellcheck="false">
+    <label style="display:flex;align-items:center;gap:6px;margin-top:8px;font-size:13px;color:var(--muted)"><input type="checkbox" id="pwShow"> Show password</label>
+    <div id="pwErr"></div></div>
+    <div class="modal-foot"><button class="tool-btn primary" id="pwBtn">Unlock</button></div>`, false, false);
+  $("overlay").classList.add("lock");
+  const go = () => {
+    if (sha256Hex($("pwInput").value.trim()) === PASSWORD_HASH) {
+      state.unlocked = true; saveState(); closeModal(); openNameModal();
+    } else {
+      $("pwErr").innerHTML = `<div class="msg err">Incorrect password. Please try again.</div>`;
+      $("pwInput").select();
+    }
+  };
+  $("pwBtn").onclick = go;
+  $("pwInput").onkeydown = (e) => { if (e.key === "Enter") go(); };
+  $("pwShow").onchange = (e) => { $("pwInput").type = e.target.checked ? "text" : "password"; };
+  setTimeout(() => $("pwInput") && $("pwInput").focus(), 50);
+}
+/* ---------- Email notification when the student starts ---------- */
+async function notifyStart() {
+  if (state.startNotified || !state.studentName) return;
+  const when = new Date(state.startedAt || Date.now()).toLocaleString();
+  const html = `<div style="font-family:Arial,sans-serif;font-size:14px"><h2 style="color:#1a73a8">Diagnostic started</h2>
+    <p><b>${esc(state.studentName)}</b> entered the password and started the <b>SAT Reading &amp; Writing Diagnostic</b>.</p>
+    <p><b>Started:</b> ${esc(when)}<br><b>Time limit:</b> 2 modules × 32 minutes</p>
+    <p>You will receive the full report when the student submits.</p></div>`;
+  try {
+    if (!window.emailjs) return;
+    await emailjs.send(EMAILJS_CONFIG.serviceId, EMAILJS_CONFIG.templateId, {
+      to_email: RECIPIENT_EMAIL, student_name: state.studentName, submit_date: when,
+      score: "STARTED (not submitted yet)", total_time: "—",
+      report: state.studentName + " started the SAT Reading & Writing Diagnostic at " + when + ".",
+      report_html: html });
+    state.startNotified = true; saveState();
+  } catch (e) { /* silent: retried on next page load */ }
+}
+function openNameModal() {
+  openModal(head("Welcome to Amro Academy", false) + `<div class="modal-body">
+    <p>This is a <b>Reading and Writing diagnostic</b>: <b>2 modules × 27 questions</b>, harder than an average SAT, like the real test's Section 1.
+    Each module has a 32-minute timer. Your progress is saved automatically, even if you refresh the page.</p>
+    <label for="nameInput"><b>Enter your full name to begin:</b></label>
+    <input class="name-input" id="nameInput" placeholder="Your name" maxlength="60">
+    <div id="nameErr"></div></div>
+    <div class="modal-foot"><button class="tool-btn primary" id="startBtn">Start Exam</button></div>`, false, false);
+  const go = () => {
+    const v = $("nameInput").value.trim();
+    if (v.length < 2) { $("nameErr").innerHTML = `<div class="msg err">Please enter your name.</div>`; return; }
+    state.studentName = v; state.startedAt = new Date().toISOString(); startModule(state.currentModule); saveState(); closeModal(); render(); notifyStart();
+  };
+  $("startBtn").onclick = go;
+  $("nameInput").onkeydown = (e) => { if (e.key === "Enter") go(); };
+  setTimeout(() => $("nameInput") && $("nameInput").focus(), 50);
+}
+
+function openNavigator() {
+  const m = state.currentModule;
+  const cells = byModule(m).map((q, i) => {
+    let cls = "nav-cell";
+    if (state.corrected) cls += " " + ({ correct: "c", wrong: "w", unanswered: "u" }[statusOf(q)]);
+    else if (hasAnswer(q)) cls += " answered";
+    if (state.marked[q.id]) cls += " flagged";
+    if (hasAnswer(q) && state.lateAnswers[q.id]) cls += " late";
+    if (i === state.currentIndex[m]) cls += " current";
+    return `<button class="${cls}" data-jump="${i}">${q.number}</button>`;
+  }).join("");
+  const legend = state.corrected
+    ? `<span><i class="lg" style="background:var(--green)"></i>Correct</span><span><i class="lg" style="background:var(--red)"></i>Wrong</span><span><i class="lg" style="background:#fef7e0;border:2px solid var(--amber)"></i>Unanswered</span><span><i class="lg" style="background:#b3261e;clip-path:polygon(0 0,100% 30%,0 60%)"></i>For Review</span>`
+    : `<span><i class="lg" style="outline:2px solid #111"></i>Current</span><span><i class="lg" style="border:2px dashed #555"></i>Unanswered</span><span><i class="lg" style="background:var(--sky-dark)"></i>Answered</span><span><i class="lg" style="background:#b3261e;clip-path:polygon(0 0,100% 30%,0 60%)"></i>For Review</span>`;
+  openModal(head("Section 1, Module " + m + ": Reading and Writing Questions") + `<div class="modal-body">
+    <div class="legend">${legend}<span>⏰ Answered after time</span></div>
+    <div class="nav-grid">${cells}</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="small-btn" data-mod="1" ${m === 1 ? "disabled" : ""}>Go to Module 1</button>
+      <button class="small-btn" data-mod="2" ${m === 2 ? "disabled" : ""}>Go to Module 2</button>
+    </div></div>`);
+  $("modal").querySelectorAll("[data-jump]").forEach(b => b.onclick = () => { closeModal(); goTo(m, Number(b.dataset.jump)); });
+  $("modal").querySelectorAll("[data-mod]").forEach(b => b.onclick = () => { goTo(Number(b.dataset.mod), state.currentIndex[Number(b.dataset.mod)]); openNavigator(); });
+}
+
+function openReference() {
+  const items = [
+    ["Circle", String.raw`\(A=\pi r^2\) &nbsp; \(C=2\pi r\)`],
+    ["Rectangle", String.raw`\(A=\ell w\)`],
+    ["Triangle", String.raw`\(A=\tfrac12 bh\)`],
+    ["Pythagorean theorem", String.raw`\(c^2=a^2+b^2\)`],
+    ["Special right triangles", String.raw`30°-60°-90°: \(x,\ x\sqrt3,\ 2x\)<br>45°-45°-90°: \(s,\ s,\ s\sqrt2\)`],
+    ["Rectangular prism", String.raw`\(V=\ell wh\)`],
+    ["Cylinder", String.raw`\(V=\pi r^2h\)`],
+    ["Sphere", String.raw`\(V=\tfrac43\pi r^3\)`],
+    ["Cone", String.raw`\(V=\tfrac13\pi r^2h\)`],
+    ["Pyramid", String.raw`\(V=\tfrac13\ell wh\)`]
+  ];
+  openModal(head("Reference Sheet") + `<div class="modal-body"><div class="ref-grid">
+    ${items.map(([t, f]) => `<div class="ref-item"><b>${t}</b>${f}</div>`).join("")}</div>
+    <ul style="margin-top:14px">
+      <li>The number of degrees of arc in a circle is 360.</li>
+      <li>The number of radians of arc in a circle is \(2\pi\).</li>
+      <li>The sum of the measures in degrees of the angles of a triangle is 180.</li>
+    </ul></div>`, true);
+}
+
+function openDirections() {
+  openModal(head("Directions") + `<div class="modal-body">
+    <p>The questions in this section address a number of important reading and writing skills. Each question includes one or more passages, which may include a table.
+    Read each passage and question carefully, and then choose the best answer to the question based on the passage(s).</p>
+    <p>All questions are multiple-choice with four answer choices, and each has a single best answer. Use the <b>ABC</b> tool to cross out choices.</p>
+    <p><b>Practice tools:</b> the <b>⏱ timer at the top of each question</b> (shortcut: <b>T</b>) stops automatically when you answer; <i>❄ Freeze Time</i> pauses all timers. When a module's time runs out you can keep answering, but those answers are marked as <b>answered after time</b>.
+    Use <i>Submit Exam</i> to send your report to your teacher, and <i>Correct Exam</i> to see your score and solutions.</p></div>`);
+}
+
+function confirmModal(title, text, okLabel, onOk, danger = false) {
+  openModal(head(title) + `<div class="modal-body"><p>${text}</p></div>
+    <div class="modal-foot"><button class="tool-btn" data-close>Cancel</button>
+    <button class="tool-btn ${danger ? "danger" : "primary"}" id="okBtn">${okLabel}</button></div>`);
+  $("okBtn").onclick = () => { closeModal(); onOk(); };
+}
+
+/* =========================================================
+   11. RESET
+   ========================================================= */
+/* =========================================================
+   FREEZE TIME
+   ========================================================= */
+function toggleFreeze() {
+  if (isLocked()) return;
+  if (state.frozen) { state.frozen = false; startModule(state.currentModule); toast("Time resumed.", 2500); }
+  else { stopAllTimers(); state.frozen = true; toast("Time frozen. The module timer and question stopwatch are paused.", 3500); }
+  saveState(); render();
+}
+
+function resetExam() {
+  confirmModal("Reset Exam", "Are you sure? All answers and times will be erased.", "Yes, reset everything", () => {
+    localStorage.removeItem(STORAGE_KEY);
+    state = freshState();
+    sending = false;
+    saveState(); render(); openPasswordModal();
+  }, true);
+}
+
+/* =========================================================
+   12. CORRECTION
+   ========================================================= */
+function correctExam() {
+  if (state.corrected) { state.resultsOpen = true; saveState(); renderResults(); $("main").scrollTop = 0; return; }
+  confirmModal("Correct Exam", "This will calculate your score, show correct answers in green and wrong answers in red, and <b>lock your answers</b>. Continue?", "Correct now", () => {
+    stopAllTimers();
+    state.corrected = true; state.correctedAt = new Date().toISOString(); state.resultsOpen = true;
+    saveState(); render(); $("main").scrollTop = 0;
+    const s = buildStats();
+    toast("Score: " + s.total + " / " + s.count);
+  });
+}
+
+/* =========================================================
+   13. REPORT + EMAILJS
+   ========================================================= */
+const RW_CURVE = [[0,200],[10,330],[20,450],[30,560],[35,610],[40,660],[45,710],[48,740],[50,760],[52,780],[54,800]];
+function estimateRW(raw) {
+  for (let i = 1; i < RW_CURVE.length; i++) { const [x0, y0] = RW_CURVE[i - 1], [x1, y1] = RW_CURVE[i];
+    if (raw <= x1) return Math.round((y0 + (raw - x0) * (y1 - y0) / (x1 - x0)) / 10) * 10; }
+  return 800;
+}
+function buildReport() {
+  const s = buildStats();
+  const date = new Date().toLocaleString();
+  const pct = (a, b) => b ? Math.round(a / b * 100) : 0;
+  const mistakes = s.rows.filter(r => r.status !== "correct");
+
+  let t = "";
+  t += "AMRO ACADEMY – SAT READING & WRITING DIAGNOSTIC REPORT\n";
+  t += "========================================\n";
+  t += "Student: " + state.studentName + "\n";
+  t += "Date: " + date + "\n";
+  t += "Total score: " + s.total + "/" + s.count + " (" + pct(s.total, s.count) + "%)\n";
+  t += "Estimated SAT Reading & Writing score: " + estimateRW(s.onTime) + " / 800 (answers given within time; estimate only)\n";
+  s.perModule.forEach(pm => { t += "Module " + pm.m + ": " + pm.correct + "/" + pm.total + " (module time used " + fmt(pm.time) + ")\n"; });
+  t += "Total time on questions (stopwatch): " + fmt(s.totalTime) + "\n";
+  t += "Hints used: " + s.hintsUsed + " | Correct without hints: " + s.correctNoHint + "\n";
+  t += "Score within time limit: " + s.onTime + "/" + s.count + " | Answered after time: " + s.lateCount + "\n\n";
+  t += "SCORE BY DOMAIN\n";
+  s.perDomain.forEach(d => { t += "- " + d.d + ": " + d.correct + "/" + d.total + " (" + d.pct + "%) | avg time " + fmt(d.avg) + " | hints " + d.hints + "\n"; });
+  t += "\nMISTAKES & UNANSWERED (" + mistakes.length + ")\n";
+  if (!mistakes.length) t += "None — perfect score!\n";
+  mistakes.forEach(r => {
+    t += "- Module " + r.q.module + " Q" + r.q.number + " | " + r.q.domain + " – " + r.q.skill +
+      " | Student: " + (r.status === "unanswered" ? "(no answer)" : r.answer) + " | Correct: " + correctDisplay(r.q) +
+      " | Time: " + fmt(r.time) + " | Hints: " + r.hints + (r.late ? " | AFTER TIME" : "") + "\n";
+  });
+  t += "\nPER-QUESTION TABLE\n";
+  s.rows.forEach(r => {
+    t += "M" + r.q.module + " Q" + r.q.number + " | " + r.q.domain + " | " + r.q.type.toUpperCase() + " | " +
+      statusLabel(r.status) + " | " + fmt(r.time) + " | Hints: " + r.hints + (r.late ? " | AFTER TIME" : "") + "\n";
+  });
+
+  // Compact HTML (EmailJS caps all variables at 50 KB, so no per-cell inline styles)
+  const color = { correct: "#1e8e3e", wrong: "#c5221f", unanswered: "#b06000" };
+  const res = (st) => `<font color="${color[st]}"><b>${statusLabel(st)}</b></font>`;
+  const tbl = (heads, rows) => `<table border="1" cellpadding="5" cellspacing="0" style="border-collapse:collapse;font:13px Arial;margin:6px 0 16px"><tr bgcolor="#e8f6fc"><th>${heads.join("</th><th>")}</th></tr>${rows.join("")}</table>`;
+  const timing = (r) => r.late ? `<font color="#b06000"><b>After time</b></font>` : (r.status === "unanswered" ? "—" : "On time");
+  const tr = (cells) => `<tr><td>${cells.join("</td><td>")}</td></tr>`;
+  let h = `<div style="font:14px Arial">`;
+  h += `<h2 style="color:#1d6a96">Amro Academy – SAT Reading &amp; Writing Diagnostic Report</h2>`;
+  h += `<p><b>Student:</b> ${esc(state.studentName)}<br><b>Date:</b> ${esc(date)}<br><b>Total score:</b> ${s.total}/${s.count} (${pct(s.total, s.count)}%)<br><b>Estimated SAT Reading &amp; Writing score:</b> ${estimateRW(s.onTime)} / 800 <i>(answers given within time; estimate only)</i><br>`;
+  h += s.perModule.map(pm => `<b>Module ${pm.m}:</b> ${pm.correct}/${pm.total} (time used ${fmt(pm.time)})`).join("<br>");
+  h += `<br><b>Time on questions:</b> ${fmt(s.totalTime)}<br><b>Hints used:</b> ${s.hintsUsed} | <b>Correct without hints:</b> ${s.correctNoHint}<br><b>Score within time limit:</b> ${s.onTime}/${s.count} | <b>Answered after time:</b> ${s.lateCount}</p>`;
+  h += `<h3>Score by domain</h3>` + tbl(["Domain", "Correct", "%", "Avg time", "Hints"],
+    s.perDomain.map(d => tr([d.d, d.correct + "/" + d.total, d.pct + "%", fmt(d.avg), d.hints])));
+  h += `<h3>Mistakes &amp; unanswered (${mistakes.length})</h3>` + (mistakes.length ? tbl(["Q", "Domain", "Skill", "Student", "Correct", "Time", "Hints", "Timing"],
+    mistakes.map(r => tr(["M" + r.q.module + " Q" + r.q.number, r.q.domain, esc(r.q.skill),
+      r.status === "unanswered" ? res("unanswered") : `<font color="#c5221f"><b>${esc(r.answer)}</b></font>`,
+      esc(correctDisplay(r.q)), fmt(r.time), r.hints, timing(r)]))) : "<p>None — perfect score!</p>");
+  h += `<h3>Per-question table</h3>` + tbl(["Q", "Domain", "Type", "Result", "Time", "Hints", "Timing"],
+    s.rows.map(r => tr(["M" + r.q.module + " Q" + r.q.number, r.q.domain, r.q.type.toUpperCase(), res(r.status), fmt(r.time), r.hints, timing(r)])));
+  h += `</div>`;
+  return { text: t, html: h, stats: s, date };
+}
+
+function openSubmitReview() {
+  if (state.emailSent) { toast("This exam has already been submitted."); return; }
+  const un = QUESTIONS.filter(q => !hasAnswer(q));
+  const mk = QUESTIONS.filter(q => state.marked[q.id]);
+  const chips = (list) => list.length
+    ? `<div class="list-q">${list.map(q => `<button class="chip" data-go="${q.id}">M${q.module} Q${q.number}</button>`).join("")}</div>`
+    : `<p style="color:var(--green);font-weight:600">None</p>`;
+  openModal(head("Check Your Work") + `<div class="modal-body">
+    <p>Once you submit, your answers are locked and a report is sent to your teacher.</p>
+    <b>Unanswered questions (${un.length})</b>${chips(un)}
+    <b>Marked for review (${mk.length})</b>${chips(mk)}
+    <div id="sendStatus"></div></div>
+    <div class="modal-foot"><button class="tool-btn" data-close>Back to exam</button>
+    <button class="tool-btn primary" id="confirmSubmit">Confirm Submit</button></div>`);
+  $("modal").querySelectorAll("[data-go]").forEach(b => b.onclick = () => { const q = findQ(b.dataset.go); closeModal(); goTo(q.module, q.number - 1); });
+  $("confirmSubmit").onclick = sendReport;
+}
+
+async function sendReport() {
+  if (sending || state.emailSent) return;            // prevent double sending
+  const btn = $("confirmSubmit"), status = $("sendStatus");
+  sending = true;
+  if (btn) { btn.disabled = true; btn.textContent = "Sending…"; }
+  if (status) status.innerHTML = `<div class="msg info">Sending your report…</div>`;
+
+  stopAllTimers();
+  state.submitted = true; state.submittedAt = state.submittedAt || new Date().toISOString();
+  saveState(); render();
+
+  const rep = buildReport();
+  const sizeOf = (o) => new Blob([JSON.stringify(o)]).size;
+  const params = {
+    to_email: RECIPIENT_EMAIL,
+    student_name: state.studentName,
+    submit_date: rep.date,
+    score: rep.stats.total + "/" + rep.stats.count,
+    total_time: fmt(rep.stats.totalTime),
+    report: rep.text,
+    report_html: rep.html
+  };
+  // EmailJS limit is 50 KB: trim the plain-text copy first if needed
+  if (sizeOf(params) > 48000) params.report = rep.text.split("\nPER-QUESTION TABLE")[0] + "\n(Per-question table: see HTML version.)";
+  if (sizeOf(params) > 48000) params.report = "See the HTML report.";
+  try {
+    if (!window.emailjs) throw new Error("EmailJS could not be loaded. Check your internet connection.");
+    await emailjs.send(EMAILJS_CONFIG.serviceId, EMAILJS_CONFIG.templateId, params);
+    state.emailSent = true; saveState(); render();
+    if (status) status.innerHTML = `<div class="msg ok">✓ Your exam was submitted and the report was sent successfully.</div>`;
+    if (btn) { btn.textContent = "Submitted ✓"; }
+    const foot = $("modal").querySelector(".modal-foot");
+    if (foot) foot.innerHTML = `<button class="tool-btn primary" data-close>Close</button>`, foot.querySelector("[data-close]").onclick = closeModal;
+  } catch (err) {
+    const reason = (err && (err.text || err.message)) || "Unknown error";
+    if (status) status.innerHTML = `<div class="msg err">✗ The report could not be sent: ${esc(reason)}. Your answers are saved.
+      <div style="margin-top:8px"><button class="small-btn" id="retryBtn">Retry</button></div></div>`;
+    if (btn) { btn.disabled = false; btn.textContent = "Confirm Submit"; }
+    const r = $("retryBtn"); if (r) r.onclick = sendReport;
+  } finally {
+    sending = false;
+  }
+}
+
+/* =========================================================
+   14. INIT
+   ========================================================= */
+function init() {
+  try { if (window.emailjs) emailjs.init({ publicKey: EMAILJS_CONFIG.publicKey }); } catch (e) {}
+
+  document.querySelectorAll(".module-tabs .tab").forEach(b => b.onclick = () => { const m = Number(b.dataset.module); goTo(m, state.currentIndex[m]); });
+  $("hideTimerBtn").onclick = () => { state.timerHidden = !state.timerHidden; saveState(); renderTop(); tick(); };
+  $("freezeBtn").onclick = toggleFreeze;
+  $("directionsBtn").onclick = openDirections;
+  $("navBtn").onclick = openNavigator;
+  $("nextBtn").onclick = next;
+  $("backBtn").onclick = back;
+  $("resetBtn").onclick = resetExam;
+  $("correctBtn").onclick = correctExam;
+  $("submitBtn").onclick = openSubmitReview;
+  $("overlay").onclick = (e) => { if (e.target.id === "overlay" && $("overlay").dataset.dismiss === "1") closeModal(); };
+  document.addEventListener("keydown", (e) => {
+    const modalOpen = $("overlay").classList.contains("open");
+    if (e.key === "Escape" && modalOpen && $("overlay").dataset.dismiss === "1") closeModal();
+    // T toggles the question timer
+    if (!modalOpen && (e.key === "t" || e.key === "T") && !e.ctrlKey && !e.metaKey && !e.altKey && !/INPUT|TEXTAREA|SELECT/.test(e.target.tagName)) {
+      const b = $("timerBtn"); if (b && !b.disabled) { e.preventDefault(); b.click(); }
+    }
+    // Arrow keys move between questions in review mode
+    if (!modalOpen && state.corrected && !/INPUT|TEXTAREA|SELECT/.test(e.target.tagName)) {
+      if (e.key === "ArrowRight") { e.preventDefault(); next(); }
+      if (e.key === "ArrowLeft") { e.preventDefault(); back(); }
+    }
+  });
+
+  // Persist running timers when leaving (timestamps already make them refresh-safe)
+  window.addEventListener("beforeunload", saveState);
+
+  if (state.studentName) startModule(state.currentModule);
+  saveState();
+  render();
+  if (!state.unlocked) openPasswordModal();
+  else if (!state.studentName) openNameModal();
+  else notifyStart();
+  setInterval(tick, 250);
+}
+
+// KaTeX scripts are deferred; wait for them so math renders on first paint.
+if (document.readyState === "complete") init();
+else window.addEventListener("load", init);
+</script>
+</body>
+</html>
