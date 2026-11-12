@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MySQL Syntax &amp; Decision Sheet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f4f6f9;--panel:#fff;--ink:#0e141e;--ink2:#3a4553;--muted:#6f7f8f;--line:#e2e7ee;--top:#0e141e;--green:#1ba94c;--green-d:#13893c;--blue:#2e6fd8;--red:#d6363c;--amber:#b77900;--code:#f6f8fa}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;background:var(--bg);color:var(--ink);font-size:15px;line-height:1.6}
+code,pre,kbd{font-family:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace}
+code{background:#eaeef3;padding:1px 5px;border-radius:4px;font-size:.86em;white-space:nowrap}
+pre{background:var(--code);border:1px solid var(--line);border-radius:6px;padding:11px 14px;overflow:auto;font-size:12.8px;line-height:1.55;margin:10px 0}
+pre code{background:none;padding:0;white-space:pre}
+.c{color:#6a7a89}
+header.top{position:sticky;top:0;z-index:20;background:var(--top);color:#fff;height:58px;display:flex;align-items:center;gap:14px;padding:0 20px}
+.logo{width:30px;height:30px;border-radius:6px;background:var(--green);display:grid;place-items:center;font-weight:700}
+header h1{font-size:15px;margin:0;font-weight:600;white-space:nowrap}
+header .sp{flex:1}
+#search{width:300px;max-width:40vw;padding:8px 12px;border-radius:6px;border:0;background:#1d2633;color:#fff;font:inherit;font-size:14px}
+#search::placeholder{color:#8794a3}
+#prog{font-size:12.5px;color:#9aa7b4;white-space:nowrap}
+.layout{display:flex;max-width:1400px;margin:0 auto}
+nav#toc{width:270px;flex-shrink:0;position:sticky;top:58px;height:calc(100vh - 58px);overflow:auto;padding:18px 0 40px;border-right:1px solid var(--line);background:#fff}
+nav#toc a{display:block;padding:4px 18px;color:var(--ink2);text-decoration:none;font-size:13px;border-left:3px solid transparent}
+nav#toc a.h2{font-weight:600;color:var(--ink);margin-top:10px;font-size:13.5px}
+nav#toc a.h3{padding-left:30px;font-size:12.5px}
+nav#toc a:hover{background:#f3f6f9}
+nav#toc a.act{border-left-color:var(--green);background:#eef7f1;color:var(--ink)}
+nav#toc a .ck{color:var(--green);font-weight:700}
+main{flex:1;min-width:0;padding:26px 36px 120px;max-width:1080px}
+.intro{background:#fff;border:1px solid var(--line);border-radius:10px;padding:18px 22px;margin-bottom:24px}
+.intro h2{margin:0 0 6px;font-size:22px}
+section.topic{background:#fff;border:1px solid var(--line);border-radius:10px;padding:8px 26px 22px;margin-bottom:22px}
+section.topic>h2{font-size:23px;margin:16px 0 4px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+section.topic>h2 .num{font-size:13px;background:var(--top);color:#fff;border-radius:5px;padding:2px 8px}
+section.topic>h2 label{margin-left:auto;font-size:12.5px;font-weight:500;color:var(--muted);display:flex;align-items:center;gap:6px;cursor:pointer}
+.lead{color:var(--ink2);margin:0 0 6px}
+h3{font-size:17px;margin:26px 0 6px;padding-top:12px;border-top:1px solid var(--line)}
+h4{font-size:14.5px;margin:16px 0 4px}
+p{margin:6px 0}
+ul,ol{margin:6px 0;padding-left:22px}
+li{margin:2px 0}
+table{border-collapse:collapse;font-size:13.5px;margin:10px 0;width:100%}
+th,td{border:1px solid var(--line);padding:6px 10px;text-align:left;vertical-align:top}
+th{background:#f3f5f8;font-weight:600}
+td code{white-space:normal}
+.tw{overflow-x:auto}
+.trap,.tip,.key{border-radius:8px;padding:10px 14px;margin:12px 0;font-size:14px}
+.trap{background:#fdf0f0;border-left:4px solid var(--red)}
+.trap::before{content:"EXAM TRAP";display:block;font-size:10.5px;font-weight:700;letter-spacing:.07em;color:var(--red);margin-bottom:2px}
+.tip{background:#eef4fd;border-left:4px solid var(--blue)}
+.tip::before{content:"HOW TO ANSWER";display:block;font-size:10.5px;font-weight:700;letter-spacing:.07em;color:var(--blue);margin-bottom:2px}
+.key{background:#ecf8f0;border-left:4px solid var(--green)}
+.key::before{content:"REMEMBER";display:block;font-size:10.5px;font-weight:700;letter-spacing:.07em;color:var(--green-d);margin-bottom:2px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.hide{display:none!important}
+mark{background:#ffe58a;padding:0 1px;border-radius:2px}
+.done>h2{color:var(--green-d)}
+@media(max-width:900px){nav#toc{display:none}main{padding:16px 12px 80px}section.topic{padding:6px 14px 16px}.grid2{grid-template-columns:1fr}#prog{display:none}}
+@media print{header.top,nav#toc{display:none}section.topic{break-inside:auto;border:0}}
+</style>
+</head>
+<body>
+<header class="top"><div class="logo">M</div><h1>MySQL Syntax &amp; Decision Sheet</h1><div class="sp"></div><input id="search" type="search" placeholder="Search… (e.g. HAVING, LEFT JOIN, 1451, DATE_SUB)"><span id="prog"></span></header>
+<div class="layout">
+<nav id="toc"></nav>
+<main id="main">
+<div class="intro">
+<h2>MySQL: syntax and when to use what</h2>
+<p class="lead">Every clause with MySQL 8 syntax, plus the decisions the test checks: WHERE vs HAVING, which JOIN, JOIN vs subquery vs EXISTS, when to use window functions, and DDL/DML forms. Red <b>Exam trap</b> boxes mark the mistakes graders look for. Start with sections 1–2, then practise in the MySQL Practice Exam.</p>
+</div>
+<section class="topic" id="order">
+<h2><span class="num">1</span>The query skeleton &amp; execution order</h2>
+<pre>SELECT   [DISTINCT] col, expr AS alias, AGG(col)     <span class="c">-- 5  what to show</span>
+FROM     table1 t1                                    <span class="c">-- 1  where the rows come from</span>
+[LEFT] JOIN table2 t2 ON t2.key = t1.key              <span class="c">-- 2  combine tables</span>
+WHERE    row_condition                                <span class="c">-- 3  filter ROWS (no aggregates, no SELECT aliases)</span>
+GROUP BY col                                          <span class="c">-- 4  make groups</span>
+HAVING   group_condition                              <span class="c">-- 4b filter GROUPS (aggregates OK)</span>
+ORDER BY alias DESC                                   <span class="c">-- 6  sort (aliases OK)</span>
+LIMIT    [offset,] count;                             <span class="c">-- 7  cut</span></pre>
+<div class="key">Logical order: <b>FROM → JOIN → WHERE → GROUP BY → HAVING → SELECT → DISTINCT → ORDER BY → LIMIT</b>. Nearly every SQL error the test can ask about follows from it:</div>
+<ul>
+<li>A SELECT alias in WHERE → <i>Unknown column</i> (SELECT hasn’t run yet). MySQL does allow aliases in GROUP BY, HAVING and ORDER BY.</li>
+<li><code>WHERE COUNT(*) &gt; 1</code> → <i>Invalid use of group function</i> (groups don’t exist yet). Use HAVING.</li>
+<li>A window function in WHERE → error (windows are computed in SELECT). Wrap the query in a derived table and filter outside.</li>
+<li>LIMIT without ORDER BY → the rows you get aren’t guaranteed.</li>
+</ul>
+</section>
+
+<section class="topic" id="decide">
+<h2><span class="num">2</span>Decision guide: which tool for which wording</h2>
+<div class="tw"><table>
+<tr><th>The question says…</th><th>Use</th><th>Skeleton</th></tr>
+<tr><td>“…where salary &gt; 5000”, “hired after…”, “status is SETTLED”</td><td><b>WHERE</b> (row condition)</td><td><code>WHERE salary &gt; 5000</code></td></tr>
+<tr><td>“for each / per / by department…”</td><td><b>GROUP BY</b> + aggregate</td><td><code>SELECT dept_id, COUNT(*) … GROUP BY dept_id</code></td></tr>
+<tr><td>“departments <b>whose total/average/count</b> is…”, “with at least 2…”, “more than one…”</td><td><b>HAVING</b> (condition on an aggregate)</td><td><code>GROUP BY dept_id HAVING COUNT(*) &gt;= 2</code></td></tr>
+<tr><td>“show X <b>and</b> Y” where X and Y are in different tables</td><td><b>INNER JOIN</b></td><td><code>FROM a JOIN b ON b.a_id = a.id</code></td></tr>
+<tr><td>“<b>all</b> departments, <b>including</b> those with none / even if…”</td><td><b>LEFT JOIN</b> from the “all” table + COUNT(right.col)</td><td><code>FROM d LEFT JOIN e ON … GROUP BY d.id</code></td></tr>
+<tr><td>“…that have <b>no</b> / <b>never</b> / <b>without</b>…”</td><td><b>Anti-join</b>: NOT EXISTS or LEFT JOIN … IS NULL</td><td><code>WHERE NOT EXISTS (SELECT 1 FROM e WHERE e.d = d.id)</code></td></tr>
+<tr><td>“…that have <b>at least one</b>…”</td><td><b>EXISTS</b>, IN, or JOIN + DISTINCT</td><td><code>WHERE EXISTS (SELECT 1 …)</code></td></tr>
+<tr><td>“more than the <b>average</b> / equal to the <b>max</b>…”</td><td><b>scalar subquery</b></td><td><code>WHERE salary &gt; (SELECT AVG(salary) FROM e)</code></td></tr>
+<tr><td>“more than the average <b>of their own</b> department”</td><td><b>correlated subquery</b> or a window AVG</td><td><code>WHERE salary &gt; (SELECT AVG(x.salary) FROM e x WHERE x.dept = e.dept)</code></td></tr>
+<tr><td>“<b>top N per</b> group”, “highest-paid <b>in each</b>…”, “latest trade <b>per</b> trader”</td><td><b>window function</b> in a derived table</td><td><code>ROW_NUMBER() OVER (PARTITION BY g ORDER BY v DESC)</code> → <code>WHERE rn &lt;= N</code></td></tr>
+<tr><td>“<b>second / Nth</b> highest”</td><td>MAX below MAX, LIMIT offset, or DENSE_RANK</td><td><code>… ORDER BY salary DESC LIMIT 1 OFFSET 1</code></td></tr>
+<tr><td>“unique / distinct values”</td><td><b>DISTINCT</b> (or GROUP BY)</td><td><code>SELECT DISTINCT color …</code></td></tr>
+<tr><td>“<b>count unique</b> X per Y”</td><td><b>COUNT(DISTINCT x)</b></td><td><code>COUNT(DISTINCT trader_id)</code></td></tr>
+<tr><td>“categorise / label as Junior/Mid/Senior”, “if…then”</td><td><b>CASE</b></td><td><code>CASE WHEN … THEN … ELSE … END</code></td></tr>
+<tr><td>“number of buys and sells <b>as columns</b>” (pivot)</td><td><b>conditional aggregation</b></td><td><code>SUM(CASE WHEN side='BUY' THEN qty ELSE 0 END)</code></td></tr>
+<tr><td>“combine two lists”</td><td><b>UNION</b> (dedupe) / <b>UNION ALL</b> (keep all)</td><td><code>SELECT … UNION SELECT …</code></td></tr>
+<tr><td>“employee and their <b>manager</b>” (same table)</td><td><b>self join</b></td><td><code>FROM e JOIN e m ON m.id = e.manager_id</code></td></tr>
+<tr><td>“running total / previous value / rank”</td><td><b>window</b> (SUM OVER, LAG, RANK)</td><td><code>SUM(x) OVER (ORDER BY d)</code></td></tr>
+<tr><td>“duplicates”</td><td><b>GROUP BY … HAVING COUNT(*) &gt; 1</b></td><td></td></tr>
+<tr><td>“exactly one / exactly N”</td><td><b>HAVING COUNT(*) = N</b></td><td></td></tr>
+<tr><td>“in the last 30 days / 3 years”</td><td><b>DATE_SUB(CURDATE(), INTERVAL n UNIT)</b></td><td><code>WHERE d &gt;= CURDATE() - INTERVAL 30 DAY</code></td></tr>
+<tr><td>“years of experience / age”</td><td><b>TIMESTAMPDIFF(YEAR, start, end)</b></td><td></td></tr>
+<tr><td>“first 3 characters / full name / uppercase”</td><td>string functions</td><td><code>LEFT(n,3)</code>, <code>CONCAT(a,' ',b)</code>, <code>UPPER()</code></td></tr>
+</table></div>
+<div class="tip">Read the question once for <b>output columns</b> (SELECT), once for <b>tables needed</b> (FROM/JOIN, following the keys), once for <b>row filters</b> (WHERE), once for <b>“per/each”</b> (GROUP BY), once for <b>conditions on totals</b> (HAVING), and once for <b>order/limit</b>. Then write the query in that order.</div>
+</section>
+
+<section class="topic" id="select">
+<h2><span class="num">3</span>SELECT, aliases, DISTINCT, CASE</h2>
+<pre>SELECT first_name, last_name FROM employees;
+SELECT * FROM employees;                                   <span class="c">-- all columns (avoid in production: slower, fragile)</span>
+SELECT first_name AS name, salary * 12 AS annual_salary    <span class="c">-- AS is optional: salary*12 annual</span>
+FROM employees e;                                          <span class="c">-- table alias</span>
+SELECT `order`, `select` FROM t;                           <span class="c">-- backticks quote identifiers / reserved words</span>
+SELECT DISTINCT dept_id FROM employees;                    <span class="c">-- unique values (NULL counts as one)</span>
+SELECT DISTINCT dept_id, manager_id FROM employees;        <span class="c">-- unique COMBINATIONS of both columns</span>
+SELECT 'fixed text', 1 + 1, NOW();                         <span class="c">-- SELECT without FROM is valid in MySQL</span>
+
+SELECT first_name,
+       CASE                                           <span class="c">-- searched CASE: first true WHEN wins</span>
+         WHEN salary &gt;= 8000 THEN 'High'
+         WHEN salary &gt;= 5000 THEN 'Medium'
+         ELSE 'Low'                                   <span class="c">-- without ELSE → NULL</span>
+       END AS band,
+       CASE dept_id WHEN 1 THEN 'Eng' WHEN 2 THEN 'Fin' ELSE 'Other' END AS d,   <span class="c">-- simple CASE</span>
+       IF(email IS NULL, 'missing', 'ok') AS email_state                        <span class="c">-- MySQL IF(cond, a, b)</span>
+FROM employees;</pre>
+<p>CASE works anywhere an expression is allowed: SELECT, WHERE, ORDER BY (<code>ORDER BY CASE status WHEN 'PENDING' THEN 1 ELSE 2 END</code>), GROUP BY, and inside aggregates.</p>
+</section>
+
+<section class="topic" id="where">
+<h2><span class="num">4</span>WHERE: every operator</h2>
+<div class="tw"><table>
+<tr><th>Operator</th><th>Example</th><th>Notes</th></tr>
+<tr><td><code>= &lt;&gt; != &lt; &gt; &lt;= &gt;=</code></td><td><code>salary &gt;= 5000</code></td><td>strings compare case-<b>insensitively</b> with the default collation (<code>'cs' = 'CS'</code> is true)</td></tr>
+<tr><td><code>AND</code>, <code>OR</code>, <code>NOT</code></td><td><code>dept_id = 1 AND (salary &gt; 7000 OR manager_id IS NULL)</code></td><td>AND binds tighter than OR, so <b>always add parentheses</b> when mixing them</td></tr>
+<tr><td><code>IN (list)</code></td><td><code>dept_id IN (1, 3)</code></td><td>= several ORs on the same column. <code>NOT IN</code> + NULL in the list → no rows</td></tr>
+<tr><td><code>IN (subquery)</code></td><td><code>emp_id IN (SELECT emp_id FROM assignments)</code></td><td></td></tr>
+<tr><td><code>BETWEEN a AND b</code></td><td><code>salary BETWEEN 5000 AND 7000</code></td><td><b>inclusive</b> both ends. For DATETIME use <code>&gt;= '2026-06-01' AND &lt; '2026-07-01'</code></td></tr>
+<tr><td><code>LIKE</code></td><td><code>first_name LIKE 'M%'</code></td><td><code>%</code> any length (0+), <code>_</code> exactly one. <code>'%a'</code> ends with a, <code>'%ar%'</code> contains, <code>'_a%'</code> 2nd letter a. Escape: <code>LIKE '50\%'</code></td></tr>
+<tr><td><code>IS NULL</code> / <code>IS NOT NULL</code></td><td><code>email IS NULL</code></td><td>never <code>= NULL</code></td></tr>
+<tr><td><code>&lt;=&gt;</code></td><td><code>a &lt;=&gt; b</code></td><td>NULL-safe equality (NULL &lt;=&gt; NULL is true). MySQL only</td></tr>
+<tr><td><code>REGEXP</code></td><td><code>email REGEXP '@murex\\.com$'</code></td><td>regular expression match</td></tr>
+<tr><td><code>EXISTS (subquery)</code></td><td><code>EXISTS (SELECT 1 FROM …)</code></td><td>true if the subquery returns at least one row</td></tr>
+<tr><td><code>x &gt; ALL (…)</code> / <code>ANY (…)</code></td><td><code>salary &gt; ALL (SELECT salary FROM e WHERE dept_id = 2)</code></td><td>greater than every value / at least one value</td></tr>
+</table></div>
+<div class="trap"><code>WHERE dept = 'A' OR 'B'</code> is wrong (it means <code>(dept='A') OR 'B'</code>). <code>WHERE dept = 'A' AND dept = 'B'</code> is never true. Correct: <code>WHERE dept IN ('A','B')</code> or <code>dept = 'A' OR dept = 'B'</code>.</div>
+</section>
+
+<section class="topic" id="null">
+<h2><span class="num">5</span>NULL: rules and functions</h2>
+<ul>
+<li>NULL = unknown. Any comparison or arithmetic with NULL gives NULL: <code>NULL = NULL</code> → NULL, <code>5 + NULL</code> → NULL, <code>CONCAT('a', NULL)</code> → NULL.</li>
+<li>WHERE keeps only TRUE, so rows where the condition is NULL are dropped, including in <code>&lt;&gt;</code>: <code>WHERE dept_id &lt;&gt; 1</code> doesn’t return rows with a NULL dept_id.</li>
+<li>Aggregates ignore NULL (except COUNT(*)). GROUP BY puts all NULLs in one group. ORDER BY ASC puts NULLs <b>first</b> in MySQL.</li>
+</ul>
+<div class="tw"><table>
+<tr><th>Function</th><th>Meaning</th></tr>
+<tr><td><code>IFNULL(x, d)</code></td><td>x, or d if x is NULL (MySQL)</td></tr>
+<tr><td><code>COALESCE(a, b, c)</code></td><td>first non-NULL argument (standard SQL, any number of args)</td></tr>
+<tr><td><code>NULLIF(a, b)</code></td><td>NULL if a = b, else a. Avoids division by zero: <code>x / NULLIF(y, 0)</code></td></tr>
+<tr><td><code>IF(x IS NULL, …, …)</code></td><td>custom handling</td></tr>
+<tr><td><code>CONCAT_WS(' ', a, b)</code></td><td>concatenates with a separator and <b>skips</b> NULLs</td></tr>
+</table></div>
+<p>Not in MySQL: <code>NVL</code> (Oracle), <code>ISNULL(a, b)</code> (SQL Server). In MySQL, <code>ISNULL(x)</code> takes one argument and returns 1/0.</p>
+</section>
+
+<section class="topic" id="sort">
+<h2><span class="num">6</span>ORDER BY &amp; LIMIT</h2>
+<pre>ORDER BY salary DESC, first_name ASC     <span class="c">-- ASC default; second column breaks ties</span>
+ORDER BY 2 DESC                          <span class="c">-- by the 2nd selected column (allowed, less readable)</span>
+ORDER BY annual_salary                   <span class="c">-- SELECT alias is allowed here</span>
+ORDER BY email IS NULL, email            <span class="c">-- NULLs last (false=0 sorts before true=1)</span>
+ORDER BY FIELD(status, 'PENDING', 'SETTLED', 'CANCELLED')   <span class="c">-- custom order (MySQL)</span>
+
+LIMIT 10                 <span class="c">-- first 10 rows</span>
+LIMIT 20, 10             <span class="c">-- skip 20, take 10 (rows 21–30) = LIMIT 10 OFFSET 20</span>
+LIMIT 1 OFFSET 1         <span class="c">-- the 2nd row → "second highest" when sorted DESC (use DISTINCT for distinct values)</span></pre>
+<p>Page n with size s: <code>LIMIT s OFFSET (n-1)*s</code>. MySQL has no <code>TOP</code> and no <code>FETCH FIRST</code>.</p>
+</section>
+
+<section class="topic" id="group">
+<h2><span class="num">7</span>Aggregates, GROUP BY, HAVING</h2>
+<div class="tw"><table>
+<tr><th>Aggregate</th><th>Returns</th><th>NULLs</th></tr>
+<tr><td><code>COUNT(*)</code></td><td>number of rows</td><td>counted</td></tr>
+<tr><td><code>COUNT(col)</code></td><td>number of non-NULL values</td><td>ignored</td></tr>
+<tr><td><code>COUNT(DISTINCT col)</code></td><td>number of distinct non-NULL values</td><td>ignored</td></tr>
+<tr><td><code>SUM(col)</code> / <code>AVG(col)</code></td><td>total / mean (AVG = SUM/COUNT(col))</td><td>ignored; SUM of no rows = NULL</td></tr>
+<tr><td><code>MIN</code> / <code>MAX</code></td><td>smallest / largest (numbers, dates, strings)</td><td>ignored</td></tr>
+<tr><td><code>GROUP_CONCAT(col ORDER BY col SEPARATOR ', ')</code></td><td>values joined into one string (MySQL)</td><td>ignored</td></tr>
+</table></div>
+<pre>SELECT dept_id, COUNT(*) AS n, ROUND(AVG(salary), 2) AS avg_sal, MAX(hire_date) AS newest
+FROM employees
+WHERE hire_date &gt;= '2018-01-01'           <span class="c">-- 1) row filter BEFORE grouping</span>
+GROUP BY dept_id                          <span class="c">-- 2) one output row per dept_id</span>
+HAVING COUNT(*) &gt;= 2                      <span class="c">-- 3) group filter AFTER aggregation</span>
+ORDER BY avg_sal DESC;</pre>
+<div class="tw"><table>
+<tr><th></th><th>WHERE</th><th>HAVING</th></tr>
+<tr><td>Filters</td><td>individual <b>rows</b></td><td><b>groups</b></td></tr>
+<tr><td>Runs</td><td>before GROUP BY</td><td>after GROUP BY</td></tr>
+<tr><td>Aggregates allowed?</td><td><b>no</b></td><td><b>yes</b></td></tr>
+<tr><td>Without GROUP BY</td><td>normal</td><td>treats the whole result as one group</td></tr>
+<tr><td>Example</td><td><code>WHERE salary &gt; 5000</code></td><td><code>HAVING AVG(salary) &gt; 5000</code></td></tr>
+<tr><td>Performance</td><td>filter as early as possible: put plain row conditions in WHERE, not in HAVING</td><td></td></tr>
+</table></div>
+<div class="trap"><b>Rule</b>: every column in SELECT must be in GROUP BY or inside an aggregate (MySQL 8’s ONLY_FULL_GROUP_BY, error 1055). <code>SELECT dept_id, first_name, MAX(salary) … GROUP BY dept_id</code> does <b>not</b> give the top earner’s name. Use a window function or join back to the max.</div>
+<pre><span class="c">-- subtotals + grand total</span>
+SELECT dept_id, SUM(salary) FROM employees GROUP BY dept_id WITH ROLLUP;
+<span class="c">-- percent of total</span>
+SELECT dept_id, SUM(salary) / (SELECT SUM(salary) FROM employees) * 100 AS pct FROM employees GROUP BY dept_id;</pre>
+</section>
+
+<section class="topic" id="joins">
+<h2><span class="num">8</span>JOINs: types, syntax, traps</h2>
+<p>Example data: <b>departments</b> = {1 Eng, 2 Fin, 5 Research}; <b>employees</b> = {Rami→1, Sara→1, Karim→2, Rita→NULL}.</p>
+<div class="tw"><table>
+<tr><th>Join</th><th>Keeps</th><th>Result for the example</th></tr>
+<tr><td><code>INNER JOIN</code> (= <code>JOIN</code>)</td><td>only matching pairs</td><td>Rami-Eng, Sara-Eng, Karim-Fin (Rita and Research dropped)</td></tr>
+<tr><td><code>departments LEFT JOIN employees</code></td><td>every department + matches (NULLs if none)</td><td>Eng-Rami, Eng-Sara, Fin-Karim, <b>Research-NULL</b></td></tr>
+<tr><td><code>employees LEFT JOIN departments</code></td><td>every employee</td><td>…, <b>Rita-NULL</b></td></tr>
+<tr><td><code>RIGHT JOIN</code></td><td>every row of the right table (rewrite it as a LEFT JOIN with the tables swapped: easier to read)</td><td></td></tr>
+<tr><td>FULL OUTER</td><td><b>not in MySQL</b>: <code>LEFT JOIN … UNION … RIGHT JOIN</code></td><td>all four + Research-NULL + NULL-Rita</td></tr>
+<tr><td><code>CROSS JOIN</code></td><td>every combination (m × n rows)</td><td>3 × 4 = 12 rows</td></tr>
+<tr><td>Self join</td><td>the table joined to itself</td><td><code>employees e JOIN employees m ON m.emp_id = e.manager_id</code></td></tr>
+</table></div>
+<pre>FROM employees e
+JOIN departments d ON d.dept_id = e.dept_id             <span class="c">-- explicit ON (preferred)</span>
+JOIN departments d USING (dept_id)                     <span class="c">-- same column name on both sides; the column appears once</span>
+NATURAL JOIN departments                               <span class="c">-- joins on ALL same-named columns: risky, avoid</span>
+FROM employees e, departments d WHERE d.dept_id = e.dept_id   <span class="c">-- old comma style = inner join</span>
+
+<span class="c">-- chain: follow the keys</span>
+FROM students s
+JOIN grades g  ON g.student_id = s.student_id
+JOIN courses c ON c.course_id  = g.course_id
+<span class="c">-- composite key</span>
+JOIN t2 ON t2.a = t1.a AND t2.b = t1.b
+
+<span class="c">-- FULL OUTER JOIN emulation</span>
+SELECT d.dept_name, e.first_name FROM departments d LEFT JOIN employees e ON e.dept_id = d.dept_id
+UNION
+SELECT d.dept_name, e.first_name FROM departments d RIGHT JOIN employees e ON e.dept_id = d.dept_id;</pre>
+<div class="trap"><b>ON vs WHERE with a LEFT JOIN.</b> A condition on the <b>right</b> table in WHERE removes the NULL rows and silently turns the LEFT JOIN into an INNER JOIN.
+<pre>-- WRONG: instruments without June trades disappear
+FROM instruments i LEFT JOIN trades x ON x.instrument_id = i.instrument_id
+WHERE x.trade_date &gt;= '2026-06-01'
+-- RIGHT: filter inside ON, so unmatched instruments are kept with NULLs (count 0)
+FROM instruments i LEFT JOIN trades x
+  ON x.instrument_id = i.instrument_id AND x.trade_date &gt;= '2026-06-01'</pre>
+Conditions on the <b>left</b> table still belong in WHERE.</div>
+<div class="trap"><b>Counting after a LEFT JOIN</b>: <code>COUNT(*)</code> counts the NULL row as 1. Use <code>COUNT(right_table.id)</code> to get 0.</div>
+<div class="trap"><b>Fan-out</b>: joining two one-to-many tables at once (employees→assignments and employees→orders) multiplies rows and inflates SUM/COUNT. Aggregate each child table in its own subquery first, then join.</div>
+</section>
+
+<section class="topic" id="sub">
+<h2><span class="num">9</span>Subqueries, EXISTS, CTEs, and when to use which</h2>
+<div class="tw"><table>
+<tr><th>Kind</th><th>Example</th><th>Use when</th></tr>
+<tr><td><b>Scalar</b> (one value)</td><td><code>WHERE salary &gt; (SELECT AVG(salary) FROM employees)</code></td><td>comparing against a single computed value</td></tr>
+<tr><td><b>IN list</b></td><td><code>WHERE dept_id IN (SELECT dept_id FROM departments WHERE location = 'Beirut')</code></td><td>membership; simple and readable</td></tr>
+<tr><td><b>EXISTS</b> / NOT EXISTS</td><td><code>WHERE EXISTS (SELECT 1 FROM assignments a WHERE a.emp_id = e.emp_id)</code></td><td>“has at least one / has none”; NULL-safe; stops at the first match</td></tr>
+<tr><td><b>Correlated</b></td><td><code>WHERE salary &gt; (SELECT AVG(x.salary) FROM employees x WHERE x.dept_id = e.dept_id)</code></td><td>compare each row with its own group (runs per outer row)</td></tr>
+<tr><td><b>Derived table</b> (FROM)</td><td><code>SELECT * FROM (SELECT …, ROW_NUMBER() OVER (…) rn FROM …) t WHERE rn &lt;= 2</code></td><td>filtering on window results or on aggregates of aggregates. <b>Needs an alias</b> in MySQL (error 1248)</td></tr>
+<tr><td><b>CTE</b> (MySQL 8)</td><td><code>WITH totals AS (SELECT dept_id, SUM(salary) s FROM employees GROUP BY dept_id) SELECT * FROM totals WHERE s &gt; 10000;</code></td><td>same as a derived table, more readable, reusable; <code>WITH RECURSIVE</code> for hierarchies</td></tr>
+<tr><td>In SELECT</td><td><code>SELECT name, (SELECT COUNT(*) FROM trades x WHERE x.trader_id = t.trader_id) AS n FROM traders t</code></td><td>a per-row count (a LEFT JOIN + GROUP BY is often faster)</td></tr>
+</table></div>
+<div class="tw"><table>
+<tr><th>Need</th><th>Best choice</th><th>Why</th></tr>
+<tr><td>Columns from both tables</td><td><b>JOIN</b></td><td>subqueries in WHERE can’t return columns to the outer SELECT</td></tr>
+<tr><td>Only filter by existence in another table</td><td><b>EXISTS</b> or IN</td><td>no duplicate rows (a JOIN can duplicate when there are several matches)</td></tr>
+<tr><td>“Has none”</td><td><b>NOT EXISTS</b> or LEFT JOIN … IS NULL</td><td><code>NOT IN</code> breaks if the subquery returns any NULL</td></tr>
+<tr><td>Compare with an overall aggregate</td><td><b>scalar subquery</b></td><td>aggregates aren’t allowed in WHERE</td></tr>
+<tr><td>Rank or top-N inside groups</td><td><b>window function</b> + derived table/CTE</td><td>clean, handles ties explicitly</td></tr>
+</table></div>
+<div class="trap">MySQL error 1093: you can’t UPDATE/DELETE a table while selecting from the <b>same</b> table in a subquery (<code>DELETE FROM e WHERE salary &lt; (SELECT AVG(salary) FROM e)</code>). Wrap it: <code>(SELECT AVG(salary) FROM (SELECT salary FROM e) tmp)</code>, or use a JOIN with a derived table.</div>
+</section>
+
+<section class="topic" id="setops">
+<h2><span class="num">10</span>Set operators</h2>
+<div class="tw"><table>
+<tr><th>Operator</th><th>Result</th><th>MySQL</th></tr>
+<tr><td><code>UNION</code></td><td>rows from both, duplicates removed (sorts → slower)</td><td>yes</td></tr>
+<tr><td><code>UNION ALL</code></td><td>rows from both, duplicates kept</td><td>yes</td></tr>
+<tr><td><code>INTERSECT</code></td><td>rows in both</td><td>8.0.31+ (older: <code>IN</code> / inner join)</td></tr>
+<tr><td><code>EXCEPT</code></td><td>rows in the first but not the second</td><td>8.0.31+ (older: NOT EXISTS). No <code>MINUS</code></td></tr>
+</table></div>
+<p>Rules: the same number of columns, compatible types. Column names come from the first SELECT. A single ORDER BY/LIMIT at the end applies to the whole result.</p>
+</section>
+
+<section class="topic" id="window">
+<h2><span class="num">11</span>Window functions (MySQL 8)</h2>
+<pre>function() OVER ( [PARTITION BY group_cols] [ORDER BY sort_cols] [frame] )</pre>
+<p>Like GROUP BY, but <b>keeps every row</b> and adds a computed column.</p>
+<div class="tw"><table>
+<tr><th>Function</th><th>Salaries 9000, 7000, 7000, 6500 (DESC)</th></tr>
+<tr><td><code>ROW_NUMBER()</code></td><td>1, 2, 3, 4: unique, ties broken arbitrarily (add a tie-breaker column)</td></tr>
+<tr><td><code>RANK()</code></td><td>1, 2, 2, 4: ties share a rank, then a <b>gap</b></td></tr>
+<tr><td><code>DENSE_RANK()</code></td><td>1, 2, 2, 3: ties share a rank, <b>no gap</b> (use for “Nth distinct value”)</td></tr>
+<tr><td><code>NTILE(4)</code></td><td>splits rows into 4 buckets</td></tr>
+<tr><td><code>LAG(col, 1)</code> / <code>LEAD(col, 1)</code></td><td>value from the previous / next row (day-over-day change)</td></tr>
+<tr><td><code>FIRST_VALUE(col)</code> / <code>LAST_VALUE</code></td><td>first/last value in the window</td></tr>
+<tr><td><code>SUM(col) OVER (ORDER BY d)</code></td><td>running total</td></tr>
+<tr><td><code>AVG(col) OVER (PARTITION BY dept)</code></td><td>department average on every row (compare a row with its group)</td></tr>
+</table></div>
+<pre><span class="c">-- top 2 per department (exactly 2: ROW_NUMBER; keep ties: DENSE_RANK)</span>
+SELECT * FROM (
+  SELECT e.*, ROW_NUMBER() OVER (PARTITION BY dept_id ORDER BY salary DESC, emp_id) AS rn
+  FROM employees e
+) t
+WHERE rn &lt;= 2;
+<span class="c">-- running notional per trader</span>
+SELECT trade_id, trader_id, trade_date,
+       SUM(quantity * price) OVER (PARTITION BY trader_id ORDER BY trade_date
+                                   ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS running
+FROM trades;</pre>
+<p>A window function can’t be used in WHERE, GROUP BY or HAVING at the same level, so wrap the query. Named windows: <code>… OVER w … WINDOW w AS (PARTITION BY dept_id ORDER BY salary DESC)</code>.</p>
+</section>
+
+<section class="topic" id="func">
+<h2><span class="num">12</span>MySQL functions</h2>
+<h3 id="f-str">String</h3>
+<div class="tw"><table>
+<tr><th>Function</th><th>Result</th></tr>
+<tr><td><code>CONCAT('Rami', ' ', 'Haddad')</code></td><td>Rami Haddad (NULL if any argument is NULL)</td></tr>
+<tr><td><code>CONCAT_WS(', ', a, b, c)</code></td><td>joins with a separator, skipping NULLs</td></tr>
+<tr><td><code>LENGTH(s)</code> / <code>CHAR_LENGTH(s)</code></td><td>bytes / characters (differ for UTF-8 such as Arabic)</td></tr>
+<tr><td><code>UPPER(s)</code>, <code>LOWER(s)</code> (UCASE/LCASE)</td><td>case</td></tr>
+<tr><td><code>SUBSTRING(s, 1, 3)</code> = <code>SUBSTR</code> = <code>MID</code></td><td>3 characters from position <b>1</b> (1-based). <code>SUBSTRING(s, -3)</code> = last 3</td></tr>
+<tr><td><code>LEFT(s, 3)</code> / <code>RIGHT(s, 3)</code></td><td>first / last 3 characters</td></tr>
+<tr><td><code>TRIM(s)</code>, <code>LTRIM</code>, <code>RTRIM</code>, <code>TRIM(BOTH 'x' FROM s)</code></td><td>remove spaces / characters</td></tr>
+<tr><td><code>REPLACE(s, 'old', 'new')</code></td><td>replace all occurrences</td></tr>
+<tr><td><code>LOCATE('@', email)</code> / <code>INSTR(email, '@')</code></td><td>position (0 if not found)</td></tr>
+<tr><td><code>SUBSTRING_INDEX(email, '@', -1)</code></td><td>part after the last '@' (the domain); <code>1</code> = before the first</td></tr>
+<tr><td><code>LPAD(id, 5, '0')</code> / <code>RPAD</code></td><td>00042</td></tr>
+<tr><td><code>REVERSE(s)</code>, <code>REPEAT(s, n)</code></td><td></td></tr>
+</table></div>
+<h3 id="f-num">Numeric</h3>
+<p><code>ROUND(x, 2)</code> · <code>TRUNCATE(x, 2)</code> (cut, no rounding) · <code>CEIL(x)</code>/<code>CEILING</code> · <code>FLOOR(x)</code> · <code>ABS(x)</code> · <code>MOD(a, b)</code> or <code>a % b</code> · <code>POW(a, b)</code> · <code>SQRT</code> · <code>a DIV b</code> (integer division). <code>7 / 2</code> = <b>3.5000</b> in MySQL (not 3). <code>CAST(x AS DECIMAL(10,2))</code>, <code>CAST('42' AS UNSIGNED)</code>, <code>CAST(d AS CHAR)</code>.</p>
+<h3 id="f-date">Date &amp; time</h3>
+<div class="tw"><table>
+<tr><th>Function</th><th>Result</th></tr>
+<tr><td><code>CURDATE()</code> / <code>CURRENT_DATE</code></td><td>today (DATE)</td></tr>
+<tr><td><code>NOW()</code> / <code>CURRENT_TIMESTAMP</code> / <code>SYSDATE()</code></td><td>date + time</td></tr>
+<tr><td><code>YEAR(d)</code>, <code>MONTH(d)</code>, <code>DAY(d)</code>, <code>DAYNAME(d)</code>, <code>QUARTER(d)</code>, <code>WEEK(d)</code></td><td>parts</td></tr>
+<tr><td><code>DATE(dt)</code></td><td>date part of a datetime</td></tr>
+<tr><td><code>DATE_ADD(d, INTERVAL 7 DAY)</code> / <code>DATE_SUB(d, INTERVAL 3 YEAR)</code></td><td>shift (units: SECOND, MINUTE, HOUR, DAY, WEEK, MONTH, QUARTER, YEAR)</td></tr>
+<tr><td><code>d + INTERVAL 1 MONTH</code> / <code>CURDATE() - INTERVAL 30 DAY</code></td><td>same, shorter</td></tr>
+<tr><td><code>DATEDIFF(a, b)</code></td><td>a − b in <b>days</b></td></tr>
+<tr><td><code>TIMESTAMPDIFF(YEAR, start, end)</code></td><td>full units between (YEAR, MONTH, DAY, HOUR…): age, tenure</td></tr>
+<tr><td><code>DATE_FORMAT(d, '%Y-%m')</code></td><td>2026-06. <code>%d</code> day, <code>%M</code> month name, <code>%b</code> short month, <code>%H:%i:%s</code> time</td></tr>
+<tr><td><code>STR_TO_DATE('30/06/2026', '%d/%m/%Y')</code></td><td>parse text to DATE</td></tr>
+<tr><td><code>LAST_DAY(d)</code></td><td>last day of the month</td></tr>
+</table></div>
+<div class="tip">Date literals are strings <code>'YYYY-MM-DD'</code>. Filter whole months with a half-open range (<code>&gt;= '2026-06-01' AND &lt; '2026-07-01'</code>) so an index on the column can be used. <code>YEAR(d) = 2026 AND MONTH(d) = 6</code> is correct but can’t use the index.</div>
+</section>
+
+<section class="topic" id="patterns">
+<h2><span class="num">13</span>Classic query patterns</h2>
+<pre><span class="c">-- 1. Nth (2nd) highest distinct value</span>
+SELECT MAX(salary) FROM employees WHERE salary &lt; (SELECT MAX(salary) FROM employees);
+SELECT DISTINCT salary FROM employees ORDER BY salary DESC LIMIT 1 OFFSET 1;
+SELECT salary FROM (SELECT salary, DENSE_RANK() OVER (ORDER BY salary DESC) r FROM employees) t WHERE r = 2 LIMIT 1;
+
+<span class="c">-- 2. Top N per group</span>
+SELECT * FROM (SELECT e.*, ROW_NUMBER() OVER (PARTITION BY dept_id ORDER BY salary DESC) rn FROM employees e) t WHERE rn &lt;= 3;
+
+<span class="c">-- 3. Row with the max per group (latest trade per trader)</span>
+SELECT x.* FROM trades x
+JOIN (SELECT trader_id, MAX(trade_date) md FROM trades GROUP BY trader_id) m
+  ON m.trader_id = x.trader_id AND m.md = x.trade_date;
+
+<span class="c">-- 4. Duplicates</span>
+SELECT email, COUNT(*) FROM employees GROUP BY email HAVING COUNT(*) &gt; 1;
+
+<span class="c">-- 5. Anti-join: rows with no match</span>
+SELECT p.* FROM projects p LEFT JOIN assignments a ON a.project_id = p.project_id WHERE a.project_id IS NULL;
+SELECT p.* FROM projects p WHERE NOT EXISTS (SELECT 1 FROM assignments a WHERE a.project_id = p.project_id);
+
+<span class="c">-- 6. Exactly N / at least N</span>
+SELECT emp_id FROM assignments GROUP BY emp_id HAVING COUNT(*) = 1;
+
+<span class="c">-- 7. "All of": employees assigned to EVERY project (relational division)</span>
+SELECT emp_id FROM assignments GROUP BY emp_id
+HAVING COUNT(DISTINCT project_id) = (SELECT COUNT(*) FROM projects);
+
+<span class="c">-- 8. Pivot with conditional aggregation</span>
+SELECT trader_id,
+       SUM(CASE WHEN side = 'BUY'  THEN quantity ELSE 0 END) AS buys,
+       SUM(CASE WHEN side = 'SELL' THEN quantity ELSE 0 END) AS sells,
+       COUNT(CASE WHEN status = 'PENDING' THEN 1 END)        AS pending   -- COUNT ignores the NULL from a missing ELSE
+FROM trades GROUP BY trader_id;
+
+<span class="c">-- 9. Compare each row with its group average</span>
+SELECT * FROM (SELECT e.*, AVG(salary) OVER (PARTITION BY dept_id) dept_avg FROM employees e) t WHERE salary &gt; dept_avg;
+
+<span class="c">-- 10. Percentage of total</span>
+SELECT dept_id, ROUND(100 * SUM(salary) / SUM(SUM(salary)) OVER (), 1) AS pct FROM employees GROUP BY dept_id;
+
+<span class="c">-- 11. Running total and day-over-day change</span>
+SELECT trade_date, SUM(quantity) q,
+       SUM(SUM(quantity)) OVER (ORDER BY trade_date) AS running,
+       SUM(quantity) - LAG(SUM(quantity)) OVER (ORDER BY trade_date) AS change_vs_prev
+FROM trades GROUP BY trade_date;
+
+<span class="c">-- 12. Delete duplicates, keep the lowest id</span>
+DELETE e1 FROM employees e1 JOIN employees e2 ON e1.email = e2.email AND e1.emp_id &gt; e2.emp_id;
+
+<span class="c">-- 13. Hierarchy (all reports under manager 1)</span>
+WITH RECURSIVE chain AS (
+  SELECT emp_id, first_name, manager_id FROM employees WHERE emp_id = 1
+  UNION ALL
+  SELECT e.emp_id, e.first_name, e.manager_id FROM employees e JOIN chain c ON e.manager_id = c.emp_id
+) SELECT * FROM chain;</pre>
+</section>
+
+<section class="topic" id="ddl">
+<h2><span class="num">14</span>DDL: CREATE, ALTER, DROP, indexes, views</h2>
+<div class="tw"><table>
+<tr><th>Type</th><th>Use for</th></tr>
+<tr><td><code>INT</code> / <code>BIGINT</code> / <code>TINYINT</code> / <code>SMALLINT</code></td><td>whole numbers (INT ≈ ±2.1 billion; BIGINT for big ids/amounts)</td></tr>
+<tr><td><code>DECIMAL(10,2)</code></td><td><b>money</b>: exact, 10 digits total, 2 after the point</td></tr>
+<tr><td><code>FLOAT</code> / <code>DOUBLE</code></td><td>approximate (scientific); not for money</td></tr>
+<tr><td><code>CHAR(n)</code> / <code>VARCHAR(n)</code></td><td>fixed (padded) / variable-length text</td></tr>
+<tr><td><code>TEXT</code> / <code>JSON</code> / <code>BLOB</code></td><td>long text / JSON documents / binary</td></tr>
+<tr><td><code>DATE</code> / <code>DATETIME</code> / <code>TIMESTAMP</code> / <code>TIME</code></td><td>date / date+time / date+time stored in UTC, auto-convertible / time</td></tr>
+<tr><td><code>BOOLEAN</code></td><td>alias of TINYINT(1): 0/1</td></tr>
+<tr><td><code>ENUM('BUY','SELL')</code></td><td>one value from a fixed list</td></tr>
+</table></div>
+<pre>CREATE TABLE IF NOT EXISTS orders (
+  order_id     INT AUTO_INCREMENT PRIMARY KEY,
+  emp_id       INT NOT NULL,
+  order_ref    VARCHAR(20) NOT NULL UNIQUE,
+  order_date   DATE NOT NULL DEFAULT (CURRENT_DATE),
+  total_amount DECIMAL(10,2) NOT NULL CHECK (total_amount &gt; 0),      <span class="c">-- CHECK enforced since 8.0.16</span>
+  status       ENUM('NEW','PAID','CANCELLED') DEFAULT 'NEW',
+  created_at   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_orders_emp FOREIGN KEY (emp_id) REFERENCES employees(emp_id)
+      ON DELETE RESTRICT ON UPDATE CASCADE,                            <span class="c">-- or CASCADE / SET NULL</span>
+  INDEX idx_orders_date (order_date)
+) ENGINE=InnoDB;
+
+CREATE TABLE reservations (                 <span class="c">-- composite primary key</span>
+  eid INT, bid INT,
+  PRIMARY KEY (eid, bid),
+  FOREIGN KEY (bid) REFERENCES boats(bid)
+);
+CREATE TABLE emp_backup AS SELECT * FROM employees;     <span class="c">-- copy structure + data (no keys/indexes)</span>
+CREATE TABLE emp_empty LIKE employees;                  <span class="c">-- copy structure incl. indexes, no data</span></pre>
+<div class="trap">In MySQL, an <b>inline</b> <code>emp_id INT REFERENCES employees(emp_id)</code> is accepted but <b>ignored</b> by InnoDB (no foreign key is created). Always write a separate <code>FOREIGN KEY (col) REFERENCES t(col)</code> clause. A foreign key needs matching types on both sides and an index (InnoDB creates one automatically).</div>
+<div class="tw"><table>
+<tr><th>ALTER TABLE …</th><th>Does</th></tr>
+<tr><td><code>ADD COLUMN bonus DECIMAL(8,2) NOT NULL DEFAULT 0 AFTER salary</code></td><td>add a column (FIRST / AFTER col for position)</td></tr>
+<tr><td><code>MODIFY salary DECIMAL(12,2) NOT NULL DEFAULT 0</code></td><td>change the type/definition, keeping the name. Restate the <b>full</b> definition (NOT NULL etc. or it’s lost)</td></tr>
+<tr><td><code>CHANGE salary base_salary DECIMAL(12,2)</code></td><td>rename + redefine (old name, new name, definition)</td></tr>
+<tr><td><code>RENAME COLUMN salary TO base_salary</code></td><td>rename only (8.0)</td></tr>
+<tr><td><code>ALTER COLUMN status SET DEFAULT 'NEW'</code> / <code>DROP DEFAULT</code></td><td>default only</td></tr>
+<tr><td><code>DROP COLUMN bonus</code></td><td>remove a column</td></tr>
+<tr><td><code>ADD CONSTRAINT uq_email UNIQUE (email)</code></td><td>add a constraint</td></tr>
+<tr><td><code>ADD CONSTRAINT fk_x FOREIGN KEY (dept_id) REFERENCES departments(dept_id)</code></td><td>add a foreign key</td></tr>
+<tr><td><code>DROP FOREIGN KEY fk_x</code> / <code>DROP INDEX idx</code> / <code>DROP PRIMARY KEY</code></td><td>remove a constraint or index</td></tr>
+<tr><td><code>ADD INDEX idx_name (last_name, first_name)</code></td><td>add an index</td></tr>
+<tr><td><code>RENAME TO staff</code> (or <code>RENAME TABLE a TO b</code>)</td><td>rename the table</td></tr>
+</table></div>
+<pre>CREATE INDEX idx_trades_date ON trades(trade_date);
+CREATE UNIQUE INDEX ux_invoice ON sales(invoice_no);        <span class="c">-- fast lookups + no duplicates</span>
+CREATE INDEX idx_book_date ON trades(trader_id, trade_date); <span class="c">-- composite: equality column first, range column second</span>
+DROP INDEX idx_trades_date ON trades;
+SHOW INDEX FROM trades;
+
+CREATE OR REPLACE VIEW v_settled AS SELECT * FROM trades WHERE status = 'SETTLED';
+DROP VIEW IF EXISTS v_settled;
+DROP TABLE IF EXISTS orders;          <span class="c">-- structure + data gone</span>
+TRUNCATE TABLE orders;                <span class="c">-- all rows gone, AUTO_INCREMENT reset, implicit commit</span>
+SHOW TABLES; DESCRIBE orders; SHOW CREATE TABLE orders;</pre>
+</section>
+
+<section class="topic" id="dml">
+<h2><span class="num">15</span>DML: INSERT, UPDATE, DELETE</h2>
+<pre>INSERT INTO departments VALUES (6, 'Legal', 'Paris');                        <span class="c">-- every column, in table order</span>
+INSERT INTO departments (dept_name, dept_id) VALUES ('Audit', 7);            <span class="c">-- named columns, any order; others DEFAULT/NULL</span>
+INSERT INTO departments (dept_id, dept_name) VALUES (8, 'Ops'), (9, 'IT');   <span class="c">-- multi-row</span>
+INSERT INTO emp_backup SELECT * FROM employees WHERE dept_id = 1;            <span class="c">-- from a query (no VALUES)</span>
+INSERT INTO departments SET dept_id = 10, dept_name = 'HR';                  <span class="c">-- MySQL SET form</span>
+INSERT IGNORE INTO departments VALUES (1, 'X', 'Y');                         <span class="c">-- skip rows that violate a key (no error)</span>
+INSERT INTO departments VALUES (2, 'Treasury', 'Paris')
+  ON DUPLICATE KEY UPDATE dept_name = VALUES(dept_name), location = VALUES(location);   <span class="c">-- upsert</span>
+REPLACE INTO departments VALUES (2, 'Treasury', 'Paris');                    <span class="c">-- delete old row + insert new</span>
+SELECT LAST_INSERT_ID();                                                     <span class="c">-- last AUTO_INCREMENT value</span>
+
+UPDATE employees SET salary = salary * 1.10, bonus = 500 WHERE dept_id = 3;  <span class="c">-- several columns</span>
+UPDATE employees SET salary = salary * 1.10
+WHERE dept_id IN (SELECT dept_id FROM departments WHERE dept_name IN ('Sales', 'Support'));
+UPDATE employees e JOIN departments d ON d.dept_id = e.dept_id               <span class="c">-- MySQL multi-table UPDATE</span>
+SET e.salary = e.salary * 1.10
+WHERE d.dept_name IN ('Sales', 'Support');
+UPDATE trades SET status = 'SETTLED' WHERE status = 'PENDING' ORDER BY trade_date LIMIT 10;   <span class="c">-- MySQL only</span>
+UPDATE employees SET salary = CASE WHEN dept_id = 1 THEN salary * 1.1 ELSE salary * 1.05 END; <span class="c">-- conditional</span>
+
+DELETE FROM assignments WHERE emp_id IN (SELECT emp_id FROM employees WHERE hire_date &lt; '2017-01-01');
+DELETE a FROM assignments a JOIN employees e ON e.emp_id = a.emp_id           <span class="c">-- MySQL multi-table DELETE</span>
+WHERE e.hire_date &lt; '2017-01-01';</pre>
+<div class="trap">UPDATE/DELETE without WHERE changes <b>every</b> row. In MySQL Workbench, <i>safe updates mode</i> (error 1175) blocks a WHERE that doesn’t use a key. Test the WHERE with a SELECT first, then run the change inside a transaction.</div>
+</section>
+
+<section class="topic" id="tx">
+<h2><span class="num">16</span>Transactions, ACID, locking</h2>
+<pre>START TRANSACTION;                 <span class="c">-- or BEGIN</span>
+UPDATE accounts SET bal = bal - 100 WHERE id = 1;
+SAVEPOINT s1;
+UPDATE accounts SET bal = bal + 100 WHERE id = 2;
+ROLLBACK TO s1;                    <span class="c">-- undo only after s1</span>
+COMMIT;                            <span class="c">-- or ROLLBACK (undo everything since START)</span>
+SET autocommit = 0;                <span class="c">-- default 1: every statement commits by itself</span>
+SELECT * FROM accounts WHERE id = 1 FOR UPDATE;    <span class="c">-- lock the row until COMMIT</span></pre>
+<ul>
+<li><b>ACID</b>: Atomicity (all or nothing), Consistency (constraints hold), Isolation (concurrent transactions don’t interfere), Durability (committed data survives crashes, via the redo log).</li>
+<li>Transactions need <b>InnoDB</b> (MyISAM has no transactions or foreign keys).</li>
+<li><b>Implicit commit</b>: DDL (CREATE, ALTER, DROP, TRUNCATE, RENAME) commits automatically and can’t be rolled back.</li>
+<li>Isolation levels: READ UNCOMMITTED (dirty reads) &lt; READ COMMITTED &lt; <b>REPEATABLE READ (InnoDB default)</b> &lt; SERIALIZABLE. <code>SET TRANSACTION ISOLATION LEVEL READ COMMITTED;</code></li>
+<li><b>Deadlock</b> (error 1213): two transactions each wait for the other’s lock; InnoDB rolls one back. Prevent: access tables/rows in the same order, keep transactions short, index the columns in your WHERE. <b>Lock wait timeout</b> (1205): waited too long for a lock.</li>
+</ul>
+</section>
+
+<section class="topic" id="perf">
+<h2><span class="num">17</span>Indexes &amp; EXPLAIN</h2>
+<pre>EXPLAIN SELECT * FROM trades WHERE trader_id = 2 AND trade_date &gt;= '2026-06-01';
+EXPLAIN ANALYZE SELECT …;    <span class="c">-- 8.0.18+: actually runs it and shows real timings</span></pre>
+<div class="tw"><table>
+<tr><th>EXPLAIN column</th><th>Read it as</th></tr>
+<tr><td><code>type</code></td><td>best → worst: <code>const</code> (PK lookup) · <code>eq_ref</code> (one match per join row) · <code>ref</code> (non-unique index) · <code>range</code> (index range) · <code>index</code> (full index scan) · <b><code>ALL</code> (full table scan: bad on big tables)</b></td></tr>
+<tr><td><code>possible_keys</code> / <code>key</code></td><td>indexes it could use / the index it chose (NULL = none)</td></tr>
+<tr><td><code>rows</code></td><td>estimated rows examined</td></tr>
+<tr><td><code>Extra</code></td><td><code>Using index</code> (covering, good) · <code>Using where</code> · <code>Using filesort</code> (extra sort) · <code>Using temporary</code> (temp table for GROUP BY/DISTINCT)</td></tr>
+</table></div>
+<ul>
+<li><b>Index</b> columns used in WHERE, JOIN ON, ORDER BY and GROUP BY; foreign keys; high-selectivity columns.</li>
+<li><b>Don’t</b> index tiny tables, low-cardinality flags, or columns that are constantly updated. Every index slows INSERT/UPDATE/DELETE and uses space.</li>
+<li><b>Index killers</b>: a function on the column (<code>YEAR(d)=…</code>, <code>LOWER(email)=…</code>) · a leading wildcard <code>LIKE '%x'</code> · implicit type conversion (comparing a VARCHAR column with a number) · <code>OR</code> across different columns · a composite index used without its leftmost column.</li>
+<li><b>Clustered</b> index = the InnoDB primary key (rows stored in PK order, one per table). <b>Secondary</b> indexes store the PK to find rows.</li>
+<li>Query hygiene: select only the needed columns (no <code>SELECT *</code>), filter early, use LIMIT for previews, avoid N+1 queries from application code, and keep statistics fresh (<code>ANALYZE TABLE t</code>). The slow query log finds the culprits.</li>
+</ul>
+</section>
+
+<section class="topic" id="proc">
+<h2><span class="num">18</span>Stored procedures, functions, triggers (MySQL syntax)</h2>
+<pre>DELIMITER //                                   <span class="c">-- change the statement terminator so ; can appear inside the body</span>
+CREATE PROCEDURE raise_dept(IN p_dept INT, IN p_pct DECIMAL(5,2), OUT p_rows INT)
+BEGIN
+  UPDATE employees SET salary = salary * (1 + p_pct / 100) WHERE dept_id = p_dept;
+  SET p_rows = ROW_COUNT();
+END //
+CREATE FUNCTION annual(s DECIMAL(10,2)) RETURNS DECIMAL(12,2) DETERMINISTIC
+BEGIN
+  RETURN s * 12;
+END //
+CREATE TRIGGER trg_emp_audit AFTER UPDATE ON employees
+FOR EACH ROW
+BEGIN
+  IF NEW.salary &lt;&gt; OLD.salary THEN
+    INSERT INTO salary_audit(emp_id, old_salary, new_salary, changed_at)
+    VALUES (OLD.emp_id, OLD.salary, NEW.salary, NOW());
+  END IF;
+END //
+DELIMITER ;
+CALL raise_dept(3, 10, @n); SELECT @n;
+SELECT first_name, annual(salary) FROM employees;</pre>
+<ul>
+<li><b>Procedure</b>: called with <code>CALL</code>, can modify data, IN/OUT/INOUT parameters, can return result sets.</li>
+<li><b>Function</b>: returns one value, usable inside SELECT/WHERE.</li>
+<li><b>Trigger</b>: runs <b>automatically</b> BEFORE/AFTER INSERT/UPDATE/DELETE, for each row. <code>NEW.col</code> = the new value, <code>OLD.col</code> = the old value. Used for audit, validation, derived columns (maintaining integrity).</li>
+<li><b>Event</b>: scheduled SQL (<code>CREATE EVENT … ON SCHEDULE EVERY 1 DAY</code>), MySQL’s cron.</li>
+<li>Variables: <code>@user_var</code> (session) vs <code>DECLARE x INT</code> (inside BEGIN…END).</li>
+</ul>
+</section>
+
+<section class="topic" id="errors">
+<h2><span class="num">19</span>MySQL error codes to recognise</h2>
+<div class="tw"><table>
+<tr><th>Code</th><th>Message</th><th>Cause → fix</th></tr>
+<tr><td>1045</td><td>Access denied for user</td><td>wrong user/password/host → check credentials and grants</td></tr>
+<tr><td>1046</td><td>No database selected</td><td><code>USE dbname;</code> or prefix <code>db.table</code></td></tr>
+<tr><td>1048</td><td>Column cannot be null</td><td>a NOT NULL column got NULL</td></tr>
+<tr><td>1054</td><td>Unknown column 'x' in 'where clause'</td><td>typo, wrong alias, or a SELECT alias used in WHERE</td></tr>
+<tr><td>1055</td><td>…isn’t in GROUP BY</td><td>ONLY_FULL_GROUP_BY: group or aggregate the column</td></tr>
+<tr><td>1062</td><td>Duplicate entry 'x' for key 'PRIMARY'</td><td>PK/UNIQUE violation → ON DUPLICATE KEY UPDATE / INSERT IGNORE / fix the data</td></tr>
+<tr><td>1064</td><td>You have an error in your SQL syntax</td><td>typo, a missing comma, a reserved word not in backticks, Oracle/SQL Server syntax</td></tr>
+<tr><td>1093</td><td>You can’t specify target table for update in FROM clause</td><td>the same table in UPDATE/DELETE and its subquery → wrap it in a derived table</td></tr>
+<tr><td>1111</td><td>Invalid use of group function</td><td>an aggregate in WHERE → HAVING</td></tr>
+<tr><td>1146</td><td>Table doesn’t exist</td><td>name/database/case (table names are case-sensitive on Linux)</td></tr>
+<tr><td>1175</td><td>Safe update mode</td><td>UPDATE/DELETE without a key in WHERE (Workbench)</td></tr>
+<tr><td>1205</td><td>Lock wait timeout exceeded</td><td>another transaction holds the lock → find it (<code>SHOW PROCESSLIST</code>, <code>performance_schema</code>)</td></tr>
+<tr><td>1213</td><td>Deadlock found</td><td>retry; same lock order; shorter transactions</td></tr>
+<tr><td>1215 / 3780</td><td>Cannot add foreign key constraint</td><td>type mismatch, missing index, or the parent column isn’t a key</td></tr>
+<tr><td>1248</td><td>Every derived table must have its own alias</td><td><code>FROM (SELECT …) AS t</code></td></tr>
+<tr><td><b>1451</b></td><td>Cannot delete or update a parent row: a foreign key constraint fails</td><td>children still reference it → delete the children first, or CASCADE/SET NULL (Oracle ORA-02292)</td></tr>
+<tr><td><b>1452</b></td><td>Cannot add or update a child row: a foreign key constraint fails</td><td>the parent doesn’t exist (Oracle ORA-02291)</td></tr>
+<tr><td>3819</td><td>Check constraint is violated</td><td>a value breaks a CHECK</td></tr>
+<tr><td>2002 / 2003</td><td>Can’t connect to MySQL server</td><td>server down, wrong host/port (3306), firewall (= “connection refused”)</td></tr>
+</table></div>
+</section>
+
+<section class="topic" id="dialects">
+<h2><span class="num">20</span>MySQL vs Oracle vs SQL Server</h2>
+<div class="tw"><table>
+<tr><th>Need</th><th>MySQL</th><th>Oracle</th><th>SQL Server</th></tr>
+<tr><td>First n rows</td><td><code>LIMIT n</code></td><td><code>FETCH FIRST n ROWS ONLY</code> / <code>ROWNUM</code></td><td><code>TOP n</code> / <code>OFFSET … FETCH</code></td></tr>
+<tr><td>Concatenate</td><td><code>CONCAT(a, b)</code></td><td><code>a || b</code></td><td><code>a + b</code> / CONCAT</td></tr>
+<tr><td>NULL default</td><td><code>IFNULL</code> / COALESCE</td><td><code>NVL</code> / COALESCE</td><td><code>ISNULL(a, b)</code> / COALESCE</td></tr>
+<tr><td>Today / now</td><td><code>CURDATE()</code> / <code>NOW()</code></td><td><code>SYSDATE</code> / <code>TRUNC(SYSDATE)</code></td><td><code>GETDATE()</code></td></tr>
+<tr><td>Add days</td><td><code>DATE_ADD(d, INTERVAL 7 DAY)</code></td><td><code>d + 7</code></td><td><code>DATEADD(day, 7, d)</code></td></tr>
+<tr><td>Substring</td><td><code>SUBSTRING</code>/<code>SUBSTR</code>/<code>LEFT</code></td><td><code>SUBSTR</code></td><td><code>SUBSTRING</code>/<code>LEFT</code></td></tr>
+<tr><td>String length</td><td><code>LENGTH</code>/<code>CHAR_LENGTH</code></td><td><code>LENGTH</code></td><td><code>LEN</code></td></tr>
+<tr><td>Auto id</td><td><code>AUTO_INCREMENT</code></td><td><code>GENERATED AS IDENTITY</code> / sequence</td><td><code>IDENTITY(1,1)</code></td></tr>
+<tr><td>Change a column</td><td><code>MODIFY</code> / <code>CHANGE</code></td><td><code>MODIFY</code></td><td><code>ALTER COLUMN</code></td></tr>
+<tr><td>Set difference</td><td><code>EXCEPT</code> (8.0.31+)</td><td><code>MINUS</code></td><td><code>EXCEPT</code></td></tr>
+<tr><td>FULL OUTER JOIN</td><td>✗ (LEFT UNION RIGHT)</td><td>✓</td><td>✓</td></tr>
+<tr><td>Upsert</td><td><code>ON DUPLICATE KEY UPDATE</code></td><td><code>MERGE</code></td><td><code>MERGE</code></td></tr>
+<tr><td>Quote identifiers</td><td><code>`name`</code></td><td><code>"NAME"</code></td><td><code>[name]</code></td></tr>
+<tr><td>Dummy table</td><td>not needed (or <code>DUAL</code>)</td><td><code>FROM DUAL</code> required</td><td>not needed</td></tr>
+<tr><td>Default port</td><td>3306</td><td>1521</td><td>1433</td></tr>
+</table></div>
+</section>
+
+<section class="topic" id="method">
+<h2><span class="num">21</span>Method for written SQL questions</h2>
+<ol>
+<li><b>Output</b>: list exactly the columns asked for (full name? rounded? alias?).</li>
+<li><b>Tables</b>: which tables hold those columns and the filters? Draw the key path (students → grades → courses). Ignore distractor tables.</li>
+<li><b>Join type</b>: “all / including those with none” → LEFT JOIN from that table; otherwise INNER.</li>
+<li><b>Row filters</b> → WHERE (or ON for the right table of a LEFT JOIN). Watch the wording: “strictly above” = <code>&gt;</code>, “at least” = <code>&gt;=</code>, “between” = inclusive.</li>
+<li><b>“Per / each / by”</b> → GROUP BY (every non-aggregated column). <b>Conditions on totals</b> → HAVING.</li>
+<li><b>Ranking / top-N per group</b> → window function in a derived table.</li>
+<li><b>Sort and limit</b>: ORDER BY with a tie-breaker; LIMIT if asked.</li>
+<li><b>Edge cases</b>: NULLs (COUNT(col), IFNULL), ties (ROW_NUMBER vs DENSE_RANK), duplicates (DISTINCT), empty groups (LEFT JOIN + COUNT(right.col)), date boundaries.</li>
+<li><b>Trace it</b> against the sample data by hand; if the result is empty, say so.</li>
+</ol>
+</section>
+</main>
+</div>
+<script>
+(function(){
+  var main=document.getElementById('main'), toc=document.getElementById('toc');
+  var KEY='mysqlSheetDone', done={};
+  try{ done=JSON.parse(localStorage.getItem(KEY)||'{}'); }catch(e){}
+  var secs=[].slice.call(document.querySelectorAll('section.topic'));
+  var html='';
+  secs.forEach(function(s){
+    var h2=s.querySelector('h2'), title=h2.textContent.replace(/^\d+/,'').trim();
+    var lab=document.createElement('label'); lab.innerHTML='<input type="checkbox"> Reviewed';
+    var cb=lab.querySelector('input'); cb.checked=!!done[s.id];
+    s.classList.toggle('done',cb.checked);
+    cb.onchange=function(){ done[s.id]=cb.checked; s.classList.toggle('done',cb.checked); try{localStorage.setItem(KEY,JSON.stringify(done));}catch(e){} build(); };
+    h2.appendChild(lab);
+    s._title=h2.querySelector('.num').textContent+'. '+title;
+  });
+  function build(){
+    var h='', n=0;
+    secs.forEach(function(s){
+      if(done[s.id]) n++;
+      h+='<a class="h2" href="#'+s.id+'">'+s._title+(done[s.id]?' <span class="ck">✓</span>':'')+'</a>';
+      [].slice.call(s.querySelectorAll('h3[id]')).forEach(function(h3){ h+='<a class="h3" href="#'+h3.id+'">'+h3.textContent+'</a>'; });
+    });
+    toc.innerHTML=h;
+    document.getElementById('prog').textContent=n+' / '+secs.length+' sections reviewed';
+  }
+  build();
+  // active link on scroll
+  var heads=[].slice.call(document.querySelectorAll('section.topic, h3[id]'));
+  var obs=new IntersectionObserver(function(es){
+    es.forEach(function(e){ if(e.isIntersecting){ var id=e.target.id; [].slice.call(toc.querySelectorAll('a')).forEach(function(a){ a.classList.toggle('act', a.getAttribute('href')==='#'+id); }); } });
+  },{rootMargin:'-70px 0px -75% 0px'});
+  heads.forEach(function(h){ obs.observe(h); });
+  // search: filter blocks within sections
+  var blocks=[];
+  secs.forEach(function(s){ [].slice.call(s.children).forEach(function(el){ if(el.tagName!=='H2') blocks.push({el:el,sec:s,text:el.textContent.toLowerCase()}); }); });
+  var q=document.getElementById('search'), t;
+  q.addEventListener('input',function(){ clearTimeout(t); t=setTimeout(run,150); });
+  function run(){
+    var v=q.value.trim().toLowerCase();
+    var vis={};
+    blocks.forEach(function(b){
+      var show=!v||b.text.indexOf(v)>-1;
+      // keep a heading visible if the block right after it matches
+      b.el.classList.toggle('hide',!show);
+      if(show) vis[b.sec.id]=true;
+    });
+    if(v){ blocks.forEach(function(b,i){ if(b.el.tagName==='H3'||b.el.tagName==='H4'){ var nx=blocks[i+1]; if(nx&&nx.sec===b.sec&&!nx.el.classList.contains('hide')) b.el.classList.remove('hide'); } }); }
+    secs.forEach(function(s){ s.classList.toggle('hide', !!v && !vis[s.id]); });
+    document.querySelector('.intro').classList.toggle('hide',!!v);
+  }
+})();
+</script>
+</body>
+</html>
