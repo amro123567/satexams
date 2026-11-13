@@ -1,0 +1,1353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Amro Academy – SAT Diagnostic Test</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<style>
+/* =========================================================
+   THEME
+   ========================================================= */
+:root{
+  --sky:#87CEEB; --sky-light:#e8f6fc; --sky-soft:#cdebf7; --sky-dark:#3a9fd1; --sky-deep:#1d6a96;
+  --ink:#1b1b1b; --muted:#5f6b75; --line:#d5dde3; --bg:#ffffff;
+  --green:#1e8e3e; --green-bg:#e6f4ea; --red:#c5221f; --red-bg:#fce8e6; --amber:#b06000;
+  --radius:10px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{font-family:"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;color:var(--ink);background:var(--bg);display:flex;flex-direction:column;min-height:100vh}
+button{font-family:inherit;cursor:pointer}
+button:disabled{cursor:not-allowed;opacity:.55}
+
+/* ---------- Top bar ---------- */
+.topbar{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:12px;padding:10px 20px;background:var(--sky-light);border-bottom:1px solid var(--sky-soft)}
+.tb-left{display:flex;align-items:center;gap:12px;min-width:0}
+.tb-left img{height:44px;width:auto;border-radius:6px}
+.brand{font-weight:700;font-size:15px;color:var(--sky-deep);white-space:nowrap}
+.sec-label{font-size:14px;color:var(--ink);margin-top:2px}
+.tb-center{display:flex;flex-direction:column;align-items:center}
+.timer{font-size:22px;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:.5px}
+.timer.low{color:var(--red)}
+.link-btn{background:none;border:1px solid var(--line);border-radius:14px;font-size:12px;padding:2px 12px;margin-top:3px;color:var(--ink)}
+.link-btn:hover{border-color:var(--sky-dark)}
+.tb-right{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end}
+.tool-btn{background:#fff;border:1px solid var(--line);border-radius:8px;padding:7px 12px;font-size:13px;font-weight:600;color:var(--ink)}
+.tool-btn:hover:not(:disabled){border-color:var(--sky-dark);background:var(--sky-light)}
+.tool-btn.primary{background:var(--sky-dark);border-color:var(--sky-dark);color:#fff}
+.tool-btn.primary:hover:not(:disabled){background:var(--sky-deep)}
+.tool-btn.danger{color:var(--red)}
+.tool-btn.success{background:var(--green);border-color:var(--green);color:#fff}
+
+/* ---------- Module tabs ---------- */
+.module-tabs{display:flex;align-items:center;gap:6px;padding:8px 20px 0}
+.module-tabs .tab{border:1px solid var(--line);border-bottom:none;background:#f6f8fa;padding:8px 18px;border-radius:8px 8px 0 0;font-weight:600;font-size:14px;color:var(--muted)}
+.module-tabs .tab:disabled{opacity:1;cursor:default}
+.module-tabs .tab.active{background:var(--sky);color:#0c3a52;border-color:var(--sky)}
+.status-pill{margin-left:auto;font-size:12px;font-weight:600;padding:4px 10px;border-radius:12px;background:#f1f3f4;color:var(--muted)}
+.status-pill.ok{background:var(--green-bg);color:var(--green)}
+.dash-line{height:0;border-top:3px dashed var(--sky);margin:0 0 0}
+
+/* ---------- Main ---------- */
+main{flex:1;overflow:auto;padding:0 0 24px}
+.wrap{max-width:1180px;margin:0 auto;padding:0 20px}
+.q-wrap{display:grid;grid-template-columns:1fr;gap:0;margin-top:20px}
+.q-wrap.spr{grid-template-columns:minmax(260px,1fr) 1.3fr}
+.spr-dir{padding:4px 28px 20px 4px;border-right:3px solid var(--sky-soft);font-size:14.5px;line-height:1.6}
+.spr-dir h3{margin:4px 0 10px;font-size:16px}
+.spr-dir ul{padding-left:18px;margin:0 0 12px}
+.spr-dir li{margin-bottom:6px}
+.ex-table{border-collapse:collapse;width:100%;font-size:13.5px;margin-top:6px}
+.ex-table th,.ex-table td{border:1px solid var(--line);padding:6px 8px;text-align:left}
+.ex-table th{background:var(--sky-light)}
+.q-main{max-width:760px;width:100%;margin:0 auto;padding:0 4px}
+.q-wrap.spr .q-main{padding-left:28px;margin:0}
+.q-head{display:flex;align-items:center;gap:10px;background:#eef1f4;border-bottom:2px dashed #9aa5ad;padding:0 8px 0 0;margin-bottom:18px;min-height:40px}
+.q-num{background:#111;color:#fff;font-weight:700;min-width:40px;height:40px;display:flex;align-items:center;justify-content:center;font-size:17px}
+.flag-btn,.hint-btn{background:none;border:none;font-size:14px;font-weight:600;display:flex;align-items:center;gap:6px;padding:6px 8px;border-radius:6px;color:var(--ink)}
+.flag-btn:hover,.hint-btn:hover{background:#e1e6ea}
+.flag-btn.on{color:#b3261e}
+.flag-icon{display:inline-block;width:14px;height:16px}
+.hint-btn{color:var(--sky-deep);border:1px solid var(--sky);background:#fff}
+.hint-btn:hover{background:var(--sky-light)}
+.hint-btn.on{background:var(--sky);color:#0c3a52}
+.spacer{flex:1}
+.abc-btn{border:1px solid #444;background:#fff;border-radius:5px;padding:3px 6px;font-size:13px;font-weight:700;text-decoration:line-through}
+.abc-btn.on{background:var(--sky-deep);color:#fff;border-color:var(--sky-deep)}
+.q-text{font-size:17px;line-height:1.7;margin-bottom:20px}
+.q-text .katex-display{margin:.6em 0}
+.data-table{border-collapse:collapse;margin:12px auto;font-size:15px}
+.data-table th,.data-table td{border:1px solid #8b959c;padding:6px 14px;text-align:center}
+.data-table thead th{background:var(--sky-light)}
+
+/* ---------- Choices ---------- */
+.choices{display:flex;flex-direction:column;gap:12px}
+.choice-row{display:flex;align-items:center;gap:10px}
+.choice{flex:1;display:flex;align-items:center;gap:14px;text-align:left;background:#fff;border:1.5px solid #5f6b75;border-radius:var(--radius);padding:12px 14px;font-size:16px;color:var(--ink);transition:background .12s,border-color .12s;position:relative}
+.choice:hover:not(:disabled){border-color:var(--sky-dark);background:var(--sky-light)}
+.choice .letter{flex:none;width:28px;height:28px;border:1.5px solid #333;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px}
+.choice.selected{border:3px solid var(--sky-dark);background:var(--sky-light);padding:10.5px 12.5px}
+.choice.selected .letter{background:var(--sky-dark);border-color:var(--sky-dark);color:#fff}
+.choice:disabled{opacity:1;cursor:default}
+.choice.eliminated,.choice.eliminated:disabled{opacity:.45}
+.choice.eliminated::after{content:"";position:absolute;left:-6px;right:-6px;top:50%;border-top:2px solid #222}
+.choice.correct{border:3px solid var(--green);background:var(--green-bg);padding:10.5px 12.5px}
+.choice.correct .letter{background:var(--green);border-color:var(--green);color:#fff}
+.choice.wrong{border:3px solid var(--red);background:var(--red-bg);padding:10.5px 12.5px}
+.choice.wrong .letter{background:var(--red);border-color:var(--red);color:#fff}
+.tag{margin-left:auto;font-size:12px;font-weight:700;padding:2px 8px;border-radius:10px;white-space:nowrap}
+.tag.g{background:var(--green);color:#fff}.tag.r{background:var(--red);color:#fff}
+.elim-btn{flex:none;width:30px;height:30px;border-radius:50%;border:1.5px solid #333;background:#fff;font-weight:700;font-size:13px;text-decoration:line-through;position:relative}
+.elim-btn:hover{background:#f1f1f1}
+.elim-undo{flex:none;background:none;border:none;text-decoration:underline;font-weight:700;font-size:13px;width:44px}
+
+/* ---------- SPR ---------- */
+.spr-input{width:200px;font-size:20px;padding:10px 12px;border:1.5px solid #5f6b75;border-radius:8px;border-bottom:3px solid #222;font-family:inherit}
+.spr-input:focus{outline:none;border-color:var(--sky-dark);box-shadow:0 0 0 3px var(--sky-soft)}
+.spr-input:disabled{background:#f6f8fa}
+.spr-input.correct{border-color:var(--green);background:var(--green-bg)}
+.spr-input.wrong{border-color:var(--red);background:var(--red-bg)}
+.preview{margin-top:12px;font-size:15px;color:var(--muted);min-height:34px}
+.preview b{color:var(--ink)}
+.preview .pv{font-size:20px;color:var(--ink);margin-left:6px}
+
+/* ---------- Tools under question ---------- */
+.q-tools{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-top:24px;padding-top:14px;border-top:1px solid var(--line)}
+.timer-btn{background:#fff;border:1.5px solid var(--sky-dark);color:var(--sky-deep);border-radius:20px;padding:6px 16px;font-weight:600;font-size:14px}
+.timer-btn.running{background:var(--sky-dark);color:#fff}
+.q-clock{font-variant-numeric:tabular-nums;font-weight:700;font-size:16px}
+.q-clock-label{font-size:13px;color:var(--muted)}
+.hint-box{margin-top:16px;background:var(--sky-light);border:1px solid var(--sky);border-left:5px solid var(--sky-dark);border-radius:8px;padding:12px 16px;font-size:15px;line-height:1.6}
+.hint-box .hint{margin-bottom:8px}
+.hint-box .hint b{color:var(--sky-deep)}
+.small-btn{background:#fff;border:1px solid var(--sky-dark);color:var(--sky-deep);border-radius:6px;padding:4px 10px;font-size:13px;font-weight:600}
+.review-box{margin-top:16px;border-radius:8px;padding:12px 16px;font-size:15px;line-height:1.6;border:1px solid var(--line);background:#fafbfc}
+.status-badge{display:inline-block;font-weight:700;padding:4px 12px;border-radius:14px;margin-bottom:8px}
+.status-badge.correct{background:var(--green-bg);color:var(--green)}
+.status-badge.wrong{background:var(--red-bg);color:var(--red)}
+.status-badge.unanswered{background:#fef7e0;color:var(--amber)}
+.ans-g{color:var(--green);font-weight:700}.ans-r{color:var(--red);font-weight:700}
+
+/* ---------- Results panel ---------- */
+.results{margin-top:18px;border:1px solid var(--sky);border-radius:12px;background:linear-gradient(180deg,var(--sky-light),#fff 120px);padding:16px 20px}
+.results-head{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.results-head h2{margin:0;font-size:20px;color:var(--sky-deep)}
+.big-score{font-size:30px;font-weight:800}
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin:14px 0}
+.stat{background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.stat .k{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px}
+.stat .v{font-size:20px;font-weight:700;margin-top:2px}
+.rtable{width:100%;border-collapse:collapse;font-size:13.5px;background:#fff}
+.rtable th,.rtable td{border:1px solid var(--line);padding:6px 8px;text-align:left}
+.rtable th{background:var(--sky-light)}
+.rtable tr.clickable{cursor:pointer}
+.rtable tr.clickable:hover td{background:var(--sky-light)}
+.res-correct{color:var(--green);font-weight:700}.res-wrong{color:var(--red);font-weight:700}.res-unanswered{color:var(--amber);font-weight:700}
+details summary{cursor:pointer;font-weight:600;margin:10px 0 8px;color:var(--sky-deep)}
+.table-scroll{overflow-x:auto}
+
+/* ---------- Bottom bar ---------- */
+.bottombar{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px;padding:10px 20px;border-top:3px dashed var(--sky);background:var(--sky-light)}
+.student{font-weight:600;font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.nav-pill{background:#111;color:#fff;border:none;border-radius:8px;padding:9px 18px;font-weight:700;font-size:14px}
+.nav-pill:hover{background:#333}
+.bb-right{display:flex;gap:10px;justify-content:flex-end}
+.nav-btn{background:var(--sky-dark);color:#fff;border:none;border-radius:22px;padding:10px 26px;font-weight:700;font-size:15px}
+.nav-btn:hover:not(:disabled){background:var(--sky-deep)}
+
+/* ---------- Modals ---------- */
+.overlay{position:fixed;inset:0;background:rgba(10,30,45,.45);display:none;align-items:center;justify-content:center;z-index:50;padding:16px}
+.overlay.open{display:flex}
+.overlay.lock{background:var(--sky-light)}
+.modal{background:#fff;border-radius:14px;max-width:640px;width:100%;max-height:88vh;overflow:auto;box-shadow:0 20px 50px rgba(0,0,0,.25)}
+.modal.wide{max-width:820px}
+.modal-head{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px solid var(--line);background:var(--sky-light);position:sticky;top:0}
+.modal-head h3{margin:0;font-size:18px}
+.x-btn{background:none;border:none;font-size:24px;line-height:1;color:var(--muted)}
+.modal-body{padding:18px 20px;font-size:15px;line-height:1.6}
+.modal-foot{display:flex;gap:10px;justify-content:flex-end;padding:12px 20px;border-top:1px solid var(--line)}
+.name-input{width:100%;font-size:17px;padding:10px 12px;border:1.5px solid var(--line);border-radius:8px;margin-top:8px}
+.name-input:focus{outline:none;border-color:var(--sky-dark)}
+.nav-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(44px,1fr));gap:10px;margin:14px 0}
+.nav-cell{position:relative;height:44px;border:2px dashed #555;background:#fff;font-weight:700;font-size:15px;border-radius:4px;color:var(--sky-deep)}
+.nav-cell.answered{border:2px solid var(--sky-dark);background:var(--sky-dark);color:#fff}
+.nav-cell.current{outline:3px solid #111;outline-offset:2px}
+.nav-cell.flagged::after{content:"";position:absolute;top:-7px;right:-7px;width:14px;height:14px;background:#b3261e;clip-path:polygon(0 0,100% 30%,0 60%)}
+.nav-cell.c{background:var(--green);border:2px solid var(--green);color:#fff}
+.nav-cell.w{background:var(--red);border:2px solid var(--red);color:#fff}
+.nav-cell.u{background:#fef7e0;border:2px solid var(--amber);color:var(--amber)}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:13px;color:var(--muted)}
+.legend span{display:flex;align-items:center;gap:6px}
+.lg{width:16px;height:16px;border-radius:3px;display:inline-block}
+.ref-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.ref-item{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:#fbfdfe}
+.ref-item b{display:block;margin-bottom:4px;color:var(--sky-deep)}
+.list-q{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 14px}
+.chip{border:1px solid var(--sky-dark);background:#fff;color:var(--sky-deep);border-radius:14px;padding:3px 10px;font-size:13px;font-weight:600}
+.msg{padding:10px 12px;border-radius:8px;margin-top:10px;font-weight:600}
+.msg.ok{background:var(--green-bg);color:var(--green)}
+.msg.err{background:var(--red-bg);color:var(--red)}
+.msg.info{background:var(--sky-light);color:var(--sky-deep)}
+.toast{position:fixed;top:84px;left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:12px 20px;border-radius:10px;z-index:60;font-weight:600;display:none;max-width:90vw;text-align:center}
+.toast.show{display:block}
+
+/* ---------- Reading and Writing passages ---------- */
+.passage{font-size:16.5px;line-height:1.75}
+.passage p{margin:0 0 12px}
+.passage ul{margin:6px 0 0;padding-left:20px}
+.passage li{margin-bottom:6px}
+.passage .data-table{margin:4px 0 12px}
+.passage caption{font-weight:700;font-size:14px;margin-bottom:6px;text-align:left}
+.blank{letter-spacing:1px;font-weight:600}
+.module-tabs{flex-wrap:wrap}
+
+/* ---------- Question timer (top bar) ---------- */
+.q-head{flex-wrap:wrap;row-gap:6px}
+.qtimer{display:inline-flex;align-items:center;gap:7px;border:1.5px solid var(--sky-dark);background:#fff;color:var(--sky-deep);border-radius:18px;padding:5px 12px;font-weight:700;font-size:13.5px;line-height:1}
+.qtimer:hover:not(:disabled){background:var(--sky-light)}
+.qtimer .qt-clock{font-variant-numeric:tabular-nums;font-size:14px;padding-left:7px;border-left:1.5px solid currentColor;opacity:.9}
+.qtimer.running{background:var(--sky-dark);color:#fff}
+.qtimer.running:hover{background:var(--sky-deep)}
+.qtimer.running .qt-dot{width:8px;height:8px;border-radius:50%;background:#fff;animation:qtblink 1s steps(2) infinite}
+.qtimer.idle{animation:qtpulse 1.8s ease-in-out infinite}
+@keyframes qtpulse{0%,100%{box-shadow:0 0 0 0 rgba(58,159,209,.5)}50%{box-shadow:0 0 0 7px rgba(58,159,209,0)}}
+@keyframes qtblink{50%{opacity:.2}}
+.qtimer kbd{font:600 11px inherit;border:1px solid currentColor;border-radius:4px;padding:1px 4px;opacity:.7}
+.qtimer.running kbd{display:none}
+
+/* ---------- Freeze / overtime / review navigation ---------- */
+.tool-btn.frozen{background:#dff3fb;border-color:var(--sky-dark);color:var(--sky-deep)}
+.timer.frozen{color:var(--sky-dark)}
+.timer.over{color:var(--red)}
+.timer-sub{font-size:11px;font-weight:700;color:var(--sky-deep);letter-spacing:.4px;text-transform:uppercase;min-height:14px}
+.late-badge{font-size:12px;font-weight:700;color:var(--amber);background:#fef7e0;border:1px solid #f3d27a;border-radius:12px;padding:2px 9px;white-space:nowrap}
+.late-badge[hidden]{display:none}
+.nav-cell.late::before{content:"⏰";position:absolute;bottom:-10px;left:-8px;font-size:12px}
+.review-nav{position:sticky;top:0;z-index:5;background:#fff;border:1px solid var(--sky);border-radius:12px;padding:10px 12px;margin-top:16px;box-shadow:0 4px 14px rgba(29,106,150,.10)}
+.rv-row{display:flex;align-items:center;gap:5px;flex-wrap:wrap;margin-bottom:6px}
+.rv-m{font-size:12px;font-weight:700;color:var(--muted);width:26px}
+.rv-chip{width:30px;height:28px;border-radius:6px;border:none;font-size:12px;font-weight:700;color:#fff;position:relative;padding:0}
+.rv-chip.c{background:var(--green)}.rv-chip.w{background:var(--red)}
+.rv-chip.u{background:#fef7e0;color:var(--amber);box-shadow:inset 0 0 0 1.5px var(--amber)}
+.rv-chip.cur{outline:3px solid #111;outline-offset:1px}
+.rv-chip.late::after{content:"";position:absolute;top:2px;right:2px;width:7px;height:7px;border-radius:50%;background:#ffd166;box-shadow:0 0 0 1px #8a5a00}
+.rv-chip:hover{filter:brightness(1.1)}
+.rv-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:4px;font-size:14px}
+.rv-actions label{display:flex;align-items:center;gap:6px;margin-left:auto;font-size:13px;color:var(--muted);cursor:pointer}
+.rv-tip{font-size:12px;color:var(--muted);margin-top:4px}
+.q-wrap{animation:qfade .18s ease}
+@keyframes qfade{from{opacity:.3;transform:translateY(4px)}to{opacity:1;transform:none}}
+
+/* ---------- Responsive ---------- */
+@media (max-width:900px){
+  .topbar{grid-template-columns:1fr auto;grid-template-areas:"l c" "r r"}
+  .tb-left{grid-area:l}.tb-center{grid-area:c}.tb-right{grid-area:r;justify-content:flex-start}
+  .q-wrap.spr{grid-template-columns:1fr}
+  .spr-dir{order:2;border-right:none;border-top:3px solid var(--sky-soft);padding:14px 0 0;margin-top:20px;font-size:13.5px}
+  .q-wrap.spr .q-main{padding-left:4px}
+}
+@media (max-width:560px){
+  .topbar,.bottombar,.module-tabs{padding-left:12px;padding-right:12px}
+  .wrap{padding:0 12px}
+  .brand{font-size:13px;white-space:normal}
+  .tb-left img{height:36px}
+  .timer{font-size:18px}
+  .tool-btn{padding:6px 9px;font-size:12px}
+  .bottombar{grid-template-columns:1fr 1fr;grid-template-areas:"n n" "s r"}
+  .student{grid-area:s}.nav-pill{grid-area:n;justify-self:center}.bb-right{grid-area:r}
+  .nav-btn{padding:8px 18px}
+  .q-text{font-size:16px}
+  .choice{font-size:15px}
+}
+</style>
+</head>
+<body>
+
+<!-- ============================ TOP BAR ============================ -->
+<header class="topbar">
+  <div class="tb-left">
+    <img src="image.png" alt="Amro Academy logo" onerror="this.style.display='none'">
+    <div>
+      <div class="brand">Amro Academy – SAT Diagnostic Test</div>
+      <div class="sec-label" id="secLabel">Section 2, Module 1: Math</div>
+    </div>
+  </div>
+  <div class="tb-center">
+    <div class="timer" id="moduleTimer">35:00</div>
+    <div class="timer-sub" id="timerSub"></div>
+    <button class="link-btn" id="hideTimerBtn">Hide</button>
+  </div>
+  <div class="tb-right">
+    <button class="tool-btn" id="directionsBtn">Directions</button>
+    <button class="tool-btn" id="refBtn">Reference</button>
+    <a class="tool-btn" id="desmosBtn" href="https://www.desmos.com/" target="_blank" rel="noopener" style="text-decoration:none;display:inline-flex;align-items:center">Desmos ↗</a>
+    <button class="tool-btn primary" id="submitBtn">Submit Exam</button>
+    <button class="tool-btn danger" id="resetBtn">Reset Exam</button>
+  </div>
+</header>
+
+<nav class="module-tabs">
+  <button class="tab" data-module="1">Reading &amp; Writing 1</button>
+  <button class="tab" data-module="2">Reading &amp; Writing 2</button>
+  <button class="tab" data-module="3">Math 1</button>
+  <button class="tab" data-module="4">Math 2</button>
+  <span class="status-pill" id="statusPill">In progress</span>
+</nav>
+<div class="dash-line"></div>
+
+<!-- ============================ MAIN ============================ -->
+<main id="main">
+  <div class="wrap">
+    <div id="results"></div>
+    <div id="questionArea"></div>
+  </div>
+</main>
+
+<!-- ============================ BOTTOM BAR ============================ -->
+<footer class="bottombar">
+  <div class="student" id="studentLabel"></div>
+  <button class="nav-pill" id="navBtn">Question 1 of 22 ▲</button>
+  <div class="bb-right">
+    <button class="nav-btn" id="backBtn">Back</button>
+    <button class="nav-btn" id="nextBtn">Next</button>
+  </div>
+</footer>
+
+<div class="overlay" id="overlay"><div class="modal" id="modal"></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* =========================================================
+   1. DATA — question bank
+   ========================================================= */
+const QUESTIONS = [{"id":"d_rw1q1","module":1,"number":1,"domain":"Craft and Structure","skill":"Words in context","type":"mcq","passage":"<p>Although the mountain orchid is often described as rare, botanist Mei Tanaka notes that it is actually <span class=\"blank\">______<\/span> in the forests of southern Japan, where thousands of the plants bloom each spring; it only seems rare because those forests are seldom visited.<\/p>","question":"Which choice completes the text with the most logical and precise word or phrase?","choices":["unknown","abundant","endangered","fragile"],"correctAnswer":"B","hints":[],"solution":""},{"id":"d_rw1q2","module":1,"number":2,"domain":"Craft and Structure","skill":"Words in context","type":"mcq","passage":"<p>The committee's report was remarkably <span class=\"blank\">______<\/span>: in only four pages, it summarized two years of research and stated each of its recommendations in a single sentence.<\/p>","question":"Which choice completes the text with the most logical and precise word or phrase?","choices":["tentative","verbose","concise","speculative"],"correctAnswer":"C","hints":[],"solution":""},{"id":"d_rw1q3","module":1,"number":3,"domain":"Craft and Structure","skill":"Text structure and purpose","type":"mcq","passage":"<p>Historians long assumed that medieval European peasants rarely traveled beyond their home villages. Analyzing court records from fourteenth-century England, historian Ruth Adeyemi found that many peasants regularly journeyed to markets twenty or more miles away. <u>Some even appeared as witnesses in courts in distant towns, suggesting that they had contacts far from home.<\/u> Adeyemi argues that the familiar image of the isolated village needs revision.<\/p>","question":"Which choice best describes the function of the underlined sentence in the text as a whole?","choices":["It provides additional evidence for Adeyemi's finding that peasants traveled more than historians had assumed.","It explains why historians long believed that peasants rarely traveled.","It describes the method Adeyemi used to analyze the court records.","It introduces a counterexample that challenges Adeyemi's argument."],"correctAnswer":"A","hints":[],"solution":""},{"id":"d_rw1q4","module":1,"number":4,"domain":"Craft and Structure","skill":"Cross-text connections","type":"mcq","passage":"<p><b>Text 1<\/b><br>Some paleontologists argue that the large crests on the heads of hadrosaurs, a group of plant-eating dinosaurs, evolved mainly to attract mates, much as flashy feathers do in many modern birds.<\/p><p><b>Text 2<\/b><br>Paleontologist Lucas Brandt points out that the hollow crests of some hadrosaurs contain long internal air passages. Computer models show that air moving through these passages would have produced low, resonant sounds. Brandt argues that the crests likely served, at least in part, to help the animals communicate over long distances.<\/p>","question":"Based on the texts, how would Brandt (Text 2) most likely respond to the paleontologists' argument in Text 1?","choices":["By claiming that modern birds do not use their feathers to attract mates","By agreeing that the crests evolved only to attract mates","By suggesting that the crests may also have served a purpose other than attracting mates","By arguing that hadrosaurs were unable to produce sounds of any kind"],"correctAnswer":"C","hints":[],"solution":""},{"id":"d_rw1q5","module":1,"number":5,"domain":"Information and Ideas","skill":"Central ideas and details","type":"mcq","passage":"<p>When a honeybee colony needs a new home, several hundred scout bees search the surrounding area and report back by dancing. Each scout dances longer for sites it judges to be better, and other scouts that visit a well-advertised site often begin dancing for it too. Over hours or days, support shifts until nearly all the scouts are dancing for a single site, and the swarm flies there. No single bee compares all the options; the decision emerges from many individual choices.<\/p>","question":"Which choice best states the main idea of the text?","choices":["Honeybee swarms usually move to the first site that any scout discovers.","A single experienced scout compares all the possible sites and chooses the best one for the colony.","Scout bees dance mainly to warn the colony about sites that are dangerous.","A honeybee swarm chooses a new home through a process in which many scouts' individual judgments combine into a group decision."],"correctAnswer":"D","hints":[],"solution":""},{"id":"d_rw1q6","module":1,"number":6,"domain":"Information and Ideas","skill":"Command of evidence (quantitative)","type":"mcq","passage":"<table class=\"data-table\"><caption>Percentage of Seeds That Germinated at Three Temperatures<\/caption><thead><tr><th>Temperature<\/th><th>Species A<\/th><th>Species B<\/th><\/tr><\/thead><tbody><tr><td>10°C<\/td><td>22%<\/td><td>61%<\/td><\/tr><tr><td>20°C<\/td><td>74%<\/td><td>68%<\/td><\/tr><tr><td>30°C<\/td><td>81%<\/td><td>35%<\/td><\/tr><\/tbody><\/table><p>A biologist claims that Species B germinates better than Species A in cool conditions but worse than Species A in warm conditions.<\/p>","question":"Which choice most effectively uses data from the table to support the biologist's claim?","choices":["At 10°C, 61% of Species B seeds germinated compared with 22% of Species A seeds, but at 30°C, only 35% of Species B seeds germinated compared with 81% of Species A seeds.","At 20°C, Species A and Species B had similar germination rates of 74% and 68%, respectively.","At 30°C, 35% of Species B seeds germinated.","The germination rate of Species A rose from 22% at 10°C to 81% at 30°C."],"correctAnswer":"A","hints":[],"solution":""},{"id":"d_rw1q7","module":1,"number":7,"domain":"Information and Ideas","skill":"Inferences","type":"mcq","passage":"<p>Researchers found that a species of coral living near an underwater volcanic vent, where the surrounding water is unusually acidic, grows much more slowly than the same species living in ordinary seawater. Because the world's oceans are gradually becoming more acidic as they absorb carbon dioxide from the air, these findings suggest that <span class=\"blank\">______<\/span><\/p>","question":"Which choice most logically completes the text?","choices":["volcanic vents are the main cause of rising ocean acidity worldwide.","the coral species is unable to survive in ordinary seawater.","corals living near volcanic vents grow faster than other corals do.","the coral species may grow more slowly in many parts of the ocean in the future."],"correctAnswer":"D","hints":[],"solution":""},{"id":"d_rw1q8","module":1,"number":8,"domain":"Standard English Conventions","skill":"Boundaries","type":"mcq","passage":"<p>In 1928, Alexander Fleming noticed that mold had contaminated one of his dishes of bacterial <span class=\"blank\">______<\/span> in the area surrounding the mold, the bacteria had died.<\/p>","question":"Which choice completes the text so that it conforms to the conventions of Standard English?","choices":["cultures;","cultures that","cultures","cultures,"],"correctAnswer":"A","hints":[],"solution":""},{"id":"d_rw1q9","module":1,"number":9,"domain":"Standard English Conventions","skill":"Form, structure, and sense","type":"mcq","passage":"<p>The collection of letters written by the poet to her younger brother, now housed in a university library, <span class=\"blank\">______<\/span> valuable insight into her early career.<\/p>","question":"Which choice completes the text so that it conforms to the conventions of Standard English?","choices":["offer","offers","are offering","have offered"],"correctAnswer":"B","hints":[],"solution":""},{"id":"d_rw1q10","module":1,"number":10,"domain":"Standard English Conventions","skill":"Form, structure, and sense","type":"mcq","passage":"<p>Many songbirds that migrate at night use the positions of the stars to find <span class=\"blank\">______<\/span> way, a skill that young birds appear to learn by watching the night sky before they leave the nest.<\/p>","question":"Which choice completes the text so that it conforms to the conventions of Standard English?","choices":["they're","its","there","their"],"correctAnswer":"D","hints":[],"solution":""},{"id":"d_rw1q11","module":1,"number":11,"domain":"Expression of Ideas","skill":"Transitions","type":"mcq","passage":"<p>The Great Wall of China is often said to be visible from space with the naked eye. <span class=\"blank\">______<\/span> astronauts who have orbited Earth report that the wall is very difficult, if not impossible, to see without magnification.<\/p>","question":"Which choice completes the text with the most logical transition?","choices":["Similarly,","However,","Therefore,","For example,"],"correctAnswer":"B","hints":[],"solution":""},{"id":"d_rw1q12","module":1,"number":12,"domain":"Expression of Ideas","skill":"Rhetorical synthesis","type":"mcq","passage":"<p>While researching a topic, a student has taken the following notes:<\/p><ul><li>Wangari Maathai was an environmental activist from Kenya.<\/li><li>In 1977, she founded the Green Belt Movement.<\/li><li>The movement has planted more than 30 million trees.<\/li><li>In 2004, Maathai became the first African woman to win the Nobel Peace Prize.<\/li><\/ul>","question":"The student wants to emphasize the scale of the Green Belt Movement's work. Which choice most effectively uses relevant information from the notes to accomplish this goal?","choices":["The Green Belt Movement, founded by Wangari Maathai in Kenya in 1977, has planted more than 30 million trees.","Wangari Maathai founded the Green Belt Movement in 1977 and won the Nobel Peace Prize in 2004.","In 2004, Wangari Maathai became the first African woman to win the Nobel Peace Prize.","Wangari Maathai, an environmental activist from Kenya, founded the Green Belt Movement."],"correctAnswer":"A","hints":[],"solution":""},{"id":"d_rw1q13","module":1,"number":13,"domain":"Expression of Ideas","skill":"Rhetorical synthesis","type":"mcq","passage":"<p>While researching a topic, a student has taken the following notes:<\/p><ul><li>The Hubble Space Telescope was launched in 1990.<\/li><li>Hubble observes mainly visible and ultraviolet light.<\/li><li>The James Webb Space Telescope was launched in 2021.<\/li><li>Webb observes mainly infrared light.<\/li><\/ul>","question":"The student wants to contrast the types of light the two telescopes observe. Which choice most effectively uses relevant information from the notes to accomplish this goal?","choices":["The Hubble Space Telescope was launched in 1990, and the James Webb Space Telescope was launched in 2021.","The James Webb Space Telescope, launched in 2021, observes mainly infrared light.","Both the Hubble and James Webb Space Telescopes observe light from distant objects in space.","Whereas the Hubble Space Telescope observes mainly visible and ultraviolet light, the James Webb Space Telescope observes mainly infrared light."],"correctAnswer":"D","hints":[],"solution":""},{"id":"d_rw2q1","module":2,"number":1,"domain":"Craft and Structure","skill":"Words in context","type":"mcq","passage":"<p>The historian's account of the treaty negotiations is notably <span class=\"blank\">______<\/span>: she presents the arguments of each delegation with equal care and refrains from judging which side acted more wisely.<\/p>","question":"Which choice completes the text with the most logical and precise word or phrase?","choices":["cursory","partisan","evenhanded","polemical"],"correctAnswer":"C","hints":[],"solution":""},{"id":"d_rw2q2","module":2,"number":2,"domain":"Craft and Structure","skill":"Words in context","type":"mcq","passage":"<p>Some critics dismissed the composer's early works as merely <span class=\"blank\">______<\/span> of his teacher's style, but recent scholarship has shown that even his first pieces contained harmonic ideas his teacher never used.<\/p>","question":"Which choice completes the text with the most logical and precise word or phrase?","choices":["independent","critical","innovative","derivative"],"correctAnswer":"D","hints":[],"solution":""},{"id":"d_rw2q3","module":2,"number":3,"domain":"Craft and Structure","skill":"Words in context","type":"mcq","passage":"<p>The following text is from a novel.<\/p><p>Though the old captain's voice had lost none of its force, his stories had grown <u>thin<\/u> with repetition, and the younger sailors, who had heard each one a dozen times, listened only out of courtesy.<\/p>","question":"As used in the text, what does the word “thin” most nearly mean?","choices":["narrow in width","lacking in freshness","small in number","slender in build"],"correctAnswer":"B","hints":[],"solution":""},{"id":"d_rw2q4","module":2,"number":4,"domain":"Craft and Structure","skill":"Text structure and purpose","type":"mcq","passage":"<p>In an essay, a chef reflects on her training: “For years I believed that a great dish required rare and expensive ingredients. Then I spent a winter cooking in a mountain village where the market offered little beyond potatoes, cabbage, and salt pork. By spring I had learned more about technique than in all my years in the city, because with so few ingredients, every decision about heat, timing, and seasoning mattered.”<\/p>","question":"Which choice best states the main purpose of the text?","choices":["To compare the cost of ingredients in cities with their cost in villages","To describe how cooking with limited ingredients changed the chef's understanding of her craft","To explain why potatoes and cabbage are difficult to cook well","To argue that restaurants in cities should use only locally grown ingredients"],"correctAnswer":"B","hints":[],"solution":""},{"id":"d_rw2q5","module":2,"number":5,"domain":"Information and Ideas","skill":"Command of evidence (textual)","type":"mcq","passage":"<p>In a poem, the speaker describes the life of a lighthouse keeper on a remote island. A student claims that the poem portrays the keeper as finding meaning in work that others overlook.<\/p>","question":"Which quotation from the poem most effectively illustrates the student's claim?","choices":["“The tower stands alone above the foam, / Where gray waves break and seabirds make their home.”","“No ship will thank him, and no sailor know, / Yet still he climbs to set the lamp aglow.”","“His boots are worn, his coat is patched and old, / His hands are stiff and cracked from winter's cold.”","“The gulls wheel white across the morning sky / And call to boats that pass the island by.”"],"correctAnswer":"B","hints":[],"solution":""},{"id":"d_rw2q6","module":2,"number":6,"domain":"Information and Ideas","skill":"Command of evidence (textual)","type":"mcq","passage":"<p>Psychologist Kenji Mori hypothesizes that people remember information better when they explain it aloud to a listener than when they simply reread it, because explaining forces them to organize the ideas in their own words.<\/p>","question":"Which finding, if true, would most directly weaken Mori's hypothesis?","choices":["Participants reported that explaining a text aloud felt more tiring than rereading it.","Participants who reread a text twice recalled more of it than participants who read it only once.","Participants who explained a text to a listener recalled no more of it a week later than participants who spent the same amount of time rereading it.","Participants who explained a text to a listener recalled more of it a week later than participants who reread it."],"correctAnswer":"C","hints":[],"solution":""},{"id":"d_rw2q7","module":2,"number":7,"domain":"Information and Ideas","skill":"Command of evidence (quantitative)","type":"mcq","passage":"<table class=\"data-table\"><caption>Annual Ridership on City Public Transit (millions of trips)<\/caption><thead><tr><th>Year<\/th><th>Bus<\/th><th>Light rail<\/th><\/tr><\/thead><tbody><tr><td>2019<\/td><td>82<\/td><td>31<\/td><\/tr><tr><td>2020<\/td><td>45<\/td><td>14<\/td><\/tr><tr><td>2021<\/td><td>58<\/td><td>22<\/td><\/tr><tr><td>2022<\/td><td>66<\/td><td>30<\/td><\/tr><\/tbody><\/table><p>A city planner claims that after the sharp drop in 2020, light rail ridership recovered more fully than bus ridership did.<\/p>","question":"Which choice most effectively uses data from the table to support the planner's claim?","choices":["Both bus ridership and light rail ridership fell sharply from 2019 to 2020.","From 2021 to 2022, bus ridership and light rail ridership each increased by 8 million trips.","Bus ridership was higher than light rail ridership in every year shown in the table.","By 2022, light rail ridership had returned to 30 million trips, nearly its 2019 level of 31 million, while bus ridership, at 66 million trips, remained well below its 2019 level of 82 million."],"correctAnswer":"D","hints":[],"solution":""},{"id":"d_rw2q8","module":2,"number":8,"domain":"Information and Ideas","skill":"Inferences","type":"mcq","passage":"<p>At an ancient settlement in the eastern Mediterranean, archaeologists found grinding stones bearing traces of wild grass seeds dated to about 23,000 years ago, more than 10,000 years before the earliest known farming in the region. Some of the seeds show signs of having been baked. Because wild grasses produce small seeds that take considerable labor to gather, grind, and cook, the find suggests that <span class=\"blank\">______<\/span><\/p>","question":"Which choice most logically completes the text?","choices":["people in the region were investing significant effort in processing plant foods long before farming began there.","wild grass seeds were the main source of food for the settlement's inhabitants.","people in the region did not use fire to prepare food until after farming began.","farming in the region began about 23,000 years ago rather than at a later date."],"correctAnswer":"A","hints":[],"solution":""},{"id":"d_rw2q9","module":2,"number":9,"domain":"Standard English Conventions","skill":"Boundaries","type":"mcq","passage":"<p>The museum's newest acquisition is an extremely rare <span class=\"blank\">______<\/span> a 2,000-year-old bronze mirror whose surface is still polished enough to reflect light.<\/p>","question":"Which choice completes the text so that it conforms to the conventions of Standard English?","choices":["object, and","object, which","object;","object:"],"correctAnswer":"D","hints":[],"solution":""},{"id":"d_rw2q10","module":2,"number":10,"domain":"Standard English Conventions","skill":"Form, structure, and sense","type":"mcq","passage":"<p>Having spent a decade studying glaciers in Greenland, <span class=\"blank\">______<\/span><\/p>","question":"Which choice completes the text so that it conforms to the conventions of Standard English?","choices":["the changes in the island's ice sheet are described in a book by geologist Ana Petrova.","a book about how the island's ice sheet is changing was written by geologist Ana Petrova.","geologist Ana Petrova wrote a book about how the island's ice sheet is changing.","geologist Ana Petrova's book describes how the island's ice sheet is changing."],"correctAnswer":"C","hints":[],"solution":""},{"id":"d_rw2q11","module":2,"number":11,"domain":"Standard English Conventions","skill":"Form, structure, and sense","type":"mcq","passage":"<p>The two <span class=\"blank\">______<\/span> findings were published together in a single article, since each researcher's data helped explain the other's results.<\/p>","question":"Which choice completes the text so that it conforms to the conventions of Standard English?","choices":["scientists'","scientists's","scientist's","scientists"],"correctAnswer":"A","hints":[],"solution":""},{"id":"d_rw2q12","module":2,"number":12,"domain":"Expression of Ideas","skill":"Transitions","type":"mcq","passage":"<p>The architect insisted that the library's exterior be covered in stone from a nearby quarry. Stone shipped from distant quarries would have cost considerably less. <span class=\"blank\">______<\/span> she argued that local stone would help the building blend into the surrounding hills and would weather in the same way as the town's older buildings.<\/p>","question":"Which choice completes the text with the most logical transition?","choices":["Nevertheless,","For instance,","Therefore,","Similarly,"],"correctAnswer":"A","hints":[],"solution":""},{"id":"d_rw2q13","module":2,"number":13,"domain":"Expression of Ideas","skill":"Rhetorical synthesis","type":"mcq","passage":"<p>While researching a topic, a student has taken the following notes:<\/p><ul><li>In 1843, Ada Lovelace published detailed notes on Charles Babbage's Analytical Engine, a proposed mechanical computer.<\/li><li>Her notes included a method for calculating a sequence of numbers called Bernoulli numbers.<\/li><li>This method is often regarded as the first published computer program.<\/li><li>Lovelace suggested that the machine could work with symbols as well as numbers and might, for example, compose music.<\/li><\/ul>","question":"The student wants to emphasize that Lovelace saw possibilities for the Analytical Engine beyond calculation. Which choice most effectively uses relevant information from the notes to accomplish this goal?","choices":["Lovelace suggested that Babbage's Analytical Engine could work with symbols as well as numbers—it might, for example, compose music.","Lovelace's method for calculating Bernoulli numbers is often regarded as the first published computer program.","Lovelace's notes included a method for calculating Bernoulli numbers.","In 1843, Lovelace published detailed notes on Babbage's Analytical Engine, a proposed mechanical computer."],"correctAnswer":"A","hints":[],"solution":""},{"id":"d_ma1q1","module":3,"number":1,"domain":"Algebra","skill":"Linear equations in one variable","type":"mcq","question":"\\[3(x-4)+2x=2x+9\\] What value of \\(x\\) is the solution to the equation above?","hints":[],"solution":"","choices":["\\(21\\)","\\(3\\)","\\(\\dfrac{21}{5}\\)","\\(7\\)"],"correctAnswer":"D"},{"id":"d_ma1q2","module":3,"number":2,"domain":"Problem-Solving and Data Analysis","skill":"Percentages","type":"spr","question":"The price of a jacket was $80. The price was increased by 15%, and then the new price was decreased by 15%. What is the final price of the jacket, in dollars?","hints":[],"solution":"","acceptedAnswers":["78.2","78.20"],"correctAnswer":"78.2"},{"id":"d_ma1q3","module":3,"number":3,"domain":"Advanced Math","skill":"Equivalent expressions","type":"mcq","question":"Which expression is equivalent to \\((2x-3)^2\\)?","hints":[],"solution":"","choices":["\\(4x^2-9\\)","\\(4x^2-12x+9\\)","\\(4x^2+9\\)","\\(4x^2-6x+9\\)"],"correctAnswer":"B"},{"id":"d_ma1q4","module":3,"number":4,"domain":"Algebra","skill":"Linear functions (interpretation)","type":"mcq","question":"The total cost \\(C\\), in dollars, of a plumber's visit that lasts \\(h\\) hours is given by \\(C=45h+60\\). What is the best interpretation of \\(60\\) in this context?","hints":[],"solution":"","choices":["The number of hours the visit lasts","The cost of each hour of the visit","A fixed fee charged for every visit, regardless of its length","The total cost of a one-hour visit"],"correctAnswer":"C"},{"id":"d_ma1q5","module":3,"number":5,"domain":"Algebra","skill":"Systems of linear equations","type":"spr","question":"\\[2x+3y=12\\]\\[x-y=1\\] If \\((x,\\,y)\\) is the solution to the system of equations above, what is the value of \\(x+y\\)?","hints":[],"solution":"","acceptedAnswers":["5"],"correctAnswer":"5"},{"id":"d_ma1q6","module":3,"number":6,"domain":"Advanced Math","skill":"Exponential functions (modeling)","type":"mcq","question":"A town had a population of 2,400 in 2020. The population increases by 3% each year. Which function gives the town's population \\(P\\) \\(t\\) years after 2020?","hints":[],"solution":"","choices":["\\(P=2400(1.03)^t\\)","\\(P=2400(1.3)^t\\)","\\(P=2400+1.03t\\)","\\(P=2400(0.03)^t\\)"],"correctAnswer":"A"},{"id":"d_ma1q7","module":3,"number":7,"domain":"Geometry and Trigonometry","skill":"Right triangle trigonometry","type":"mcq","question":"In right triangle \\(ABC\\), angle \\(C\\) is the right angle, \\(AC=12\\), and \\(BC=9\\). What is the value of \\(\\sin A\\)?","hints":[],"solution":"","choices":["\\(\\dfrac45\\)","\\(\\dfrac34\\)","\\(\\dfrac43\\)","\\(\\dfrac35\\)"],"correctAnswer":"D"},{"id":"d_ma1q8","module":3,"number":8,"domain":"Problem-Solving and Data Analysis","skill":"Mean and median","type":"mcq","question":"A data set consists of the values \\(4,\\ 7,\\ 7,\\ 9,\\) and \\(13\\). If the value \\(13\\) is replaced with \\(33\\), which statement about the new data set is true?","hints":[],"solution":"","choices":["The mean and the median both stay the same.","The mean increases, and the median stays the same.","The mean and the median both increase.","The mean stays the same, and the median increases."],"correctAnswer":"B"},{"id":"d_ma1q9","module":3,"number":9,"domain":"Advanced Math","skill":"Quadratic equations","type":"spr","question":"\\[x^2-5x-14=0\\] What is the positive solution to the equation above?","hints":[],"solution":"","acceptedAnswers":["7"],"correctAnswer":"7"},{"id":"d_ma1q10","module":3,"number":10,"domain":"Algebra","skill":"Linear inequalities","type":"spr","question":"At a fair, Maria pays a $5 entrance fee and then $3.75 for each ride. She has $50 to spend. What is the greatest number of rides she can go on?","hints":[],"solution":"","acceptedAnswers":["12"],"correctAnswer":"12"},{"id":"d_ma1q11","module":3,"number":11,"domain":"Geometry and Trigonometry","skill":"Circles","type":"mcq","question":"The equation of a circle in the \\(xy\\)-plane is \\(x^2+y^2-6x+8y=11\\). What is the radius of the circle?","hints":[],"solution":"","choices":["\\(36\\)","\\(\\sqrt{11}\\)","\\(6\\)","\\(11\\)"],"correctAnswer":"C"},{"id":"d_ma2q1","module":4,"number":1,"domain":"Algebra","skill":"Linear equations in two variables","type":"mcq","question":"Line \\(k\\) passes through the points \\((2,\\,5)\\) and \\((6,\\,-3)\\). Line \\(j\\) is perpendicular to line \\(k\\) and passes through the point \\((0,\\,4)\\). Which equation defines line \\(j\\)?","hints":[],"solution":"","choices":["\\(y=-2x+4\\)","\\(y=-\\tfrac12x+4\\)","\\(y=\\tfrac12x+4\\)","\\(y=2x+4\\)"],"correctAnswer":"C"},{"id":"d_ma2q2","module":4,"number":2,"domain":"Advanced Math","skill":"Quadratic functions (vertex)","type":"spr","question":"The function \\(f\\) is defined by \\(f(x)=x^2-8x+k\\), where \\(k\\) is a constant. The minimum value of \\(f(x)\\) is \\(3\\). What is the value of \\(k\\)?","hints":[],"solution":"","acceptedAnswers":["19"],"correctAnswer":"19"},{"id":"d_ma2q3","module":4,"number":3,"domain":"Problem-Solving and Data Analysis","skill":"Probability (two-way tables)","type":"mcq","question":"<table class=\"data-table\"><caption>Preferred Class Format<\/caption><thead><tr><th><\/th><th>Online<\/th><th>In person<\/th><th>Total<\/th><\/tr><\/thead><tbody><tr><td>Juniors<\/td><td>48<\/td><td>52<\/td><td>100<\/td><\/tr><tr><td>Seniors<\/td><td>66<\/td><td>34<\/td><td>100<\/td><\/tr><tr><td>Total<\/td><td>114<\/td><td>86<\/td><td>200<\/td><\/tr><\/tbody><\/table>The table shows the results of a survey of 200 students. If one of the students who prefer online classes is selected at random, what is the probability that the student is a senior?","hints":[],"solution":"","choices":["\\(\\dfrac{11}{19}\\)","\\(\\dfrac{8}{19}\\)","\\(\\dfrac{33}{100}\\)","\\(\\dfrac{33}{50}\\)"],"correctAnswer":"A"},{"id":"d_ma2q4","module":4,"number":4,"domain":"Algebra","skill":"Systems of linear equations (number of solutions)","type":"spr","question":"\\[3x-ky=7\\]\\[6x+4y=5\\] In the system of equations above, \\(k\\) is a constant. For what value of \\(k\\) does the system have no solution?","hints":[],"solution":"","acceptedAnswers":["-2"],"correctAnswer":"-2"},{"id":"d_ma2q5","module":4,"number":5,"domain":"Advanced Math","skill":"Exponential functions (equivalent forms)","type":"mcq","question":"The value of an investment, in dollars, \\(t\\) years after it was made is given by \\(f(t)=500(1.21)^t\\). Which of the following equivalent forms of \\(f\\) shows that the value increases by 10% every half-year?","hints":[],"solution":"","choices":["\\(f(t)=250(1.21)^{2t}\\)","\\(f(t)=500(1.21)^{t/2}\\)","\\(f(t)=500(1.1)^{t/2}\\)","\\(f(t)=500(1.1)^{2t}\\)"],"correctAnswer":"D"},{"id":"d_ma2q6","module":4,"number":6,"domain":"Geometry and Trigonometry","skill":"Volume","type":"spr","question":"A cylinder has a radius of 3 centimeters and a height of 8 centimeters. A cone has the same radius as the cylinder and the same volume as the cylinder. What is the height, in centimeters, of the cone?","hints":[],"solution":"","acceptedAnswers":["24"],"correctAnswer":"24"},{"id":"d_ma2q7","module":4,"number":7,"domain":"Advanced Math","skill":"Quadratic equations (discriminant)","type":"mcq","question":"\\[2x^2-12x+c=0\\] In the equation above, \\(c\\) is a constant. For what value of \\(c\\) does the equation have exactly one real solution?","hints":[],"solution":"","choices":["\\(72\\)","\\(9\\)","\\(18\\)","\\(36\\)"],"correctAnswer":"C"},{"id":"d_ma2q8","module":4,"number":8,"domain":"Problem-Solving and Data Analysis","skill":"Sampling and margin of error","type":"mcq","question":"A researcher surveyed a random sample of 400 residents of a town and found that 62% of them support a proposal to build a new park. The margin of error for the estimate is 4 percentage points. Which conclusion is most appropriate?","hints":[],"solution":"","choices":["At least 62% of residents in every town in the region support building a new park.","It is plausible that between 58% and 66% of all residents of the town support the proposal.","Exactly 62% of all residents of the town support the proposal.","Between 58% and 66% of the 400 residents surveyed support the proposal."],"correctAnswer":"B"},{"id":"d_ma2q9","module":4,"number":9,"domain":"Algebra","skill":"Linear functions (modeling)","type":"mcq","question":"A tank contains 240 liters of water. Water drains from the tank at a constant rate, and after 15 minutes the tank contains 165 liters. How many minutes after the water starts draining will the tank be empty?","hints":[],"solution":"","choices":["\\(33\\)","\\(16\\)","\\(63\\)","\\(48\\)"],"correctAnswer":"D"},{"id":"d_ma2q10","module":4,"number":10,"domain":"Advanced Math","skill":"Rational equations","type":"mcq","question":"If \\(x>0\\) and \\(\\dfrac{x^2-9}{x-3}=2x-4\\), what is the value of \\(x\\)?","hints":[],"solution":"","choices":["\\(7\\)","\\(3\\)","\\(4\\)","\\(1\\)"],"correctAnswer":"A"},{"id":"d_ma2q11","module":4,"number":11,"domain":"Geometry and Trigonometry","skill":"Trigonometry (complementary angles)","type":"spr","question":"\\[\\sin(x^\\circ)=\\cos\\big((2x-30)^\\circ\\big)\\] In the equation above, \\(0\\lt x\\lt 90\\) and \\(0\\lt 2x-30\\lt 90\\). What is the value of \\(x\\)?","hints":[],"solution":"","acceptedAnswers":["40"],"correctAnswer":"40"}];
+
+/* =========================================================
+   2. CONFIG
+   ========================================================= */
+const EMAILJS_CONFIG = {
+  publicKey: "r7tBHktw3unegDdMM",
+  serviceId: "service_6gulv0u",
+  templateId: "template_nxcnl2g"
+};
+const RECIPIENT_EMAIL = "amroacademylb@gmail.com";
+
+const STORAGE_KEY = "amroacademy_sat_diagnostic_v1";
+const MODULE_TIME_MS = 35 * 60 * 1000;
+const MODULES = [1, 2, 3, 4];
+const MODULE_INFO = {
+  1: { section: 1, sub: 1, name: "Reading and Writing", min: 16, tab: "Reading & Writing 1" },
+  2: { section: 1, sub: 2, name: "Reading and Writing", min: 16, tab: "Reading & Writing 2" },
+  3: { section: 2, sub: 1, name: "Math", min: 18, tab: "Math 1" },
+  4: { section: 2, sub: 2, name: "Math", min: 18, tab: "Math 2" }
+};
+const BREAK_MS = 5 * 60 * 1000;
+const modTime = (m) => MODULE_INFO[m].min * 60 * 1000;
+const modLabel = (m) => `Section ${MODULE_INFO[m].section}, Module ${MODULE_INFO[m].sub}: ${MODULE_INFO[m].name}`;
+const isRW = (m) => m <= 2;
+const qLabel = (q) => (isRW(q.module) ? "RW" + q.module : "M" + (q.module - 2)) + " Q" + q.number;
+const RW_DOMAINS = ["Craft and Structure", "Information and Ideas", "Standard English Conventions", "Expression of Ideas"];
+const MATH_DOMAINS = ["Algebra", "Advanced Math", "Problem-Solving and Data Analysis", "Geometry and Trigonometry"];
+const DOMAINS = [...RW_DOMAINS, ...MATH_DOMAINS];
+const LETTERS = ["A", "B", "C", "D"];
+
+/* =========================================================
+   3. STATE & STORAGE
+   ========================================================= */
+function freshState() {
+  return {
+    studentName: "",
+    currentModule: 1,
+    currentIndex: { 1: 0, 2: 0, 3: 0, 4: 0 },
+    answers: {},        // qid -> "A".."D" or SPR string
+    eliminated: {},     // qid -> ["B", ...]
+    eliminatorOn: {},   // qid -> bool
+    marked: {},         // qid -> bool
+    qTimers: {},        // qid -> { acc: ms, start: timestamp|null }
+    hintOpen: {},       // qid -> bool
+    hintLevel: {},      // qid -> 0|1|2 (hints revealed)
+    moduleTimers: { 1: { elapsed: 0, start: null }, 2: { elapsed: 0, start: null }, 3: { elapsed: 0, start: null }, 4: { elapsed: 0, start: null } },
+    onBreak: false, breakStart: null,
+    timeUpShown: { 1: false, 2: false, 3: false, 4: false },
+    timerHidden: false,
+    submitted: false, submittedAt: null, emailSent: false,
+    corrected: false, correctedAt: null,
+    stage: 1,                // module the student is allowed to work on
+    autoSubmitted: false,
+    resultsOpen: true,
+    frozen: false,           // Freeze Time on/off
+    lateAnswers: {},         // qid -> true when answered after the module time ran out
+    reviewOnlyMistakes: false
+  };
+}
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return freshState();
+    const s = JSON.parse(raw);
+    const base = freshState();
+    return Object.assign(base, s, {
+      currentIndex: Object.assign(base.currentIndex, s.currentIndex || {}),
+      moduleTimers: Object.assign(base.moduleTimers, s.moduleTimers || {}),
+      timeUpShown: Object.assign(base.timeUpShown, s.timeUpShown || {})
+    });
+  } catch (e) { return freshState(); }
+}
+function saveState() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) { /* storage full or blocked */ }
+}
+let state = loadState();
+let sending = false;
+
+/* =========================================================
+   4. HELPERS
+   ========================================================= */
+const $ = (id) => document.getElementById(id);
+const byModule = (m) => QUESTIONS.filter(q => q.module === m).sort((a, b) => a.number - b.number);
+const findQ = (id) => QUESTIONS.find(q => q.id === id);
+const currentQ = () => byModule(state.currentModule)[state.currentIndex[state.currentModule]];
+const isLocked = () => state.submitted || state.corrected;
+const hasAnswer = (q) => { const a = state.answers[q.id]; return a !== undefined && a !== null && String(a).trim() !== ""; };
+
+function fmt(ms) {
+  ms = Math.max(0, ms);
+  const total = Math.floor(ms / 1000);
+  const m = Math.floor(total / 60), s = total % 60;
+  return String(m).padStart(2, "0") + ":" + String(s).padStart(2, "0");
+}
+function esc(s) {
+  return String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+}
+function typeset(el) {
+  if (window.renderMathInElement && el) {
+    renderMathInElement(el, {
+      delimiters: [{ left: "\\[", right: "\\]", display: true }, { left: "\\(", right: "\\)", display: false }],
+      throwOnError: false
+    });
+  }
+}
+function toast(msg, ms = 3500) {
+  const t = $("toast"); t.textContent = msg; t.classList.add("show");
+  clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.remove("show"), ms);
+}
+
+/* =========================================================
+   5. TIMERS (module countdown + per-question stopwatch)
+   ========================================================= */
+function moduleElapsed(m) {
+  const t = state.moduleTimers[m];
+  return t.elapsed + (t.start ? Date.now() - t.start : 0);
+}
+function pauseModule(m) {
+  const t = state.moduleTimers[m];
+  if (t.start) { t.elapsed += Date.now() - t.start; t.start = null; }
+}
+function startModule(m) {
+  const t = state.moduleTimers[m];
+  if (!t.start && !isLocked() && state.studentName && !state.frozen) t.start = Date.now();
+}
+function qt(id) {
+  if (!state.qTimers[id]) state.qTimers[id] = { acc: 0, start: null };
+  return state.qTimers[id];
+}
+const qElapsed = (id) => { const t = qt(id); return t.acc + (t.start ? Date.now() - t.start : 0); };
+function stopQ(id) { const t = qt(id); if (t.start) { t.acc += Date.now() - t.start; t.start = null; } }
+function stopAllQ() { Object.keys(state.qTimers).forEach(stopQ); }
+function startQ(id) { if (state.frozen) return; stopAllQ(); qt(id).start = Date.now(); }
+const isOvertime = (m) => moduleElapsed(m) >= modTime(m);
+function markTiming(q) {
+  if (!hasAnswer(q)) delete state.lateAnswers[q.id];
+  else if (isOvertime(q.module)) state.lateAnswers[q.id] = true;
+}
+function stopAllTimers() { stopAllQ(); MODULES.forEach(pauseModule); }
+
+function tick() {
+  if (state.onBreak) { tickBreak(); return; }
+  const m = state.currentModule;
+  const remaining = modTime(m) - moduleElapsed(m);
+  const el = $("moduleTimer");
+  const over = remaining <= 0;
+  el.textContent = state.timerHidden ? "" : (over ? "00:00" : fmt(remaining));
+  el.classList.toggle("low", !over && remaining < 5 * 60 * 1000);
+  el.classList.toggle("over", over);
+  el.classList.toggle("frozen", !!state.frozen);
+  const sub = $("timerSub");
+  if (sub) sub.textContent = state.frozen && !isLocked() ? "❄ Time frozen" : "";
+  if (over && !isLocked() && state.studentName) {
+    if (m === state.stage && m < 4) { closeModal(); finishModule(true); }   // time's up → next module (or break)
+    else if (m === 4 && state.stage === 4 && !sending) {                     // time's up → test submits itself
+      state.autoSubmitted = true; saveState(); closeModal(); openSubmitReview(); sendReport();
+    }
+  }
+  const q = currentQ();
+  const clock = $("qClock");
+  if (q && clock) clock.textContent = fmt(qElapsed(q.id));
+}
+
+/* =========================================================
+   6. GRADING
+   ========================================================= */
+function parseNum(str) {
+  if (str === undefined || str === null) return NaN;
+  const s = String(str).trim();
+  if (/^-?(\d+\.?\d*|\.\d+)\/(\d+\.?\d*|\.\d+)$/.test(s)) {
+    const [a, b] = s.split("/").map(Number);
+    return b === 0 ? NaN : a / b;
+  }
+  if (/^-?(\d+\.?\d*|\.\d+)$/.test(s)) return Number(s);
+  return NaN;
+}
+function normalizeSpr(s) {
+  let t = String(s).trim().replace(/\s+/g, "");
+  if (/^-?0\.\d/.test(t)) t = t.replace("0.", ".");
+  return t;
+}
+function isCorrect(q, ans) {
+  if (ans === undefined || ans === null || String(ans).trim() === "") return false;
+  if (q.type === "mcq") return ans === q.correctAnswer;
+  const n = normalizeSpr(ans);
+  if (q.acceptedAnswers.some(a => normalizeSpr(a) === n)) return true;
+  const v = parseNum(ans), target = parseNum(q.correctAnswer);
+  return !isNaN(v) && !isNaN(target) && Math.abs(v - target) < 1e-9;
+}
+function statusOf(q) {
+  if (!hasAnswer(q)) return "unanswered";
+  return isCorrect(q, state.answers[q.id]) ? "correct" : "wrong";
+}
+function buildStats() {
+  const rows = QUESTIONS.map(q => ({
+    q, status: statusOf(q), time: qElapsed(q.id), hints: state.hintLevel[q.id] || 0,
+    late: hasAnswer(q) && !!state.lateAnswers[q.id],
+    answer: hasAnswer(q) ? String(state.answers[q.id]) : "—"
+  }));
+  const total = rows.filter(r => r.status === "correct").length;
+  const perModule = MODULES.map(m => {
+    const rs = rows.filter(r => r.q.module === m);
+    return { m, correct: rs.filter(r => r.status === "correct").length, onTime: rs.filter(r => r.status === "correct" && !r.late).length, late: rs.filter(r => r.late).length, total: rs.length, time: moduleElapsed(m) };
+  });
+  const perDomain = DOMAINS.filter(d => rows.some(r => r.q.domain === d)).map(d => {
+    const rs = rows.filter(r => r.q.domain === d);
+    const correct = rs.filter(r => r.status === "correct").length;
+    const time = rs.reduce((s, r) => s + r.time, 0);
+    return { d, correct, total: rs.length, pct: rs.length ? Math.round(correct / rs.length * 100) : 0, avg: rs.length ? time / rs.length : 0, hints: rs.reduce((s, r) => s + r.hints, 0) };
+  });
+  const totalTime = rows.reduce((s, r) => s + r.time, 0);
+  const hintsUsed = rows.reduce((s, r) => s + r.hints, 0);
+  const correctNoHint = rows.filter(r => r.status === "correct" && r.hints === 0).length;
+  const onTime = rows.filter(r => r.status === "correct" && !r.late).length;
+  const lateCount = rows.filter(r => r.late).length;
+  return { rows, total, perModule, perDomain, totalTime, hintsUsed, correctNoHint, onTime, lateCount, count: rows.length };
+}
+const correctDisplay = (q) => q.type === "mcq" ? q.correctAnswer : q.acceptedAnswers.join(" or ");
+const statusLabel = (s) => ({ correct: "Correct", wrong: "Wrong", unanswered: "Unanswered" }[s]);
+
+/* =========================================================
+   7. RENDERING
+   ========================================================= */
+function render() {
+  renderTop();
+  renderResults();
+  renderQuestion();
+  renderBottom();
+  tick();
+}
+
+function renderTop() {
+  const m = state.currentModule;
+  $("secLabel").textContent = state.onBreak ? "Break" : modLabel(m);
+  $("refBtn").style.display = isRW(m) || state.onBreak ? "none" : "";
+  $("desmosBtn").style.display = isRW(m) || state.onBreak ? "none" : "inline-flex";
+  $("hideTimerBtn").textContent = state.timerHidden ? "Show" : "Hide";
+  document.querySelectorAll(".module-tabs .tab").forEach(b => b.classList.toggle("active", Number(b.dataset.module) === m));
+  const pill = $("statusPill");
+  const parts = [];
+  if (state.frozen && !isLocked()) parts.push("❄ Time frozen");
+  if (state.corrected) parts.push("Corrected");
+  if (state.emailSent) parts.push("Submitted ✓");
+  else if (state.submitted) parts.push("Submitted (email not sent)");
+  pill.textContent = parts.length ? parts.join(" · ") : "In progress";
+  pill.classList.toggle("ok", parts.length > 0);
+  $("submitBtn").textContent = state.emailSent ? "Submitted ✓" : "Submit Exam";
+  $("submitBtn").className = "tool-btn " + (state.emailSent ? "success" : "primary");
+  $("submitBtn").disabled = state.emailSent;
+  // test-day flow: Module 1 → Module 2 → submit
+  if (!state.submitted) {
+    $("submitBtn").textContent = state.onBreak ? "Resume Testing →" : state.stage < 4 ? "Next Module →" : "Submit Exam";
+  }
+  document.querySelectorAll(".module-tabs .tab").forEach(b => {
+    const tm = Number(b.dataset.module);
+    b.disabled = tm !== state.stage || state.submitted;
+    b.textContent = MODULE_INFO[tm].tab + (tm < state.stage || state.submitted ? " ✓" : "");
+  });
+}
+
+function renderBottom() {
+  const m = state.currentModule, i = state.currentIndex[m], n = byModule(m).length;
+  $("navBtn").textContent = "Question " + (i + 1) + " of " + n + " ▲";
+  $("studentLabel").textContent = state.studentName || "";
+  $("backBtn").disabled = i === 0 || state.submitted || state.onBreak;
+  $("nextBtn").disabled = state.submitted || state.onBreak;
+  $("navBtn").disabled = state.submitted || state.onBreak;
+}
+
+function sprDirections() {
+  return `<aside class="spr-dir">
+    <h3>Student-produced response directions</h3>
+    <ul>
+      <li>If you find <b>more than one correct answer</b>, enter only one answer.</li>
+      <li>You can enter up to <b>5 characters</b> for a positive answer and up to <b>6 characters</b> (including the negative sign) for a negative answer.</li>
+      <li>If your answer is a <b>fraction</b> that doesn't fit in the space, enter the decimal equivalent.</li>
+      <li>If your answer is a <b>decimal</b> that doesn't fit, enter it by truncating or rounding at the fourth digit.</li>
+      <li>If your answer is a <b>mixed number</b> (such as 3½), enter it as an improper fraction (7/2) or its decimal equivalent (3.5).</li>
+      <li>Don't enter <b>symbols</b> such as a percent sign, comma, or dollar sign.</li>
+    </ul>
+    <table class="ex-table"><thead><tr><th>Answer</th><th>Acceptable ways to enter</th><th>Unacceptable</th></tr></thead>
+    <tbody><tr><td>3.5</td><td>3.5 &nbsp; 3.50 &nbsp; 7/2</td><td>31/2 &nbsp; 3 1/2</td></tr>
+    <tr><td>2/3</td><td>2/3 &nbsp; .6666 &nbsp; .6667 &nbsp; 0.666 &nbsp; 0.667</td><td>0.66 &nbsp; .66 &nbsp; 0.67 &nbsp; .67</td></tr>
+    <tr><td>−1/3</td><td>−1/3 &nbsp; −.3333 &nbsp; −0.333</td><td>−.33 &nbsp; −0.33</td></tr></tbody></table>
+  </aside>`;
+}
+
+function flagSvg(on) {
+  return `<svg class="flag-icon" viewBox="0 0 14 16"><path d="M2 1v14" stroke="currentColor" stroke-width="1.6"/><path d="M2.5 1.5h9l-2.2 3 2.2 3h-9z" fill="${on ? "currentColor" : "none"}" stroke="currentColor" stroke-width="1.3"/></svg>`;
+}
+
+function renderQuestion() {
+  const q = currentQ();
+  const area = $("questionArea");
+  if (state.submitted) { area.innerHTML = submittedHtml(); const rs = $("resendBtn"); if (rs) rs.onclick = openSubmitReview; return; }
+  if (state.onBreak) { area.innerHTML = breakHtml(); $("resumeBtn").onclick = endBreak; return; }
+  const locked = isLocked();
+  const corrected = state.corrected;
+  const ans = state.answers[q.id];
+  const elimOn = !!state.eliminatorOn[q.id] && !locked;
+  const elim = state.eliminated[q.id] || [];
+  const running = !!qt(q.id).start;
+  const hintLevel = state.hintLevel[q.id] || 0;
+  const hintOpen = !!state.hintOpen[q.id];
+
+  let body = "";
+  if (q.type === "mcq") {
+    body = `<div class="choices">` + q.choices.map((c, i) => {
+      const L = LETTERS[i];
+      const isElim = elim.includes(L);
+      let cls = "choice";
+      let tag = "";
+      if (corrected) {
+        if (L === q.correctAnswer) { cls += " correct"; tag = `<span class="tag g">Correct answer</span>`; }
+        if (ans === L && L !== q.correctAnswer) { cls += " wrong"; tag = `<span class="tag r">Your answer</span>`; }
+        if (ans === L && L === q.correctAnswer) tag = `<span class="tag g">Your answer ✓</span>`;
+      } else {
+        if (ans === L) cls += " selected";
+        if (isElim) cls += " eliminated";
+      }
+      let elimCtl = "";
+      if (elimOn) {
+        elimCtl = isElim
+          ? `<button class="elim-undo" data-undo="${L}" aria-label="Undo eliminate ${L}">Undo</button>`
+          : `<button class="elim-btn" data-elim="${L}" aria-label="Eliminate choice ${L}">${L}</button>`;
+      }
+      return `<div class="choice-row"><button class="${cls}" data-choice="${L}" ${locked || isElim ? "disabled" : ""}>
+        <span class="letter">${L}</span><span class="ctext">${c}</span>${tag}</button>${elimCtl}</div>`;
+    }).join("") + `</div>`;
+  } else {
+    const val = ans || "";
+    let cls = "spr-input";
+    if (corrected && hasAnswer(q)) cls += isCorrect(q, val) ? " correct" : " wrong";
+    body = `<input class="${cls}" id="sprInput" type="text" inputmode="decimal" autocomplete="off" spellcheck="false"
+              maxlength="${val.startsWith("-") ? 6 : 5}" value="${esc(val)}" ${locked ? "disabled" : ""} aria-label="Your answer">
+            <div class="preview" id="sprPreview"></div>`;
+  }
+
+  // hints
+  let hintHtml = "";
+  if (hintOpen) {
+    hintHtml = `<div class="hint-box">`;
+    if (hintLevel === 0) hintHtml += `<div class="hint" style="color:var(--muted)">Hints are revealed one at a time.</div>`;
+    for (let i = 0; i < hintLevel; i++) hintHtml += `<div class="hint"><b>Hint ${i + 1}:</b> ${q.hints[i]}</div>`;
+    if (hintLevel < q.hints.length) hintHtml += `<button class="small-btn" id="nextHintBtn">${hintLevel === 0 ? "Reveal Hint 1" : "Reveal Hint 2"}</button>`;
+    else hintHtml += `<div style="font-size:13px;color:var(--muted)">All hints revealed.</div>`;
+    hintHtml += `</div>`;
+  }
+
+  // review (after correction)
+  let reviewHtml = "";
+  if (corrected) {
+    const st = statusOf(q);
+    reviewHtml = `<div class="review-box"><span class="status-badge ${st}">${st === "correct" ? "✓ Correct" : st === "wrong" ? "✗ Incorrect" : "Not answered"}</span>`;
+    if (q.type === "spr") {
+      reviewHtml += `<div>Your answer: ${hasAnswer(q) ? `<span class="${st === "correct" ? "ans-g" : "ans-r"}">${esc(ans)}</span>` : "<i>none</i>"}
+        &nbsp;|&nbsp; Accepted answer(s): <span class="ans-g">${esc(q.acceptedAnswers.join(", "))}</span></div>`;
+    } else if (st === "unanswered") {
+      reviewHtml += `<div>Correct answer: <span class="ans-g">${q.correctAnswer}</span></div>`;
+    }
+    reviewHtml += `<div style="margin-top:8px"><b>Step-by-step solution:</b> ${q.solution}</div>
+      <div style="margin-top:6px;font-size:13px;color:var(--muted)">${esc(q.domain)} · ${esc(q.skill)} · Time: ${fmt(qElapsed(q.id))} · Hints used: ${hintLevel}${hasAnswer(q) && state.lateAnswers[q.id] ? " · ⏰ Answered after time" : ""}</div></div>`;
+  }
+
+  area.innerHTML = (corrected ? reviewNavHtml(q) : "") + `
+    <div class="q-wrap ${q.type === "spr" || q.passage ? "spr" : ""}">
+      ${q.passage ? `<aside class="spr-dir passage">${q.passage}</aside>` : q.type === "spr" ? sprDirections() : ""}
+      <section class="q-main">
+        <div class="q-head">
+          <span class="q-num">${q.number}</span>
+          <button class="flag-btn ${state.marked[q.id] ? "on" : ""}" id="flagBtn">${flagSvg(!!state.marked[q.id])} Mark for Review</button>
+          <span class="late-badge" id="lateBadge" title="This answer was given after the module time ran out" ${hasAnswer(q) && state.lateAnswers[q.id] ? "" : "hidden"}>⏰ Answered after time</span>
+          <span class="spacer"></span>
+          ${q.type === "mcq" && !locked ? `<button class="abc-btn ${elimOn ? "on" : ""}" id="abcBtn" title="Cross out answer choices">ABC</button>` : ""}
+        </div>
+        <div class="q-text">${q.question}</div>
+        ${body}
+        ${hintHtml}
+        ${reviewHtml}
+      </section>
+    </div>`;
+
+  if (q.type === "spr") updatePreview();
+  typeset(area);
+  bindQuestionEvents(q);
+  if (corrected) bindReviewNav();
+}
+
+/* ---------- Review navigation (after correction) ---------- */
+const ORDER = () => [...byModule(1), ...byModule(2)];
+function reviewNavHtml(q) {
+  const cls = { correct: "c", wrong: "w", unanswered: "u" };
+  const row = (m) => `<div class="rv-row"><span class="rv-m">M${m}</span>${byModule(m).map(x => {
+    const st = statusOf(x), late = hasAnswer(x) && state.lateAnswers[x.id];
+    return `<button class="rv-chip ${cls[st]} ${x.id === q.id ? "cur" : ""} ${late ? "late" : ""}" data-rv="${x.id}"
+      title="Module ${m} Q${x.number}: ${statusLabel(st)}${late ? " (answered after time)" : ""}">${x.number}</button>`;
+  }).join("")}</div>`;
+  const st = statusOf(q);
+  const mistakes = ORDER().filter(x => statusOf(x) !== "correct").length;
+  return `<div class="review-nav" id="reviewNav">${row(1)}${row(2)}
+    <div class="rv-actions">
+      <button class="small-btn" id="prevMistake" ${mistakes ? "" : "disabled"}>← Previous mistake</button>
+      <span class="res-${st}">Module ${q.module} · Q${q.number} · ${statusLabel(st)}</span>
+      <button class="small-btn" id="nextMistake" ${mistakes ? "" : "disabled"}>Next mistake →</button>
+      <label><input type="checkbox" id="onlyMistakes" ${state.reviewOnlyMistakes ? "checked" : ""}> Back / Next skip correct answers</label>
+    </div>
+    <div class="rv-tip">Click any number to jump to it · use the ← → arrow keys to move · a yellow dot means answered after time</div>
+  </div>`;
+}
+function stepTo(dir, onlyMistakes) {
+  const list = ORDER(), cur = currentQ();
+  let i = list.findIndex(x => x.id === cur.id);
+  while (true) {
+    i += dir;
+    if (i < 0 || i >= list.length) break;
+    if (!onlyMistakes || statusOf(list[i]) !== "correct") { goTo(list[i].module, list[i].number - 1); return true; }
+  }
+  toast(onlyMistakes ? (dir > 0 ? "No more mistakes after this question." : "No mistakes before this question.")
+                     : (dir > 0 ? "This is the last question." : "This is the first question."), 2500);
+  return false;
+}
+function bindReviewNav() {
+  document.querySelectorAll("[data-rv]").forEach(b => b.onclick = () => { const x = findQ(b.dataset.rv); goTo(x.module, x.number - 1); });
+  const p = $("prevMistake"), n = $("nextMistake"), o = $("onlyMistakes");
+  if (p) p.onclick = () => stepTo(-1, true);
+  if (n) n.onclick = () => stepTo(1, true);
+  if (o) o.onchange = () => { state.reviewOnlyMistakes = o.checked; saveState(); };
+}
+
+function updatePreview() {
+  const inp = $("sprInput"), pv = $("sprPreview");
+  if (!inp || !pv) return;
+  const v = inp.value.trim();
+  if (!v) { pv.innerHTML = ""; return; }
+  let tex = v.replace(/-/g, "-");
+  const m = v.match(/^(-?)(.+)\/(.+)$/);
+  if (m) tex = `${m[1]}\\dfrac{${m[2]}}{${m[3]}}`;
+  let html = esc(v);
+  if (window.katex) { try { html = katex.renderToString(tex, { throwOnError: false }); } catch (e) {} }
+  const valid = !isNaN(parseNum(v));
+  pv.innerHTML = `<b>Answer Preview:</b><span class="pv">${html}</span>${valid ? "" : ` <span style="color:var(--red);font-size:13px;margin-left:8px">Not a valid number yet</span>`}`;
+}
+
+function renderResults() {
+  const box = $("results");
+  if (!state.corrected) { box.innerHTML = ""; return; }
+  const s = buildStats();
+  const pct = Math.round(s.total / s.count * 100);
+  const rowsHtml = s.rows.map(r => `<tr class="clickable" data-goto="${r.q.id}">
+      <td>M${r.q.module} Q${r.q.number}</td><td>${esc(r.q.domain)}</td><td>${r.q.type.toUpperCase()}</td>
+      <td class="res-${r.status}">${statusLabel(r.status)}</td><td>${esc(r.answer)}</td><td>${esc(correctDisplay(r.q))}</td>
+      <td>${fmt(r.time)}</td><td>${r.hints}</td><td>${r.late ? "⏰ After time" : (r.status === "unanswered" ? "—" : "On time")}</td></tr>`).join("");
+  box.innerHTML = `<div class="results">
+    <div class="results-head"><h2>Your Results</h2><span class="big-score">${s.total} / ${s.count}</span>
+      <span style="color:var(--muted)">(${pct}%)</span><span class="spacer"></span>
+      <button class="small-btn" id="toggleResults">${state.resultsOpen ? "Hide details" : "Show details"}</button></div>
+    ${state.resultsOpen ? `
+    <div class="stat-grid">
+      ${s.perModule.map(pm => `<div class="stat"><div class="k">Module ${pm.m}</div><div class="v">${pm.correct} / ${pm.total}</div><div style="font-size:12px;color:var(--muted)">Module time used: ${fmt(pm.time)}</div></div>`).join("")}
+      <div class="stat"><div class="k">Score within time</div><div class="v">${s.onTime} / ${s.count}</div><div style="font-size:12px;color:var(--muted)">Answered after time: ${s.lateCount}</div></div>
+      <div class="stat"><div class="k">Time on questions</div><div class="v">${fmt(s.totalTime)}</div></div>
+      <div class="stat"><div class="k">Hints used</div><div class="v">${s.hintsUsed}</div><div style="font-size:12px;color:var(--muted)">Correct without hints: ${s.correctNoHint}</div></div>
+    </div>
+    <div class="table-scroll"><table class="rtable"><thead><tr><th>Domain</th><th>Correct</th><th>%</th><th>Avg time / question</th><th>Hints</th></tr></thead><tbody>
+      ${s.perDomain.map(d => `<tr><td>${esc(d.d)}</td><td>${d.correct} / ${d.total}</td><td>${d.pct}%</td><td>${fmt(d.avg)}</td><td>${d.hints}</td></tr>`).join("")}
+    </tbody></table></div>
+    <details><summary>Per-question breakdown (click a row to open that question)</summary>
+      <div class="table-scroll"><table class="rtable"><thead><tr><th>Q</th><th>Domain</th><th>Type</th><th>Result</th><th>Your answer</th><th>Correct</th><th>Time</th><th>Hints</th><th>Timing</th></tr></thead>
+      <tbody>${rowsHtml}</tbody></table></div></details>` : ""}
+  </div>`;
+  const tg = $("toggleResults");
+  if (tg) tg.onclick = () => { state.resultsOpen = !state.resultsOpen; saveState(); renderResults(); };
+  box.querySelectorAll("[data-goto]").forEach(tr => tr.onclick = () => {
+    const q = findQ(tr.dataset.goto); goTo(q.module, q.number - 1);
+  });
+}
+
+/* =========================================================
+   8. QUESTION EVENTS
+   ========================================================= */
+function bindQuestionEvents(q) {
+  $("flagBtn").onclick = () => { state.marked[q.id] = !state.marked[q.id]; saveState(); renderQuestion(); };
+  if ($("hintBtn")) $("hintBtn").onclick = () => {
+    state.hintOpen[q.id] = !state.hintOpen[q.id];
+    if (state.hintOpen[q.id] && !state.hintLevel[q.id]) state.hintLevel[q.id] = 1; // first open reveals Hint 1
+    saveState(); renderQuestion();
+  };
+  const nh = $("nextHintBtn");
+  if (nh) nh.onclick = () => { state.hintLevel[q.id] = Math.min(2, (state.hintLevel[q.id] || 0) + 1); saveState(); renderQuestion(); };
+
+  const abc = $("abcBtn");
+  if (abc) abc.onclick = () => { state.eliminatorOn[q.id] = !state.eliminatorOn[q.id]; saveState(); renderQuestion(); };
+
+  if ($("timerBtn")) $("timerBtn").onclick = () => {
+    if (isLocked()) return;
+    if (qt(q.id).start) stopQ(q.id); else startQ(q.id);
+    saveState(); renderQuestion();
+  };
+
+  document.querySelectorAll("[data-choice]").forEach(btn => btn.onclick = () => {
+    if (isLocked()) return;
+    const L = btn.dataset.choice;
+    if ((state.eliminated[q.id] || []).includes(L)) return;
+    state.answers[q.id] = L;
+    markTiming(q);               // flag answers given after the module time ran out
+    stopQ(q.id);                 // answering stops the stopwatch
+    saveState(); renderQuestion();
+  });
+  document.querySelectorAll("[data-elim]").forEach(btn => btn.onclick = () => {
+    const L = btn.dataset.elim;
+    const arr = state.eliminated[q.id] || (state.eliminated[q.id] = []);
+    if (!arr.includes(L)) arr.push(L);
+    if (state.answers[q.id] === L) { delete state.answers[q.id]; markTiming(q); } // crossing out the selected choice clears it
+    saveState(); renderQuestion();
+  });
+  document.querySelectorAll("[data-undo]").forEach(btn => btn.onclick = () => {
+    state.eliminated[q.id] = (state.eliminated[q.id] || []).filter(x => x !== btn.dataset.undo);
+    saveState(); renderQuestion();
+  });
+
+  const inp = $("sprInput");
+  if (inp) {
+    inp.oninput = () => {
+      let v = inp.value.replace(/[^0-9.\/-]/g, "");
+      v = v.replace(/(?!^)-/g, "");                 // minus only at the start
+      const parts = v.split("/"); if (parts.length > 2) v = parts[0] + "/" + parts.slice(1).join("");
+      const max = v.startsWith("-") ? 6 : 5;
+      v = v.slice(0, max);
+      inp.maxLength = max;
+      if (inp.value !== v) inp.value = v;
+      state.answers[q.id] = v;
+      markTiming(q);
+      const lb = $("lateBadge"); if (lb) lb.hidden = !(hasAnswer(q) && state.lateAnswers[q.id]);
+      if (v.length) stopQ(q.id);                    // typing an answer stops the stopwatch
+      saveState(); updatePreview(); refreshTimerUi(q);
+    };
+  }
+}
+function timerClass(q) {
+  const running = !!qt(q.id).start;
+  return running ? "running" : (qElapsed(q.id) === 0 && !isLocked() && !state.frozen && !hasAnswer(q) ? "idle" : "");
+}
+function timerInner(q) {
+  const running = !!qt(q.id).start, el = qElapsed(q.id);
+  const icon = running ? '<span class="qt-dot"></span>' : "⏱";
+  const label = running ? "Stop" : (el > 0 ? "Resume" : "Start timer");
+  return `${icon}<span>${label}</span>${running ? "" : "<kbd>T</kbd>"}<span class="qt-clock" id="qClock">${fmt(el)}</span>`;
+}
+function refreshTimerUi(q) {
+  const b = $("timerBtn"); if (!b) return;
+  b.className = "qtimer " + timerClass(q);
+  b.innerHTML = timerInner(q);
+}
+
+/* =========================================================
+   9. NAVIGATION
+   ========================================================= */
+function goTo(m, idx) {
+  if (m !== state.stage) return;             // a finished module can't be reopened
+  const n = byModule(m).length;
+  idx = Math.max(0, Math.min(n - 1, idx));
+  stopAllQ();                                  // leaving a question pauses its stopwatch
+  if (m !== state.currentModule) { pauseModule(state.currentModule); state.currentModule = m; startModule(m); }
+  state.currentIndex[m] = idx;
+  saveState(); render();
+  const main = $("main");
+  if (state.corrected) {
+    // keep the review bar in view instead of jumping back to the results panel
+    const top = $("questionArea").getBoundingClientRect().top - main.getBoundingClientRect().top + main.scrollTop - 8;
+    main.scrollTop = Math.max(0, top);
+  } else main.scrollTop = 0;
+}
+function next() {
+  if (state.corrected) { stepTo(1, state.reviewOnlyMistakes); return; }
+  const m = state.currentModule, i = state.currentIndex[m], n = byModule(m).length;
+  if (i < n - 1) goTo(m, i + 1);
+  else openNavigator();                       // end of module: review page, like Bluebook
+}
+function back() {
+  if (state.corrected) { stepTo(-1, state.reviewOnlyMistakes); return; }
+  const m = state.currentModule, i = state.currentIndex[m];
+  if (i > 0) goTo(m, i - 1);
+
+}
+
+/* =========================================================
+   10. MODALS
+   ========================================================= */
+function openModal(html, wide = false, dismissable = true) {
+  $("modal").className = "modal" + (wide ? " wide" : "");
+  $("modal").innerHTML = html;
+  $("overlay").classList.add("open");
+  $("overlay").dataset.dismiss = dismissable ? "1" : "0";
+  $("modal").querySelectorAll("[data-close]").forEach(b => b.onclick = closeModal);
+  typeset($("modal"));
+}
+function closeModal() { $("overlay").classList.remove("open", "lock"); $("modal").innerHTML = ""; }
+
+/* ---------- Password gate (only a SHA-256 hash is stored) ---------- */
+const PASSWORD_HASH = "806d3d5697b651f31bc592e5fa0fffb8e936cbc99f13242025e383bdc0474519";
+function sha256Hex(ascii) {
+  function rr(v, a) { return (v >>> a) | (v << (32 - a)); }
+  const mp = Math.pow, maxWord = mp(2, 32); let result = "", i, j;
+  const words = [], bitLen = ascii.length * 8, k = [], isComposite = {};
+  let hash = [], primeCounter = 0;
+  for (let c = 2; primeCounter < 64; c++) {
+    if (!isComposite[c]) { for (i = 0; i < 313; i += c) isComposite[i] = c; hash[primeCounter] = (mp(c, .5) * maxWord) | 0; k[primeCounter++] = (mp(c, 1 / 3) * maxWord) | 0; }
+  }
+  hash = hash.slice(0, 8);
+  ascii += "\x80";
+  while (ascii.length % 64 - 56) ascii += "\x00";
+  for (i = 0; i < ascii.length; i++) { j = ascii.charCodeAt(i); if (j >> 8) return ""; words[i >> 2] |= j << ((3 - i) % 4) * 8; }
+  words[words.length] = (bitLen / maxWord) | 0; words[words.length] = bitLen;
+  for (j = 0; j < words.length;) {
+    const w = words.slice(j, j += 16), old = hash; hash = hash.slice(0, 8);
+    for (i = 0; i < 64; i++) {
+      const w15 = w[i - 15], w2 = w[i - 2], a = hash[0], e = hash[4];
+      const t1 = hash[7] + (rr(e, 6) ^ rr(e, 11) ^ rr(e, 25)) + ((e & hash[5]) ^ ((~e) & hash[6])) + k[i]
+        + (w[i] = (i < 16) ? w[i] : (w[i - 16] + (rr(w15, 7) ^ rr(w15, 18) ^ (w15 >>> 3)) + w[i - 7] + (rr(w2, 17) ^ rr(w2, 19) ^ (w2 >>> 10))) | 0);
+      const t2 = (rr(a, 2) ^ rr(a, 13) ^ rr(a, 22)) + ((a & hash[1]) ^ (a & hash[2]) ^ (hash[1] & hash[2]));
+      hash = [(t1 + t2) | 0].concat(hash); hash[4] = (hash[4] + t1) | 0;
+    }
+    for (i = 0; i < 8; i++) hash[i] = (hash[i] + old[i]) | 0;
+  }
+  for (i = 0; i < 8; i++) for (j = 3; j + 1; j--) { const b = (hash[i] >> (j * 8)) & 255; result += (b < 16 ? "0" : "") + b.toString(16); }
+  return result;
+}
+function openPasswordModal() {
+  openModal(head("🔒 Password required", false) + `<div class="modal-body">
+    <p>This test is protected. Enter the password your teacher gave you to begin.</p>
+    <input class="name-input" id="pwInput" type="password" placeholder="Password" autocomplete="off" spellcheck="false">
+    <label style="display:flex;align-items:center;gap:6px;margin-top:8px;font-size:13px;color:var(--muted)"><input type="checkbox" id="pwShow"> Show password</label>
+    <div id="pwErr"></div></div>
+    <div class="modal-foot"><button class="tool-btn primary" id="pwBtn">Unlock</button></div>`, false, false);
+  $("overlay").classList.add("lock");
+  const go = () => {
+    if (sha256Hex($("pwInput").value.trim()) === PASSWORD_HASH) {
+      state.unlocked = true; saveState(); closeModal(); openNameModal();
+    } else {
+      $("pwErr").innerHTML = `<div class="msg err">Incorrect password. Please try again.</div>`;
+      $("pwInput").select();
+    }
+  };
+  $("pwBtn").onclick = go;
+  $("pwInput").onkeydown = (e) => { if (e.key === "Enter") go(); };
+  $("pwShow").onchange = (e) => { $("pwInput").type = e.target.checked ? "text" : "password"; };
+  setTimeout(() => $("pwInput") && $("pwInput").focus(), 50);
+}
+const head = (title, closable = true) => `<div class="modal-head"><h3>${title}</h3>${closable ? `<button class="x-btn" data-close aria-label="Close">×</button>` : ""}</div>`;
+
+/* ---------- Email notification when the student starts ---------- */
+async function notifyStart() {
+  if (state.startNotified || !state.studentName) return;
+  const when = new Date(state.startedAt || Date.now()).toLocaleString();
+  const html = `<div style="font-family:Arial,sans-serif;font-size:14px"><h2 style="color:#1a73a8">Diagnostic started</h2>
+    <p><b>${esc(state.studentName)}</b> entered the password and started the <b>SAT Diagnostic Test (English + Math)</b>.</p>
+    <p><b>Started:</b> ${esc(when)}<br><b>Time limit:</b> English 2 × 16 min, 5-min break, Math 2 × 18 min</p>
+    <p>You will receive the full report when the student submits.</p></div>`;
+  try {
+    if (!window.emailjs) return;
+    await emailjs.send(EMAILJS_CONFIG.serviceId, EMAILJS_CONFIG.templateId, {
+      to_email: RECIPIENT_EMAIL, student_name: state.studentName, submit_date: when,
+      score: "STARTED (not submitted yet)", total_time: "—",
+      report: state.studentName + " started the SAT Diagnostic Test at " + when + ".",
+      report_html: html });
+    state.startNotified = true; saveState();
+  } catch (e) { /* silent: retried on next page load */ }
+}
+function openNameModal() {
+  openModal(head("Welcome to Amro Academy", false) + `<div class="modal-body">
+    <p>This is a <b>short SAT diagnostic test</b> (about half the length of the real SAT, with the same time per question), run like test day:</p><ul style="margin:0 0 12px;padding-left:20px;line-height:1.6"><li><b>Reading and Writing:</b> 2 modules, 13 questions each, 16 minutes each</li><li><b>5-minute break</b></li><li><b>Math:</b> 2 modules, 11 questions each, 18 minutes each</li></ul><p>When a module ends (you finish it or time runs out), the next one starts and you <b>can't go back</b>. There are no hints and no answer checking; your teacher receives your results. Your answers are saved if the page refreshes.</p>
+    <label for="nameInput"><b>Enter your full name to begin:</b></label>
+    <input class="name-input" id="nameInput" placeholder="Your name" maxlength="60">
+    <div id="nameErr"></div></div>
+    <div class="modal-foot"><button class="tool-btn primary" id="startBtn">Start Exam</button></div>`, false, false);
+  const go = () => {
+    const v = $("nameInput").value.trim();
+    if (v.length < 2) { $("nameErr").innerHTML = `<div class="msg err">Please enter your name.</div>`; return; }
+    state.studentName = v; state.startedAt = new Date().toISOString(); startModule(state.currentModule); saveState(); closeModal(); render(); notifyStart();
+  };
+  $("startBtn").onclick = go;
+  $("nameInput").onkeydown = (e) => { if (e.key === "Enter") go(); };
+  $("overlay").classList.add("lock");
+  setTimeout(() => $("nameInput") && $("nameInput").focus(), 50);
+}
+
+function openNavigator() {
+  const m = state.currentModule;
+  const cells = byModule(m).map((q, i) => {
+    let cls = "nav-cell";
+    if (state.corrected) cls += " " + ({ correct: "c", wrong: "w", unanswered: "u" }[statusOf(q)]);
+    else if (hasAnswer(q)) cls += " answered";
+    if (state.marked[q.id]) cls += " flagged";
+    if (hasAnswer(q) && state.lateAnswers[q.id]) cls += " late";
+    if (i === state.currentIndex[m]) cls += " current";
+    return `<button class="${cls}" data-jump="${i}">${q.number}</button>`;
+  }).join("");
+  const legend = state.corrected
+    ? `<span><i class="lg" style="background:var(--green)"></i>Correct</span><span><i class="lg" style="background:var(--red)"></i>Wrong</span><span><i class="lg" style="background:#fef7e0;border:2px solid var(--amber)"></i>Unanswered</span><span><i class="lg" style="background:#b3261e;clip-path:polygon(0 0,100% 30%,0 60%)"></i>For Review</span>`
+    : `<span><i class="lg" style="outline:2px solid #111"></i>Current</span><span><i class="lg" style="border:2px dashed #555"></i>Unanswered</span><span><i class="lg" style="background:var(--sky-dark)"></i>Answered</span><span><i class="lg" style="background:#b3261e;clip-path:polygon(0 0,100% 30%,0 60%)"></i>For Review</span>`;
+  openModal(head(modLabel(m) + " Questions") + `<div class="modal-body">
+    <div class="legend">${legend}</div>
+    <div class="nav-grid">${cells}</div>
+    ${state.submitted ? "" : `<div style="display:flex;justify-content:flex-end"><button class="tool-btn primary" id="navFinish">${m < 4 ? "Next Module →" : "Submit Exam"}</button></div>`}</div>`);
+  $("modal").querySelectorAll("[data-jump]").forEach(b => b.onclick = () => { closeModal(); goTo(m, Number(b.dataset.jump)); });
+  const nf = $("navFinish");
+  if (nf) nf.onclick = () => { closeModal(); state.stage < 4 ? openFinishModule() : openSubmitReview(); };
+}
+
+function openReference() {
+  const items = [
+    ["Circle", String.raw`\(A=\pi r^2\) &nbsp; \(C=2\pi r\)`],
+    ["Rectangle", String.raw`\(A=\ell w\)`],
+    ["Triangle", String.raw`\(A=\tfrac12 bh\)`],
+    ["Pythagorean theorem", String.raw`\(c^2=a^2+b^2\)`],
+    ["Special right triangles", String.raw`30°-60°-90°: \(x,\ x\sqrt3,\ 2x\)<br>45°-45°-90°: \(s,\ s,\ s\sqrt2\)`],
+    ["Rectangular prism", String.raw`\(V=\ell wh\)`],
+    ["Cylinder", String.raw`\(V=\pi r^2h\)`],
+    ["Sphere", String.raw`\(V=\tfrac43\pi r^3\)`],
+    ["Cone", String.raw`\(V=\tfrac13\pi r^2h\)`],
+    ["Pyramid", String.raw`\(V=\tfrac13\ell wh\)`]
+  ];
+  openModal(head("Reference Sheet") + `<div class="modal-body"><div class="ref-grid">
+    ${items.map(([t, f]) => `<div class="ref-item"><b>${t}</b>${f}</div>`).join("")}</div>
+    <ul style="margin-top:14px">
+      <li>The number of degrees of arc in a circle is 360.</li>
+      <li>The number of radians of arc in a circle is \(2\pi\).</li>
+      <li>The sum of the measures in degrees of the angles of a triangle is 180.</li>
+    </ul></div>`, true);
+}
+
+function openDirections() {
+  openModal(head("Directions") + `<div class="modal-body">
+    ${isRW(state.currentModule) ? `<p>The questions in this section address a number of important reading and writing skills. Each question includes one or more passages, which may include a table.
+    Read each passage and question carefully, and then choose the best answer to the question based on the passage(s).</p>
+    <p>All questions in this section are multiple-choice with four answer choices. Each question has a single best answer.</p>` : `<p>The questions in this section address a number of important math skills.</p>
+    <p>Use of a calculator is permitted for all questions. A reference sheet is available by selecting <b>Reference</b>.</p>`}
+    <p>Unless otherwise indicated: all variables and expressions represent real numbers; figures are drawn to scale; figures lie in a plane;
+    and the domain of a given function \(f\) is the set of all real numbers \(x\) for which \(f(x)\) is a real number.</p>
+    <p>For <b>multiple-choice questions</b>, choose the single best answer. Use the <b>ABC</b> tool to cross out choices.</p>
+    <p>For <b>student-produced response questions</b>, type your answer in the box and check the Answer Preview.</p>
+    <p><b>Test-day rules:</b> Reading and Writing modules have 16 minutes each and Math modules have 18 minutes each, with a 5-minute break between the sections. Use <i>Next Module</i> when you finish a module; you can't return to it. When the last module's time runs out, your test is submitted automatically.</p></div>`);
+}
+
+function confirmModal(title, text, okLabel, onOk, danger = false) {
+  openModal(head(title) + `<div class="modal-body"><p>${text}</p></div>
+    <div class="modal-foot"><button class="tool-btn" data-close>Cancel</button>
+    <button class="tool-btn ${danger ? "danger" : "primary"}" id="okBtn">${okLabel}</button></div>`);
+  $("okBtn").onclick = () => { closeModal(); onOk(); };
+}
+
+/* =========================================================
+   11. RESET
+   ========================================================= */
+/* =========================================================
+   FREEZE TIME
+   ========================================================= */
+function toggleFreeze() {
+  if (isLocked()) return;
+  if (state.frozen) { state.frozen = false; startModule(state.currentModule); toast("Time resumed.", 2500); }
+  else { stopAllTimers(); state.frozen = true; toast("Time frozen. The module timer and question stopwatch are paused.", 3500); }
+  saveState(); render();
+}
+
+/* =========================================================
+   TEST-DAY FLOW
+   ========================================================= */
+function openFinishModule() {
+  const m = state.stage, un = byModule(m).filter(q => !hasAnswer(q)).length;
+  const nextText = m === 2 ? "Next is a <b>5-minute break</b>, then the Math section."
+    : `Module ${MODULE_INFO[m + 1].sub} of ${MODULE_INFO[m + 1].name} and its ${MODULE_INFO[m + 1].min}-minute timer will start right away.`;
+  confirmModal("Finish this module",
+    (un ? `You have <b>${un} unanswered question${un > 1 ? "s" : ""}</b> in this module. There is no penalty for guessing.<br><br>` : "") +
+    `Once you move on, <b>you can't return to this module</b>. ${nextText}`,
+    m === 2 ? "Start the break" : "Next module", () => finishModule(false));
+}
+function finishModule(auto) {
+  const m = state.stage;
+  if (m >= 4 || isLocked()) return;
+  stopAllQ(); pauseModule(m);
+  if (m === 2) {                                   // break between the two sections
+    state.stage = 3; state.currentModule = 3; state.currentIndex[3] = 0;
+    state.onBreak = true; state.breakStart = Date.now();
+    saveState(); render(); $("main").scrollTop = 0;
+    toast(auto ? "Time is up for Reading and Writing. Your 5-minute break has started." : "Your 5-minute break has started.", 5000);
+    return;
+  }
+  startModuleNow(m + 1, auto ? `Time is up. ${modLabel(m + 1)} has started.` : `${modLabel(m + 1)} has started.`);
+}
+function startModuleNow(m, msg) {
+  state.onBreak = false; state.stage = m; state.currentModule = m; state.currentIndex[m] = 0;
+  startModule(m); saveState(); render(); $("main").scrollTop = 0;
+  toast(msg + ` You have ${MODULE_INFO[m].min} minutes.`, 5000);
+}
+function endBreak() { if (state.onBreak) startModuleNow(3, "The Math section has started."); }
+function tickBreak() {
+  const left = BREAK_MS - (Date.now() - state.breakStart);
+  const el = $("moduleTimer"); el.textContent = fmt(Math.max(0, left)); el.classList.remove("low", "over");
+  const bt = $("breakClock"); if (bt) bt.textContent = fmt(Math.max(0, left));
+  if (left <= 0) endBreak();
+}
+function breakHtml() {
+  return `<div style="max-width:640px;margin:50px auto;text-align:center;padding:0 16px">
+    <div style="font-size:15px;font-weight:700;color:var(--sky-deep);letter-spacing:.06em;text-transform:uppercase">Scheduled break</div>
+    <div id="breakClock" style="font-size:64px;font-weight:800;font-variant-numeric:tabular-nums;margin:6px 0">${fmt(Math.max(0, BREAK_MS - (Date.now() - state.breakStart)))}</div>
+    <p style="font-size:16px;color:var(--muted)">You've finished the Reading and Writing section. Stand up, stretch, drink some water.
+      The Math section (2 modules, 18 minutes each) starts automatically when the break ends.</p>
+    <button class="tool-btn primary" id="resumeBtn" style="font-size:15px;padding:10px 22px">Resume Testing Now →</button>
+  </div>`;
+}
+function submittedHtml() {
+  return `<div style="max-width:620px;margin:60px auto;text-align:center;padding:0 16px">
+    <div style="font-size:52px;line-height:1">✓</div>
+    <h2 style="margin:10px 0 6px">Your test has been submitted</h2>
+    <p style="color:var(--muted);font-size:16px">${state.autoSubmitted ? "Time ran out in the last module, so your answers were submitted automatically. " : ""}
+      Thank you, ${esc(state.studentName)}. Your teacher will receive your answers and score.</p>
+    ${state.emailSent ? `<div class="msg ok" style="display:inline-block">Report sent ✓</div>`
+      : `<div class="msg err" style="display:inline-block">The report has not been sent yet.</div>
+         <div style="margin-top:12px"><button class="tool-btn primary" id="resendBtn">Send report</button></div>`}
+  </div>`;
+}
+
+function resetExam() {
+  confirmModal("Reset Exam", "Are you sure? All answers and times will be erased.", "Yes, reset everything", () => {
+    localStorage.removeItem(STORAGE_KEY);
+    state = freshState();
+    sending = false;
+    saveState(); render(); openPasswordModal();
+  }, true);
+}
+
+/* =========================================================
+   12. CORRECTION
+   ========================================================= */
+function correctExam() {
+  if (state.corrected) { state.resultsOpen = true; saveState(); renderResults(); $("main").scrollTop = 0; return; }
+  confirmModal("Correct Exam", "This will calculate your score, show correct answers in green and wrong answers in red, and <b>lock your answers</b>. Continue?", "Correct now", () => {
+    stopAllTimers();
+    state.corrected = true; state.correctedAt = new Date().toISOString(); state.resultsOpen = true;
+    saveState(); render(); $("main").scrollTop = 0;
+    const s = buildStats();
+    toast("Score: " + s.total + " / " + s.count);
+  });
+}
+
+/* =========================================================
+   13. REPORT + EMAILJS
+   ========================================================= */
+/* ---------- Estimated SAT scores (200–800 per section) ----------
+   Short diagnostic: raw scores are scaled to a full-length test and read on hard-route curves. The real test uses IRT and an
+   adaptive Module 2, so these are estimates, not official scores. */
+const RW_CURVE = [[0,200],[10,330],[20,450],[30,560],[35,610],[40,660],[45,710],[48,740],[50,760],[52,780],[54,800]];
+const MATH_CURVE = [[0,200],[10,380],[20,500],[25,560],[30,630],[33,670],[35,700],[38,740],[40,760],[42,780],[44,800]];
+function estimateScaled(raw, curve) {
+  for (let i = 1; i < curve.length; i++) {
+    const [x0, y0] = curve[i - 1], [x1, y1] = curve[i];
+    if (raw <= x1) return Math.max(200, Math.min(800, Math.round((y0 + (raw - x0) * (y1 - y0) / (x1 - x0)) / 10) * 10));
+  }
+  return 800;
+}
+function estimateSAT(rwRaw, mathRaw) {
+  const rw = estimateScaled(rwRaw * 54 / 26, RW_CURVE), math = estimateScaled(mathRaw * 2, MATH_CURVE);
+  return { rw, math, total: rw + math };
+}
+
+function buildReport() {
+  const s = buildStats();
+  const date = new Date().toLocaleString();
+  const pct = (x, y) => y ? Math.round(x / y * 100) : 0;
+  const used = (m) => fmt(Math.min(moduleElapsed(m), modTime(m))) + " of " + MODULE_INFO[m].min + ":00";
+  const right = (q) => q.type === "mcq" ? q.correctAnswer : q.acceptedAnswers.join(" or ");
+  const ans = (r) => r.status === "unanswered" ? "(blank)" : r.answer;
+  const sec = (rw) => { const rs = s.rows.filter(r => isRW(r.q.module) === rw); return { c: rs.filter(r => r.status === "correct").length, n: rs.length }; };
+  const RWs = sec(true), MAs = sec(false);
+  const est = estimateSAT(RWs.c, MAs.c);
+  const mistakes = s.rows.filter(r => r.status !== "correct");
+  const how = state.autoSubmitted ? "automatically (time ran out in the last module)" : "by the student";
+
+  let t = "AMRO ACADEMY – SAT DIAGNOSTIC TEST REPORT\n========================================\n";
+  t += "Student: " + state.studentName + "\nDate: " + date + "\nSubmitted: " + how + "\n\n";
+  t += "Reading and Writing: " + RWs.c + "/" + RWs.n + " (" + pct(RWs.c, RWs.n) + "%)\n";
+  t += "Math: " + MAs.c + "/" + MAs.n + " (" + pct(MAs.c, MAs.n) + "%)\n";
+  t += "TOTAL: " + s.total + "/" + s.count + " (" + pct(s.total, s.count) + "%)\n\n";
+  t += "ESTIMATED SAT SCORE: " + est.total + " / 1600\n";
+  t += "  Reading and Writing: " + est.rw + " / 800\n  Math: " + est.math + " / 800\n";
+  t += "  (Estimate from a typical digital SAT conversion. The real SAT adjusts for question difficulty, so official scores can differ.)\n\n";
+  s.perModule.forEach(pm => { t += modLabel(pm.m) + ": " + pm.correct + "/" + pm.total + " | time used " + used(pm.m) + "\n"; });
+  t += "\nSCORE BY DOMAIN\n";
+  s.perDomain.forEach(d => { t += "- " + d.d + ": " + d.correct + "/" + d.total + " (" + d.pct + "%)\n"; });
+  t += "\nMISTAKES & BLANKS (" + mistakes.length + ")\n";
+  if (!mistakes.length) t += "None — perfect score!\n";
+  mistakes.forEach(r => { t += "- " + qLabel(r.q) + " | " + r.q.domain + " – " + r.q.skill + " | Student: " + ans(r) + " | Correct: " + right(r.q) + "\n"; });
+  t += "\nALL ANSWERS\n";
+  s.rows.forEach(r => { t += qLabel(r.q) + " | " + ans(r) + " | correct " + right(r.q) + " | " + statusLabel(r.status) + "\n"; });
+
+  const color = { correct: "#1e8e3e", wrong: "#c5221f", unanswered: "#b06000" };
+  const res = (st) => `<font color="${color[st]}"><b>${statusLabel(st)}</b></font>`;
+  const tbl = (heads, rows) => `<table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse;font:13px Arial;margin:6px 0 16px"><tr bgcolor="#e8f6fc"><th>${heads.join("</th><th>")}</th></tr>${rows.join("")}</table>`;
+  const tr = (cells) => `<tr><td>${cells.join("</td><td>")}</td></tr>`;
+  let h = `<div style="font:14px Arial"><h2 style="color:#1d6a96">Amro Academy – SAT Diagnostic Test Report</h2>`;
+  h += `<p><b>Student:</b> ${esc(state.studentName)}<br><b>Date:</b> ${esc(date)}<br><b>Submitted:</b> ${how}</p>`;
+  h += `<div style="border:2px solid #3a9fd1;border-radius:8px;padding:10px 14px;margin:8px 0 14px;background:#e8f6fc">
+    <div style="font-size:12px;color:#1d6a96;font-weight:bold;text-transform:uppercase">Estimated SAT score</div>
+    <div style="font-size:28px;font-weight:bold;margin:2px 0">${est.total} <span style="font-size:16px;color:#555">/ 1600</span></div>
+    <div>Reading and Writing: <b>${est.rw}</b> / 800 &nbsp;·&nbsp; Math: <b>${est.math}</b> / 800</div>
+    <div style="font-size:12px;color:#555;margin-top:4px">Estimate based on a typical digital SAT conversion. The real SAT adjusts for question difficulty, so official scores can differ.</div></div>`;
+  h += tbl(["Section", "Correct", "%", "Estimated score"], [tr(["Reading and Writing", RWs.c + "/" + RWs.n, pct(RWs.c, RWs.n) + "%", est.rw + " / 800"]), tr(["Math", MAs.c + "/" + MAs.n, pct(MAs.c, MAs.n) + "%", est.math + " / 800"]), tr(["<b>Total</b>", "<b>" + s.total + "/" + s.count + "</b>", "<b>" + pct(s.total, s.count) + "%</b>", "<b>" + est.total + " / 1600</b>"])]);
+  h += `<h3>By module</h3>` + tbl(["Module", "Correct", "Time used"], s.perModule.map(pm => tr([modLabel(pm.m), pm.correct + "/" + pm.total, used(pm.m)])));
+  h += `<h3>By domain</h3>` + tbl(["Domain", "Correct", "%"], s.perDomain.map(d => tr([d.d, d.correct + "/" + d.total, d.pct + "%"])));
+  h += `<h3>Mistakes &amp; blanks (${mistakes.length})</h3>` + (mistakes.length ? tbl(["Q", "Domain", "Skill", "Student", "Correct"],
+    mistakes.map(r => tr([qLabel(r.q), r.q.domain, esc(r.q.skill), r.status === "unanswered" ? res("unanswered") : `<font color="#c5221f"><b>${esc(r.answer)}</b></font>`, esc(right(r.q))]))) : "<p>None — perfect score!</p>");
+  h += `<h3>All answers</h3>` + tbl(["Q", "Student", "Correct", "Result"], s.rows.map(r => tr([qLabel(r.q), esc(ans(r)), esc(right(r.q)), res(r.status)])));
+  h += `</div>`;
+  return { text: t, html: h, stats: s, date };
+}
+
+function openSubmitReview() {
+  if (state.emailSent) { toast("This exam has already been submitted."); return; }
+  const un = byModule(state.currentModule).filter(q => !hasAnswer(q));
+  const mk = byModule(state.currentModule).filter(q => state.marked[q.id]);
+  const chips = (list) => list.length
+    ? `<div class="list-q">${list.map(q => `<button class="chip" data-go="${q.id}">${qLabel(q)}</button>`).join("")}</div>`
+    : `<p style="color:var(--green);font-weight:600">None</p>`;
+  openModal(head("Check Your Work") + `<div class="modal-body">
+    <p>Once you submit, your answers are locked and sent to your teacher. You won't see your score here.</p>
+    <b>Unanswered questions (${un.length})</b>${chips(un)}
+    <b>Marked for review (${mk.length})</b>${chips(mk)}
+    <div id="sendStatus"></div></div>
+    <div class="modal-foot"><button class="tool-btn" data-close>Back to exam</button>
+    <button class="tool-btn primary" id="confirmSubmit">Confirm Submit</button></div>`);
+  $("modal").querySelectorAll("[data-go]").forEach(b => b.onclick = () => { const q = findQ(b.dataset.go); closeModal(); goTo(q.module, q.number - 1); });
+  $("confirmSubmit").onclick = sendReport;
+}
+
+async function sendReport() {
+  if (sending || state.emailSent) return;            // prevent double sending
+  const btn = $("confirmSubmit"), status = $("sendStatus");
+  sending = true;
+  if (btn) { btn.disabled = true; btn.textContent = "Sending…"; }
+  if (status) status.innerHTML = `<div class="msg info">Sending your report…</div>`;
+
+  stopAllTimers();
+  state.submitted = true; state.submittedAt = state.submittedAt || new Date().toISOString();
+  saveState(); render();
+
+  const rep = buildReport();
+  const sizeOf = (o) => new Blob([JSON.stringify(o)]).size;
+  const params = {
+    to_email: RECIPIENT_EMAIL,
+    student_name: state.studentName,
+    submit_date: rep.date,
+    score: (() => { const rw = rep.stats.rows.filter(r => isRW(r.q.module) && r.status === "correct").length, ma = rep.stats.rows.filter(r => !isRW(r.q.module) && r.status === "correct").length, e = estimateSAT(rw, ma); return "≈" + e.total + " (R&W ≈" + e.rw + ", Math ≈" + e.math + ") · raw "; })() + rep.stats.total + "/" + rep.stats.count + " (R&W " + rep.stats.rows.filter(r => isRW(r.q.module) && r.status === "correct").length + "/26 · Math " + rep.stats.rows.filter(r => !isRW(r.q.module) && r.status === "correct").length + "/22)",
+    total_time: MODULES.map(m => MODULE_INFO[m].tab + " " + fmt(Math.min(moduleElapsed(m), modTime(m)))).join(" · "),
+    report: rep.text,
+    report_html: rep.html
+  };
+  // EmailJS limit is 50 KB: trim the plain-text copy first if needed
+  if (sizeOf(params) > 48000) params.report = rep.text.split("\nPER-QUESTION TABLE")[0] + "\n(Per-question table: see HTML version.)";
+  if (sizeOf(params) > 48000) params.report = "See the HTML report.";
+  try {
+    if (!window.emailjs) throw new Error("EmailJS could not be loaded. Check your internet connection.");
+    await emailjs.send(EMAILJS_CONFIG.serviceId, EMAILJS_CONFIG.templateId, params);
+    state.emailSent = true; saveState(); render();
+    if (status) status.innerHTML = `<div class="msg ok">✓ Your exam was submitted and the report was sent successfully.</div>`;
+    if (btn) { btn.textContent = "Submitted ✓"; }
+    const foot = $("modal").querySelector(".modal-foot");
+    if (foot) foot.innerHTML = `<button class="tool-btn primary" data-close>Close</button>`, foot.querySelector("[data-close]").onclick = closeModal;
+  } catch (err) {
+    const reason = (err && (err.text || err.message)) || "Unknown error";
+    if (status) status.innerHTML = `<div class="msg err">✗ The report could not be sent: ${esc(reason)}. Your answers are saved.
+      <div style="margin-top:8px"><button class="small-btn" id="retryBtn">Retry</button></div></div>`;
+    if (btn) { btn.disabled = false; btn.textContent = "Confirm Submit"; }
+    const r = $("retryBtn"); if (r) r.onclick = sendReport;
+  } finally {
+    sending = false;
+  }
+}
+
+/* =========================================================
+   14. INIT
+   ========================================================= */
+function init() {
+  try { if (window.emailjs) emailjs.init({ publicKey: EMAILJS_CONFIG.publicKey }); } catch (e) {}
+
+  document.querySelectorAll(".module-tabs .tab").forEach(b => b.onclick = () => { const m = Number(b.dataset.module); goTo(m, state.currentIndex[m]); });
+  $("hideTimerBtn").onclick = () => { state.timerHidden = !state.timerHidden; saveState(); renderTop(); tick(); };
+  $("refBtn").onclick = openReference;
+  $("directionsBtn").onclick = openDirections;
+  $("navBtn").onclick = openNavigator;
+  $("nextBtn").onclick = next;
+  $("backBtn").onclick = back;
+  $("resetBtn").onclick = resetExam;
+  $("submitBtn").onclick = () => { if (state.emailSent) return; if (state.onBreak) { endBreak(); return; } if (state.submitted || state.stage === 4) { openSubmitReview(); return; } openFinishModule(); };
+  $("overlay").onclick = (e) => { if (e.target.id === "overlay" && $("overlay").dataset.dismiss === "1") closeModal(); };
+  document.addEventListener("keydown", (e) => {
+    const modalOpen = $("overlay").classList.contains("open");
+    if (e.key === "Escape" && modalOpen && $("overlay").dataset.dismiss === "1") closeModal();
+    // T toggles the question timer
+    if (!modalOpen && (e.key === "t" || e.key === "T") && !e.ctrlKey && !e.metaKey && !e.altKey && !/INPUT|TEXTAREA|SELECT/.test(e.target.tagName)) {
+      const b = $("timerBtn"); if (b && !b.disabled) { e.preventDefault(); b.click(); }
+    }
+    // Arrow keys move between questions in review mode
+    if (!modalOpen && state.corrected && !/INPUT|TEXTAREA|SELECT/.test(e.target.tagName)) {
+      if (e.key === "ArrowRight") { e.preventDefault(); next(); }
+      if (e.key === "ArrowLeft") { e.preventDefault(); back(); }
+    }
+  });
+
+  // Persist running timers when leaving (timestamps already make them refresh-safe)
+  window.addEventListener("beforeunload", saveState);
+
+  if (state.studentName) startModule(state.currentModule);
+  saveState();
+  render();
+  if (!state.unlocked) openPasswordModal();
+  else if (!state.studentName) openNameModal();
+  else notifyStart();
+  setInterval(tick, 250);
+}
+
+// KaTeX scripts are deferred; wait for them so math renders on first paint.
+if (document.readyState === "complete") init();
+else window.addEventListener("load", init);
+</script>
+</body>
+</html>
