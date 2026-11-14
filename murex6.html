@@ -40,6 +40,8 @@ details[open] summary::after{transform:rotate(90deg)}
 .task{font-size:13px;color:var(--dim);margin-bottom:3px}
 .cmd{display:inline-block;color:var(--cmd);background:var(--cmdbg);border:1px solid #1d2f27;border-radius:7px;padding:4px 8px;font-size:13.5px;word-break:break-word;white-space:pre-wrap;cursor:pointer;max-width:100%}
 .cmd:active{filter:brightness(1.3)}
+.cmd.block{display:block;white-space:pre;overflow-x:auto;line-height:1.5;padding:8px 10px;font-size:12.5px}
+.row.tpl{display:block}
 .note{font-size:12px;color:#7d8896;margin-top:3px}
 .note code{color:#a9b3bf;background:#1a2029;padding:0 4px;border-radius:4px;font-size:11.5px}
 .sec-tag{font-size:11px;color:var(--head);opacity:.8;margin-bottom:2px}
@@ -56,7 +58,7 @@ mark{background:var(--hl);color:#e8d7ae;border-radius:3px;padding:0 1px}
 <header>
   <div class="toprow">
     <span class="title">Murex Cheats</span>
-    <input id="q" type="search" placeholder="Search: chmod, port, HAVING, 403…" autocomplete="off">
+    <input id="q" type="search" placeholder="Search: create table, port, kill…" autocomplete="off">
     <button class="tbtn" id="fsDown" aria-label="Smaller text">A−</button>
     <button class="tbtn" id="fsUp" aria-label="Bigger text">A+</button>
   </div>
@@ -616,6 +618,304 @@ const CHEAT = [
 ]},
 ];
 
+// ===== Additions: full templates + gap fixes =====
+const ADD_ROWS = {
+  sql: [{ h:'Operators & more syntax', rows:[
+    ['pattern match', "WHERE name LIKE 'M%'", '% any chars · _ one char · \'_a%\' = 2nd letter a'],
+    ['in a list', "WHERE dept_id IN (1, 3)", 'NOT IN breaks with NULL'],
+    ['range (inclusive)', 'WHERE salary BETWEEN 5000 AND 7000', ''],
+    ['null check', 'WHERE email IS NULL', 'never = NULL'],
+    ['sort several columns', 'ORDER BY salary DESC, name ASC', ''],
+    ['combine lists', 'SELECT … UNION SELECT …', 'UNION ALL keeps duplicates'],
+    ['self join (manager)', 'FROM employees e JOIN employees m ON m.emp_id = e.manager_id', ''],
+    ['rank with ties, no gaps', 'DENSE_RANK() OVER (ORDER BY salary DESC)', 'RANK leaves gaps'],
+    ['date minus N', 'DATE_SUB(CURDATE(), INTERVAL 3 YEAR)', 'or CURDATE() - INTERVAL 3 YEAR'],
+    ['FULL OUTER JOIN (MySQL)', 'LEFT JOIN … UNION … RIGHT JOIN', 'no FULL JOIN in MySQL'],
+    ['trigger', 'CREATE TRIGGER t AFTER UPDATE ON emp FOR EACH ROW …', 'runs automatically'],
+    ['ACID', 'Atomicity · Consistency · Isolation · Durability', 'InnoDB default: REPEATABLE READ'],
+    ['normal forms', '1NF atomic · 2NF no partial · 3NF no transitive', ''],
+    ['index rules', 'index WHERE/JOIN columns; no functions on them', 'composite: leftmost prefix'],
+  ]}],
+  git: [{ h:'More git', rows:[
+    ['new repo / copy repo', 'git init  ·  git clone url', 'init dir does NOT cd into it'],
+    ['switch / create (old syntax)', 'git checkout br  ·  git checkout -b br', ''],
+    ['discard file (old syntax)', 'git checkout -- f', ''],
+    ['compare branches', 'git diff main feature', ''],
+    ['find bad commit', 'git bisect start · bad · good v1.0 · reset', 'binary search'],
+    ['ignore files', '.gitignore: *.log  target/  .env', 'only for untracked files'],
+    ['revert a merge', 'git revert -m 1 <merge-sha>', ''],
+  ]}],
+  hw: [{ h:'Docker, Kubernetes, formats', rows:[
+    ['build image', 'docker build -t app .', ''],
+    ['run detached + port', 'docker run -d -p 8080:80 --name web app', ''],
+    ['logs / shell inside', 'docker logs -f web  ·  docker exec -it web bash', ''],
+    ['stop / remove', 'docker stop web  ·  docker rm web', 'docker images · rmi'],
+    ['k8s pods / logs', 'kubectl get pods  ·  kubectl logs pod', 'pod = smallest unit'],
+    ['JSON vs XML', 'JSON lighter, faster to parse, no types · XML tags, XSD schema', 'both need parsing'],
+    ['Python default list trap', 'def f(x, y=[]) shares one list', 'mutable default arg · use y=None'],
+    ['Python // vs /', '7//2 = 3 · -7//2 = -4 · 7/2 = 3.5', ''],
+    ['module', 'reusable unit of code', ''],
+    ['full GC triggers', 'when JVM lacks memory', 'System.gc() is only a hint'],
+  ]}],
+  net: [{ h:'More networking', rows:[
+    ['Class C default mask', '255.255.255.0', 'A 255.0.0.0 · B 255.255.0.0'],
+    ['10.25.0.0/16', '65,536 addresses · class A · private', ''],
+    ['same subnet? /25', '.0–.127 and .128–.255', ''],
+    ['ping output: 0% loss, high ms', 'slow network', 'not wrong URL / not down'],
+  ]}],
+  test: [{ h:'Agile & documents', rows:[
+    ['Scrum roles', 'Product Owner · Scrum Master · Developers', 'PO orders the backlog'],
+    ['Scrum events', 'Sprint · Planning · Daily · Review · Retro', ''],
+    ['agile tester skills', 'product knowledge · team player · critical thinking', ''],
+    ['happy path', 'valid input, normal flow, success', ''],
+    ['negative test', 'invalid input handled gracefully', ''],
+    ['bug report fields', 'title · env/build · steps · expected · actual · evidence · severity/priority', ''],
+    ['test case fields', 'ID · precondition · data · steps · expected', ''],
+    ['prioritise when short on time', 'highest risk first', 'no-op changes last'],
+  ]}],
+  files: [{ h:'Editors & viewers', rows:[
+    ['edit a file', 'vi f  ·  nano f', 'vi: i insert · Esc · :wq save+quit · :q! quit'],
+    ['viewers (display content)', 'cat · less · more · head · tail', 'vi = editor'],
+    ['list dir into a file', 'ls data > data/files', 'file is created before ls runs'],
+  ]}],
+};
+
+const TEMPLATES = [
+{ id:'tsql', icon:'📝', title:'SQL templates', groups:[
+ { h:'CREATE / ALTER / INSERT / UPDATE / DELETE', rows:[
+  ['CREATE TABLE (full)', `CREATE TABLE orders (
+  order_id     INT AUTO_INCREMENT PRIMARY KEY,
+  emp_id       INT NOT NULL,
+  ref          VARCHAR(20) NOT NULL UNIQUE,
+  order_date   DATE NOT NULL,
+  total_amount DECIMAL(10,2) NOT NULL CHECK (total_amount > 0),
+  status       VARCHAR(20) DEFAULT 'NEW',
+  FOREIGN KEY (emp_id) REFERENCES employees(emp_id)
+);`, 'money = DECIMAL · FK as its own line'],
+  ['composite primary key', `CREATE TABLE reservations (
+  eid INT,
+  bid INT,
+  PRIMARY KEY (eid, bid),
+  FOREIGN KEY (bid) REFERENCES boats(bid)
+);`, ''],
+  ['ALTER variants', `ALTER TABLE employees ADD COLUMN bonus DECIMAL(8,2) DEFAULT 0;
+ALTER TABLE employees MODIFY salary DECIMAL(12,2) NOT NULL;
+ALTER TABLE employees CHANGE salary base_salary DECIMAL(12,2);
+ALTER TABLE employees RENAME COLUMN email TO mail;
+ALTER TABLE employees DROP COLUMN bonus;`, ''],
+  ['INSERT (two syntaxes)', `INSERT INTO cities VALUES ('Beirut', 33.89, 35.50);
+INSERT INTO cities (Latitude, Longitude, Name)
+VALUES (48.85, 2.35, 'Paris');`, ''],
+  ['UPDATE by name in other table', `UPDATE employees
+SET salary = salary * 1.10
+WHERE dept_id IN (SELECT dept_id FROM departments
+                  WHERE dept_name IN ('Sales', 'Support'));`, 'or UPDATE e JOIN d ON … SET …'],
+  ['DELETE with subquery', `DELETE FROM assignments
+WHERE emp_id IN (SELECT emp_id FROM employees
+                 WHERE hire_date < '2017-01-01');`, ''],
+  ['CREATE VIEW', `CREATE VIEW v_payroll AS
+SELECT d.dept_name, SUM(e.salary) AS total
+FROM departments d JOIN employees e ON e.dept_id = d.dept_id
+GROUP BY d.dept_name;`, ''],
+ ]},
+ { h:'SELECT patterns', rows:[
+  ['3-table join + filter', `SELECT CONCAT(s.first_name, ' ', s.last_name) AS full_name
+FROM students s
+JOIN grades g  ON g.student_id = s.student_id
+JOIN courses c ON c.course_id  = g.course_id
+WHERE c.course_name = 'Database Structures' AND g.grade > 85;`, ''],
+  ['group + aggregates', `SELECT c.course_name, MIN(g.grade), AVG(g.grade), MAX(g.grade)
+FROM courses c JOIN grades g ON g.course_id = c.course_id
+GROUP BY c.course_id, c.course_name;`, ''],
+  ['count per group, sorted', `SELECT major, COUNT(*) AS n
+FROM students
+GROUP BY major
+ORDER BY n DESC;`, ''],
+  ['all groups incl. zero', `SELECT d.dept_name, COUNT(e.emp_id) AS n
+FROM departments d
+LEFT JOIN employees e ON e.dept_id = d.dept_id
+GROUP BY d.dept_id, d.dept_name;`, 'SUM → COALESCE(SUM(x),0)'],
+  ['HAVING with date filter', `SELECT CONCAT(d.first_name,' ',d.last_name) AS name,
+       AVG(v.capacity) AS avg_cap
+FROM shipments s
+JOIN drivers  d ON d.driver_id  = s.driver_id
+JOIN vehicles v ON v.vehicle_id = s.vehicle_id
+WHERE s.shipment_date >= DATE_SUB(CURDATE(), INTERVAL 3 YEAR)
+GROUP BY d.driver_id, d.first_name, d.last_name
+HAVING COUNT(*) >= 2
+ORDER BY avg_cap DESC;`, ''],
+  ['anti-join (has none)', `SELECT p.project_name
+FROM projects p
+WHERE NOT EXISTS (SELECT 1 FROM assignments a
+                  WHERE a.project_id = p.project_id);`, ''],
+  ['above overall average', `SELECT name, salary FROM employees
+WHERE salary > (SELECT AVG(salary) FROM employees);`, ''],
+  ['above own group average', `SELECT x.trade_id FROM trades x
+WHERE x.price > (SELECT AVG(y.price) FROM trades y
+                 WHERE y.instrument_id = x.instrument_id);`, ''],
+  ['top N per group', `SELECT * FROM (
+  SELECT e.*, d.dept_name,
+         DENSE_RANK() OVER (PARTITION BY e.dept_id
+                            ORDER BY e.salary DESC) AS rnk
+  FROM employees e JOIN departments d ON d.dept_id = e.dept_id
+) t
+WHERE rnk <= 3;`, 'ROW_NUMBER = exactly N'],
+  ['2nd highest', `SELECT MAX(salary) FROM employees
+WHERE salary < (SELECT MAX(salary) FROM employees);`, 'or DISTINCT … LIMIT 1 OFFSET 1'],
+  ['CASE categories', `SELECT name,
+  CASE WHEN years < 3 THEN 'Junior'
+       WHEN years BETWEEN 3 AND 7 THEN 'Mid-Level'
+       ELSE 'Senior' END AS level
+FROM employees;`, ''],
+  ['exactly one', `SELECT e.name FROM employees e
+JOIN assignments a ON a.emp_id = e.emp_id
+GROUP BY e.emp_id, e.name
+HAVING COUNT(*) = 1;`, ''],
+  ['first 3 characters', 'SELECT SUBSTRING(First_Name, 1, 3) FROM Students;', 'LEFT(First_Name,3)'],
+ ]},
+]},
+{ id:'tcode', icon:'💻', title:'Code templates (Java)', groups:[
+ { h:'Write from memory', rows:[
+  ['duplicates (brute force)', `static boolean hasDup(String[] a) {
+  for (int i = 0; i < a.length; i++)
+    for (int j = i + 1; j < a.length; j++)
+      if (a[i].equals(a[j])) return true;
+  return false;
+}`, 'O(n²) · HashSet = O(n)'],
+  ['swap without temp', `a = a + b;
+b = a - b;
+a = a - b;
+// or: a ^= b; b ^= a; a ^= b;`, ''],
+  ['first 100 Fibonacci', `BigInteger a = BigInteger.ONE, b = BigInteger.ONE;
+for (int i = 0; i < 100; i++) {
+  System.out.println(a);
+  BigInteger t = a.add(b); a = b; b = t;
+}`, 'long overflows after F(92)'],
+  ['reverse array (no library)', `int i = 0, j = arr.length - 1;
+while (i < j) {
+  int t = arr[i]; arr[i] = arr[j]; arr[j] = t;
+  i++; j--;
+}`, ''],
+  ['reverse string', `String r = "";
+for (int i = s.length() - 1; i >= 0; i--) r += s.charAt(i);
+// or new StringBuilder(s).reverse().toString()`, ''],
+  ['palindrome', `boolean pal = true;
+for (int i = 0, j = s.length() - 1; i < j; i++, j--)
+  if (s.charAt(i) != s.charAt(j)) { pal = false; break; }`, ''],
+  ['max & second max', `int first = Integer.MIN_VALUE, second = Integer.MIN_VALUE;
+for (int x : arr) {
+  if (x > first) { second = first; first = x; }
+  else if (x > second && x != first) second = x;
+}`, ''],
+  ['clock angle', `static double angle(int h, int m) {
+  double hour = 30 * (h % 12) + 0.5 * m;
+  double min  = 6 * m;
+  double d = Math.abs(hour - min);
+  return Math.min(d, 360 - d);
+}`, '3:30 → 75'],
+  ['balanced brackets', `Deque<Character> st = new ArrayDeque<>();
+for (char c : s.toCharArray()) {
+  if ("([{".indexOf(c) >= 0) st.push(c);
+  else if (st.isEmpty() || "([{".indexOf(st.pop()) != ")]}".indexOf(c)) return false;
+}
+return st.isEmpty();`, ''],
+  ['prime check', `static boolean isPrime(int n) {
+  if (n < 2) return false;
+  for (int i = 2; (long) i * i <= n; i++) if (n % i == 0) return false;
+  return true;
+}`, ''],
+  ['factorial / GCD', `long f = 1; for (int i = 2; i <= n; i++) f *= i;
+static int gcd(int a, int b) { return b == 0 ? a : gcd(b, a % b); }`, ''],
+ ]},
+]},
+{ id:'tpseudo', icon:'🧭', title:'Pseudocode templates', groups:[
+ { h:'Decision & state', rows:[
+  ['traffic light (2 roads)', `lightA = GREEN
+lightB = RED
+loop forever:
+    show(lightA, lightB)
+    wait(60 seconds)
+    if lightA == GREEN:
+        lightA = RED;   lightB = GREEN
+    else:
+        lightA = GREEN; lightB = RED`, 'never both green'],
+  ['decision tree shape', `if condition1:
+    return A
+else if condition2:
+    if condition3: return B
+    else:          return C
+else:
+    return D`, 'most important check first'],
+  ['reconcile two lists', `setA = toSet(listA); setB = toSet(listB)
+for id in setA: if id not in setB: report "missing in B", id
+for id in setB: if id not in setA: report "missing in A", id`, 'O(n+m) with sets'],
+  ['retry with limit', `attempts = 0
+while attempts < 3:
+    if callService() == OK: return OK
+    attempts = attempts + 1
+    wait(5 seconds)
+return FAILED`, ''],
+ ]},
+]},
+{ id:'twrite', icon:'🗒', title:'Written-answer templates', groups:[
+ { h:'Open questions', rows:[
+  ['slow web app: 5 actions', `1. Scope: who/what/since when/what changed
+2. App server: top, free -h, df -h, iostat
+3. App logs: errors, timeouts, GC, pool exhaustion
+4. Network: ping/traceroute app↔users, app↔DB
+5. Database: slow queries, EXPLAIN, locks, indexes
+Alert: monitoring (CPU, mem, disk, latency, errors)
++ thresholds + synthetic checks → email/Slack/PagerDuty`, ''],
+  ['crash: info to collect', `steps to reproduce · frequency · test data
+error message + screenshot · timestamp
+app/server logs + stack trace
+browser console & network (HTTP status)
+environment: build, browser, OS, test env
+expected vs actual · recent changes`, ''],
+  ['pstack on OCI/kpuexec', `1) Stuck waiting for Oracle to execute a query on
+   USERS_TABLE → bottleneck is the DB, not the code.
+2) Check session/locks (v$session), execution plan,
+   add index, refresh stats, check DB load/network,
+   rewrite query, add timeout.`, ''],
+  ['ConnectException: refused', `Service not running · wrong host/port · listening
+on 127.0.0.1 only · firewall reject · backlog full
+→ check: nc -zv host port, ss -tlnp, service logs`, ''],
+  ['HTTP 403', `Forbidden: authorized identity lacks permission
+→ role/permission missing, expired token, wrong
+service account, IP not whitelisted, CSRF`, '401 = not authenticated'],
+  ['C output portable?', `gcc → machine code (.o, executable)
+NOT portable: CPU instruction set, OS executable
+format/ABI, libraries → recompile per target`, ''],
+  ['javac output portable?', `javac → .class bytecode
+YES portable: each OS/CPU has its own JVM
+that runs the same bytecode`, ''],
+  ['RDBMS on multiple servers', `high availability/failover · scalability &
+load balancing (replicas, sharding) · performance ·
+disaster recovery · maintenance without downtime`, ''],
+  ['vertical vs horizontal', `vertical: bigger machine, simple, has limit/SPOF
+horizontal: more machines + load balancer,
+scalable & fault tolerant, needs stateless app`, ''],
+  ['SaaS advantages', `no upfront hardware/licence cost · provider does
+updates/security/backups · fast deploy · anywhere`, ''],
+  ['test case template', `ID / title: Search returns matching products
+Precondition: site up, catalogue has items
+Steps: 1 open home 2 type "wireless mouse" 3 Enter
+Expected: relevant results, price/image shown`, ''],
+  ['field test ideas (max 16)', `valid: letters, digits, mix, 1, 15, 16 chars
+invalid: 0 (empty), 17, special chars, spaces,
+emoji, SQL/XSS · duplicate/case · server-side check`, ''],
+  ['git trace method', `table: branch → commit → file content
++ index + working dir after EACH command
+untracked? staged? committed? which branch?`, ''],
+  ['4 levels of testing', 'Unit · Integration · System · Acceptance', ''],
+ ]},
+]},
+];
+
+// merge
+for (const id in ADD_ROWS) { const s = CHEAT.find(x => x.id === id); if (s) s.groups.push(...ADD_ROWS[id]); }
+CHEAT.splice(1, 0, ...TEMPLATES);
+
 </script>
 <script>
 (function(){
@@ -632,7 +932,8 @@ const CHEAT = [
   }
   function rowHTML(r, secTitle, term){
     const hl = t => term ? t.replace(new RegExp('(' + term.replace(/[.*+?^${}()|[\]\\]/g,'\\$&') + ')','gi'),'<mark>$1</mark>') : t;
-    return `<div class="row">${secTitle ? `<div class="sec-tag">${esc(secTitle)}</div>` : ''}<div class="task">${hl(esc(r[0]))}</div><div><span class="cmd" data-c="${esc(r[1])}">${hl(esc(r[1]))}</span>${r[2] ? `<div class="note">${hl(note(r[2]))}</div>` : ''}</div></div>`;
+    const blk = r[1].includes('\n');
+    return `<div class="row${blk ? ' tpl' : ''}">${secTitle ? `<div class="sec-tag">${esc(secTitle)}</div>` : ''}<div class="task">${hl(esc(r[0]))}</div><div><span class="cmd${blk ? ' block' : ''}" data-c="${esc(r[1])}">${hl(esc(r[1]))}</span>${r[2] ? `<div class="note">${hl(note(r[2]))}</div>` : ''}</div></div>`;
   }
   function search(term){
     term = term.trim();
